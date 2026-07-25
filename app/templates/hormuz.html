@@ -175,7 +175,7 @@
         <h3 style="font-size: 1.2rem; margin: 0;">Targeted Vessel Attacks Intelligence</h3>
       </div>
       <span style="font-size: 0.83rem; color: var(--text-sub);">
-        Empirical incident analysis across 18 maritime strikes during the 2026 Strait of Hormuz Crisis.
+        Empirical incident analysis across {{ total_attacks }} maritime strikes during the 2026 Strait of Hormuz Crisis (Wikipedia Log).
       </span>
     </div>
     <div style="display: flex; gap: 12px; font-family: var(--font-mono); font-size: 0.8rem;">
@@ -190,9 +190,9 @@
     <div style="background: var(--surface-card); border: 1px solid var(--border-bright); border-radius: var(--radius-md); padding: 18px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
         <h4 style="font-size: 1.05rem; margin: 0; color: var(--text-main);">Attacks by Country (Flag State)</h4>
-        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">Apache ECharts</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">Wikipedia Verified</span>
       </div>
-      <div id="echart-country-container" style="width: 100%; min-height: 280px; height: 280px;"></div>
+      <div id="echart-country-container" style="width: 100%; min-height: 340px; height: 340px;"></div>
     </div>
 
     <!-- Report 2: Cumulative Attacks by Month (ECharts Area Chart) -->
@@ -201,7 +201,7 @@
         <h4 style="font-size: 1.05rem; margin: 0; color: var(--text-main);">Cumulative Attacks by Month</h4>
         <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">Jan – Jul 2026</span>
       </div>
-      <div id="echart-week-container" style="width: 100%; min-height: 280px; height: 280px;"></div>
+      <div id="echart-week-container" style="width: 100%; min-height: 340px; height: 340px;"></div>
     </div>
   </div>
 
@@ -495,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function() {
         textStyle: { color: isDark ? "#F8FAFC" : "#0F172A" },
         formatter: "{b}: <strong>{c} ships attacked</strong>"
       },
-      grid: { top: 15, right: 35, bottom: 25, left: 120 },
+      grid: { top: 15, right: 35, bottom: 25, left: 150 },
       xAxis: {
         type: "value",
         minInterval: 1,
