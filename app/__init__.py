@@ -1,8 +1,14 @@
+import os
 from flask import Flask
 
 
 def create_app() -> Flask:
-    app = Flask(__name__)
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+    app = Flask(
+        __name__,
+        static_folder=os.path.join(app_dir, "static"),
+        template_folder=os.path.join(app_dir, "templates"),
+    )
 
     from app.routes import bp
 
