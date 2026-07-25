@@ -4,11 +4,18 @@ import json
 import os
 from datetime import date, timedelta
 
-from flask import Blueprint, Response, abort, jsonify, render_template, request
+from flask import Blueprint, Response, abort, jsonify, render_template, request, send_from_directory
 
 from app.indices import hormuz
 
 bp = Blueprint("main", __name__)
+
+
+@bp.route("/app-static/<path:filename>")
+def serve_static_asset(filename):
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+    static_dir = os.path.join(app_dir, "static")
+    return send_from_directory(static_dir, filename)
 
 # Nav categories shown in the menu.
 NAV_CATEGORIES = [
