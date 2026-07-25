@@ -1,20 +1,14 @@
 #!/usr/bin/env python3
 """
-MyDataLabs Automated Data Updater Script
+MyDataLabs Data Updater Script
 Updates quantitative indices, market snapshots, vessel attack intelligence,
-syncs static assets, and optionally commits and pushes to GitHub to trigger Vercel deployment.
-
-Usage:
-  python update_data.py          # Updates data and pushes to GitHub (default for cron)
-  python update_data.py --local  # Local test mode: updates data locally without git push
+and syncs static assets to root static/ directory.
 """
 
-import argparse
 import datetime
 import json
 import os
 import shutil
-import subprocess
 import sys
 
 # Add project root to python path
@@ -60,52 +54,13 @@ def sync_static_assets():
         print("3. Synced app/static to root static/ CDN directory.")
 
 
-def push_to_github():
-    """Commit updated data and push to GitHub (triggers Vercel deployment)."""
-    print("==================================================")
-    print("4. Committing and Pushing to GitHub...")
-    root_dir = os.path.dirname(os.path.abspath(__file__))
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    commit_msg = f"Automated weekly data update [{timestamp}]"
-    
-    try:
-        subprocess.run(["git", "add", "."], cwd=root_dir, check=True)
-        status = subprocess.run(["git", "status", "--porcelain"], cwd=root_dir, capture_output=True, text=True)
-        if status.stdout.strip():
-            subprocess.run(["git", "commit", "-m", commit_msg], cwd=root_dir, check=True)
-            subprocess.run(["git", "push", "origin", "main"], cwd=root_dir, check=True)
-            print("   [SUCCESS] Pushed to GitHub -> Vercel deployment triggered automatically!")
-        else:
-            print("   [INFO] No data changes detected; repository is clean.")
-    except Exception as e:
-        print(f"   [ERROR] Git push failed: {e}")
-
-
 def main():
-    parser = argparse.ArgumentParser(description="MyDataLabs Automated Data Updater")
-    parser.add_argument(
-        "--local", "-l",
-        action="store_true",
-        help="Run in local test mode: update data without committing or pushing to Git"
-    )
-    args = parser.parse_args()
-
-    mode_str = "LOCAL TEST MODE (Git Push Skipped)" if args.local else "PRODUCTION / CRON MODE (Auto Git Push)"
-    print(f"Starting MyDataLabs Automated Data Update [{datetime.datetime.now().isoformat()}]")
-    print(f"Execution Mode: {mode_str}")
-
+    print(f"Starting MyDataLabs Local Data Update [{datetime.datetime.now().isoformat()}]")
     update_indices()
     update_vessel_attacks()
     sync_static_assets()
-
-    if args.local:
-        print("==================================================")
-        print("4. [LOCAL MODE] Skipped Git commit & push.")
-    else:
-        push_to_github()
-
     print("==================================================")
-    print("ALL MYDATALABS DATASETS UPDATED SUCCESSFULLY!")
+    print("ALL MYDATALABS DATASETS UPDATED LOCALLY SUCCESSFULLY!")
     print("==================================================")
 
 
