@@ -4,7 +4,7 @@ import json
 import os
 from datetime import date, timedelta
 
-from flask import Blueprint, Response, abort, jsonify, render_template, request, send_from_directory
+from flask import Blueprint, Response, abort, jsonify, redirect, render_template, request, send_from_directory
 
 from app.indices import hormuz
 
@@ -413,7 +413,5 @@ def robots():
 
 @bp.route("/favicon.ico")
 def favicon():
-    app_dir = os.path.dirname(os.path.abspath(__file__))
-    static_img = os.path.join(app_dir, "static", "img")
-    return send_from_directory(static_img, "favicon.png", mimetype="image/png")
+    return redirect("/static/img/favicon.png")
 
