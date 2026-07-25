@@ -4,7 +4,7 @@ FROM python:3.12-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PORT=5000 \
+    PORT=8080 \
     FLASK_ENV=production
 
 # Set working directory inside container
@@ -25,12 +25,12 @@ COPY . .
 # Ensure static assets are synced to public/static directory
 RUN python update_data.py
 
-# Expose port
-EXPOSE 5000
+# Expose default port
+EXPOSE 8080
 
 # Healthcheck to verify container responsiveness
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:5000/ || exit 1
+  CMD curl -f http://localhost:${PORT:-8080}/ || exit 1
 
-# Run Gunicorn WSGI Production Server
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--threads", "2", "app:create_app()"]
+# Run Gunicorn WSGI Production Server using dynamic PORT env
+CMD exec gunicorn --bind 0.0.0.0:${PORT:-8080} --workers 4 --threads 2 "app:create_app()"
