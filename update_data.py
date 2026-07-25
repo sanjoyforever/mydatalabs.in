@@ -42,16 +42,17 @@ def update_vessel_attacks():
 
 
 def sync_static_assets():
-    """Sync app/static directory to root static/ for Vercel CDN."""
+    """Sync app/static directory to public/static/ for Vercel CDN."""
     root_dir = os.path.dirname(os.path.abspath(__file__))
     app_static = os.path.join(root_dir, "app", "static")
-    root_static = os.path.join(root_dir, "static")
+    pub_static = os.path.join(root_dir, "public", "static")
     if os.path.exists(app_static):
-        if os.path.exists(root_static):
-            shutil.rmtree(root_static)
-        shutil.copytree(app_static, root_static)
+        os.makedirs(os.path.dirname(pub_static), exist_ok=True)
+        if os.path.exists(pub_static):
+            shutil.rmtree(pub_static)
+        shutil.copytree(app_static, pub_static)
         print("==================================================")
-        print("3. Synced app/static to root static/ CDN directory.")
+        print("3. Synced app/static to public/static/ CDN directory.")
 
 
 def main():
