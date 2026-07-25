@@ -132,7 +132,9 @@ def compute_snapshot(persist: bool = False) -> CompositeResult:
     instance unless the storage backend is swapped for Blob/DB (see README).
     """
     history = storage.load_history(INDEX_KEY)
-    manual = history.get("manual_overrides", BASELINE_VALUES)
+    weeks = history.get("weeks", [])
+    latest_raw = weeks[-1]["raw_values"] if weeks else BASELINE_VALUES
+    manual = {**latest_raw, **history.get("manual_overrides", {})}
 
     live = fetch_live_values()
     stale_keys = MANUAL_KEYS | {k for k, v in live.items() if v is None}
