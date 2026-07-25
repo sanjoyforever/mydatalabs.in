@@ -2,9 +2,14 @@
 """
 MyDataLabs Automated Data Updater Script
 Updates quantitative indices, market snapshots, vessel attack intelligence,
-syncs static assets, and automatically commits and pushes to GitHub to trigger Vercel deployment.
+syncs static assets, and optionally commits and pushes to GitHub to trigger Vercel deployment.
+
+Usage:
+  python update_data.py          # Updates data and pushes to GitHub (default for cron)
+  python update_data.py --local  # Local test mode: updates data locally without git push
 """
 
+import argparse
 import datetime
 import json
 import os
@@ -77,13 +82,30 @@ def push_to_github():
 
 
 def main():
+    parser = argparse.ArgumentParser(description="MyDataLabs Automated Data Updater")
+    parser.add_argument(
+        "--local", "-l",
+        action="store_true",
+        help="Run in local test mode: update data without committing or pushing to Git"
+    )
+    args = parser.parse_args()
+
+    mode_str = "LOCAL TEST MODE (Git Push Skipped)" if args.local else "PRODUCTION / CRON MODE (Auto Git Push)"
     print(f"Starting MyDataLabs Automated Data Update [{datetime.datetime.now().isoformat()}]")
+    print(f"Execution Mode: {mode_str}")
+
     update_indices()
     update_vessel_attacks()
     sync_static_assets()
-    push_to_github()
+
+    if args.local:
+        print("==================================================")
+        print("4. [LOCAL MODE] Skipped Git commit & push.")
+    else:
+        push_to_github()
+
     print("==================================================")
-    print("ALL MYDATALABS DATASETS UPDATED & DEPLOYED SUCCESSFULLY!")
+    print("ALL MYDATALABS DATASETS UPDATED SUCCESSFULLY!")
     print("==================================================")
 
 
