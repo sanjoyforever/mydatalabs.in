@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}System Refreshing — MyDataLabs Intelligence{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 80px auto; text-align: center; padding: 40px 20px; background: var(--surface-card); border: 1px solid var(--border-bright); border-radius: var(--radius-lg);">
+  <div style="font-size: 3rem; margin-bottom: 16px;">🔄</div>
+  <h2 style="font-size: 1.5rem; color: var(--text-main); margin-bottom: 12px;">System Snapshot Refreshing</h2>
+  <p style="color: var(--text-sub); font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;">
+    The quantitative model is currently compiling the latest weekly market snapshot. Please refresh in a few seconds.
+  </p>
+  <a href="{{ request.path }}" class="btn-primary" style="display: inline-block; text-decoration: none;">
+    ⚡ Refresh Page
+  </a>
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 
 
 def create_app() -> Flask:
@@ -14,4 +14,13 @@ def create_app() -> Flask:
     from app.routes import bp
 
     app.register_blueprint(bp)
+
+    @app.errorhandler(500)
+    def internal_error(e):
+        return render_template("500.html"), 500
+
+    @app.errorhandler(404)
+    def not_found_error(e):
+        return render_template("500.html"), 404
+
     return app
