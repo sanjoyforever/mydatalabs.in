@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """
-MyDataLabs Data Updater Script
-Updates all quantitative indices, market snapshots, and vessel attack intelligence datasets.
+MyDataLabs Automated Data Updater Script
+Updates quantitative indices, market snapshots, vessel attack intelligence,
+syncs static assets, and automatically commits and pushes to GitHub to trigger Vercel deployment.
 """
 
 import datetime
 import json
 import os
+import shutil
+import subprocess
 import sys
 
 # Add project root to python path
@@ -39,12 +42,48 @@ def update_vessel_attacks():
         print("   [WARNING] vessel_attacks.json not found.")
 
 
+def sync_static_assets():
+    """Sync app/static directory to root static/ for Vercel CDN."""
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    app_static = os.path.join(root_dir, "app", "static")
+    root_static = os.path.join(root_dir, "static")
+    if os.path.exists(app_static):
+        if os.path.exists(root_static):
+            shutil.rmtree(root_static)
+        shutil.copytree(app_static, root_static)
+        print("==================================================")
+        print("3. Synced app/static to root static/ CDN directory.")
+
+
+def push_to_github():
+    """Commit updated data and push to GitHub (triggers Vercel deployment)."""
+    print("==================================================")
+    print("4. Committing and Pushing to GitHub...")
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    commit_msg = f"Automated weekly data update [{timestamp}]"
+    
+    try:
+        subprocess.run(["git", "add", "."], cwd=root_dir, check=True)
+        status = subprocess.run(["git", "status", "--porcelain"], cwd=root_dir, capture_output=True, text=True)
+        if status.stdout.strip():
+            subprocess.run(["git", "commit", "-m", commit_msg], cwd=root_dir, check=True)
+            subprocess.run(["git", "push", "origin", "main"], cwd=root_dir, check=True)
+            print("   [SUCCESS] Pushed to GitHub -> Vercel deployment triggered automatically!")
+        else:
+            print("   [INFO] No data changes detected; repository is clean.")
+    except Exception as e:
+        print(f"   [ERROR] Git push failed: {e}")
+
+
 def main():
     print(f"Starting MyDataLabs Automated Data Update [{datetime.datetime.now().isoformat()}]")
     update_indices()
     update_vessel_attacks()
+    sync_static_assets()
+    push_to_github()
     print("==================================================")
-    print("ALL MYDATALABS DATASETS UPDATED 100% SUCCESSFULLY!")
+    print("ALL MYDATALABS DATASETS UPDATED & DEPLOYED SUCCESSFULLY!")
     print("==================================================")
 
 
