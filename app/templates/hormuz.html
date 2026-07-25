@@ -1,7 +1,34 @@
 {% extends "base.html" %}
 {% block title %}Hormuz Crisis Index (HMX-INDEX) — MyDataLabs Intelligence{% endblock %}
+{% block meta_title %}Hormuz Crisis Index (HMX-INDEX) — Geopolitical Risk Benchmark | MyDataLabs{% endblock %}
+{% block meta_desc %}Live quantitative stress index tracking the 2026 Strait of Hormuz crisis. Monitors Brent Crude ($96.78), 56 vessel attack incidents, war risk insurance (0.45%), and ship transits.{% endblock %}
+{% block meta_keywords %}Hormuz Crisis Index, HMX-INDEX, Strait of Hormuz Crisis 2026, Vessel Attacks Iran, Brent Crude Oil, War Risk Insurance, Shipping Dislocation, MyDataLabs{% endblock %}
 
-{% block content %}
+{% block extra_head %}
+<!-- Schema.org Dataset & FinancialProduct Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Dataset",
+      "@id": "https://mydatalabs.in/hormuz-index#dataset",
+      "name": "Hormuz Crisis Index (HMX-INDEX) & Targeted Vessel Attacks Dataset",
+      "description": "Weekly quantitative index and verified 56-incident maritime strike log tracking geopolitical stress in the Strait of Hormuz.",
+      "url": "https://mydatalabs.in/hormuz-index",
+      "keywords": ["Hormuz Crisis Index", "Strait of Hormuz", "Vessel Attacks", "Brent Crude", "War Risk Insurance"],
+      "creator": {
+        "@type": "Organization",
+        "name": "MyDataLabs",
+        "url": "https://mydatalabs.in"
+      },
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "spatialCoverage": "Strait of Hormuz, Persian Gulf, Gulf of Oman"
+    }
+  ]
+}
+</script>
+{% endblock %}
 <!-- Dashboard Header Bar -->
 <div class="dash-header-bar">
   <div class="dash-title-group">

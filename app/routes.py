@@ -4,7 +4,7 @@ import json
 import os
 from datetime import date, timedelta
 
-from flask import Blueprint, Response, abort, jsonify, render_template, request
+from flask import Blueprint, Response, abort, jsonify, render_template, request, send_from_directory
 
 from app.indices import hormuz
 
@@ -375,4 +375,45 @@ def cron_update_hormuz():
             "week_start": snapshot.week_start,
         }
     )
+
+
+@bp.route("/sitemap.xml")
+def sitemap():
+    host = "https://mydatalabs.in"
+    pages = [
+        {"loc": f"{host}/", "priority": "1.0", "changefreq": "daily"},
+        {"loc": f"{host}/hormuz-index", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": f"{host}/reports/geo-politics", "priority": "0.8", "changefreq": "weekly"},
+        {"loc": f"{host}/reports/energy-commodities", "priority": "0.8", "changefreq": "weekly"},
+        {"loc": f"{host}/reports/maritime-supply", "priority": "0.8", "changefreq": "weekly"},
+        {"loc": f"{host}/reports/financial-stress", "priority": "0.8", "changefreq": "weekly"},
+        {"loc": f"{host}/reports/tech-infrastructure", "priority": "0.8", "changefreq": "weekly"},
+    ]
+
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    today = date.today().isoformat()
+    for p in pages:
+        xml.append("  <url>")
+        xml.append(f"    <loc>{p['loc']}</loc>")
+        xml.append(f"    <lastmod>{today}</lastmod>")
+        xml.append(f"    <changefreq>{p['changefreq']}</changefreq>")
+        xml.append(f"    <priority>{p['priority']}</priority>")
+        xml.append("  </url>")
+    xml.append("</urlset>")
+
+    return Response("\n".join(xml), mimetype="application/xml")
+
+
+@bp.route("/robots.txt")
+def robots():
+    content = "User-agent: *\nAllow: /\n\nSitemap: https://mydatalabs.in/sitemap.xml\n"
+    return Response(content, mimetype="text/plain")
+
+
+@bp.route("/favicon.ico")
+def favicon():
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+    static_img = os.path.join(app_dir, "static", "img")
+    return send_from_directory(static_img, "favicon.png", mimetype="image/png")
 

@@ -5,10 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}MyDataLabs — Geopolitical Risk & Market Intelligence{% endblock %}</title>
 
-<!-- Favicon & Meta -->
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
-<meta name="description" content="Weekly composite indices tracking geopolitical stress, maritime chokepoints, market dislocation, and energy security. Trusted by news media and institutional analysts.">
-<meta name="keywords" content="Hormuz Crisis Index, Geopolitical Risk, Maritime Chokepoints, Strait of Hormuz, Energy Dislocation, Market Stress Index">
+<!-- Primary Meta Tags -->
+<meta name="title" content="{% block meta_title %}MyDataLabs — Geopolitical Risk & Market Intelligence{% endblock %}">
+<meta name="description" content="{% block meta_desc %}MyDataLabs provides weekly composite indices tracking geopolitical stress, maritime chokepoints, market dislocation, and energy security. Trusted by news media and institutional analysts.{% endblock %}">
+<meta name="keywords" content="{% block meta_keywords %}Hormuz Crisis Index, Geopolitical Risk, Strait of Hormuz, Maritime Chokepoints, Energy Security, Market Dislocation, Vessel Attacks, MyDataLabs{% endblock %}">
+<meta name="author" content="MyDataLabs Intelligence Network">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{% block canonical_url %}https://mydatalabs.in{{ request.path }}{% endblock %}">
+
+<!-- OpenGraph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mydatalabs.in{{ request.path }}">
+<meta property="og:title" content="{% block og_title %}MyDataLabs — Geopolitical Risk & Market Intelligence{% endblock %}">
+<meta property="og:description" content="{% block og_desc %}Institutional quantitative indices tracking geopolitical stress, energy dislocation, and maritime chokepoints.{% endblock %}">
+<meta property="og:image" content="https://mydatalabs.in/static/img/logo.png">
+<meta property="og:site_name" content="MyDataLabs">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://mydatalabs.in{{ request.path }}">
+<meta name="twitter:title" content="{% block twitter_title %}MyDataLabs — Geopolitical Risk & Market Intelligence{% endblock %}">
+<meta name="twitter:description" content="{% block twitter_desc %}Institutional quantitative indices tracking geopolitical stress, energy dislocation, and maritime chokepoints.{% endblock %}">
+<meta name="twitter:image" content="https://mydatalabs.in/static/img/logo.png">
+<meta name="twitter:site" content="@MyDataLabs">
+
+<!-- Favicons & Icons -->
+<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon.png') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/logo.png') }}">
 
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,6 +40,18 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+<!-- Global Schema.org JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "MyDataLabs",
+  "url": "https://mydatalabs.in",
+  "logo": "https://mydatalabs.in/static/img/logo.png",
+  "description": "Institutional quantitative intelligence network tracking geopolitical stress, market dislocation, and maritime chokepoints."
+}
+</script>
 {% block extra_head %}{% endblock %}
 <script>
   (function () {
