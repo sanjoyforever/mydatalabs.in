@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block title %}MyDataLabs — Institutional Geopolitical Risk & Market Intelligence{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-wrapper">
+  <div class="hero-header-meta">
+    <span class="badge-tag">FLAGSHIP REPORT</span>
+    <span style="font-size: 0.82rem; color: var(--text-sub); font-family: var(--font-mono);">UPDATED FOR WEEK OF {{ snapshot.week_start }}</span>
+  </div>
+  
+  <h1 class="hero-title">Signals before the headlines.</h1>
+  <p class="hero-subtitle">
+    Quantitative composite indices tracking geopolitical stress, maritime chokepoint vulnerabilities, energy dislocation, and cross-asset tail risks. Built for news media outlets, energy desks, and institutional analysts.
+  </p>
+
+  <div class="macro-stats-grid">
+    <div class="macro-card">
+      <div class="macro-label">Flagship Risk Index</div>
+      <div class="macro-value-group">
+        <span class="macro-value">{{ "%.1f"|format(hormuz_score) }}</span>
+        <span class="delta-pill {% if delta >= 0 %}delta-up{% else %}delta-down{% endif %}">
+          {% if delta >= 0 %}▲ +{% else %}▼ {% endif %}{{ "%.1f"|format(delta|abs) }}
+        </span>
+      </div>
+      <div class="macro-sub">Hormuz Crisis Index (HMX-INDEX)</div>
+    </div>
+
+    <div class="macro-card">
+      <div class="macro-label">Chokepoint Risk Posture</div>
+      <div class="macro-value-group">
+        <span class="status-badge status-{{ hormuz_status }}" style="font-size: 0.95rem; padding: 6px 14px;">
+          <span class="status-dot"></span>{{ hormuz_level }}
+        </span>
+      </div>
+      <div class="macro-sub">Strait of Hormuz • Level 3 Elevation</div>
+    </div>
+
+    <div class="macro-card">
+      <div class="macro-label">Monitored Oil Flow</div>
+      <div class="macro-value-group">
+        <span class="macro-value" style="color: var(--accent-blue);">21.0M</span>
+        <span style="font-size: 0.85rem; color: var(--text-sub);">bpd</span>
+      </div>
+      <div class="macro-sub">~20% of global petroleum consumption</div>
+    </div>
+
+    <div class="macro-card">
+      <div class="macro-label">Data Schedule</div>
+      <div class="macro-value-group">
+        <span class="macro-value" style="font-size: 1.3rem;">Weekly</span>
+      </div>
+      <div class="macro-sub">Next run: Monday 06:00 UTC</div>
+    </div>
+  </div>
+</section>
+
+<!-- Spotlight Card: Hormuz Crisis Index -->
+<section style="margin-bottom: 48px;">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Flagship Intelligence Report</h2>
+      <p class="section-desc">Real-time composite metric monitoring conflict & blockade risk in the Strait of Hormuz.</p>
+    </div>
+    <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">View Full Dashboard →</a>
+  </div>
+
+  <div class="spotlight-card">
+    <div>
+      <div class="spotlight-info-top">
+        <span class="badge-tag">HMX-INDEX</span>
+        <span class="status-badge status-{{ hormuz_status }}">
+          <span class="status-dot"></span>{{ hormuz_level }}
+        </span>
+      </div>
+      <h2 class="spotlight-title">Hormuz Crisis Index</h2>
+      <p class="spotlight-desc">
+        Tracks crude price escalation, war-risk insurance premiums, vessel transits, tanker freight rates, and Cape of Good Hope traffic reroutes against a non-crisis 100.0 baseline.
+      </p>
+
+      <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-family: var(--font-mono);">
+        Key Drivers This Week:
+      </div>
+      <div class="spotlight-drivers">
+        {% for cr in snapshot.components[:3] %}
+        <div class="driver-chip">
+          <span style="color: var(--accent-blue);">•</span>
+          <span class="driver-chip-label">{{ cr.component.label }}:</span>
+          <span>{{ "%.2f"|format(cr.current_value) if cr.current_value is not none else '—' }} {{ cr.component.unit }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">Explore Intelligence Dashboard</a>
+      </div>
+    </div>
+
+    <div class="spotlight-metrics-panel">
+      <div class="spotlight-score-header">
+        <div>
+          <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); font-family: var(--font-mono); font-weight: 700;">Composite Score</div>
+          <div class="spotlight-score-number">{{ "%.1f"|format(hormuz_score) }}</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="delta-pill {% if delta >= 0 %}delta-up{% else %}delta-down{% endif %}" style="font-size: 0.9rem; padding: 4px 10px;">
+            {% if delta >= 0 %}▲ +{% else %}▼ {% endif %}{{ "%.1f"|format(delta|abs) }}
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">vs previous week</div>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-sub); margin-bottom: 8px;">
+          <span>Crisis Scale Range</span>
+          <span style="font-family: var(--font-mono); font-weight: 600;">Baseline = 100.0</span>
+        </div>
+        <div style="height: 8px; border-radius: 999px; background: var(--surface-input); overflow: hidden; position: relative;">
+          <div style="height: 100%; width: {{ ([hormuz_score - 100, 0]|max, 100)|min }}%; background: linear-gradient(90deg, var(--accent-emerald), var(--accent-amber), var(--accent-rose));"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Category Intelligence Grid -->
+<section style="margin-bottom: 48px;">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Intelligence Catalog</h2>
+      <p class="section-desc">Quantitative risk indices organized by domain and supply chain vector.</p>
+    </div>
+  </div>
+
+  <div class="category-grid">
+    {% for report in reports %}
+    <div class="report-card">
+      <div>
+        <div class="report-card-top">
+          <span class="report-card-cat">{{ report.category }}</span>
+          <span class="status-badge status-{{ snapshot.level_status }}">
+            <span class="status-dot"></span>LIVE
+          </span>
+        </div>
+        <h3>{{ report.title }}</h3>
+        <p>{{ report.blurb }}</p>
+      </div>
+      <div class="report-card-footer">
+        <div>
+          <span style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700;">{{ "%.1f"|format(snapshot.score) }}</span>
+          <span style="font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono);">score</span>
+        </div>
+        <a href="{{ report.url }}" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">Access Report →</a>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="report-card" style="opacity: 0.8;">
+      <div>
+        <div class="report-card-top">
+          <span class="report-card-cat">Energy & Commodities</span>
+          <span class="badge-tag" style="background: var(--surface-input); color: var(--text-muted);">COMING Q3 2026</span>
+        </div>
+        <h3>LNG Supply Chokepoints</h3>
+        <p>Tracking liquefied natural gas maritime traffic bottlenecks across the Malacca and Bab-el-Mandeb straits.</p>
+      </div>
+      <div class="report-card-footer">
+        <span style="font-size: 0.8rem; color: var(--text-muted);">In Development</span>
+        <a href="{{ url_for('main.coming_soon', slug='energy-commodities') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">Preview →</a>
+      </div>
+    </div>
+
+    <div class="report-card" style="opacity: 0.8;">
+      <div>
+        <div class="report-card-top">
+          <span class="report-card-cat">Maritime & Supply</span>
+          <span class="badge-tag" style="background: var(--surface-input); color: var(--text-muted);">COMING Q3 2026</span>
+        </div>
+        <h3>Taiwan Strait Security Index</h3>
+        <p>High-frequency monitor for semiconductor maritime routes, commercial flight diversions, and naval patrol density.</p>
+      </div>
+      <div class="report-card-footer">
+        <span style="font-size: 0.8rem; color: var(--text-muted);">In Development</span>
+        <a href="{{ url_for('main.coming_soon', slug='maritime-supply') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">Preview →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Media & Trust Hub -->
+<section class="trust-hub">
+  <div class="section-header" style="margin-bottom: 12px;">
+    <div>
+      <span class="badge-tag">FOR NEWS MEDIA & RESEARCHERS</span>
+      <h2 class="section-title" style="margin-top: 8px;">Peer-Reviewable & Citation-Ready</h2>
+    </div>
+  </div>
+  <p style="color: var(--text-sub); max-width: 780px;">
+    MyDataLabs indices are built on transparent mathematical normalization models. Every index combines live market feeds (yfinance) with verified industry reports (Lloyd's List, Baltic Exchange, Reuters).
+  </p>
+
+  <div class="trust-grid">
+    <div class="trust-item">
+      <h4>Mathematical Transparency</h4>
+      <p>All indices start at a 100.0 baseline representing calm baseline conditions. Capping thresholds prevent single-asset outliers from distorting the overall stress score.</p>
+    </div>
+    <div class="trust-item">
+      <h4>Quantitative Data Standards</h4>
+      <p>Verified historical snapshots formatted for integration into financial models, news reports, and academic research.</p>
+    </div>
+    <div class="trust-item">
+      <h4>Newsroom Citations</h4>
+      <p>Standardized AP/Chicago style attribution formats make it simple for reporters and analysts to cite MyDataLabs index metrics accurately.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Geopolitical Timeline Stream -->
+<section class="events-section">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Recent Geopolitical Events</h2>
+      <p class="section-desc">Key operational incidents influencing current index scores.</p>
+    </div>
+  </div>
+
+  <div class="events-timeline">
+    {% for ev in events %}
+    <div class="event-card">
+      <div class="event-date">{{ ev.date }}</div>
+      <div class="event-details">
+        <h4>{{ ev.title }}</h4>
+        <p>{{ ev.description }}</p>
+        {% if ev.source_name %}
+        <div style="margin-top: 6px;">
+          <a href="{{ ev.source_url }}" target="_blank" rel="noopener" style="font-size: 0.78rem; color: var(--accent-blue); text-decoration: none; font-weight: 600;">
+            📰 Source: {{ ev.source_name }} &rarr;
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="event-impact">{{ ev.impact }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

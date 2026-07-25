@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ category.label }} Intelligence — MyDataLabs{% endblock %}
+
+{% block content %}
+<section style="padding: 64px 0; max-width: 680px;">
+  <div style="margin-bottom: 16px;">
+    <span class="badge-tag">{{ category.label|upper }} DESK</span>
+    <span class="badge-tag" style="background: var(--surface-input); color: var(--text-muted); margin-left: 8px;">IN DEVELOPMENT (Q3 2026)</span>
+  </div>
+  
+  <h1 style="font-size: 2.4rem; letter-spacing: -0.02em; margin-bottom: 16px;">{{ category.label }} Index Series</h1>
+  <p style="font-size: 1.05rem; color: var(--text-sub); line-height: 1.6; margin-bottom: 32px;">
+    Our quantitative research team is currently constructing data fetchers, component baselines, and scoring models for the <strong>{{ category.label }}</strong> intelligence desk.
+  </p>
+
+  <div style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+    <h3 style="font-size: 1.05rem; color: var(--accent-blue); margin-bottom: 8px;">Live Flagship Report Available</h3>
+    <p style="font-size: 0.9rem; color: var(--text-sub); margin-bottom: 16px;">
+      In the meantime, explore our flagship report tracking geopolitical risk and maritime chokepoint stress in the Strait of Hormuz.
+    </p>
+    <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">Explore Hormuz Crisis Index →</a>
+  </div>
+</section>
+{% endblock %}

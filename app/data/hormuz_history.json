@@ -1,0 +1,445 @@
+{
+  "manual_overrides": {
+    "ship_traffic": 25,
+    "war_risk": 0.45,
+    "tanker_freight": 1360,
+    "reroutes": 24
+  },
+  "weeks": [
+    {
+      "week_start": "2026-01-05",
+      "score": 100.0,
+      "level_label": "Calm",
+      "level_status": "good",
+      "raw_values": {
+        "brent": 65.0,
+        "ship_traffic": 34,
+        "war_risk": 0.1,
+        "tanker_freight": 900,
+        "ttf_gas": 33.0,
+        "vix": 14.5,
+        "reroutes": 8.0
+      }
+    },
+    {
+      "week_start": "2026-01-12",
+      "score": 100.6,
+      "level_label": "Calm",
+      "level_status": "good",
+      "raw_values": {
+        "brent": 65.5,
+        "ship_traffic": 34,
+        "war_risk": 0.1,
+        "tanker_freight": 905,
+        "ttf_gas": 33.2,
+        "vix": 14.6,
+        "reroutes": 8.0
+      }
+    },
+    {
+      "week_start": "2026-01-19",
+      "score": 102.2,
+      "level_label": "Calm",
+      "level_status": "good",
+      "raw_values": {
+        "brent": 66.8,
+        "ship_traffic": 34,
+        "war_risk": 0.1,
+        "tanker_freight": 915,
+        "ttf_gas": 33.8,
+        "vix": 14.9,
+        "reroutes": 8.0
+      }
+    },
+    {
+      "week_start": "2026-01-26",
+      "score": 105.5,
+      "level_label": "Calm",
+      "level_status": "good",
+      "raw_values": {
+        "brent": 68.2,
+        "ship_traffic": 33,
+        "war_risk": 0.11,
+        "tanker_freight": 930,
+        "ttf_gas": 34.5,
+        "vix": 15.2,
+        "reroutes": 8.5
+      }
+    },
+    {
+      "week_start": "2026-02-02",
+      "score": 100.0,
+      "level_label": "Calm",
+      "level_status": "good",
+      "raw_values": {
+        "brent": 65.0,
+        "ship_traffic": 34,
+        "war_risk": 0.1,
+        "tanker_freight": 900,
+        "ttf_gas": 33.0,
+        "vix": 14.5,
+        "reroutes": 8.0
+      }
+    },
+    {
+      "week_start": "2026-02-09",
+      "score": 107.0,
+      "level_label": "Calm",
+      "level_status": "good",
+      "raw_values": {
+        "brent": 69.5,
+        "ship_traffic": 34,
+        "war_risk": 0.12,
+        "tanker_freight": 950,
+        "ttf_gas": 35.0,
+        "vix": 15.8,
+        "reroutes": 9.0
+      }
+    },
+    {
+      "week_start": "2026-02-16",
+      "score": 116.3,
+      "level_label": "Elevated",
+      "level_status": "good",
+      "raw_values": {
+        "brent": 73.0,
+        "ship_traffic": 32,
+        "war_risk": 0.16,
+        "tanker_freight": 1010,
+        "ttf_gas": 37.2,
+        "vix": 17.5,
+        "reroutes": 11.0
+      }
+    },
+    {
+      "week_start": "2026-02-23",
+      "score": 132.3,
+      "level_label": "Acute",
+      "level_status": "warning",
+      "raw_values": {
+        "brent": 78.5,
+        "ship_traffic": 29,
+        "war_risk": 0.25,
+        "tanker_freight": 1140,
+        "ttf_gas": 39.8,
+        "vix": 20.1,
+        "reroutes": 14.0
+      }
+    },
+    {
+      "week_start": "2026-03-02",
+      "score": 146.2,
+      "level_label": "Acute",
+      "level_status": "warning",
+      "raw_values": {
+        "brent": 82.0,
+        "ship_traffic": 27,
+        "war_risk": 0.35,
+        "tanker_freight": 1260,
+        "ttf_gas": 42.5,
+        "vix": 22.8,
+        "reroutes": 18.0
+      }
+    },
+    {
+      "week_start": "2026-03-09",
+      "score": 155.1,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 85.5,
+        "ship_traffic": 26,
+        "war_risk": 0.4,
+        "tanker_freight": 1320,
+        "ttf_gas": 44.2,
+        "vix": 24.5,
+        "reroutes": 21.0
+      }
+    },
+    {
+      "week_start": "2026-03-16",
+      "score": 139.3,
+      "level_label": "Acute",
+      "level_status": "warning",
+      "raw_values": {
+        "brent": 79.5,
+        "ship_traffic": 28,
+        "war_risk": 0.3,
+        "tanker_freight": 1210,
+        "ttf_gas": 41.0,
+        "vix": 21.2,
+        "reroutes": 18.5
+      }
+    },
+    {
+      "week_start": "2026-03-23",
+      "score": 150.9,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 83.5,
+        "ship_traffic": 27,
+        "war_risk": 0.38,
+        "tanker_freight": 1290,
+        "ttf_gas": 43.5,
+        "vix": 23.8,
+        "reroutes": 22.0
+      }
+    },
+    {
+      "week_start": "2026-03-30",
+      "score": 169.2,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 89.0,
+        "ship_traffic": 24,
+        "war_risk": 0.5,
+        "tanker_freight": 1430,
+        "ttf_gas": 48.0,
+        "vix": 26.5,
+        "reroutes": 26.0
+      }
+    },
+    {
+      "week_start": "2026-04-06",
+      "score": 157.7,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 85.0,
+        "ship_traffic": 25,
+        "war_risk": 0.42,
+        "tanker_freight": 1350,
+        "ttf_gas": 44.8,
+        "vix": 24.2,
+        "reroutes": 23.5
+      }
+    },
+    {
+      "week_start": "2026-04-13",
+      "score": 160.0,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 86.2,
+        "ship_traffic": 25,
+        "war_risk": 0.43,
+        "tanker_freight": 1370,
+        "ttf_gas": 45.5,
+        "vix": 24.6,
+        "reroutes": 24.0
+      }
+    },
+    {
+      "week_start": "2026-04-20",
+      "score": 165.1,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 88.0,
+        "ship_traffic": 24,
+        "war_risk": 0.46,
+        "tanker_freight": 1400,
+        "ttf_gas": 46.8,
+        "vix": 25.4,
+        "reroutes": 25.0
+      }
+    },
+    {
+      "week_start": "2026-04-27",
+      "score": 170.8,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 90.5,
+        "ship_traffic": 23,
+        "war_risk": 0.48,
+        "tanker_freight": 1440,
+        "ttf_gas": 48.2,
+        "vix": 26.1,
+        "reroutes": 26.5
+      }
+    },
+    {
+      "week_start": "2026-05-04",
+      "score": 177.0,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 92.8,
+        "ship_traffic": 22,
+        "war_risk": 0.52,
+        "tanker_freight": 1490,
+        "ttf_gas": 50.1,
+        "vix": 27.5,
+        "reroutes": 28.0
+      }
+    },
+    {
+      "week_start": "2026-05-11",
+      "score": 179.5,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 94.0,
+        "ship_traffic": 22,
+        "war_risk": 0.55,
+        "tanker_freight": 1520,
+        "ttf_gas": 52.0,
+        "vix": 28.2,
+        "reroutes": 29.0
+      }
+    },
+    {
+      "week_start": "2026-05-18",
+      "score": 172.8,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 91.5,
+        "ship_traffic": 23,
+        "war_risk": 0.49,
+        "tanker_freight": 1450,
+        "ttf_gas": 49.2,
+        "vix": 26.0,
+        "reroutes": 27.5
+      }
+    },
+    {
+      "week_start": "2026-05-25",
+      "score": 178.1,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 93.2,
+        "ship_traffic": 22,
+        "war_risk": 0.53,
+        "tanker_freight": 1500,
+        "ttf_gas": 51.5,
+        "vix": 27.8,
+        "reroutes": 28.5
+      }
+    },
+    {
+      "week_start": "2026-06-01",
+      "score": 184.4,
+      "level_label": "Extreme",
+      "level_status": "critical",
+      "raw_values": {
+        "brent": 96.0,
+        "ship_traffic": 21,
+        "war_risk": 0.58,
+        "tanker_freight": 1580,
+        "ttf_gas": 54.0,
+        "vix": 29.5,
+        "reroutes": 31.0
+      }
+    },
+    {
+      "week_start": "2026-06-08",
+      "score": 188.9,
+      "level_label": "Extreme",
+      "level_status": "critical",
+      "raw_values": {
+        "brent": 98.5,
+        "ship_traffic": 20,
+        "war_risk": 0.62,
+        "tanker_freight": 1640,
+        "ttf_gas": 57.2,
+        "vix": 31.0,
+        "reroutes": 33.0
+      }
+    },
+    {
+      "week_start": "2026-06-15",
+      "score": 165.9,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 91.0,
+        "ship_traffic": 24,
+        "war_risk": 0.44,
+        "tanker_freight": 1380,
+        "ttf_gas": 47.0,
+        "vix": 23.5,
+        "reroutes": 25.0
+      }
+    },
+    {
+      "week_start": "2026-06-22",
+      "score": 172.6,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 93.5,
+        "ship_traffic": 23,
+        "war_risk": 0.47,
+        "tanker_freight": 1420,
+        "ttf_gas": 49.5,
+        "vix": 25.0,
+        "reroutes": 26.5
+      }
+    },
+    {
+      "week_start": "2026-06-29",
+      "score": 179.4,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 95.8,
+        "ship_traffic": 22,
+        "war_risk": 0.5,
+        "tanker_freight": 1470,
+        "ttf_gas": 52.1,
+        "vix": 26.8,
+        "reroutes": 28.0
+      }
+    },
+    {
+      "week_start": "2026-07-06",
+      "score": 183.6,
+      "level_label": "Extreme",
+      "level_status": "critical",
+      "raw_values": {
+        "brent": 97.2,
+        "ship_traffic": 21,
+        "war_risk": 0.52,
+        "tanker_freight": 1510,
+        "ttf_gas": 54.5,
+        "vix": 28.0,
+        "reroutes": 29.5
+      }
+    },
+    {
+      "week_start": "2026-07-13",
+      "score": 173.3,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 94.8,
+        "ship_traffic": 23,
+        "war_risk": 0.46,
+        "tanker_freight": 1410,
+        "ttf_gas": 50.2,
+        "vix": 25.5,
+        "reroutes": 26.0
+      }
+    },
+    {
+      "week_start": "2026-07-20",
+      "score": 173.2,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 96.77999877929688,
+        "ship_traffic": 25,
+        "war_risk": 0.45,
+        "tanker_freight": 1360,
+        "ttf_gas": 63.57500076293945,
+        "vix": 18.700000762939453,
+        "reroutes": 24
+      }
+    }
+  ]
+}
