@@ -2,13 +2,14 @@ import csv
 import io
 import json
 import os
+import re
 import threading
 import time
 from datetime import date, datetime
 
 from flask import Blueprint, Response, abort, jsonify, redirect, render_template, request
 
-from app import scoring, storage
+from app import scoring, storage, votes
 from app.indices import hormuz
 
 bp = Blueprint("main", __name__)
@@ -407,6 +408,7 @@ def hormuz_index():
             total_attacks=total_attacks,
             month_labels=month_labels,
             cumulative_attacks=cumulative_attacks,
+            sentiment=votes.get_summary(),
             press=build_press_dispatch(snapshot, total_attacks),
             top_driver=hormuz.top_driver(snapshot),
             band_positions=scoring.band_positions(),
@@ -607,6 +609,97 @@ def cron_update_hormuz():
         "persisted": persisted,
         "storage_backend": storage.storage_backend(),
     }), (200 if persisted else 202)
+
+
+# --- Community sentiment ---------------------------------------------------
+# The Public Perception Index: what readers say the crisis feels like, on the
+# same 100–200 scale as the model score. See app/votes.py for the identity and
+# data-protection design; nothing here reads or stores personal data.
+
+# Accepted shape of the browser's anonymous vote token. Deliberately strict:
+# the token is only ever a client-generated UUID, and refusing anything else
+# keeps arbitrary caller-supplied strings out of the hash input.
+_VOTER_TOKEN_RE = re.compile(r"^[A-Za-z0-9_-]{16,64}$")
+
+
+def _voter_token() -> str | None:
+    token = request.headers.get("X-Voter-Token", "").strip()
+    return token if _VOTER_TOKEN_RE.match(token) else None
+
+
+def _origin_hash(week_start: str) -> str:
+    """Coarse per-network fingerprint used only to cap ballot stuffing.
+
+    Built from the forwarded client IP and user agent, immediately hashed with
+    a week-derived salt. Neither input is stored or logged by this application.
+    """
+    forwarded = request.headers.get("X-Forwarded-For", "")
+    ip = forwarded.split(",")[0].strip() or (request.remote_addr or "unknown")
+    return votes.hash_origin(ip, request.headers.get("User-Agent", ""), week_start)
+
+
+def _no_store(resp: Response) -> Response:
+    """Sentiment responses are per-voter and live; never let a CDN hold them."""
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
+@bp.route("/api/hormuz-index/sentiment", methods=["GET"])
+def api_sentiment():
+    token = _voter_token()
+    voter_hash = votes.hash_voter_token(token) if token else None
+    return _no_store(jsonify(votes.get_summary(voter_hash=voter_hash)))
+
+
+@bp.route("/api/hormuz-index/sentiment", methods=["POST"])
+def api_sentiment_vote():
+    token = _voter_token()
+    if not token:
+        return _no_store(jsonify({"error": "Missing or malformed voter token."})), 400
+
+    bad_rating = {
+        "error": f"Rating must be a whole number from "
+                 f"{votes.RATING_MIN} to {votes.RATING_MAX}."
+    }
+    payload = request.get_json(silent=True) or {}
+    try:
+        value = int(payload.get("value"))
+    except (TypeError, ValueError):
+        return _no_store(jsonify(bad_rating)), 400
+    # Range is checked here as well as in votes.cast_vote so a malformed ballot
+    # answers 400 rather than sharing the 429 used for the rate limit.
+    if not votes.RATING_MIN <= value <= votes.RATING_MAX:
+        return _no_store(jsonify(bad_rating)), 400
+
+    week_start = votes.current_week_start()
+    try:
+        summary = votes.cast_vote(
+            value,
+            voter_hash=votes.hash_voter_token(token),
+            origin_hash=_origin_hash(week_start),
+            week_start=week_start,
+        )
+    except votes.VoteRejected as exc:
+        return _no_store(jsonify({"error": str(exc)})), 429
+    except Exception:
+        return _no_store(jsonify({"error": "Could not record your vote. Try again."})), 503
+
+    return _no_store(jsonify(summary))
+
+
+@bp.route("/api/hormuz-index/sentiment", methods=["DELETE"])
+def api_sentiment_withdraw():
+    """Let a visitor remove their own vote — the erasure path for the dialog."""
+    token = _voter_token()
+    if not token:
+        return _no_store(jsonify({"error": "Missing or malformed voter token."})), 400
+    try:
+        summary = votes.withdraw_vote(votes.hash_voter_token(token))
+    except votes.VoteRejected as exc:
+        return _no_store(jsonify({"error": str(exc)})), 503
+    except Exception:
+        return _no_store(jsonify({"error": "Could not withdraw your vote."})), 503
+    return _no_store(jsonify(summary))
 
 
 # --- Crawler-facing files --------------------------------------------------

@@ -81,6 +81,7 @@ marks the whole snapshot `degraded`, which surfaces a reduced-confidence notice 
 | `/api/hormuz-index/data.csv` | Weekly history with raw component values |
 | `/api/health` | Liveness, storage durability, snapshot cache age |
 | `/api/cron/update-hormuz` | Scheduled recompute + persist (`CRON_SECRET` protected) |
+| `/api/hormuz-index/sentiment` | Public Perception Index: `GET` aggregate, `POST` vote, `DELETE` withdraw |
 | `/sitemap.xml`, `/robots.txt`, `/llms.txt` | Crawler-facing files |
 
 ---
@@ -98,11 +99,14 @@ mydatalabs-in/
 │   ├── static/
 │   │   ├── css/style.css      # Design tokens, dark/light themes, a11y primitives
 │   │   ├── js/theme.js        # Theme toggle, keyboard-accessible nav, clipboard
-│   │   └── js/charts.js       # ECharts setup, theme-reactive, fallback handling
+│   │   ├── js/charts.js       # ECharts setup, theme-reactive, fallback handling
+│   │   └── js/vote.js         # HMX-PPI voting dialog, anonymous token handling
 │   ├── templates/             # base, home, hormuz, methodology, data, 404, 500, coming_soon
 │   ├── routes.py              # Routing, snapshot cache, press dispatch derivation
 │   ├── scoring.py             # Generic composite engine (index-agnostic)
 │   ├── storage.py             # History persistence with durability reporting
+│   ├── db.py                  # Postgres connections + idempotent schema bootstrap
+│   ├── votes.py               # HMX-PPI aggregation, dedup and privacy design
 │   └── __init__.py            # App factory, security headers, static caching
 ├── scripts/
 │   ├── build_assets.py        # Regenerate icons + 1200x630 OG card from logo.png
@@ -173,7 +177,41 @@ derivatives are ever served). Re-run after replacing either source image.
 | `HISTORY_DATA_DIR` | *(unset)* | Writable directory for durable history persistence |
 | `SNAPSHOT_TTL_SECONDS` | `3600` | How long a computed snapshot is reused before refetching |
 | `STATIC_MAX_AGE` | `31536000` | `Cache-Control: max-age` for `/static/*` |
+| `DATABASE_URL` | *(unset, falls back to `db`)* | Postgres DSN for community voting. Unset disables the vote block; nothing else on the site depends on it |
+| `VOTE_PEPPER` | *(dev placeholder)* | Secret mixed into vote token hashes. **Set this in production** |
+| `MIN_VOTES_TO_PUBLISH` | `5` | Ballots required before the perception number is shown |
+| `MAX_VOTES_PER_ORIGIN` | `25` | Weekly ballot ceiling per coarse network hash |
 
+
+---
+
+## Public Perception Index
+
+A 1–10 rating on the Hormuz dashboard asking readers how severe the situation
+feels. The mean rating is stretched onto the same 100–200 scale as the model
+score, so a rating of 1 lands on the calm baseline and 10 on maximum stress:
+
+```
+index = 100 + (mean_rating - 1) / 9 * 100
+```
+
+Sharing the scale is what makes the crowd reading and the composite comparable
+at a glance. It is opinion, contributes nothing to HMX-INDEX, and is never
+served by the data API.
+
+Votes live in Postgres (`community_votes`); the table is created on first use
+by `app/votes.py:SCHEMA`, so a fresh database needs no manual bootstrap.
+
+**Data protection.** No account, no cookie, no IP address, no user agent and no
+fingerprint is stored. Uniqueness comes from a random UUID the browser
+generates and keeps in `localStorage`, written only when someone actually
+votes, and stored server-side only as a peppered SHA-256. Ballot stuffing is
+capped against a week-salted HMAC of IP + user agent from which neither input
+can be recovered and which cannot be correlated across weeks. The
+`localStorage` entry is strictly necessary for the function the visitor asked
+for, so it needs no consent banner, and the voting dialog states it anyway.
+Visitors can withdraw a vote from the same dialog, which deletes the row and
+the local ID. See the module docstring in `app/votes.py` for the full rationale.
 
 ---
 

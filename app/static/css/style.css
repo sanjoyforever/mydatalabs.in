@@ -760,16 +760,16 @@ main {
   background: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: 14px;
-  padding: 24px 28px;
-  margin-bottom: 32px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
 }
 
 .gauge-track-container {
   position: relative;
-  height: 14px;
+  height: 10px;
   border-radius: 999px;
   background: var(--surface-input);
-  margin: 24px 0 12px;
+  margin: 16px 0 8px;
   overflow: visible;
 }
 
@@ -783,30 +783,30 @@ main {
 
 .gauge-tick-mark {
   position: absolute;
-  top: -4px;
+  top: -3px;
   width: 2px;
-  height: 22px;
+  height: 16px;
   background: var(--border-bright);
   transform: translateX(-1px);
 }
 
 .gauge-pointer {
   position: absolute;
-  top: -6px;
-  width: 18px;
-  height: 18px;
+  top: -5px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--text-main);
-  border: 3px solid var(--accent-blue);
-  box-shadow: 0 0 12px var(--accent-blue);
-  transform: translateX(-9px);
+  border: 3px solid var(--accent-rose);
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+  transform: translateX(-8px);
   transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .gauge-labels-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-family: var(--font-mono);
   color: var(--text-muted);
 }
@@ -1400,6 +1400,17 @@ main:focus { outline: none; }
   gap: 12px;
 }
 .gauge-card-header h2 { font-size: 1.1rem; margin-bottom: 2px; }
+/* Same treatment as .gauge-scale-ends: small muted mono, regular weight. */
+.inline-desc {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0;
+  color: var(--text-muted);
+  margin-left: 8px;
+  vertical-align: baseline;
+}
 .gauge-scale-ends {
   display: flex;
   justify-content: space-between;
@@ -2041,3 +2052,337 @@ background: linear-gradient(90deg,
   padding: 26px 36px;
   margin-bottom: 24px;
 }
+
+/* ==========================================================================
+   Public Perception Index — community sentiment block and voting dialog
+   ========================================================================== */
+
+.ppi-block {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ppi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* The description is long enough to claim the full row and push the button on
+   to a line of its own; let it shrink and wrap internally instead. */
+.ppi-header > div:first-child {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.ppi-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  margin: 0 0 4px;
+}
+
+.ppi-vote-btn {
+  flex-shrink: 0;
+  background: var(--accent-emerald);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+}
+
+.ppi-vote-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.ppi-readout {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.ppi-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.ppi-value {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.ppi-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ppi-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.ppi-gap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.ppi-gap-value {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+}
+/* Crowd reading above the model is "hotter" — the public feels it worse than
+   the components measure. Colour follows that direction, not good/bad. */
+.ppi-gap-value.is-hotter { color: var(--accent-rose); }
+.ppi-gap-value.is-cooler { color: var(--accent-emerald); }
+
+.ppi-gap-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.ppi-track { margin: 12px 0 6px; }
+
+.ppi-fill {
+  background: linear-gradient(90deg, var(--accent-emerald) 0%, var(--accent-amber) 50%, var(--accent-rose) 100%);
+}
+
+.ppi-pointer {
+  background: var(--text-main);
+  border-color: var(--accent-rose);
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+}
+
+.ppi-model-marker {
+  background: transparent;
+  border: 2px dashed var(--text-muted);
+  box-shadow: none;
+  width: 14px;
+  height: 14px;
+  top: -4px;
+  transform: translateX(-7px);
+}
+
+.ppi-footnote {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ppi-marker-key {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px dashed var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* --- Voting dialog -------------------------------------------------------- */
+
+.ppi-dialog {
+  width: min(460px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--border-bright);
+  border-radius: 14px;
+  background: var(--surface-card);
+  color: var(--text-main);
+}
+
+.ppi-dialog::backdrop {
+  background: rgba(4, 7, 14, 0.66);
+  backdrop-filter: blur(2px);
+}
+
+.ppi-dialog-form { padding: 22px 24px 20px; }
+
+.ppi-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ppi-dialog-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.ppi-dialog-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.ppi-dialog-close:hover { color: var(--text-main); }
+
+.ppi-dialog-intro {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  margin: 10px 0 20px;
+}
+
+.ppi-slider-readout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.ppi-slider-value {
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ppi-slider-word {
+  font-size: 0.85rem;
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+/* Shows where the rating lands on the published 100-200 scale, so the mapping
+   is visible at the point of voting rather than being a black box. */
+.ppi-slider-mapped {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.ppi-slider {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-emerald) 0%, var(--accent-amber) 50%, var(--accent-rose) 100%);
+  outline: none;
+  cursor: pointer;
+}
+
+.ppi-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--text-main);
+  border: 3px solid var(--accent-emerald);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+  cursor: grab;
+}
+
+.ppi-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--text-main);
+  border: 3px solid var(--accent-emerald);
+  cursor: grab;
+}
+
+.ppi-slider:focus-visible { box-shadow: 0 0 0 3px var(--accent-emerald-bg); }
+
+/* Ten discrete stops, so the notch marks read as the steps they are. */
+.ppi-slider { margin-bottom: 2px; }
+
+.ppi-slider + datalist {
+  display: flex;
+  justify-content: space-between;
+  writing-mode: horizontal-tb;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+
+.ppi-slider + datalist option { padding: 0; }
+
+.ppi-slider-ends {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.ppi-privacy {
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  background: var(--surface-input);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 18px 0 0;
+}
+
+.ppi-error {
+  font-size: 0.8rem;
+  color: var(--status-critical-text);
+  background: var(--status-critical-bg);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 12px 0 0;
+}
+
+.ppi-dialog-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.ppi-actions-spacer { flex: 1; }
+
+.ppi-withdraw {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+.ppi-withdraw:hover { color: var(--status-critical-text); }
+
+@media (max-width: 560px) {
+  .ppi-header { flex-direction: column; align-items: stretch; }
+  .ppi-vote-btn { justify-content: center; }
+  .ppi-gap { margin-left: 0; }
+  .ppi-dialog-actions { flex-wrap: wrap; }
+}
+
+/* Several components here set an explicit `display`, which outranks the user
+   agent's `[hidden] { display: none }` and leaves elements the templates and
+   vote.js believe are hidden still painted. Restate it with the weight to win. */
+[hidden] { display: none !important; }
