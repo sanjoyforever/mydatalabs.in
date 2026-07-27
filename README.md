@@ -173,7 +173,7 @@ derivatives are ever served). Re-run after replacing either source image.
 | `HISTORY_DATA_DIR` | *(unset)* | Writable directory for durable history persistence |
 | `SNAPSHOT_TTL_SECONDS` | `3600` | How long a computed snapshot is reused before refetching |
 | `STATIC_MAX_AGE` | `31536000` | `Cache-Control: max-age` for `/static/*` |
-| `GA_MEASUREMENT_ID` | `G-3376VRHZW8` | GA4 property loaded site-wide; page views are automatic, `theme.js` also fires custom events for the theme toggle, clipboard copy and outbound clicks |
+
 
 ---
 
@@ -202,21 +202,6 @@ set `www.mydatalabs.in` to **redirect to** `mydatalabs.in`.
 
 If you would rather serve from `www`, set `SITE_ORIGIN=https://www.mydatalabs.in` instead — no code
 changes are needed either way.
-
-### DNS (GoDaddy)
-
-| Type | Host | Value | TTL |
-| :--- | :--- | :--- | :--- |
-| A | `@` | `76.76.21.21` | Automatic |
-| CNAME | `www` | `cname.vercel-dns.com` | Automatic |
-
-### Persistence caveat
-
-Vercel's filesystem is read-only outside `/tmp`, so scheduled writes are instance-local and vanish
-when the instance recycles — `/api/cron/update-hormuz` returns **202** with `"persisted": false`
-rather than a misleading 200 when this happens. For durable history, either set `HISTORY_DATA_DIR`
-to a mounted volume (Docker / Cloud Run), or run `update_data.py` locally and commit
-`app/data/hormuz_history.json`.
 
 ---
 
