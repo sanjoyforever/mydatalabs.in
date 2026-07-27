@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""MyDataLabs local data updater.
+"""MyDataLabs data updater.
 
 Recomputes the index snapshot, appends it to the weekly history, and reports
 what actually happened — including whether the write was durable and which
-components are running stale.
+components are running stale. In production/cron mode it then commits the
+updated data files and pushes to GitHub, which is what triggers the Vercel
+deployment; Vercel's own filesystem is read-only, so a push is the only way a
+weekly update actually reaches the live site.
 
 Usage:
-    python update_data.py                  # recompute and persist
-    python update_data.py --dry-run        # recompute without writing
+    python update_data.py                  # recompute, persist, commit + push
+    python update_data.py --local          # recompute and persist; skip git
+    python update_data.py --dry-run        # recompute without writing anything
     python update_data.py --stamp-manual   # mark manual inputs as updated today
 
 Before a weekly run, update the "manual_overrides" block in
@@ -21,12 +25,15 @@ import argparse
 import datetime
 import json
 import os
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app import storage  # noqa: E402
 from app.indices import hormuz  # noqa: E402
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app", "data")
 
@@ -92,29 +99,63 @@ def report_incident_dataset() -> None:
         return
     with open(path, "r", encoding="utf-8") as f:
         rows = json.load(f)
-    synthetic = sum(1 for r in rows if r.get("synthetic"))
-    print(f"  {len(rows)} records ({synthetic} flagged synthetic).")
-    if synthetic:
-        print(
-            "  NOTE: this is an ILLUSTRATIVE MODEL, not a verified incident log."
-            " It is excluded from the composite score and is labelled as synthetic"
-            " everywhere it appears in the UI."
+    print(f"  {len(rows)} records. Compiled separately from the index; contributes"
+          " nothing to the composite score and is not served by the API.")
+
+
+def push_to_github() -> int:
+    """Commit the updated data files and push, which is what triggers the
+    Vercel deploy. Only ever touches app/data/*.json — a broad `git add .`
+    here would sweep up whatever unrelated edit happens to be sitting in the
+    working tree when the weekly cron fires."""
+    print("=" * 62)
+    print("Committing and pushing to GitHub...")
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    commit_msg = f"Automated weekly data update [{timestamp}]"
+
+    data_files = [
+        os.path.join("app", "data", "hormuz_history.json"),
+        os.path.join("app", "data", "vessel_attacks.json"),
+    ]
+    try:
+        subprocess.run(["git", "add", *data_files], cwd=ROOT_DIR, check=True)
+        status = subprocess.run(
+            ["git", "status", "--porcelain", *data_files],
+            cwd=ROOT_DIR, capture_output=True, text=True, check=True,
         )
+        if not status.stdout.strip():
+            print("  No data changes to commit; repository is already up to date.")
+            return 0
+        subprocess.run(["git", "commit", "-m", commit_msg], cwd=ROOT_DIR, check=True)
+        subprocess.run(["git", "push", "origin", "main"], cwd=ROOT_DIR, check=True)
+        print("  Pushed to GitHub -> Vercel deployment triggered.")
+        return 0
+    except subprocess.CalledProcessError as e:
+        print(f"  ERROR: git command failed: {e}")
+        return 1
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dry-run", action="store_true", help="recompute without writing history")
+    parser.add_argument("--dry-run", action="store_true", help="recompute without writing anything")
+    parser.add_argument("--local", "-l", action="store_true",
+                        help="persist locally but skip the git commit + push")
     parser.add_argument("--stamp-manual", action="store_true",
                         help="mark all manual components as updated today, then run")
     args = parser.parse_args()
 
+    mode = "DRY RUN" if args.dry_run else ("LOCAL (git push skipped)" if args.local else "PRODUCTION / CRON (git push)")
     print(f"MyDataLabs data update — {datetime.datetime.now().isoformat(timespec='seconds')}")
+    print(f"Mode: {mode}")
     if args.stamp_manual:
         stamp_manual_dates()
 
     code = update_index(persist=not args.dry_run)
     report_incident_dataset()
+
+    if code == 0 and not args.dry_run and not args.local:
+        code = push_to_github()
+
     print("=" * 62)
     return code
 

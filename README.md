@@ -131,23 +131,36 @@ python -m pytest tests/ -q      # scoring engine tests
 
 ```bash
 # 1. Edit app/data/hormuz_history.json → manual_overrides with this week's figures
-# 2. Recompute, stamping the manual inputs as updated today:
+# 2. Recompute, stamping the manual inputs as updated today, commit + push:
 python update_data.py --stamp-manual
 
-# Preview without writing:
+# Recompute and persist locally without touching git:
+python update_data.py --local
+
+# Preview without writing anything:
 python update_data.py --dry-run
 ```
 
 The updater reports which components are stale, whether the snapshot is degraded, and — importantly —
 whether the write actually landed anywhere durable.
 
+By default (no flag) it also commits `app/data/hormuz_history.json` and `vessel_attacks.json` and
+pushes to `origin/main` — that push is what triggers the Vercel deployment, since Vercel's own
+filesystem is read-only outside `/tmp` and cannot persist the update itself. This is the mode the
+scheduled cron job runs in. `--local` skips the git step for local testing; the commit only ever
+touches those two data files, never a broad `git add .`.
+
 ### Regenerating image assets
 
 ```bash
-python scripts/build_assets.py   # after changing app/static/img/logo.png
+python scripts/build_assets.py
 ```
 
-Produces `logo-64.png`, `favicon.png`, `apple-touch-icon.png` and the 1200×630 `og-card.png`.
+Produces `logo-64.png`, `favicon.png`, `apple-touch-icon.png` and the 1200×630 `og-card.png` from
+`logo.png`, and — if `app/static/img/image1.jpg` is present — the home page hero: three responsive
+WebP + JPEG derivatives (640/960/1400px, 12:5) cropped and re-encoded down from whatever the source
+photo is (the source itself is excluded from the Vercel bundle via `.vercelignore`; only the
+derivatives are ever served). Re-run after replacing either source image.
 
 ---
 
@@ -160,6 +173,7 @@ Produces `logo-64.png`, `favicon.png`, `apple-touch-icon.png` and the 1200×630 
 | `HISTORY_DATA_DIR` | *(unset)* | Writable directory for durable history persistence |
 | `SNAPSHOT_TTL_SECONDS` | `3600` | How long a computed snapshot is reused before refetching |
 | `STATIC_MAX_AGE` | `31536000` | `Cache-Control: max-age` for `/static/*` |
+| `GA_MEASUREMENT_ID` | `G-3376VRHZW8` | GA4 property loaded site-wide; page views are automatic, `theme.js` also fires custom events for the theme toggle, clipboard copy and outbound clicks |
 
 ---
 
