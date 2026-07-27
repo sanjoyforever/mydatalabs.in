@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Page not found — MyDataLabs{% endblock %}
+{% block robots %}noindex, follow{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <span class="badge-tag">404</span>
+  <h1>That page does not exist</h1>
+  <p class="prose-lede">
+    The URL you followed does not match anything on this site. The link may be out of date, or the
+    address may have a typo in it. Everything published here is one click away below.
+  </p>
+
+  <div class="error-links">
+    <a href="{{ url_for('main.home') }}" class="btn-primary">Go to the homepage</a>
+    <a href="{{ url_for('main.hormuz_index') }}" class="btn-secondary">Hormuz Crisis Index</a>
+    <a href="{{ url_for('main.methodology') }}" class="btn-secondary">Methodology</a>
+    <a href="{{ url_for('main.data_page') }}" class="btn-secondary">Data &amp; API</a>
+  </div>
+</section>
+{% endblock %}

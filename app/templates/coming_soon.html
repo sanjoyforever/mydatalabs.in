@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ category.label }} Intelligence — MyDataLabs{% endblock %}
+{% block meta_desc %}The {{ category.label }} index series is in development at MyDataLabs. Our live flagship report is the Hormuz Crisis Index.{% endblock %}
+{# These pages are near-identical placeholders — indexing five of them would submit
+   thin duplicates against two substantive pages. Noindexed until each index ships. #}
+{% block robots %}noindex, follow{% endblock %}
+
+{% block content %}
+<section class="prose-page prose-page-narrow">
+  <div class="coming-soon-tags">
+    <span class="badge-tag">{{ category.label|upper }} DESK</span>
+    <span class="badge-tag badge-tag-muted">IN DEVELOPMENT (Q3 2026)</span>
+  </div>
+
+  <h1>{{ category.label }} index series</h1>
+  <p class="prose-lede">
+    We are building the data fetchers, component baselines and scoring models for the
+    <strong>{{ category.label }}</strong> desk. Each index will ship with the same published
+    methodology and open data as the flagship report.
+  </p>
+
+  <div class="coming-soon-card">
+    <h2>Live flagship report</h2>
+    <p>
+      In the meantime, the Hormuz Crisis Index tracks geopolitical risk and maritime chokepoint stress
+      in the Strait of Hormuz — updated weekly, with a full component breakdown and free data export.
+    </p>
+    <div class="error-links">
+      <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">Explore the Hormuz Crisis Index <span aria-hidden="true">→</span></a>
+      <a href="{{ url_for('main.methodology') }}" class="btn-secondary">Read the methodology</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

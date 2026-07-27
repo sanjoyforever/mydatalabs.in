@@ -1,0 +1,603 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+{% set brent = snapshot.components|selectattr("component.key", "equalto", "brent")|first %}
+
+{% block title %}Hormuz Crisis Index (HMX-INDEX) — MyDataLabs Intelligence{% endblock %}
+{% block meta_desc %}The Hormuz Crisis Index (HMX-INDEX) stands at {{ "%.1f"|format(snapshot.score) }} ({{ snapshot.level_label }}) for the week of {{ snapshot.week_start }}. Weekly composite of Brent crude, ship transits, war-risk insurance and tanker freight.{% endblock %}
+{% block og_title %}Hormuz Crisis Index: {{ "%.1f"|format(snapshot.score) }} ({{ snapshot.level_label }}){% endblock %}
+{% block og_desc %}Weekly quantitative stress index for the Strait of Hormuz, scored against a calm baseline of 100.0. Open methodology, free JSON and CSV data.{% endblock %}
+{% block twitter_title %}Hormuz Crisis Index: {{ "%.1f"|format(snapshot.score) }} ({{ snapshot.level_label }}){% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
+
+<!-- Schema.org Dataset & Breadcrumb Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Dataset",
+      "@id": "{{ origin }}/hormuz-index#dataset",
+      "name": "Hormuz Crisis Index (HMX-INDEX)",
+      "description": "Weekly quantitative composite index measuring geopolitical, maritime and energy-market stress in the Strait of Hormuz against a calm baseline of 100.0 (baseline window {{ baseline_window|default('2026-01-01/2026-01-31') }}). Seven weighted components covering Brent crude, ship transits, war-risk insurance, tanker freight, European gas, equity volatility and Cape of Good Hope reroutes.",
+      "url": "{{ origin }}/hormuz-index",
+      "keywords": ["Hormuz Crisis Index", "HMX-INDEX", "Strait of Hormuz", "war risk insurance", "tanker freight", "Brent crude", "maritime chokepoint"],
+      "creator": { "@id": "{{ origin }}/#organization" },
+      "publisher": { "@id": "{{ origin }}/#organization" },
+      "license": "{{ license_url }}",
+      "isAccessibleForFree": true,
+      "spatialCoverage": "Strait of Hormuz, Persian Gulf, Gulf of Oman",
+      "temporalCoverage": "{{ history[0].week_start if history else '2026-01-05' }}/..",
+      "dateModified": "{{ snapshot.week_start }}",
+      "measurementTechnique": "Weighted sum of per-component stress scores, each normalised as percentage change from a baseline value and capped at a component-specific crisis threshold.",
+      "variableMeasured": [
+        {
+          "@type": "PropertyValue",
+          "name": "HMX-INDEX composite score",
+          "value": {{ "%.1f"|format(snapshot.score) }},
+          "minValue": {{ scale_min }},
+          "description": "Composite stress score; 100.0 equals baseline conditions."
+        }{% for cr in snapshot.components %},
+        {
+          "@type": "PropertyValue",
+          "name": {{ cr.component.label|tojson }},
+          "unitText": {{ cr.component.unit|tojson }},
+          "value": {{ cr.current_value if cr.current_value is not none else 'null' }},
+          "description": {{ ("Component weight " ~ (cr.component.weight * 100)|round|int ~ "%. Baseline " ~ "%.2f"|format(cr.baseline_value) ~ ". Source: " ~ cr.component.source ~ ".")|tojson }}
+        }{% endfor %}
+      ],
+      "distribution": [
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "application/json",
+          "contentUrl": "{{ origin }}/api/hormuz-index/data.json",
+          "name": "HMX-INDEX current snapshot and full weekly history (JSON)"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "text/csv",
+          "contentUrl": "{{ origin }}/api/hormuz-index/data.csv",
+          "name": "HMX-INDEX weekly history with raw component values (CSV)"
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ origin }}/" },
+        { "@type": "ListItem", "position": 2, "name": "Hormuz Crisis Index", "item": "{{ origin }}/hormuz-index" }
+      ]
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="{{ url_for('main.home') }}">Home</a>
+  <span aria-hidden="true">/</span>
+  <span aria-current="page">Hormuz Crisis Index</span>
+</nav>
+
+<!-- Dashboard Header Bar -->
+<div class="dash-header-bar">
+  <div class="dash-title-group">
+    <div class="dash-badge-row">
+      <span class="badge-tag">HMX-INDEX</span>
+      <span class="status-badge status-{{ snapshot.level_status }}">
+        <span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label }}
+      </span>
+      <span class="dash-week">WEEK OF {{ snapshot.week_start }}</span>
+    </div>
+    <h1>Hormuz Crisis Index</h1>
+    <div class="dash-meta">
+      <span>Geo Politics &amp; Maritime Security</span>
+      <span aria-hidden="true">•</span>
+      <span>Strait of Hormuz Chokepoint Monitor</span>
+      <span aria-hidden="true">•</span>
+      <span>Baseline: Feb 2026 = 100.0</span>
+    </div>
+  </div>
+
+  <div class="dash-header-actions">
+    <div class="dash-score-box">
+      <div>
+        <div class="dash-score-label">Composite Score</div>
+        <div class="dash-big-score">{{ "%.1f"|format(snapshot.score) }}</div>
+      </div>
+      <div class="dash-delta-group">
+        <span class="delta-pill {% if delta >= 0 %}delta-up{% else %}delta-down{% endif %}">
+          <span aria-hidden="true">{% if delta >= 0 %}▲{% else %}▼{% endif %}</span>
+          {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
+          <span class="sr-only">points {% if delta >= 0 %}up{% else %}down{% endif %} versus last week</span>
+        </span>
+        <div class="dash-delta-caption">vs last week</div>
+      </div>
+    </div>
+
+    <button type="button" class="btn-primary" data-copy-target="ticker-quote-text">
+      <span aria-hidden="true">📋</span> Copy
+    </button>
+  </div>
+</div>
+
+<!-- Executive Intelligence Briefing Grid -->
+<section aria-labelledby="briefing-heading">
+  <h2 id="briefing-heading" class="sr-only">Executive briefing</h2>
+  <div class="briefing-grid">
+    <div class="briefing-card">
+      <h3><span aria-hidden="true">⚠️</span> Threat Level Assessment</h3>
+      <p>
+        The index stands at <strong>{{ "%.1f"|format(snapshot.score) }} ({{ snapshot.level_label }})</strong>,
+        {{ "%.1f"|format(press.points_above_baseline) }} points above the 100.0 calm baseline.
+        {% if press.war_risk_multiple and press.war_risk_multiple > 1.5 %}
+        War-risk insurance is running at {{ "%.1f"|format(press.war_risk_multiple) }}× baseline
+        {% endif %}
+        {%- if press.reroutes %} and {{ "%.0f"|format(press.reroutes) }}% of regional tanker traffic is routing around the Cape of Good Hope{% endif %}.
+      </p>
+    </div>
+
+    <div class="briefing-card">
+      <h3><span aria-hidden="true">📊</span> Key Driver This Week</h3>
+      <p>
+        {% if top_driver %}
+        <strong>{{ top_driver.component.label }}</strong> is the largest single contributor, adding
+        <strong>{{ "%.1f"|format(top_driver.contribution) }} points</strong> to the composite
+        ({{ "%.0f"|format(top_driver.stress) }}/100 stress at a {{ (top_driver.component.weight * 100)|round|int }}% weight){% if press.driver_2_label %},
+        followed by <strong>{{ press.driver_2_label }}</strong> at {{ "%.1f"|format(press.driver_2_points) }} points{% endif %}.
+        {% else %}
+        Component data unavailable this week.
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="briefing-card">
+      <h3><span aria-hidden="true">⚓</span> Chokepoint Posture</h3>
+      <p>
+        {% if press.traffic is not none %}
+        Strait transits are averaging <strong>{{ "%.0f"|format(press.traffic) }} ships/week</strong>
+        against a baseline of {{ "%.0f"|format(press.traffic_baseline) }}{% if press.traffic_drop_pct %} —
+        {{ "%.1f"|format(press.traffic_drop_pct) }}% {{ press.traffic_direction }} baseline{% endif %}.
+        {% endif %}
+        {% if press.reroutes %}
+        An estimated <strong>{{ "%.0f"|format(press.reroutes) }}%</strong> of regional tanker traffic is diverting around Africa.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Crisis Severity Scale Gauge -->
+<section class="gauge-card" aria-labelledby="gauge-heading">
+  <div class="gauge-card-header">
+    <div>
+      <h2 id="gauge-heading">Crisis Severity Gauge</h2>
+      <span class="section-desc">Risk classification derived from the composite score, on a {{ scale_min|int }}–{{ scale_max|int }} presentation scale.</span>
+    </div>
+    <span class="status-badge status-{{ snapshot.level_status }}">
+      CURRENT STATUS: {{ snapshot.level_label|upper }}
+    </span>
+  </div>
+
+  <div class="gauge-track-container"
+       role="meter"
+       aria-valuenow="{{ "%.1f"|format(snapshot.score) }}"
+       aria-valuemin="{{ scale_min }}"
+       aria-valuemax="{{ scale_max }}"
+       aria-label="HMX-INDEX composite score, {{ "%.1f"|format(snapshot.score) }} of {{ scale_max|int }}, classified {{ snapshot.level_label }}">
+    <div class="gauge-fill-bar" style="width: {{ scale_pct }}%;"></div>
+    {% for band in band_positions %}
+    <div class="gauge-tick-mark" style="left: {{ band.pct }}%;" title="{{ band.label }} begins at {{ band.lower|int }}"></div>
+    {% endfor %}
+    <div class="gauge-pointer" style="left: {{ scale_pct }}%;" title="Current score: {{ '%.1f'|format(snapshot.score) }}"></div>
+  </div>
+
+  <div class="gauge-scale-ends" aria-hidden="true">
+    <span>{{ scale_min|int }} · baseline</span>
+    <span>{{ scale_max|int }} · maximum stress on every component</span>
+  </div>
+
+  <div class="gauge-labels-row">
+    <span class="gauge-label-item {% if snapshot.level_label == 'Calm' %}active{% endif %}">CALM (&lt;110)</span>
+    <span class="gauge-label-item {% if snapshot.level_label == 'Elevated' %}active{% endif %}">ELEVATED (110–125)</span>
+    <span class="gauge-label-item {% if snapshot.level_label == 'Acute' %}active{% endif %}">ACUTE (125–150)</span>
+    <span class="gauge-label-item {% if snapshot.level_label == 'Severe' %}active{% endif %}">SEVERE (150–180)</span>
+    <span class="gauge-label-item {% if snapshot.level_label == 'Extreme' %}active{% endif %}">EXTREME (180+)</span>
+  </div>
+</section>
+
+<!-- Interactive Weekly Trend Chart with ECharts -->
+<section class="chart-card" aria-labelledby="trend-heading">
+  <div class="chart-header">
+    <div>
+      <h2 id="trend-heading">Weekly Score Trajectory</h2>
+      <span class="section-desc">Historical weekly composite index evolution against the 100.0 baseline.</span>
+    </div>
+    <div class="chart-legend">
+      <span><span class="legend-swatch legend-baseline" aria-hidden="true"></span> Dashed line = 100.0 baseline</span>
+      <span class="legend-ceasefire"><span aria-hidden="true">🕊️</span> Ceasefire declared</span>
+    </div>
+  </div>
+
+  <div id="echart-trend-container"
+       class="chart-canvas"
+       role="img"
+       aria-label="Line chart of the HMX-INDEX composite score for each week from {{ history[0].week_start if history else 'the start of the series' }} to {{ history[-1].week_start if history else 'now' }}, moving from {{ "%.1f"|format(history[0].score) if history else 100 }} to {{ "%.1f"|format(history[-1].score) if history else snapshot.score }}. The full series is available in the data table below.">
+    <p class="chart-fallback">Loading chart… If it does not appear, the underlying figures are in the data table below.</p>
+  </div>
+
+  <details class="chart-data-table">
+    <summary>View trajectory as a data table ({{ history|length }} weeks)</summary>
+    <div class="table-responsive">
+      <table class="components-table">
+        <caption class="sr-only">HMX-INDEX composite score by week</caption>
+        <thead>
+          <tr><th scope="col">Week starting</th><th scope="col">Composite score</th><th scope="col">Level</th></tr>
+        </thead>
+        <tbody>
+          {% for h in history %}
+          <tr>
+            <th scope="row" class="font-mono">{{ h.week_start }}</th>
+            <td class="font-mono">{{ "%.1f"|format(h.score) }}</td>
+            <td>{{ h.level_label }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+</section>
+
+<!-- Ceasefire Events & Sources -->
+<section class="ceasefire-grid" aria-label="Ceasefire milestones">
+  {% for ev in events if ev.is_ceasefire %}
+  <article class="ceasefire-card">
+    <div>
+      <div class="ceasefire-card-top">
+        <span class="ceasefire-tag"><span aria-hidden="true">🕊️</span> CEASEFIRE MILESTONE</span>
+        <span class="ceasefire-date">{{ ev.date }}</span>
+      </div>
+      <h3>{{ ev.title }}</h3>
+      <p>{{ ev.description }}</p>
+    </div>
+    <div class="ceasefire-card-foot">
+      <span class="ceasefire-impact">{{ ev.impact }}</span>
+      <a href="{{ ev.source_url }}">{{ ev.source_name }} <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+
+<!-- Vessel Incident Model -->
+<section class="chart-card chart-card-incident" aria-labelledby="incident-heading">
+  <div class="chart-header chart-header-ruled">
+    <div>
+      <div class="incident-title-row">
+        <span class="incident-dot" aria-hidden="true"></span>
+        <h2 id="incident-heading">Vessel Incident Log</h2>
+      </div>
+      <span class="section-desc">
+        Distribution analysis across {{ total_attacks }} recorded maritime incidents, Feb–Jul 2026.
+      </span>
+    </div>
+    <div class="incident-count-pill">Incidents logged: {{ total_attacks }}</div>
+  </div>
+
+  <div class="incident-charts">
+    <div class="incident-chart-panel">
+      <h3>Incidents by flag state</h3>
+      <div id="echart-country-container"
+           class="chart-canvas chart-canvas-tall"
+           role="img"
+           aria-label="Horizontal bar chart of incidents by vessel flag state across {{ flag_stats|length }} flag states. Figures are in the table below.">
+        <p class="chart-fallback">Loading chart…</p>
+      </div>
+      <details class="chart-data-table">
+        <summary>View as a data table</summary>
+        <div class="table-responsive">
+          <table class="components-table">
+            <caption class="sr-only">Incidents by flag state</caption>
+            <thead><tr><th scope="col">Flag state</th><th scope="col">Incidents</th><th scope="col">Share</th></tr></thead>
+            <tbody>
+              {% for f in flag_stats %}
+              <tr><th scope="row">{{ f.country }}</th><td class="font-mono">{{ f.count }}</td><td class="font-mono">{{ f.pct }}%</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+
+    <div class="incident-chart-panel">
+      <h3>Cumulative incidents by month</h3>
+      <div id="echart-month-container"
+           class="chart-canvas chart-canvas-tall"
+           role="img"
+           aria-label="Area chart of cumulative incidents by month, rising to {{ cumulative_attacks[-1] if cumulative_attacks else 0 }} by {{ month_labels[-1] if month_labels else 'the latest month' }}. Figures are in the table below.">
+        <p class="chart-fallback">Loading chart…</p>
+      </div>
+      <details class="chart-data-table">
+        <summary>View as a data table</summary>
+        <div class="table-responsive">
+          <table class="components-table">
+            <caption class="sr-only">Cumulative incidents by month</caption>
+            <thead><tr><th scope="col">Month</th><th scope="col">Cumulative incidents</th></tr></thead>
+            <tbody>
+              {% for label in month_labels %}
+              <tr><th scope="row">{{ label }}</th><td class="font-mono">{{ cumulative_attacks[loop.index0] }}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <details class="incident-log">
+    <summary>
+      <span><span aria-hidden="true">📜</span> Incident log ({{ total_attacks }} records)</span>
+      <span class="summary-hint">Click to expand <span aria-hidden="true">▾</span></span>
+    </summary>
+    <div class="table-responsive">
+      <table class="components-table table-sticky-first">
+        <caption class="sr-only">Vessel incident log</caption>
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Vessel</th>
+            <th scope="col">Flag country</th>
+            <th scope="col">Vessel type</th>
+            <th scope="col">Strike method</th>
+            <th scope="col">Location</th>
+            <th scope="col">Damage status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for atk in vessel_attacks %}
+          <tr>
+            <th scope="row" class="font-mono">{{ atk.date }}</th>
+            <td class="cell-strong">{{ atk.vessel_name }}</td>
+            <td class="font-mono"><span class="flag-chip">{{ atk.flag_country }}</span></td>
+            <td class="cell-sub">{{ atk.vessel_type }}</td>
+            <td class="cell-strike">{{ atk.strike_type }}</td>
+            <td class="cell-sub">{{ atk.location }}</td>
+            <td class="cell-muted">{{ atk.damage_level }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+</section>
+
+<!-- Component Breakdown Matrix -->
+<section class="components-card" aria-labelledby="components-heading">
+  <div class="components-card-head">
+    <h2 id="components-heading">Component Breakdown Matrix</h2>
+    <span class="section-desc">
+      Composite = 100 + ∑(weight × stress score). Full derivation on the
+      <a href="{{ url_for('main.methodology') }}">methodology page</a>.
+    </span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="components-table table-sticky-first">
+      <caption class="sr-only">HMX-INDEX component breakdown for the week of {{ snapshot.week_start }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">Indicator component</th>
+          <th scope="col">Current value</th>
+          <th scope="col">Baseline value</th>
+          <th scope="col">Stress score (0–100)</th>
+          <th scope="col">Weight</th>
+          <th scope="col">Index contribution</th>
+          <th scope="col">Source &amp; freshness</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cr in snapshot.components %}
+        <tr {% if cr.stale %}class="row-stale"{% endif %}>
+          <th scope="row">
+            <div class="comp-name-cell">
+              <span class="comp-swatch" aria-hidden="true"></span>
+              {{ cr.component.label }}
+            </div>
+          </th>
+          <td class="font-mono cell-strong">
+            {{ "%.2f"|format(cr.current_value) if cr.current_value is not none else "—" }}
+            <span class="cell-unit">{{ cr.component.unit }}</span>
+            {% if cr.stale %}
+            <span class="stale-badge" title="Could not be refreshed; last known value carried forward">STALE</span>
+            {% elif cr.carried_forward %}
+            <span class="carried-badge" title="Carried forward from the last manual entry">CARRIED</span>
+            {% endif %}
+          </td>
+          <td class="font-mono cell-sub">
+            {{ "%.2f"|format(cr.baseline_value) }}
+            <span class="cell-unit">{{ cr.component.unit }}</span>
+          </td>
+          <td>
+            <div class="stress-bar-wrapper">
+              <div class="stress-track">
+                <div class="stress-fill {% if cr.stress > 60 %}stress-high{% elif cr.stress > 30 %}stress-mid{% else %}stress-low{% endif %}" style="width: {{ cr.stress }}%;"></div>
+              </div>
+              <span class="font-mono stress-value">{{ "%.0f"|format(cr.stress) }}</span>
+            </div>
+          </td>
+          <td class="font-mono">{{ (cr.component.weight * 100)|round|int }}%</td>
+          <td class="font-mono cell-contribution">+{{ "%.1f"|format(cr.contribution) }}</td>
+          <td>
+            <span class="source-badge">{{ cr.component.source }}</span>
+            <div class="source-freshness">
+              {{ cr.component.update_cadence }}{% if cr.last_updated %} · updated {{ cr.last_updated }}{% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="components-footnote">
+    Four of the seven components (50% of index weight) have no free API and are entered manually each
+    week from licensed sources; the other three refresh automatically. Each row shows its own cadence
+    and last-updated date above.
+  </p>
+</section>
+
+<!-- Methodology summary -->
+<section class="methodology-card" aria-labelledby="method-heading">
+  <h2 id="method-heading">Quantitative Index Methodology</h2>
+  <p class="section-desc">
+    The <strong>Hormuz Crisis Index (HMX-INDEX)</strong> measures composite geopolitical, maritime and
+    economic stress relative to a calm baseline period ({{ baseline_window|default('January 2026') }}).
+  </p>
+
+  <div class="formula-box">
+    Index Score = 100.0 + ∑ [ Weight<sub>i</sub> × StressScore( Current<sub>i</sub>, Baseline<sub>i</sub>, Cap<sub>i</sub> ) ]
+  </div>
+
+  <div class="method-grid">
+    <div>
+      <strong>Normalization &amp; capping:</strong> each indicator's percentage change from baseline is
+      normalised to a 0–100 stress scale. Component-specific caps stop a single volatile market from
+      dominating the composite.
+    </div>
+    <div>
+      <strong>Directional inversion:</strong> for ship transits a <em>decline</em> below baseline is the
+      crisis signal, so its change is inverted before scoring.
+    </div>
+    <div>
+      <strong>One-sided by design:</strong> stress scores floor at zero, so the composite cannot fall
+      below 100.0. The index measures stress against calm, not conditions calmer than calm.
+    </div>
+  </div>
+
+  <p class="method-cta">
+    <a href="{{ url_for('main.methodology') }}" class="btn-secondary">Full methodology, cap rationale &amp; limitations →</a>
+  </p>
+</section>
+
+<!-- Press Wire Dispatch -->
+<section class="citation-card" aria-labelledby="press-heading">
+  <div class="citation-head">
+    <div>
+      <span class="badge-tag badge-tag-blue"><span aria-hidden="true">📰</span> PRESS WIRE DISPATCH</span>
+      <h2 id="press-heading">Ready-to-publish dispatch</h2>
+      <p class="section-desc">
+        Every figure below is generated from the current index reading. News outlets may reproduce or
+        cite this dispatch under {{ license_name }} with attribution to MyDataLabs.
+      </p>
+    </div>
+    <button type="button" class="btn-primary" data-copy-target="press-story-container">
+      <span aria-hidden="true">📋</span> Copy full dispatch
+    </button>
+  </div>
+
+  <div id="press-story-container" class="press-story">
+    <div class="press-story-head">
+      <span>FOR IMMEDIATE RELEASE | PRESS DISPATCH</span>
+      <span>DATELINE: {{ press.week_start }}</span>
+    </div>
+
+    <h3 class="press-headline">
+      Hormuz Crisis Index at {{ "%.1f"|format(press.score) }} ({{ press.level }})
+      {%- if press.driver_label %} as {{ press.driver_label }} leads weekly stress{% endif %}
+    </h3>
+
+    <p>
+      <strong>{{ press.week_start }}</strong> — Geopolitical and maritime stress across
+      the Strait of Hormuz registered a <strong>{{ press.level_lower }} reading of
+      {{ "%.1f"|format(press.score) }}</strong> ({{ "%.1f"|format(press.points_above_baseline) }} points
+      above the 100.0 calm baseline) for the reporting week of {{ press.week_start }}, according to the
+      Hormuz Crisis Index (HMX-INDEX) published by MyDataLabs.
+    </p>
+
+    <p>
+      {% if press.driver_label %}
+      <strong>{{ press.driver_label }}</strong> was the largest contributor to the composite this week,
+      adding {{ "%.1f"|format(press.driver_points) }} points{% if press.driver_2_label %}, ahead of
+      {{ press.driver_2_label }} at {{ "%.1f"|format(press.driver_2_points) }} points{% endif %}.
+      {% endif %}
+      {% if press.traffic is not none and press.traffic_drop_pct %}
+      Commercial ship transits through the 21-nautical-mile chokepoint stand at
+      {{ "%.0f"|format(press.traffic) }} per week, {{ "%.1f"|format(press.traffic_drop_pct) }}%
+      {{ press.traffic_direction }} the baseline of {{ "%.0f"|format(press.traffic_baseline) }}.
+      {% endif %}
+      {% if press.ceasefire_months %}
+      Diplomatic truces in {{ press.ceasefire_months|join(', ') }} produced temporary operational lulls
+      without returning conditions to baseline.
+      {% endif %}
+    </p>
+
+    <p>
+      {% if press.brent is not none %}
+      Brent crude traded at <strong>${{ "%.2f"|format(press.brent) }} per barrel</strong>
+      ({{ "%.1f"|format(press.brent_change_pct|abs) }}% {{ press.brent_direction }} the
+      ${{ "%.2f"|format(press.brent_baseline) }} baseline).
+      {% endif %}
+      {% if press.war_risk is not none %}
+      Marine war-risk insurance surcharges stand at
+      <strong>{{ "%.2f"|format(press.war_risk) }}% of hull value</strong>{% if press.war_risk_multiple %},
+      {{ "%.1f"|format(press.war_risk_multiple) }} times the baseline rate{% endif %}.
+      {% endif %}
+      {% if press.reroutes %}
+      Reroutes via the Cape of Good Hope account for {{ "%.1f"|format(press.reroutes) }}% of regional traffic.
+      {% endif %}
+    </p>
+
+    <p>
+      The HMX-INDEX is a weekly composite of seven weighted market and shipping indicators scored
+      against a calm baseline week of {{ baseline_window.replace('/', ' to ') }}. Its full methodology, component weights and
+      cap thresholds are published at mydatalabs.in/methodology, and the underlying series is available
+      as open JSON and CSV.
+      {%- if press.degraded %}
+      MyDataLabs notes that part of the index weight is currently stale and this week's reading should
+      be treated as provisional.
+      {%- endif %}
+      <em>(Source: MyDataLabs Hormuz Crisis Index — mydatalabs.in)</em>
+    </p>
+  </div>
+
+  <div class="ticker-box">
+    <div class="ticker-body">
+      <span class="ticker-label">Broadcast ticker quote:</span>
+      <div class="ticker-quote" id="ticker-quote-text">
+        "According to the MyDataLabs Hormuz Crisis Index (HMX-INDEX), geopolitical risk in the Strait of
+        Hormuz registered {{ snapshot.level_label }} {{ "%.1f"|format(snapshot.score) }} for the week of
+        {{ snapshot.week_start }} (baseline 100.0). Source: mydatalabs.in."
+      </div>
+    </div>
+    <button type="button" class="btn-secondary" data-copy-target="ticker-quote-text">
+      <span aria-hidden="true">📋</span> Copy ticker quote
+    </button>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script id="hmx-chart-data" type="application/json">
+{
+  "trend": {
+    "dates": {{ history|map(attribute='week_start')|list|tojson }},
+    "scores": {{ history|map(attribute='score')|list|tojson }},
+    "ceasefires": {{ events|selectattr('is_ceasefire')|map(attribute='date')|list|tojson }}
+  },
+  "flags": {
+    {# Canvas has no colour-emoji font, so flag glyphs fall back to their two
+       literal regional-indicator letters (e.g. "LR") stacked next to the
+       already-plain code — hence "LR LR". Emoji + code together only work in
+       the HTML table below; the chart axis gets the code alone. #}
+    "countries": {{ flag_stats|map(attribute='code')|list|tojson }},
+    "counts": {{ flag_stats|map(attribute='count')|list|tojson }}
+  },
+  "months": {
+    "labels": {{ month_labels|tojson }},
+    "cumulative": {{ cumulative_attacks|tojson }}
+  }
+}
+</script>
+<script src="{{ url_for('static', filename='js/charts.js') }}?v={{ asset_v }}" defer></script>
+{% endblock %}

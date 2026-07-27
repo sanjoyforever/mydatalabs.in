@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block title %}MyDataLabs — Geopolitical Risk &amp; Market Intelligence Indices{% endblock %}
+{% block meta_desc %}MyDataLabs publishes weekly quantitative indices for geopolitical stress and maritime chokepoint risk. The Hormuz Crisis Index stands at {{ "%.1f"|format(hormuz_score) }} ({{ hormuz_level }}). Open methodology, free JSON and CSV data.{% endblock %}
+
+{% block content %}
+<!-- Hero carousel. One slide for now; the track/dots markup is in place so
+     further slides only need another .hero-slide article. -->
+<section class="hero-carousel" aria-roledescription="carousel" aria-label="Featured">
+  <div class="hero-track">
+    <article class="hero-slide" aria-roledescription="slide" aria-label="1 of 1">
+      <div class="hero-copy">
+        <div class="hero-header-meta">
+          <span class="badge-tag">FLAGSHIP REPORT</span>
+          <span class="hero-updated">UPDATED FOR WEEK OF {{ snapshot.week_start }}</span>
+        </div>
+
+        <h1 class="hero-title" id="hero-title">Signals before the headlines.</h1>
+        <p class="hero-subtitle">
+          Quantitative composite indices tracking geopolitical stress, maritime chokepoint
+          vulnerabilities, energy dislocation, and cross-asset tail risks. Built for news desks,
+          energy analysts, and institutional researchers — with the full method and the raw data
+          published alongside every score.
+        </p>
+      </div>
+
+      <div class="hero-media">
+        {# width/height match the generated 12:5 banner so the box is reserved
+           before the image loads and nothing shifts. #}
+        <picture>
+          <source
+            type="image/webp"
+            srcset="{{ url_for('static', filename='img/hero-640.webp') }}?v={{ asset_v }} 640w,
+                    {{ url_for('static', filename='img/hero-960.webp') }}?v={{ asset_v }} 960w,
+                    {{ url_for('static', filename='img/hero-1400.webp') }}?v={{ asset_v }} 1400w"
+            sizes="(max-width: 900px) 100vw, min(100vw, 1200px)">
+          <img
+            src="{{ url_for('static', filename='img/hero-960.jpg') }}?v={{ asset_v }}"
+            srcset="{{ url_for('static', filename='img/hero-640.jpg') }}?v={{ asset_v }} 640w,
+                    {{ url_for('static', filename='img/hero-960.jpg') }}?v={{ asset_v }} 960w,
+                    {{ url_for('static', filename='img/hero-1400.jpg') }}?v={{ asset_v }} 1400w"
+            sizes="(max-width: 900px) 100vw, min(100vw, 1200px)"
+            width="1400" height="583"
+            alt="A commercial vessel under way past a rocky headland at sea."
+            fetchpriority="high" decoding="async">
+        </picture>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Spotlight Card: Hormuz Crisis Index -->
+<section class="section-block" aria-labelledby="spotlight-heading">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title" id="spotlight-heading">Flagship intelligence report</h2>
+      <p class="section-desc">Composite metric monitoring conflict and blockade risk in the Strait of Hormuz.</p>
+    </div>
+    <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">View full dashboard <span aria-hidden="true">→</span></a>
+  </div>
+
+  <div class="spotlight-card">
+    <div>
+      <div class="spotlight-info-top">
+        <span class="badge-tag">HMX-INDEX</span>
+        <span class="status-badge status-{{ hormuz_status }}">
+          <span class="status-dot" aria-hidden="true"></span>{{ hormuz_level }}
+        </span>
+      </div>
+      <h3 class="spotlight-title">Hormuz Crisis Index</h3>
+      <p class="spotlight-desc">
+        Tracks crude price escalation, war-risk insurance premiums, vessel transits, tanker freight
+        rates, European gas, equity volatility and Cape of Good Hope reroutes against a non-crisis
+        100.0 baseline.
+      </p>
+
+      <div class="spotlight-drivers-label">Key drivers this week</div>
+      <div class="spotlight-drivers">
+        {% for cr in snapshot.components[:3] %}
+        <div class="driver-chip">
+          <span class="driver-bullet" aria-hidden="true">•</span>
+          <span class="driver-chip-label">{{ cr.component.label }}:</span>
+          <span>{{ "%.2f"|format(cr.current_value) if cr.current_value is not none else '—' }} {{ cr.component.unit }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="spotlight-actions">
+        <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">Explore dashboard</a>
+        <a href="{{ url_for('main.methodology') }}" class="btn-secondary">How it is calculated</a>
+      </div>
+    </div>
+
+    <div class="spotlight-metrics-panel">
+      <div class="spotlight-score-header">
+        <div>
+          <div class="spotlight-score-label">Composite score</div>
+          <div class="spotlight-score-number">{{ "%.1f"|format(hormuz_score) }}</div>
+        </div>
+        <div class="spotlight-delta">
+          <div class="delta-pill {% if delta >= 0 %}delta-up{% else %}delta-down{% endif %}">
+            <span aria-hidden="true">{% if delta >= 0 %}▲{% else %}▼{% endif %}</span>
+            {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
+          </div>
+          <div class="spotlight-delta-caption">vs previous week</div>
+        </div>
+      </div>
+
+      <div class="spotlight-scale">
+        <div class="spotlight-scale-head">
+          <span>Crisis scale</span>
+          <span class="font-mono">Baseline = {{ scale_min|int }}</span>
+        </div>
+        <div class="mini-gauge"
+             role="meter"
+             aria-valuenow="{{ "%.1f"|format(hormuz_score) }}"
+             aria-valuemin="{{ scale_min }}"
+             aria-valuemax="{{ scale_max }}"
+             aria-label="HMX-INDEX score {{ "%.1f"|format(hormuz_score) }} on a scale from {{ scale_min|int }} to {{ scale_max|int }}">
+          <div class="mini-gauge-fill" style="width: {{ scale_pct }}%;"></div>
+        </div>
+        <div class="mini-gauge-ends" aria-hidden="true">
+          <span>{{ scale_min|int }}</span>
+          <span>{{ scale_max|int }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Category Intelligence Grid -->
+<section class="section-block" aria-labelledby="catalog-heading">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title" id="catalog-heading">Intelligence catalog</h2>
+      <p class="section-desc">Quantitative risk indices organised by domain and supply chain vector.</p>
+    </div>
+  </div>
+
+  <div class="category-grid">
+    {% for report in reports %}
+    <div class="report-card">
+      <div>
+        <div class="report-card-top">
+          <span class="report-card-cat">{{ report.category }}</span>
+          <span class="status-badge status-{{ snapshot.level_status }}">
+            <span class="status-dot" aria-hidden="true"></span>LIVE
+          </span>
+        </div>
+        <h3>{{ report.title }}</h3>
+        <p>{{ report.blurb }}</p>
+      </div>
+      <div class="report-card-footer">
+        <div>
+          <span class="report-score">{{ "%.1f"|format(snapshot.score) }}</span>
+          <span class="report-score-unit">score</span>
+        </div>
+        <a href="{{ report.url }}" class="btn-secondary btn-sm">Access report <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="report-card report-card-pending">
+      <div>
+        <div class="report-card-top">
+          <span class="report-card-cat">Energy &amp; Commodities</span>
+          <span class="badge-tag badge-tag-muted">COMING Q3 2026</span>
+        </div>
+        <h3>Russia–Ukraine Escalation Index</h3>
+        <p>Weekly composite scoring the war's market transmission: European gas and power prices,
+          Black Sea grain and crude flows, strike tempo against energy infrastructure, and sanctions
+          and shadow-fleet enforcement.</p>
+      </div>
+      <div class="report-card-footer">
+        <span class="report-pending-label">In development</span>
+      </div>
+    </div>
+
+    <div class="report-card report-card-pending">
+      <div>
+        <div class="report-card-top">
+          <span class="report-card-cat">Maritime &amp; Supply</span>
+          <span class="badge-tag badge-tag-muted">COMING Q3 2026</span>
+        </div>
+        <h3>Taiwan Strait Security Index</h3>
+        <p>Escalation monitor for a China–Taiwan contingency, scored from blockade and quarantine
+          signals through to invasion: PLA incursions and mobilisation, shipping and flight
+          diversions, and advanced-node chip capacity inside the exposure radius.</p>
+      </div>
+      <div class="report-card-footer">
+        <span class="report-pending-label">In development</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

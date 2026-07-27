@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+<title>{% block title %}MyDataLabs — Geopolitical Risk & Market Intelligence{% endblock %}</title>
+
+<!-- Primary Meta Tags -->
+<meta name="description" content="{% block meta_desc %}MyDataLabs publishes weekly composite indices tracking geopolitical stress, maritime chokepoints, market dislocation, and energy security, with an open methodology and a free data API.{% endblock %}">
+<meta name="author" content="MyDataLabs Intelligence Network">
+<meta name="robots" content="{% block robots %}index, follow, max-image-preview:large{% endblock %}">
+<meta name="theme-color" content="#0B1220">
+<link rel="canonical" href="{% block canonical_url %}{{ origin }}{{ request.path }}{% endblock %}">
+
+<!-- OpenGraph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ origin }}{{ request.path }}">
+<meta property="og:title" content="{% block og_title %}MyDataLabs — Geopolitical Risk & Market Intelligence{% endblock %}">
+<meta property="og:description" content="{% block og_desc %}Quantitative composite indices tracking geopolitical stress, energy dislocation, and maritime chokepoints. Open methodology, free JSON and CSV data.{% endblock %}">
+<meta property="og:image" content="{{ origin }}/static/img/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MyDataLabs — Hormuz Crisis Index">
+<meta property="og:site_name" content="MyDataLabs">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% block twitter_title %}MyDataLabs — Geopolitical Risk & Market Intelligence{% endblock %}">
+<meta name="twitter:description" content="{% block twitter_desc %}Quantitative composite indices tracking geopolitical stress, energy dislocation, and maritime chokepoints.{% endblock %}">
+<meta name="twitter:image" content="{{ origin }}/static/img/og-card.png">
+
+<!-- Favicons & Icons -->
+<link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='img/favicon.png') }}?v={{ asset_v }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}?v={{ asset_v }}">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ asset_v }}">
+<link rel="alternate" type="application/json" title="HMX-INDEX data" href="{{ origin }}/api/hormuz-index/data.json">
+
+<!-- Global Schema.org JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "{{ origin }}/#organization",
+      "name": "MyDataLabs",
+      "url": "{{ origin }}",
+      "logo": "{{ origin }}/static/img/logo.png",
+      "description": "Quantitative intelligence network publishing composite indices for geopolitical stress, market dislocation, and maritime chokepoints."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "{{ origin }}/#website",
+      "url": "{{ origin }}",
+      "name": "MyDataLabs",
+      "publisher": { "@id": "{{ origin }}/#organization" },
+      "inLanguage": "en"
+    }
+  ]
+}
+</script>
+{% block extra_head %}{% endblock %}
+<script>
+  (function () {
+    var saved = localStorage.getItem("theme");
+    if (saved) document.documentElement.setAttribute("data-theme", saved);
+  })();
+</script>
+
+{% if ga_measurement_id %}
+<!-- Google Analytics (GA4) — every page: page_view is automatic on load.
+     Custom events (copy actions, theme toggle, outbound clicks) are sent
+     from static/js/theme.js. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_measurement_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag("js", new Date());
+  gtag("config", "{{ ga_measurement_id }}", {
+    page_path: "{{ request.path }}"
+  });
+</script>
+{% endif %}
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- Header Bar -->
+<header class="site-header">
+  <div class="brand-wrapper">
+    <a class="brand" href="{{ url_for('main.home') }}">
+      <img src="{{ url_for('static', filename='img/logo-64.png') }}?v={{ asset_v }}" alt="" width="32" height="32" class="brand-logo" aria-hidden="true">
+      <span>MyDataLabs<span class="brand-dot">.</span></span>
+    </a>
+    <span class="brand-tag">INTELLIGENCE</span>
+  </div>
+
+  <div class="header-right">
+    <div class="header-actions">
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle color theme" aria-pressed="false" title="Toggle color theme">
+        <span class="icon-sun" aria-hidden="true">☀</span><span class="icon-moon" aria-hidden="true">☾</span>
+      </button>
+    </div>
+
+    <nav class="site-nav" aria-label="Primary">
+      <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('main.home') }}"{% if request.path == '/' %} aria-current="page"{% endif %}>Home</a>
+      <a class="nav-link {% if request.path == '/hormuz-index' %}active{% endif %}" href="{{ url_for('main.hormuz_index') }}"{% if request.path == '/hormuz-index' %} aria-current="page"{% endif %}>Hormuz Crisis Index</a>
+      <a class="nav-link {% if request.path == '/methodology' %}active{% endif %}" href="{{ url_for('main.methodology') }}"{% if request.path == '/methodology' %} aria-current="page"{% endif %}>Methodology</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" tabindex="-1">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div>
+      <div class="brand footer-brand">
+        <img src="{{ url_for('static', filename='img/logo-64.png') }}?v={{ asset_v }}" alt="" width="26" height="26" class="brand-logo" aria-hidden="true">
+        <span>MyDataLabs<span class="brand-dot">.</span></span>
+      </div>
+      <p class="footer-blurb">
+        Quantitative composite indices tracking geopolitical stress, energy dislocation, and maritime chokepoints. Fully documented, reproducible methodology.
+      </p>
+    </div>
+    <div class="footer-links">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <a href="{{ url_for('main.hormuz_index') }}">Hormuz Index</a>
+      <a href="{{ url_for('main.methodology') }}">Methodology</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>© {{ current_year }} MyDataLabs Intelligence Network. Index data licensed under
+      <a href="{{ license_url|default('https://creativecommons.org/licenses/by/4.0/') }}" rel="license noopener" target="_blank">{{ license_name|default('CC BY 4.0') }}</a>.
+    </span>
+    <span>Cite: <em>MyDataLabs Hormuz Crisis Index (HMX-INDEX)</em></span>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/theme.js') }}?v={{ asset_v }}" defer></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,22 @@
+# Build source, not a runtime asset. scripts/build_assets.py turns this into
+# the hero-*.webp/jpg derivatives that are actually served. Shipping the
+# original would add ~11 MB to the serverless bundle for a file no request
+# ever reaches.
+#
+# NOTE: logo.png stays — the Organization JSON-LD in base.html points at
+# /static/img/logo.png, so excluding it would 404 a live schema reference.
+app/static/img/image1.jpg
+
+tests/
+scripts/
+feedback_claude.md
+README_CLOUDRUN.md
+Dockerfile
+docker-compose.yml
+deploy.py
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+venv/
+.venv/

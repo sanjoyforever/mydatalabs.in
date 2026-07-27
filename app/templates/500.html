@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Something went wrong — MyDataLabs{% endblock %}
+{% block robots %}noindex, follow{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <span class="badge-tag">500</span>
+  <h1>Something went wrong on our side</h1>
+  <p class="prose-lede">
+    The page could not be generated. This is a server error, not a problem with your request —
+    reloading in a moment usually resolves it. The index data itself is unaffected and remains
+    available from the API.
+  </p>
+
+  <div class="error-links">
+    <a href="{{ request.path }}" class="btn-primary">Reload this page</a>
+    <a href="{{ url_for('main.home') }}" class="btn-secondary">Go to the homepage</a>
+    <a href="{{ url_for('main.data_page') }}" class="btn-secondary">Data &amp; API</a>
+  </div>
+</section>
+{% endblock %}

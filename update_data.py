@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""MyDataLabs local data updater.
+
+Recomputes the index snapshot, appends it to the weekly history, and reports
+what actually happened — including whether the write was durable and which
+components are running stale.
+
+Usage:
+    python update_data.py                  # recompute and persist
+    python update_data.py --dry-run        # recompute without writing
+    python update_data.py --stamp-manual   # mark manual inputs as updated today
+
+Before a weekly run, update the "manual_overrides" block in
+app/data/hormuz_history.json with this week's ship traffic, war-risk
+insurance, tanker freight and reroute figures, and set the matching dates in
+"manual_updated" (or pass --stamp-manual to set them all to today).
+"""
+from __future__ import annotations
+
+import argparse
+import datetime
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from app import storage  # noqa: E402
+from app.indices import hormuz  # noqa: E402
+
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app", "data")
+
+
+def stamp_manual_dates() -> None:
+    """Mark every manual component as updated today."""
+    history = storage.load_history(hormuz.INDEX_KEY)
+    today = datetime.date.today().isoformat()
+    history["manual_updated"] = {k: today for k in hormuz.MANUAL_KEYS}
+    storage.save_history(hormuz.INDEX_KEY, history)
+    print(f"  Stamped manual components as updated {today}: {sorted(hormuz.MANUAL_KEYS)}")
+
+
+def update_index(persist: bool) -> int:
+    print("=" * 62)
+    print("Hormuz Crisis Index (HMX-INDEX)")
+    snapshot = hormuz.compute_snapshot(persist=persist)
+
+    print(f"  Week of {snapshot.week_start}: {snapshot.score:.1f} ({snapshot.level_label})")
+    print(f"  Storage: {storage.storage_backend()}")
+
+    print("\n  Components:")
+    for cr in snapshot.components:
+        flags = []
+        if cr.stale:
+            flags.append("STALE")
+        if cr.carried_forward:
+            flags.append("carried forward")
+        suffix = f"  [{', '.join(flags)}]" if flags else ""
+        value = f"{cr.current_value:.2f}" if cr.current_value is not None else "—"
+        print(
+            f"    {cr.component.label:<28} {value:>10} {cr.component.unit:<14}"
+            f" stress={cr.stress:5.1f}  +{cr.contribution:5.2f}{suffix}"
+        )
+
+    if snapshot.degraded:
+        print(
+            f"\n  WARNING: {snapshot.stale_weight * 100:.0f}% of index weight is stale."
+            " This week's score is provisional."
+        )
+
+    if persist:
+        if snapshot.persisted:
+            print(f"\n  Persisted. History now has {len(hormuz.get_history())} weekly snapshots.")
+        else:
+            print(
+                "\n  WARNING: the write did NOT land anywhere durable."
+                " Set HISTORY_DATA_DIR to a writable volume, or run this locally"
+                " and commit app/data/hormuz_history.json."
+            )
+            return 1
+    else:
+        print("\n  Dry run — nothing written.")
+    return 0
+
+
+def report_incident_dataset() -> None:
+    print("=" * 62)
+    print("Vessel incident dataset")
+    path = os.path.join(DATA_DIR, "vessel_attacks.json")
+    if not os.path.exists(path):
+        print("  WARNING: vessel_attacks.json not found.")
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        rows = json.load(f)
+    synthetic = sum(1 for r in rows if r.get("synthetic"))
+    print(f"  {len(rows)} records ({synthetic} flagged synthetic).")
+    if synthetic:
+        print(
+            "  NOTE: this is an ILLUSTRATIVE MODEL, not a verified incident log."
+            " It is excluded from the composite score and is labelled as synthetic"
+            " everywhere it appears in the UI."
+        )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dry-run", action="store_true", help="recompute without writing history")
+    parser.add_argument("--stamp-manual", action="store_true",
+                        help="mark all manual components as updated today, then run")
+    args = parser.parse_args()
+
+    print(f"MyDataLabs data update — {datetime.datetime.now().isoformat(timespec='seconds')}")
+    if args.stamp_manual:
+        stamp_manual_dates()
+
+    code = update_index(persist=not args.dry_run)
+    report_incident_dataset()
+    print("=" * 62)
+    return code
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

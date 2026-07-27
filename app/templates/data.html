@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+
+{% block title %}Data &amp; API — Free HMX-INDEX JSON and CSV | MyDataLabs{% endblock %}
+{% block meta_desc %}Free, open access to the Hormuz Crisis Index: JSON and CSV endpoints, response schema, component correlation matrix, licence terms and citation formats. No key, no registration.{% endblock %}
+{% block og_title %}HMX-INDEX data and API — free JSON and CSV{% endblock %}
+{% block og_desc %}Endpoint documentation, response schema, licence and citation formats for the Hormuz Crisis Index.{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebAPI",
+      "@id": "{{ origin }}/data#api",
+      "name": "MyDataLabs HMX-INDEX API",
+      "description": "Open, unauthenticated JSON and CSV endpoints serving the Hormuz Crisis Index current snapshot, per-component breakdown and full weekly history.",
+      "url": "{{ origin }}/data",
+      "provider": { "@id": "{{ origin }}/#organization" },
+      "termsOfService": "{{ license_url }}",
+      "documentation": "{{ origin }}/data"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ origin }}/" },
+        { "@type": "ListItem", "position": 2, "name": "Data & API", "item": "{{ origin }}/data" }
+      ]
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="{{ url_for('main.home') }}">Home</a>
+  <span aria-hidden="true">/</span>
+  <span aria-current="page">Data &amp; API</span>
+</nav>
+
+<article class="prose-page">
+  <header class="prose-header">
+    <span class="badge-tag">DATA &amp; API</span>
+    <h1>Open index data</h1>
+    <p class="prose-lede">
+      The complete HMX-INDEX series is free to download and free to republish under
+      <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_name }}</a>.
+      No API key, no registration, no rate limit worth mentioning.
+      Currently {{ history_weeks }} weekly observations, {{ first_week }} to {{ last_week }}.
+    </p>
+  </header>
+
+  <section aria-labelledby="endpoints-h">
+    <h2 id="endpoints-h">Endpoints</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-head">
+        <span class="method-pill">GET</span>
+        <code>/api/hormuz-index/data.json</code>
+      </div>
+      <p>Current snapshot, full per-component breakdown, baseline values, correlation matrix and the
+        complete weekly history.</p>
+      <pre class="code-block"><code>curl {{ origin }}/api/hormuz-index/data.json</code></pre>
+    </div>
+
+    <div class="endpoint-card">
+      <div class="endpoint-head">
+        <span class="method-pill">GET</span>
+        <code>/api/hormuz-index/data.csv</code>
+      </div>
+      <p>Weekly history with raw component values, one row per week — ready for a spreadsheet or a
+        dataframe.</p>
+      <pre class="code-block"><code>curl -O {{ origin }}/api/hormuz-index/data.csv</code></pre>
+    </div>
+
+    <div class="endpoint-card">
+      <div class="endpoint-head">
+        <span class="method-pill">GET</span>
+        <code>/api/health</code>
+      </div>
+      <p>Liveness probe. Also reports whether scheduled writes are landing somewhere durable and how
+        old the cached snapshot is.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="schema-h">
+    <h2 id="schema-h">JSON response shape</h2>
+    <pre class="code-block"><code>{
+  "ticker": "HMX-INDEX",
+  "index_name": "Hormuz Crisis Index",
+  "license": { "name": "{{ license_name }}", "url": "{{ license_url }}" },
+  "generated_at": "2026-07-26T04:00:00+00:00",
+  "current_snapshot": {
+    "week_start": "{{ snapshot.week_start }}",
+    "score": {{ "%.1f"|format(snapshot.score) }},
+    "level_label": "{{ snapshot.level_label }}",
+    "level_status": "{{ snapshot.level_status }}",
+    "degraded": {{ 'true' if snapshot.degraded else 'false' }},
+    "stale_weight": {{ snapshot.stale_weight }}
+  },
+  "baseline": { "window": "...", "values": { "brent": 65.0, ... } },
+  "scale": { "min": 100.0, "max": 200.0 },
+  "components": [
+    {
+      "key": "brent",
+      "label": "Brent Crude",
+      "weight": 0.3,
+      "unit": "$/bbl",
+      "current_value": 96.78,
+      "baseline_value": 65.0,
+      "cap_pct": 55,
+      "inverted": false,
+      "stress_score": 88.9,
+      "contribution": 26.67,
+      "source": "yfinance (BZ=F)",
+      "manual": false,
+      "update_cadence": "Daily (automatic)",
+      "last_updated": "2026-07-26",
+      "stale": false,
+      "carried_forward": false
+    }
+  ],
+  "component_correlations": { "n": 29, "matrix": { ... } },
+  "history": [ { "week_start": "...", "score": 100.0, "raw_values": { ... } } ]
+}</code></pre>
+
+    <h3>Fields worth reading carefully</h3>
+    <dl class="field-list">
+      <div><dt><code>stale</code></dt><dd>The value could not be refreshed on schedule; the last known
+        reading was carried forward. It is <em>not</em> reset to baseline.</dd></div>
+      <div><dt><code>carried_forward</code></dt><dd>The value was reused from a prior observation rather
+        than fetched this run. Normal for the four manually-keyed components between weekly updates.</dd></div>
+      <div><dt><code>degraded</code></dt><dd>True when stale components account for 20% or more of index
+        weight. Treat the composite as provisional when this is set.</dd></div>
+      <div><dt><code>stale_weight</code></dt><dd>Fraction of total index weight currently stale, 0 to 1.</dd></div>
+    </dl>
+  </section>
+
+  {% if correlations.matrix %}
+  <section aria-labelledby="corr-h">
+    <h2 id="corr-h">Component correlation matrix</h2>
+    <p>
+      Pearson correlation between component series across {{ correlations.n }} weekly observations.
+      Published because Brent, TTF gas and VIX together carry 50% of index weight and tend to move
+      together in an energy shock — the composite is less diversified than a seven-component structure
+      suggests, and this is the size of that effect rather than a caveat to take on trust.
+    </p>
+    <div class="table-responsive">
+      <table class="components-table table-sticky-first corr-table">
+        <caption class="sr-only">Pearson correlation between HMX-INDEX component series</caption>
+        <thead>
+          <tr>
+            <th scope="col">Component</th>
+            {% for k in correlations.columns %}<th scope="col" class="corr-head">{{ correlations.labels[k] }}</th>{% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in correlations.columns %}
+          <tr>
+            <th scope="row">{{ correlations.labels[a] }}</th>
+            {% for b in correlations.columns %}
+            {% set v = correlations.matrix[a][b] %}
+            <td class="font-mono corr-cell {% if v is not none and v|abs >= 0.8 and a != b %}corr-strong{% elif v is not none and v|abs >= 0.5 and a != b %}corr-mid{% endif %}">
+              {{ "%.2f"|format(v) if v is not none else "—" }}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+
+  <section aria-labelledby="cite-h">
+    <h2 id="cite-h">How to cite</h2>
+
+    <h3>News and general prose</h3>
+    <pre class="code-block" id="cite-prose"><code>MyDataLabs Hormuz Crisis Index (HMX-INDEX), mydatalabs.in, week of {{ snapshot.week_start }}.</code></pre>
+    <button type="button" class="btn-secondary btn-sm" data-copy-target="cite-prose">
+      <span aria-hidden="true">📋</span> Copy
+    </button>
+
+    <h3>BibTeX</h3>
+    <pre class="code-block" id="cite-bibtex"><code>@misc{mydatalabs_hmx_{{ current_year }},
+  title        = {{ '{' }}Hormuz Crisis Index (HMX-INDEX){{ '}' }},
+  author       = {{ '{' }}MyDataLabs Intelligence Network{{ '}' }},
+  year         = {{ '{' }}{{ current_year }}{{ '}' }},
+  howpublished = {{ '{' }}\url{{ '{' }}{{ origin }}/hormuz-index{{ '}' }}{{ '}' }},
+  note         = {{ '{' }}Accessed: {{ snapshot.week_start }}. Licensed {{ license_name }}.{{ '}' }}
+}</code></pre>
+    <button type="button" class="btn-secondary btn-sm" data-copy-target="cite-bibtex">
+      <span aria-hidden="true">📋</span> Copy
+    </button>
+  </section>
+
+  <section aria-labelledby="terms-h">
+    <h2 id="terms-h">Licence and fair use</h2>
+    <p>
+      Index data — scores, component values and history — is licensed
+      <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_name }}</a>: reuse
+      it commercially or otherwise, with attribution to MyDataLabs and a link back.
+    </p>
+    <p>
+      Please cache rather than polling: the underlying values change at most daily, and the endpoints
+      are served from cache with a one-hour revalidation window.
+    </p>
+    <p>
+      <strong>Not included in these endpoints:</strong> the vessel incident log shown on the dashboard
+      is compiled separately from the index components and is not served by the API.
+    </p>
+  </section>
+</article>
+{% endblock %}

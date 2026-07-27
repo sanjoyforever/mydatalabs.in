@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+
+{% block title %}HMX-INDEX Methodology — How the Hormuz Crisis Index Is Calculated | MyDataLabs{% endblock %}
+{% block meta_desc %}Full methodology for the Hormuz Crisis Index: the composite formula, all seven component weights, the rationale behind each cap threshold, baseline selection, data cadence, and the index's known limitations.{% endblock %}
+{% block og_title %}How the Hormuz Crisis Index is calculated{% endblock %}
+{% block og_desc %}Component weights, cap rationale, baseline selection, refresh cadence and stated limitations for the HMX-INDEX.{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "{{ origin }}/methodology#article",
+      "headline": "Hormuz Crisis Index (HMX-INDEX) methodology",
+      "description": "Composite formula, component weights, cap thresholds and rationale, baseline selection, data cadence and known limitations for the HMX-INDEX.",
+      "url": "{{ origin }}/methodology",
+      "author": { "@id": "{{ origin }}/#organization" },
+      "publisher": { "@id": "{{ origin }}/#organization" },
+      "about": { "@id": "{{ origin }}/hormuz-index#dataset" },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ origin }}/" },
+        { "@type": "ListItem", "position": 2, "name": "Methodology", "item": "{{ origin }}/methodology" }
+      ]
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="{{ url_for('main.home') }}">Home</a>
+  <span aria-hidden="true">/</span>
+  <span aria-current="page">Methodology</span>
+</nav>
+
+<article class="prose-page">
+  <header class="prose-header">
+    <span class="badge-tag">METHODOLOGY</span>
+    <h1>How the Hormuz Crisis Index is calculated</h1>
+    <p class="prose-lede">
+      The HMX-INDEX is a weekly composite measuring geopolitical, maritime and energy-market stress in
+      the Strait of Hormuz against a calm baseline. This page documents every input, every constant and
+      every known weakness, so the number can be checked rather than taken on trust.
+    </p>
+  </header>
+
+  <nav class="toc" aria-label="On this page">
+    <h2>On this page</h2>
+    <ol>
+      <li><a href="#formula">The formula</a></li>
+      <li><a href="#components">Components, weights and caps</a></li>
+      <li><a href="#baseline">Baseline selection</a></li>
+      <li><a href="#bands">Severity bands</a></li>
+      <li><a href="#cadence">Data cadence and staleness</a></li>
+      <li><a href="#limitations">Known limitations</a></li>
+      <li><a href="#citation">Citation</a></li>
+    </ol>
+  </nav>
+
+  <section id="formula" aria-labelledby="formula-h">
+    <h2 id="formula-h">The formula</h2>
+    <div class="formula-box">
+      Index Score = 100.0 + ∑ [ Weight<sub>i</sub> × StressScore( Current<sub>i</sub>, Baseline<sub>i</sub>, Cap<sub>i</sub> ) ]
+    </div>
+    <p>
+      Each component is converted to a <strong>stress score</strong> between 0 and 100 by expressing its
+      current value as a percentage change from its baseline value, then dividing by that component's
+      cap and rescaling:
+    </p>
+    <div class="formula-box formula-box-sm">
+      StressScore = clamp( ( pctChange / cap ) × 100 , 0 , 100 )
+      &nbsp;&nbsp;where&nbsp;&nbsp; pctChange = ( current − baseline ) / baseline × 100
+    </div>
+    <p>
+      Stress scores are multiplied by their weight and summed, and the total is added to 100. Weights
+      sum to exactly 1.0, so a component at maximum stress across all seven inputs would produce a
+      score of {{ scale_max|int }}.
+    </p>
+    <p>
+      <strong>Directional inversion.</strong> For ship traffic a <em>fall</em> below baseline is the
+      crisis signal, so its percentage change is negated before scoring. All other components treat a
+      rise as stress.
+    </p>
+    <p>
+      <strong>The index is one-sided by design.</strong> Stress scores are floored at zero, so
+      conditions calmer than the baseline register as 0 rather than as negative stress, and the
+      composite cannot fall below {{ scale_min|int }}. This is deliberate — the index measures crisis
+      stress, not general market wellbeing — but it is a real limitation, and it is listed as one
+      <a href="#limitations">below</a>.
+    </p>
+  </section>
+
+  <section id="components" aria-labelledby="components-h">
+    <h2 id="components-h">Components, weights and caps</h2>
+    <p>
+      Seven components, weighted to reflect how directly each one transmits chokepoint disruption into
+      observable cost. The cap is the percentage change from baseline that scores 100 — the point at
+      which that component is treated as maximally stressed.
+    </p>
+
+    <div class="table-responsive">
+      <table class="components-table table-sticky-first">
+        <caption class="sr-only">HMX-INDEX components with weight, cap and cap rationale</caption>
+        <thead>
+          <tr>
+            <th scope="col">Component</th>
+            <th scope="col">Weight</th>
+            <th scope="col">Baseline</th>
+            <th scope="col">Cap</th>
+            <th scope="col">Source</th>
+            <th scope="col">Cadence</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in components %}
+          <tr>
+            <th scope="row">{{ c.label }}</th>
+            <td class="font-mono">{{ (c.weight * 100)|round|int }}%</td>
+            <td class="font-mono">{{ "%.2f"|format(baseline_values[c.key]) }} <span class="cell-unit">{{ c.unit }}</span></td>
+            <td class="font-mono">{% if c.invert %}−{% else %}+{% endif %}{{ c.cap_pct|int }}%</td>
+            <td><span class="source-badge">{{ c.source }}</span></td>
+            <td class="cell-sub">{{ c.update_cadence }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Why each cap was set where it was</h3>
+    <p>
+      Caps are the most consequential judgement calls in the model: a tighter cap makes a component
+      saturate sooner and so raises its effective influence at moderate stress levels. Each is
+      anchored to a historical precedent rather than chosen to make the chart look right.
+    </p>
+    <dl class="cap-list">
+      {% for c in components %}
+      <div class="cap-item">
+        <dt>{{ c.label }} <span class="cap-value">{% if c.invert %}−{% else %}+{% endif %}{{ c.cap_pct|int }}%</span></dt>
+        <dd>{{ c.cap_rationale }}</dd>
+      </div>
+      {% endfor %}
+    </dl>
+  </section>
+
+  <section id="baseline" aria-labelledby="baseline-h">
+    <h2 id="baseline-h">Baseline selection</h2>
+    <p>
+      For the three market-fed components the baseline is the mean of daily closes across
+      <strong>{{ baseline_window.replace('/', ' to ') }}</strong> — 20 trading days with no active
+      chokepoint disruption. Ship traffic is baselined on the IMF PortWatch one-year reference window.
+      The remaining three manual components are anchored to their sources' stated pre-crisis levels.
+      No baseline drifts once set.
+    </p>
+    <p>
+      <strong>This is still an approximation.</strong> One calm month is a better anchor than one calm
+      week, but a different month would move every historical score by a point or so. A trailing
+      multi-month median would be more robust and is on the roadmap. Until then, the baseline values
+      are published in full — in the table above, in the
+      <a href="{{ url_for('main.data_page') }}">JSON API</a>, and in the CSV export — so anyone can
+      rebase the series themselves and check how sensitive a conclusion is to that choice.
+    </p>
+  </section>
+
+  <section id="bands" aria-labelledby="bands-h">
+    <h2 id="bands-h">Severity bands</h2>
+    <p>The composite is classified into five bands. Band thresholds and the gauge on the dashboard are
+      generated from the same constants, so they cannot drift apart.</p>
+    <div class="table-responsive">
+      <table class="components-table">
+        <caption class="sr-only">HMX-INDEX severity bands</caption>
+        <thead><tr><th scope="col">Band</th><th scope="col">Score range</th></tr></thead>
+        <tbody>
+          {% for lower, label, status in bands %}
+          <tr>
+            <th scope="row"><span class="status-badge status-{{ status }}"><span class="status-dot" aria-hidden="true"></span>{{ label }}</span></th>
+            <td class="font-mono">
+              {% if not loop.first %}{{ lower|int }}{% else %}{{ scale_min|int }}{% endif %}
+              {%- if not loop.last %} – {{ bands[loop.index][0]|int }}{% else %} and above{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="cadence" aria-labelledby="cadence-h">
+    <h2 id="cadence-h">Data cadence and staleness</h2>
+    <p>
+      Three components — Brent crude, TTF gas and VIX, together 50% of index weight — refresh
+      automatically from market data. The other four have no free API and are entered by hand each week
+      from licensed industry sources. The site does not pretend otherwise: every component in the
+      <a href="{{ url_for('main.hormuz_index') }}#components-heading">breakdown table</a> shows its own
+      cadence and last-updated date.
+    </p>
+    <h3>What happens when a value cannot be fetched</h3>
+    <ul>
+      <li>The <strong>last known value is carried forward</strong>. It is never reset to baseline —
+        a value we could not fetch is not a value that is calm, and treating it as one would make an
+        outage look like a de-escalation.</li>
+      <li>The component is flagged <strong>stale</strong> in the breakdown table and in the JSON API.</li>
+      <li>If stale components account for {{ (degraded_threshold * 100)|round|int }}% or more of index
+        weight, the whole snapshot is marked <strong>degraded</strong> and a reduced-confidence notice
+        appears above the dashboard.</li>
+    </ul>
+    {% if not durable_storage %}
+    <p class="notice notice-warning" role="note">
+      <strong>Operational note:</strong> this deployment is running on an ephemeral filesystem, so
+      scheduled history writes persist only for the life of the serving instance. The published weekly
+      series is the version committed to the repository.
+    </p>
+    {% endif %}
+  </section>
+
+  <section id="limitations" aria-labelledby="limitations-h">
+    <h2 id="limitations-h">Known limitations</h2>
+    <p>Stated plainly, because a reader who finds these on their own trusts everything else less.</p>
+    <ol class="limitations-list">
+      <li>
+        <strong>Half the index weight is manually keyed.</strong> Four of seven components refresh
+        weekly by hand, not continuously. Between updates those values are carried forward unchanged.
+      </li>
+      <li>
+        <strong>The index cannot express calm below baseline.</strong> Stress scores floor at zero, so
+        the composite has a hard floor of {{ scale_min|int }}. A genuine de-escalation below January
+        2026 conditions is invisible to the model.
+      </li>
+      <li>
+        <strong>The baseline is a single calm month</strong> for six of the seven components.
+        See <a href="#baseline">baseline selection</a> above. Ship traffic is the exception: it is
+        baselined on the IMF PortWatch one-year reference window, which is the more robust
+        treatment and the direction the other six should move in.
+      </li>
+      <li>
+        <strong>Components are correlated.</strong> Brent (30%), TTF gas (10%) and VIX (10%) tend to
+        move together during an energy shock, so half the index weight can respond to a single event.
+        The composite is therefore less diversified than a seven-component structure implies. A
+        correlation matrix is published alongside the data.
+      </li>
+      <li>
+        <strong>Cap thresholds are judgement calls.</strong> They are anchored to historical precedent
+        and documented above, but a different analyst would reasonably choose different values, and the
+        composite is sensitive to them.
+      </li>
+      <li>
+        <strong>Scores are point estimates without a confidence interval.</strong> One decimal place
+        implies more precision than four weekly manual inputs can support. Treat differences under
+        roughly one point as noise.
+      </li>
+    </ol>
+  </section>
+
+  <section id="citation" aria-labelledby="citation-h">
+    <h2 id="citation-h">Citation</h2>
+    <p>Index data is published under
+      <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_name }}</a>.
+      Attribution formats are on the <a href="{{ url_for('main.data_page') }}">Data &amp; API page</a>.</p>
+  </section>
+</article>
+{% endblock %}
