@@ -41,7 +41,20 @@ CONTENT_SECURITY_POLICY = "; ".join([
 
 
 def _static_version(static_folder: str | None) -> str:
-    """Newest mtime under the static folder, as a short cache-busting token."""
+    """Cache-busting token for /static, changed by every deploy.
+
+    Prefers the deployed commit SHA. The mtime fallback below is correct on a
+    normal filesystem but useless on Vercel, which normalises every checked-out
+    file to one fixed timestamp for reproducible builds: every deploy then
+    emits the same token, and since vercel.json marks /static immutable for a
+    year, returning visitors keep running last year's JS against this year's
+    HTML. That combination is silent — the stale script simply fails to find
+    the elements it wants — so it has to be prevented rather than noticed.
+    """
+    sha = os.environ.get("VERCEL_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT_SHA")
+    if sha:
+        return sha[:12]
+
     newest = 0.0
     if static_folder and os.path.isdir(static_folder):
         for root, _dirs, files in os.walk(static_folder):
