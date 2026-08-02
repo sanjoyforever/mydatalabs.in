@@ -174,9 +174,9 @@
       <div>
         <h3 class="ppi-title">Public Perception Index <span class="inline-desc">(1–10 reader opinion mapped to 100–200 scale)</span></h3>
       </div>
-      <button type="button" class="ppi-vote-btn" id="ppi-open"
-              aria-haspopup="dialog" aria-controls="ppi-dialog">
-        <span aria-hidden="true">🗳️</span> <span id="ppi-open-label">Cast your read</span>
+      <button type="button" class="ppi-vote-btn" id="ppi-submit" disabled
+              aria-describedby="ppi-hint">
+        <span aria-hidden="true">🗳️</span> <span id="ppi-submit-label">Cast your read</span>
       </button>
     </div>
 
@@ -212,6 +212,10 @@
       </div>
     </div>
 
+    {# One marker does both jobs: at rest it shows where the crowd sits, and
+       dragging it turns it into your own answer on the very same scale. It
+       moves freely — the ballot is a position, not one of ten buttons — and
+       the wording under it names the decile the position falls in. #}
     <div class="gauge-track-container ppi-track"
          role="meter"
          id="ppi-meter"
@@ -223,16 +227,48 @@
            style="width: {{ sentiment.scale_pct if sentiment.scale_pct is not none else 0 }}%;"></div>
       <div class="gauge-pointer ppi-model-marker" style="left: {{ scale_pct }}%;"
            title="Model score: {{ '%.1f'|format(snapshot.score) }}"></div>
-      <div class="gauge-pointer ppi-pointer" id="ppi-pointer"
-           style="left: {{ sentiment.scale_pct if sentiment.scale_pct is not none else 0 }}%;"
-           {% if sentiment.scale_pct is none %}hidden{% endif %}></div>
+      {# With no votes in yet there is no crowd position to show, but the marker
+         still has to be there to be dragged — park it at the midpoint and mute
+         it, rather than hiding the only way to vote. #}
+      <div class="gauge-pointer ppi-pointer{% if sentiment.scale_pct is none %} is-empty{% endif %}" id="ppi-pointer"
+           style="left: {{ sentiment.scale_pct if sentiment.scale_pct is not none else 50 }}%;"
+           role="slider"
+           tabindex="0"
+           aria-label="Drag to cast your read of this week, 1 (calm) to 10 (open war)"
+           aria-valuemin="1" aria-valuemax="10" aria-valuenow="5"
+           aria-valuetext="Not yet cast"
+           aria-describedby="ppi-hint"></div>
     </div>
+
+    <div class="ppi-scale-ends" aria-hidden="true">
+      <span>100 · Calm</span>
+      <span>200 · Open war</span>
+    </div>
+
+    <p class="ppi-hint" id="ppi-hint">
+      <span id="ppi-hint-text">Drag the marker to where you think this week sits, then press
+      <strong>Cast your read</strong>.</span>
+    </p>
+
+    <p class="ppi-error" id="ppi-error" role="alert" hidden></p>
 
     <p class="ppi-footnote">
       <span class="ppi-marker-key" aria-hidden="true"></span>
-      Hollow marker is the model score ({{ "%.1f"|format(snapshot.score) }}). Votes reset each
-      week and are anonymous — see the voting dialog for what is stored.
+      Hollow marker is the model score ({{ "%.1f"|format(snapshot.score) }}). Votes reset each week
+      and are anonymous.
+      <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw my vote</button>
     </p>
+
+    <details class="ppi-privacy-toggle">
+      <summary>What we store when you vote</summary>
+      <p class="ppi-privacy">
+        Your 1–10 rating, the week, and a random ID this browser generates so you can
+        change or delete your vote. No account, no cookie, no IP address, no tracking,
+        nothing shared with anyone else. The random ID is kept in this browser's local
+        storage and means nothing outside this poll — clear it any time from your
+        browser settings.
+      </p>
+    </details>
   </div>
 </section>
 
@@ -282,67 +318,18 @@
   </div>
 </section>
 
-<!-- Voting dialog. Native <dialog> so focus trapping, Esc-to-close and the
-     backdrop come from the platform rather than from hand-rolled JS. -->
-<dialog class="ppi-dialog" id="ppi-dialog" aria-labelledby="ppi-dialog-title">
-  <form method="dialog" class="ppi-dialog-form" id="ppi-form">
-    <div class="ppi-dialog-header">
-      <h2 id="ppi-dialog-title">How severe does this feel to you?</h2>
-      <button type="submit" value="cancel" class="ppi-dialog-close" aria-label="Close">&times;</button>
-    </div>
-
-    <p class="ppi-dialog-intro">
-      Rate the situation in the Strait of Hormuz this week from 1 to 10. Your answer
-      joins everyone else's to form the Public Perception Index.
-    </p>
-
-    <output class="ppi-slider-readout" for="ppi-slider" id="ppi-slider-readout">
-      <span class="ppi-slider-value" id="ppi-slider-value">5</span>
-      <span class="ppi-slider-word" id="ppi-slider-word">Serious escalation risk</span>
-      <span class="ppi-slider-mapped" id="ppi-slider-mapped">= 144.4 on the index scale</span>
-    </output>
-
-    <input type="range" class="ppi-slider" id="ppi-slider"
-           min="1" max="10" step="1" value="5"
-           list="ppi-slider-ticks"
-           aria-describedby="ppi-slider-word">
-    <datalist id="ppi-slider-ticks">
-      {% for n in range(1, 11) %}<option value="{{ n }}" label="{{ n }}"></option>{% endfor %}
-    </datalist>
-
-    <div class="ppi-slider-ends" aria-hidden="true">
-      <span>1 · Calm</span>
-      <span>10 · Open war</span>
-    </div>
-
-    <p class="ppi-privacy">
-      <strong>What we store:</strong> your 1–10 rating, the week, and a random ID this
-      browser generates so you can change or delete your vote. No account, no cookie,
-      no IP address, no tracking, nothing shared with anyone else. The random ID is
-      kept in this browser's local storage and means nothing outside this poll — clear
-      it any time from your browser settings.
-    </p>
-
-    <p class="ppi-error" id="ppi-error" role="alert" hidden></p>
-
-    <div class="ppi-dialog-actions">
-      <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw my vote</button>
-      <span class="ppi-actions-spacer"></span>
-      <button type="submit" value="cancel" class="btn-secondary">Cancel</button>
-      <button type="button" class="btn-primary" id="ppi-submit">Submit vote</button>
-    </div>
-  </form>
-</dialog>
-
 <!-- Interactive Weekly Trend Chart with ECharts -->
 <section class="chart-card" aria-labelledby="trend-heading">
   <div class="chart-header">
     <div>
       <h2 id="trend-heading">Weekly Score Trajectory</h2>
-      <span class="section-desc">Historical weekly composite index evolution against the 100.0 baseline.</span>
+      <span class="section-desc">Historical weekly composite index evolution against the 100.0 baseline, with reader perception on the same scale.</span>
     </div>
     <div class="chart-legend">
       <span><span class="legend-swatch legend-baseline" aria-hidden="true"></span> Dashed line = 100.0 baseline</span>
+      {% if perception_by_week %}
+      <span><span class="legend-swatch legend-perception" aria-hidden="true"></span> Public Perception Index</span>
+      {% endif %}
       <span class="legend-ceasefire"><span aria-hidden="true">🕊️</span> Ceasefire declared</span>
     </div>
   </div>
@@ -360,7 +347,12 @@
       <table class="components-table">
         <caption class="sr-only">HMX-INDEX composite score by week</caption>
         <thead>
-          <tr><th scope="col">Week starting</th><th scope="col">Composite score</th><th scope="col">Level</th></tr>
+          <tr>
+            <th scope="col">Week starting</th>
+            <th scope="col">Composite score</th>
+            <th scope="col">Level</th>
+            {% if perception_by_week %}<th scope="col">Public perception</th>{% endif %}
+          </tr>
         </thead>
         <tbody>
           {% for h in history %}
@@ -368,6 +360,10 @@
             <th scope="row" class="font-mono">{{ h.week_start }}</th>
             <td class="font-mono">{{ "%.1f"|format(h.score) }}</td>
             <td>{{ h.level_label }}</td>
+            {% if perception_by_week %}
+            {% set ppi = perception_by_week.get(h.week_start) %}
+            <td class="font-mono">{% if ppi is not none %}{{ "%.1f"|format(ppi) }}{% else %}—{% endif %}</td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>
@@ -709,6 +705,8 @@
   "trend": {
     "dates": {{ history|map(attribute='week_start')|list|tojson }},
     "scores": {{ history|map(attribute='score')|list|tojson }},
+    {# Nulls are deliberate: weeks without a publishable vote count draw a gap. #}
+    "perception": {{ perception_series|tojson }},
     "ceasefires": {{ events|selectattr('is_ceasefire')|map(attribute='date')|list|tojson }}
   },
   "flags": {

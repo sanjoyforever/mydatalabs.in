@@ -392,6 +392,13 @@ def hormuz_index():
         running_total += monthly_map.get(m, 0)
         cumulative_attacks.append(running_total)
 
+    # Reader perception, plotted on the model's own week axis. Weeks with no
+    # ballots (or too few to publish) map to None, which reaches the chart as
+    # a null and draws a gap rather than a fabricated point.
+    sentiment_history = votes.get_history()
+    perception_by_week = {h["week_start"]: h["index"] for h in sentiment_history}
+    perception_series = [perception_by_week.get(h["week_start"]) for h in history]
+
     html = render_template(
         "hormuz.html",
         **_common(
@@ -409,6 +416,9 @@ def hormuz_index():
             month_labels=month_labels,
             cumulative_attacks=cumulative_attacks,
             sentiment=votes.get_summary(),
+            sentiment_history=sentiment_history,
+            perception_series=perception_series,
+            perception_by_week=perception_by_week,
             press=build_press_dispatch(snapshot, total_attacks),
             top_driver=hormuz.top_driver(snapshot),
             band_positions=scoring.band_positions(),
@@ -648,7 +658,12 @@ def _no_store(resp: Response) -> Response:
 def api_sentiment():
     token = _voter_token()
     voter_hash = votes.hash_voter_token(token) if token else None
-    return _no_store(jsonify(votes.get_summary(voter_hash=voter_hash)))
+    summary = votes.get_summary(voter_hash=voter_hash)
+    # The weekly series is a second query, so it is opt-in: the vote block
+    # polls this endpoint after every ballot and only needs the current week.
+    if request.args.get("history") in ("1", "true", "yes"):
+        summary["history"] = votes.get_history()
+    return _no_store(jsonify(summary))
 
 
 @bp.route("/api/hormuz-index/sentiment", methods=["POST"])
@@ -658,16 +673,20 @@ def api_sentiment_vote():
         return _no_store(jsonify({"error": "Missing or malformed voter token."})), 400
 
     bad_rating = {
-        "error": f"Rating must be a whole number from "
+        "error": f"Rating must be a number from "
                  f"{votes.RATING_MIN} to {votes.RATING_MAX}."
     }
     payload = request.get_json(silent=True) or {}
     try:
-        value = int(payload.get("value"))
+        # The ballot is a dragged position, so it arrives fractional. Rounding
+        # here as well as in the model keeps a client that sends fifteen decimal
+        # places from writing them.
+        value = round(float(payload.get("value")), votes.RATING_DP)
     except (TypeError, ValueError):
         return _no_store(jsonify(bad_rating)), 400
     # Range is checked here as well as in votes.cast_vote so a malformed ballot
-    # answers 400 rather than sharing the 429 used for the rate limit.
+    # answers 400 rather than sharing the 429 used for the rate limit. The
+    # comparison also rejects NaN, which survives float() intact.
     if not votes.RATING_MIN <= value <= votes.RATING_MAX:
         return _no_store(jsonify(bad_rating)), 400
 
@@ -689,7 +708,7 @@ def api_sentiment_vote():
 
 @bp.route("/api/hormuz-index/sentiment", methods=["DELETE"])
 def api_sentiment_withdraw():
-    """Let a visitor remove their own vote — the erasure path for the dialog."""
+    """Let a visitor remove their own vote — the erasure path for the vote block."""
     token = _voter_token()
     if not token:
         return _no_store(jsonify({"error": "Missing or malformed voter token."})), 400

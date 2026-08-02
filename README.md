@@ -100,7 +100,7 @@ mydatalabs-in/
 │   │   ├── css/style.css      # Design tokens, dark/light themes, a11y primitives
 │   │   ├── js/theme.js        # Theme toggle, keyboard-accessible nav, clipboard
 │   │   ├── js/charts.js       # ECharts setup, theme-reactive, fallback handling
-│   │   └── js/vote.js         # HMX-PPI voting dialog, anonymous token handling
+│   │   └── js/vote.js         # HMX-PPI drag-to-vote gauge, anonymous token handling
 │   ├── templates/             # base, home, hormuz, methodology, data, 404, 500, coming_soon
 │   ├── routes.py              # Routing, snapshot cache, press dispatch derivation
 │   ├── scoring.py             # Generic composite engine (index-agnostic)
@@ -209,8 +209,8 @@ votes, and stored server-side only as a peppered SHA-256. Ballot stuffing is
 capped against a week-salted HMAC of IP + user agent from which neither input
 can be recovered and which cannot be correlated across weeks. The
 `localStorage` entry is strictly necessary for the function the visitor asked
-for, so it needs no consent banner, and the voting dialog states it anyway.
-Visitors can withdraw a vote from the same dialog, which deletes the row and
+for, so it needs no consent banner, and the vote block states it anyway.
+Visitors can withdraw a vote from the same block, which deletes the row and
 the local ID. See the module docstring in `app/votes.py` for the full rationale.
 
 ---

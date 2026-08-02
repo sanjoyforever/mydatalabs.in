@@ -36,7 +36,8 @@
       blue: isDark ? "#38BDF8" : "#0284C7",
       red: isDark ? "#EF4444" : "#DC2626",
       green: isDark ? "#10B981" : "#059669",
-      greenText: isDark ? "#34D399" : "#047857"
+      greenText: isDark ? "#34D399" : "#047857",
+      violet: isDark ? "#A78BFA" : "#7C3AED"
     };
   }
 
@@ -102,6 +103,13 @@
 
   // --- 1. Weekly trend trajectory -----------------------------------------
   register("echart-trend-container", function (p) {
+    var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var fmtDateShort = function (iso) {
+      var parts = iso.split("-");
+      if (parts.length !== 3) return iso;
+      return parts[2] + "-" + MONTHS[parseInt(parts[1], 10) - 1];
+    };
+
     var truceLines = (DATA.trend.ceasefires || []).map(function (d) {
       return {
         xAxis: d,
@@ -110,14 +118,23 @@
       };
     });
 
+    // Reader perception rides the same axis as the model. Weeks with no
+    // publishable vote count arrive as nulls; connectNulls stays off so the
+    // line breaks there instead of interpolating an opinion nobody gave.
+    var perception = DATA.trend.perception || [];
+    var hasPerception = perception.some(function (v) { return v !== null && v !== undefined; });
+
     return {
       backgroundColor: "transparent",
       animation: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       tooltip: Object.assign({
         trigger: "axis",
         formatter: function (params) {
-          var d = params[0];
-          return "<strong>Week of " + d.name + "</strong><br/>Score: <strong>" + d.value + "</strong>";
+          var rows = params.map(function (s) {
+            var v = (s.value === null || s.value === undefined) ? "no votes" : s.value;
+            return s.seriesName + ": <strong>" + v + "</strong>";
+          });
+          return "<strong>Week of " + fmtDateShort(params[0].name) + "</strong><br/>" + rows.join("<br/>");
         }
       }, tooltipBase(p)),
       grid: { top: 35, right: 30, bottom: 45, left: 55 },
@@ -125,7 +142,7 @@
         type: "category",
         data: DATA.trend.dates,
         axisLine: { lineStyle: { color: p.grid } },
-        axisLabel: { color: p.text, fontSize: 11, fontFamily: "JetBrains Mono" }
+        axisLabel: { color: p.text, fontSize: 11, fontFamily: "JetBrains Mono", formatter: fmtDateShort }
       },
       yAxis: {
         type: "value",
@@ -157,7 +174,16 @@
           }].concat(truceLines)
         },
         data: DATA.trend.scores
-      }]
+      }].concat(hasPerception ? [{
+        name: "Public Perception",
+        type: "line",
+        smooth: true,
+        symbolSize: 6,
+        connectNulls: false,
+        itemStyle: { color: p.violet },
+        lineStyle: { width: 2, color: p.violet, type: "dashed" },
+        data: perception
+      }] : [])
     };
   });
 

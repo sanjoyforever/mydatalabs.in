@@ -11,9 +11,14 @@ share a scale: publishing the crowd number on a scale of its own would destroy
 the one interesting thing about a sentiment reading next to a model, which is
 the distance between them.
 
-A rating out of ten is asked for rather than a continuous slider because people
-have a shared intuition for out-of-ten and none at all for "68 out of 100" —
-the extra apparent precision would be noise presented as signal.
+The ballot is continuous rather than ten discrete steps, because it is cast by
+dragging a marker along the published gauge: a handle that jumped between ten
+stops would fight the gesture, and "somewhere between 6 and 7" is a real thing
+to mean. It is stored to two decimals — enough that the drag feels free, and
+coarse enough not to pretend a reader placed a marker to the pixel. Ratings are
+still *described* in tens, because people have a shared intuition for
+out-of-ten and none at all for "68 out of 100"; the decile a rating falls in is
+what gets a name, and the histogram keeps its ten buckets.
 
 
 Identity, and why there is no personal data here
@@ -41,11 +46,11 @@ anything that identifies a person:
 
 Under GDPR the ``localStorage`` entry is strictly necessary for the function
 the visitor explicitly asked for (casting and amending a vote), so it needs no
-consent banner, and it is stated in the voting dialog regardless. No cookie is
+consent banner, and it is stated in the vote block regardless. No cookie is
 set, no profile is built, nothing is shared with a third party, and nothing
 stored can be traced back to an individual — so there is no personal data to
 export or erase on request. A visitor who wants their vote gone can withdraw it
-from the same dialog, which deletes the row.
+from the same block, which deletes the row.
 """
 from __future__ import annotations
 
@@ -65,8 +70,15 @@ MAX_VOTES_PER_ORIGIN = int(os.environ.get("MAX_VOTES_PER_ORIGIN", "25"))
 # Minimum ballots before the public number is shown.
 MIN_VOTES_TO_PUBLISH = int(os.environ.get("MIN_VOTES_TO_PUBLISH", "1"))
 
+# How far back the perception series is read for the trend chart.
+HISTORY_WEEKS = int(os.environ.get("SENTIMENT_HISTORY_WEEKS", "104"))
+
 RATING_MIN = 1
 RATING_MAX = 10
+
+# Resolution of one ballot. Two decimals over a span of nine is ~900 distinct
+# positions, which no drag can distinguish from continuous.
+RATING_DP = 2
 
 SCHEMA = [
     """
@@ -74,7 +86,7 @@ SCHEMA = [
         id           BIGSERIAL PRIMARY KEY,
         index_key    TEXT        NOT NULL,
         week_start   DATE        NOT NULL,
-        rating       SMALLINT    NOT NULL CHECK (rating BETWEEN 1 AND 10),
+        rating       NUMERIC(4,2) NOT NULL CHECK (rating BETWEEN 1 AND 10),
         voter_hash   TEXT        NOT NULL,
         origin_hash  TEXT        NOT NULL,
         created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -82,6 +94,24 @@ SCHEMA = [
         CONSTRAINT community_votes_unique_voter
             UNIQUE (index_key, week_start, voter_hash)
     )
+    """,
+    # Widening for databases created when the ballot was ten whole steps. The
+    # old values are already valid on the new type (7 means 7.00), so this is a
+    # type change with no rescale and no data loss. Guarded on the current type
+    # because an unguarded ALTER rewrites the whole table on every boot.
+    """
+    DO $$
+    BEGIN
+        IF EXISTS (
+            SELECT 1 FROM information_schema.columns
+             WHERE table_name = 'community_votes'
+               AND column_name = 'rating'
+               AND data_type <> 'numeric'
+        ) THEN
+            ALTER TABLE community_votes
+                ALTER COLUMN rating TYPE NUMERIC(4,2);
+        END IF;
+    END $$
     """,
     """
     CREATE INDEX IF NOT EXISTS community_votes_week_idx
@@ -136,7 +166,7 @@ def _empty(week_start: str) -> dict:
         "level_status": None,
         "scale_pct": None,
         "mean_rating": None,
-        # One bucket per rating, 1 through 10.
+        # Ten buckets, one per decile of the continuous rating.
         "distribution": [0] * (RATING_MAX - RATING_MIN + 1),
         "min_votes": MIN_VOTES_TO_PUBLISH,
         "your_vote": None,
@@ -162,16 +192,20 @@ def _summarise(cur, week_start: str, voter_hash: str | None) -> dict:
     doubled the latency the voter waits through.
     """
     summary = _empty(week_start)
+    # Grouped by decile for the histogram, but carrying the untruncated sum too,
+    # so the published mean keeps the precision the ballots were cast with.
     cur.execute(
         """
-        SELECT rating, COUNT(*)
+        SELECT ROUND(rating)::int AS bucket, COUNT(*), SUM(rating)
           FROM community_votes
          WHERE index_key = %s AND week_start = %s
-         GROUP BY rating
+         GROUP BY bucket
         """,
         (INDEX_KEY, week_start),
     )
-    counts = {int(rating): int(n) for rating, n in cur.fetchall()}
+    rows = cur.fetchall()
+    counts = {int(bucket): int(n) for bucket, n, _ in rows}
+    rating_sum = sum(float(total) for _, _, total in rows)
 
     if voter_hash:
         cur.execute(
@@ -182,7 +216,7 @@ def _summarise(cur, week_start: str, voter_hash: str | None) -> dict:
             (INDEX_KEY, week_start, voter_hash),
         )
         row = cur.fetchone()
-        summary["your_vote"] = int(row[0]) if row else None
+        summary["your_vote"] = round(float(row[0]), RATING_DP) if row else None
 
     total = sum(counts.values())
     summary["votes"] = total
@@ -190,8 +224,8 @@ def _summarise(cur, week_start: str, voter_hash: str | None) -> dict:
         counts.get(r, 0) for r in range(RATING_MIN, RATING_MAX + 1)
     ]
     if total >= MIN_VOTES_TO_PUBLISH:
-        mean = sum(r * n for r, n in counts.items()) / total
-        summary["mean_rating"] = round(mean, 2)
+        mean = rating_sum / total
+        summary["mean_rating"] = round(mean, RATING_DP)
         summary["index"] = to_index(mean)
     return _decorate(summary)
 
@@ -214,18 +248,65 @@ def get_summary(week_start: str | None = None, voter_hash: str | None = None) ->
         return summary
 
 
+def get_history(weeks: int = HISTORY_WEEKS) -> list[dict]:
+    """Weekly perception series, oldest first. Never raises.
+
+    Rows are never deleted on a week roll-over, so the table already holds the
+    whole history — this is the read that turns it into a series. Weeks that
+    did not clear ``MIN_VOTES_TO_PUBLISH`` are returned with ``index: None``
+    rather than being dropped: the chart needs to draw a gap there, and a
+    thinly-voted week silently becoming a plotted point would be a lie.
+    """
+    if not db.is_configured():
+        return []
+    try:
+        db.ensure_schema(SCHEMA)
+        with db.cursor() as cur:
+            cur.execute(
+                """
+                SELECT week_start, COUNT(*), AVG(rating)
+                  FROM community_votes
+                 WHERE index_key = %s
+                 GROUP BY week_start
+                 ORDER BY week_start DESC
+                 LIMIT %s
+                """,
+                (INDEX_KEY, weeks),
+            )
+            rows = cur.fetchall()
+    except Exception:
+        return []
+
+    series = []
+    for week_start, total, mean in reversed(rows):
+        total = int(total)
+        mean = float(mean)
+        published = total >= MIN_VOTES_TO_PUBLISH
+        series.append({
+            "week_start": week_start.isoformat(),
+            "votes": total,
+            "mean_rating": round(mean, 2) if published else None,
+            "index": to_index(mean) if published else None,
+        })
+    return series
+
+
 class VoteRejected(Exception):
     """Raised when a ballot is refused for a reason the visitor should see."""
 
 
-def cast_vote(rating: int, voter_hash: str, origin_hash: str,
+def cast_vote(rating: float, voter_hash: str, origin_hash: str,
               week_start: str | None = None) -> dict:
     """Record or amend one vote, then return the refreshed summary."""
     if not db.is_configured():
         raise VoteRejected("Voting is not available right now.")
-    if not isinstance(rating, int) or not RATING_MIN <= rating <= RATING_MAX:
+    try:
+        rating = round(float(rating), RATING_DP)
+    except (TypeError, ValueError):
+        rating = None
+    if rating is None or not RATING_MIN <= rating <= RATING_MAX:
         raise VoteRejected(
-            f"Rating must be a whole number from {RATING_MIN} to {RATING_MAX}."
+            f"Rating must be a number from {RATING_MIN} to {RATING_MAX}."
         )
 
     week_start = week_start or current_week_start()
