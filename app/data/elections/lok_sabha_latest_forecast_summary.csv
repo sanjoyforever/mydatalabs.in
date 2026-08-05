@@ -1,0 +1,2 @@
+as_of_date,baseline_election_used,composite_sentiment,NDA_predicted_seats,NDA_seats_90_CI,NDA_majority_probability,INDIA_predicted_seats,INDIA_seats_90_CI,INDIA_majority_probability,OTHERS_predicted_seats,hung_probability,trend_slope_per_day,ma_7d,ma_30d,volatility,momentum,backtest_overall_mae
+2026-08-02,2024,-27.774,274,247 - 300,56.0%,253,228 - 279,11.7%,16,32.3%,0.0498,274.0,273.5333,0.1826,0.4667,5.33

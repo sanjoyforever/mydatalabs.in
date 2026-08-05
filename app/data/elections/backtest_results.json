@@ -1,0 +1,67 @@
+{
+  "2019": {
+    "NDA_error": 2,
+    "NDA_pred": 351,
+    "NDA_actual": 353,
+    "INDIA_error": 0,
+    "INDIA_pred": 91,
+    "INDIA_actual": 91,
+    "OTHERS_error": 2,
+    "OTHERS_pred": 100,
+    "OTHERS_actual": 98,
+    "mae": 1.3333333333333333,
+    "total_abs_error": 4,
+    "election_year": 2019,
+    "survey_sample_count": 61,
+    "predicted_seats": {
+      "NDA": 351,
+      "INDIA": 91,
+      "OTHERS": 100
+    },
+    "actual_seats": {
+      "NDA": 353,
+      "INDIA": 91,
+      "OTHERS": 98
+    },
+    "composite_sentiment": 19.535,
+    "projected_vote_share": {
+      "NDA": 44.96,
+      "INDIA": 27.02,
+      "OTHERS": 28.02
+    },
+    "window": "2019-03-24 .. 2019-05-23"
+  },
+  "2024": {
+    "NDA_error": 14,
+    "NDA_pred": 279,
+    "NDA_actual": 293,
+    "INDIA_error": 14,
+    "INDIA_pred": 248,
+    "INDIA_actual": 234,
+    "OTHERS_error": 0,
+    "OTHERS_pred": 16,
+    "OTHERS_actual": 16,
+    "mae": 9.333333333333334,
+    "total_abs_error": 28,
+    "election_year": 2024,
+    "survey_sample_count": 61,
+    "predicted_seats": {
+      "NDA": 279,
+      "INDIA": 248,
+      "OTHERS": 16
+    },
+    "actual_seats": {
+      "NDA": 293,
+      "INDIA": 234,
+      "OTHERS": 16
+    },
+    "composite_sentiment": -18.039,
+    "projected_vote_share": {
+      "NDA": 43.58,
+      "INDIA": 41.71,
+      "OTHERS": 14.7
+    },
+    "window": "2024-04-05 .. 2024-06-04"
+  },
+  "overall_mae": 5.333333333333334
+}

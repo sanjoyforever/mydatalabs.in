@@ -1,0 +1,32 @@
+{
+  "best": {
+    "trackers": [
+      1,
+      4
+    ],
+    "tracker_names": [
+      "National Issues",
+      "Index of Inflation"
+    ],
+    "self_nation_weight": 1.0,
+    "cube_exponent": 2.65,
+    "mean_mae": 6.0,
+    "worst_mae": 9.33,
+    "mae_spread": 6.67,
+    "mae_2019": 2.67,
+    "mae_2024": 9.33,
+    "pred_2019": {
+      "NDA": 349,
+      "INDIA": 92,
+      "OTHERS": 101
+    },
+    "pred_2024": {
+      "NDA": 279,
+      "INDIA": 248,
+      "OTHERS": 16
+    },
+    "slope": 0.065016,
+    "intercept": 47.54326
+  },
+  "evaluated": 750
+}

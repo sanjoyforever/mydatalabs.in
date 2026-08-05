@@ -1,0 +1,14 @@
+{
+  "cards": {
+    "hormuz-index": {
+      "value": "159.2",
+      "unit": "score",
+      "status": "serious"
+    },
+    "lok-sabha-index": {
+      "value": "274",
+      "unit": "NDA seats",
+      "status": "good"
+    }
+  }
+}

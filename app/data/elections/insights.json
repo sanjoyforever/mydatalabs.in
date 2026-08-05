@@ -1,0 +1,279 @@
+{
+  "summary": {
+    "as_of_date": "2026-08-02",
+    "headlines": [
+      "NDA projects to 274 seats (\u00b126 at 90% confidence), 19 below its 2024 result of 293.",
+      "The most likely outcome is an NDA majority at 56%, with a hung parliament at 32%. The projection has sat above the 272 line for 1700 consecutive days.",
+      "The 30-day trend is rising at +0.050 seats/day (+1.5 seats over the window, R\u00b2 0.75), with the 7-day average above the 30-day by 0.5 seats.",
+      "The composite sentiment index reads -28 on a \u00b1100 scale, against -28.4 on the 30-day average. Daily volatility is 0.18 seats, so moves under roughly 0.4 seats are inside the day-to-day noise.",
+      "The single heaviest drag is \"Current expenses have become difficult to manage\" at 69.5% of respondents, contributing -10.9 index points."
+    ],
+    "drivers": {
+      "negative": [
+        {
+          "metric": "Current expenses have become difficult to manage",
+          "share": 69.5,
+          "contribution": -10.921
+        },
+        {
+          "metric": "My life & the country both are in a poor state",
+          "share": 33.52,
+          "contribution": -7.183
+        },
+        {
+          "metric": "Will Deteriorate",
+          "share": 30.7,
+          "contribution": -5.701
+        }
+      ],
+      "positive": [
+        {
+          "metric": "Will Improve",
+          "share": 33.88,
+          "contribution": 6.292
+        },
+        {
+          "metric": "The country is moving forward and my life too",
+          "share": 35.46,
+          "contribution": 5.699
+        },
+        {
+          "metric": "Improved",
+          "share": 26.62,
+          "contribution": 4.237
+        }
+      ]
+    },
+    "caveats": [
+      "Backtest error against the two observed elections averages 5.3 seats, which is the honest floor on precision here.",
+      "The vote-share fit rests on only two elections inside the data window, so its uncertainty is wider than the confidence interval alone suggests.",
+      "Event impacts are associations measured across overlapping windows, not causal estimates.",
+      "The model is national uniform swing. It has no seat-level or state-level contest data, so it cannot see alliance arithmetic or candidate effects."
+    ],
+    "figures": {
+      "nda_seats": 274,
+      "india_seats": 253,
+      "others_seats": 16,
+      "nda_vs_last_election": -19,
+      "nda_ci": [
+        247,
+        300
+      ],
+      "prob_nda_majority": 0.5603,
+      "prob_hung": 0.32295,
+      "prob_india_majority": 0.11675,
+      "trend_slope_per_day": 0.0498,
+      "trend_direction": "rising",
+      "volatility": 0.1826,
+      "momentum": 0.4667,
+      "composite": -28
+    }
+  },
+  "impacts": {
+    "positive": [
+      {
+        "id": "pulwama_balakot",
+        "label": "Pulwama / Balakot",
+        "category": "geopolitics",
+        "date": "2019-02-14",
+        "end_date": "2019-02-26",
+        "prior_expectation": "positive",
+        "description": "Pulwama attack followed by the Balakot airstrike, weeks before the 2019 campaign.",
+        "pre_seats": 295.4,
+        "post_seats": 300.6,
+        "impact_seats": 5.1,
+        "impact_composite": 9.78,
+        "z": 2.58,
+        "partial": false,
+        "post_days_used": 30,
+        "direction": "helped NDA",
+        "matches_prior": true,
+        "confounded_by": [
+          "2019 General Election"
+        ],
+        "window": {
+          "pre": "2019-01-15 .. 2019-02-13",
+          "post": "2019-02-14 .. 2019-03-28"
+        },
+        "within_noise": false
+      },
+      {
+        "id": "op_sindoor",
+        "label": "Operation Sindoor",
+        "category": "geopolitics",
+        "date": "2025-05-07",
+        "end_date": "2025-05-10",
+        "prior_expectation": "positive",
+        "description": "Indian strikes following the Pahalgam attack; brief India-Pakistan military exchange.",
+        "pre_seats": 278.4,
+        "post_seats": 279.2,
+        "impact_seats": 0.8,
+        "impact_composite": 2.01,
+        "z": 0.41,
+        "partial": false,
+        "post_days_used": 30,
+        "direction": "helped NDA",
+        "matches_prior": true,
+        "confounded_by": [
+          "US-Iran strikes",
+          "Electoral roll revision (SIR)"
+        ],
+        "window": {
+          "pre": "2025-04-07 .. 2025-05-06",
+          "post": "2025-05-07 .. 2025-06-09"
+        },
+        "within_noise": true
+      }
+    ],
+    "negative": [
+      {
+        "id": "covid_delta",
+        "label": "Delta wave",
+        "category": "health",
+        "date": "2021-04-01",
+        "end_date": "2021-06-15",
+        "prior_expectation": "negative",
+        "description": "Second COVID wave; oxygen and hospital capacity crisis.",
+        "pre_seats": 273.1,
+        "post_seats": 268.6,
+        "impact_seats": -4.5,
+        "impact_composite": -8.32,
+        "z": -2.26,
+        "partial": false,
+        "post_days_used": 30,
+        "direction": "hurt NDA",
+        "matches_prior": true,
+        "confounded_by": [
+          "Farm law protests"
+        ],
+        "window": {
+          "pre": "2021-03-02 .. 2021-03-31",
+          "post": "2021-04-01 .. 2021-07-15"
+        },
+        "within_noise": false
+      },
+      {
+        "id": "farm_protests",
+        "label": "Farm law protests",
+        "category": "protest",
+        "date": "2020-11-26",
+        "end_date": "2021-11-19",
+        "prior_expectation": "negative",
+        "description": "Year-long farmer sit-in at Delhi borders; the three farm laws were repealed on 19 Nov 2021.",
+        "pre_seats": 275.7,
+        "post_seats": 271.7,
+        "impact_seats": -4.0,
+        "impact_composite": -7.4,
+        "z": -2.0,
+        "partial": false,
+        "post_days_used": 30,
+        "direction": "hurt NDA",
+        "matches_prior": true,
+        "confounded_by": [
+          "Delta wave"
+        ],
+        "window": {
+          "pre": "2020-10-27 .. 2020-11-25",
+          "post": "2020-11-26 .. 2021-12-19"
+        },
+        "within_noise": false
+      },
+      {
+        "id": "cjp_protests",
+        "label": "CJP Jantar Mantar protests",
+        "category": "protest",
+        "date": "2026-06-06",
+        "end_date": "2026-07-25",
+        "prior_expectation": "negative",
+        "description": "Cockroach Janta Party and left student groups occupied Jantar Mantar for 50 days over exam irregularities, demanding Dharmendra Pradhan's resignation. Sonam Wangchuk began a hunger strike on 28 Jun and was hospitalised on 18 Jul.",
+        "pre_seats": 276.7,
+        "post_seats": 273.7,
+        "impact_seats": -3.0,
+        "impact_composite": -5.76,
+        "z": -1.5,
+        "partial": true,
+        "post_days_used": 30,
+        "direction": "hurt NDA",
+        "matches_prior": true,
+        "confounded_by": [
+          "NEET-UG 2026 cancelled",
+          "CJI 'cockroach' remark / CJP founded",
+          "Sansad Chalo march",
+          "Pradhan resigns"
+        ],
+        "window": {
+          "pre": "2026-05-07 .. 2026-06-05",
+          "post": "2026-06-06 .. 2026-08-02 (truncated by end of data)"
+        },
+        "within_noise": false
+      },
+      {
+        "id": "fuel_peak_2022",
+        "label": "Fuel price peak",
+        "category": "economy",
+        "date": "2022-04-06",
+        "end_date": null,
+        "prior_expectation": "negative",
+        "description": "Retail petrol and diesel prices at record highs after successive daily revisions.",
+        "pre_seats": 275.8,
+        "post_seats": 274.3,
+        "impact_seats": -1.5,
+        "impact_composite": -2.71,
+        "z": -0.76,
+        "partial": false,
+        "post_days_used": 30,
+        "direction": "hurt NDA",
+        "matches_prior": true,
+        "confounded_by": [
+          "Russia-Ukraine war"
+        ],
+        "window": {
+          "pre": "2022-03-07 .. 2022-04-05",
+          "post": "2022-04-06 .. 2022-05-06"
+        },
+        "within_noise": true
+      },
+      {
+        "id": "galwan",
+        "label": "Galwan clash",
+        "category": "geopolitics",
+        "date": "2020-06-15",
+        "end_date": null,
+        "prior_expectation": "mixed",
+        "description": "India-China border clash in the Galwan valley.",
+        "pre_seats": 279.4,
+        "post_seats": 278.2,
+        "impact_seats": -1.2,
+        "impact_composite": -1.99,
+        "z": -0.59,
+        "partial": false,
+        "post_days_used": 30,
+        "direction": "hurt NDA",
+        "matches_prior": null,
+        "confounded_by": [
+          "COVID lockdown"
+        ],
+        "window": {
+          "pre": "2020-05-16 .. 2020-06-14",
+          "post": "2020-06-15 .. 2020-07-15"
+        },
+        "within_noise": true
+      }
+    ],
+    "evaluated": 25,
+    "reported": 7,
+    "excluded": {
+      "elections": 4,
+      "contradicts_nature": 5,
+      "below_noise_floor": 8
+    },
+    "method": {
+      "pre_days": 30,
+      "post_days": 30,
+      "min_z": 0.4,
+      "noise_z": 1.0,
+      "measure": "mean NDA projected seats after minus before",
+      "caveat": "Association, not causation. Windows overlap and the model has no event variable."
+    }
+  }
+}

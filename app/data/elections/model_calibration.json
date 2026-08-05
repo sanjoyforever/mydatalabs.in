@@ -1,0 +1,68 @@
+{
+  "baseline_year": 2024,
+  "vote_share_model": {
+    "intercept": 44.244889,
+    "slope": 0.036668,
+    "form": "nda_vote_share = intercept + slope * composite_sentiment",
+    "anchors": [
+      {
+        "year": 2019,
+        "composite": 20.593,
+        "actual_nda_vote_share": 45.0,
+        "window": "2019-03-10 .. 2019-05-19"
+      },
+      {
+        "year": 2024,
+        "composite": -17.5871,
+        "actual_nda_vote_share": 43.6,
+        "window": "2024-03-16 .. 2024-06-01"
+      }
+    ]
+  },
+  "cube_exponent": 2.655,
+  "cube_exponent_fit": {
+    "method": "joint across observed elections",
+    "per_year": {
+      "2019": {
+        "predicted": [
+          352,
+          91,
+          99
+        ],
+        "actual": [
+          353,
+          91,
+          98
+        ],
+        "mae": 0.67
+      },
+      "2024": {
+        "predicted": [
+          279,
+          248,
+          16
+        ],
+        "actual": [
+          293,
+          234,
+          16
+        ],
+        "mae": 9.33
+      }
+    }
+  },
+  "opposition_split": {
+    "india_ratio": 0.739362,
+    "others_ratio": 0.260638
+  },
+  "total_seats": 543,
+  "vote_share_bounds": [
+    25.0,
+    60.0
+  ],
+  "data_range": {
+    "first_date": "2019-01-01",
+    "last_date": "2026-08-02",
+    "rows": 2771
+  }
+}
