@@ -42,6 +42,14 @@ Options
     python push_to_prod.py --message "…" custom commit message
     python push_to_prod.py --branch main target a different branch
 
+A clean working tree does not mean production is current — the work may be
+committed and simply unpushed. Both cases publish: the script pushes whatever
+the branch is carrying, and only reports "already current" when origin has it.
+
+Only `main` moves the live domain. `--branch` targets anything else, but Vercel
+gives those a preview build, and the script says so rather than calling it a
+deployment.
+
 Exit codes
 ----------
     0  pushed, or nothing to push
@@ -55,6 +63,11 @@ import subprocess
 import sys
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# The branch Vercel serves the live domain from. Every other branch still gets
+# built, but as a preview on a URL nobody is reading — so a push to one of them
+# is not a deploy, and must not be reported as one.
+PRODUCTION_BRANCH = "main"
 
 # Paths whose changes are publishable data. Directories are added whole; git
 # ignores the ones that do not exist yet.
@@ -122,6 +135,53 @@ def _pending_code_changes() -> list[str]:
     return pending
 
 
+def _unpushed_commits(branch: str) -> list[str] | None:
+    """Commits on ``branch`` that origin has not got yet, newest first.
+
+    A clean working tree means the work is committed, not that production has
+    it. Without this check the script read a clean tree as "already current"
+    and exited 0 on top of a stack of commits it had never pushed.
+
+    Returns None when origin has no such branch at all, which is a different
+    situation from having nothing to push and needs its own wording.
+    """
+    remote = f"origin/{branch}"
+    try:
+        _git("rev-parse", "--verify", "--quiet", remote, capture=True)
+    except subprocess.CalledProcessError:
+        return None
+    out = _git("log", "--oneline", f"{remote}..{branch}", capture=True).stdout
+    return [line.rstrip() for line in out.splitlines() if line.strip()]
+
+
+def _report_pushed(branch: str) -> None:
+    """Say what the push actually did.
+
+    Vercel builds every branch; only the production one moves the live domain.
+    Printing "deployment triggered" for the rest is how someone walks away
+    believing the site shipped when all they got was a preview URL.
+    """
+    print()
+    if branch == PRODUCTION_BRANCH:
+        print(f"  Pushed to origin/{branch} — Vercel production deployment triggered.")
+    else:
+        print(f"  Pushed to origin/{branch} — this builds a Vercel PREVIEW, not production.")
+        print(f"  The live site still serves origin/{PRODUCTION_BRANCH}. Merge there to deploy.")
+
+
+def _push(branch: str, set_upstream: bool = False) -> int:
+    try:
+        if set_upstream:
+            _git("push", "--set-upstream", "origin", branch)
+        else:
+            _git("push", "origin", branch)
+    except subprocess.CalledProcessError as err:
+        print(f"  ERROR: git push failed: {err}", file=sys.stderr)
+        return 1
+    _report_pushed(branch)
+    return 0
+
+
 def push_to_prod(message: str | None = None, dry_run: bool = False, branch: str = "main",
                  include_code: bool = False) -> int:
     print("=" * 66)
@@ -169,8 +229,26 @@ def push_to_prod(message: str | None = None, dry_run: bool = False, branch: str 
         return 1
 
     if not status:
-        print("  Nothing to publish; production is already current.")
-        return 0
+        # Nothing new to stage. That is not the same as production being
+        # current: the change may already be committed and simply never pushed.
+        unpushed = _unpushed_commits(branch)
+        if unpushed == []:
+            print("  Nothing to publish; production is already current.")
+            return 0
+
+        if unpushed is None:
+            print(f"  Nothing new to commit, and origin has no '{branch}' branch yet.")
+        else:
+            print(f"  Nothing new to commit, but {len(unpushed)} commit(s) have not reached origin:")
+            for line in unpushed[:15]:
+                print(f"    {line}")
+            if len(unpushed) > 15:
+                print(f"    … and {len(unpushed) - 15} more")
+
+        if dry_run:
+            print("\n  Dry run — nothing pushed.")
+            return 0
+        return _push(branch, set_upstream=unpushed is None)
 
     print("  Staged:")
     for line in status.splitlines():
@@ -192,14 +270,13 @@ def push_to_prod(message: str | None = None, dry_run: bool = False, branch: str 
 
     try:
         _git("commit", "-m", commit_msg)
-        _git("push", "origin", branch)
     except subprocess.CalledProcessError as err:
-        print(f"  ERROR: git command failed: {err}", file=sys.stderr)
+        print(f"  ERROR: git commit failed: {err}", file=sys.stderr)
         return 1
 
-    print()
-    print(f"  Pushed to origin/{branch} — Vercel deployment triggered.")
-    return 0
+    # The push carries any older unpushed commits along with this one, which is
+    # the point: whatever is on the branch is what production ends up running.
+    return _push(branch, set_upstream=_unpushed_commits(branch) is None)
 
 
 def main() -> int:
