@@ -42,13 +42,17 @@
       This composite sentiment is converted to an NDA national vote share by a linear transformation calibrated
       against historical general election results:
     </p>
+    {# Both branches print the fitted coefficients from model_calibration.json.
+       The literals are the values that file currently holds, so a page rendered
+       without the calibration in context still states the model that ran rather
+       than a placeholder pair from an earlier fit. #}
     {% if vs %}
     <div class="formula-box formula-box-sm">
-      NDA Vote Share = {{ "%.3f"|format(vs.get('intercept', 0.380)) }} + {{ "%.4f"|format(vs.get('slope', 0.0018)) }} × CompositeSentiment
+      NDA Vote Share = {{ "%.3f"|format(vs.get('intercept', 44.245)) }} + {{ "%.4f"|format(vs.get('slope', 0.0367)) }} × CompositeSentiment
     </div>
     {% else %}
     <div class="formula-box formula-box-sm">
-      NDA Vote Share = 0.380 + 0.0018 × CompositeSentiment
+      NDA Vote Share = 44.245 + 0.0367 × CompositeSentiment
     </div>
     {% endif %}
     <p>
@@ -59,7 +63,13 @@
       &nbsp;&nbsp;where&nbsp;&nbsp; k = {{ "%.3f"|format(cal.get('cube_exponent', 2.655)) if cal else '2.655' }}
     </div>
     <p>
-      <strong>Clamping &amp; Ratios:</strong> Vote share outputs are clamped to a realistic 25%–65% range to prevent extreme polling swings from producing impossible totals. Opposition vote share is split between the INDIA alliance and regional parties in a fixed baseline ratio.
+      {# Bounds and split read from the calibration rather than restated: both
+         are refitted when the baseline election changes, and a hardcoded pair
+         here silently becomes a claim about a model that no longer runs. #}
+      <strong>Clamping &amp; Ratios:</strong> Vote share outputs are clamped to a realistic
+      {{ "%.0f"|format((cal.get('vote_share_bounds') or [25.0, 60.0])[0]) if cal else '25' }}%–{{ "%.0f"|format((cal.get('vote_share_bounds') or [25.0, 60.0])[1]) if cal else '60' }}% range
+      to prevent extreme polling swings from producing impossible totals. Opposition vote share is
+      split between the INDIA alliance and regional parties in a fixed baseline ratio.
     </p>
   </section>
 
@@ -141,7 +151,7 @@
         <dd>Fitted to constrain winner-take-all seat amplification at wide polling margins, acting as a conservative floor on seat swings.</dd>
       </div>
       <div class="cap-item">
-        <dt>Opposition Split Ratio <span class="cap-value">INDIA: 84.2% / Others: 15.8%</span></dt>
+        <dt>Opposition Split Ratio <span class="cap-value">INDIA: {{ "%.1f"|format((cal.get('opposition_split', {}).get('india_ratio', 0.739362)) * 100) if cal else '73.9' }}% / Others: {{ "%.1f"|format((cal.get('opposition_split', {}).get('others_ratio', 0.260638)) * 100) if cal else '26.1' }}%</span></dt>
         <dd>Anchored to the 2024 general election result ratio among non-NDA vote shares to maintain realistic third-party seat distributions.</dd>
       </div>
     </dl>
@@ -150,7 +160,10 @@
   <section id="baseline" aria-labelledby="baseline-h">
     <h2 id="baseline-h">Baseline selection &amp; historical anchors</h2>
     <p>
-      The model is anchored on the actual constituency-level and national election outcomes of the <strong>2019 and 2024 general elections</strong>.
+      {# "Constituency-level" was not true and contradicted the limitation stated
+         further down this same page: the anchors are national vote shares and
+         seat totals, with state baselines used only for the state view. #}
+      The model is anchored on the national vote shares and seat totals of the <strong>2019 and 2024 general elections</strong>.
       Vote share sentiment equations are calibrated directly against the mean survey readings over the 60-day window preceding each election date.
     </p>
     <p>
