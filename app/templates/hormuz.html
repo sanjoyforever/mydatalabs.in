@@ -139,17 +139,32 @@
    screen instead of three scrolls. Collapses to one column under 1100px. #}
 <div class="summary-row">
 
+<div class="summary-row">
+
 <!-- Merged Indices Column (Model Score Gauge + Public Perception Gauge Stacked) -->
 <section class="gauge-card merged-indices-card" aria-label="Crisis Severity and Public Perception Gauges">
   <!-- Upper Section: Crisis Severity Scale Gauge -->
   <div class="merged-gauge-block model-gauge-block">
     <div class="gauge-card-header">
-      <div class="gauge-title-group">
-        <h2 id="gauge-heading">Crisis Severity Gauge</h2>
-        <span class="card-sub">(100–200 composite risk scale)</span>
+      <div class="gauge-title-with-icon">
+        <span class="card-icon-box card-icon-red" aria-hidden="true">🛡️</span>
+        <div>
+          <div class="gauge-title-row">
+            <h2 id="gauge-heading">Crisis Severity Gauge</h2>
+            <span class="status-badge status-{{ snapshot.level_status }}"><span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}</span>
+          </div>
+        </div>
       </div>
-      <div class="gauge-header-right">
-        <span class="status-badge status-{{ snapshot.level_status }}"><span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}</span>
+
+      <div class="gauge-header-readout">
+        <div class="gauge-score-headline">
+          <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
+          <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
+        </div>
+        <div class="gauge-micro-facts">
+          <span><span class="micro-label">VS BASELINE</span> <span class="is-above">+{{ "%.1f"|format(press.points_above_baseline) }}</span></span>
+          <span><span class="micro-label">VS LAST WEEK</span> <span class="{{ 'is-above' if delta >= 0 else 'is-below' }}">{{ '+' if delta >= 0 else '−' }}{{ "%.1f"|format(delta|abs) }}</span></span>
+        </div>
       </div>
     </div>
 
@@ -168,41 +183,16 @@
 
     <div class="gauge-labels-row">
       {% for band in [
-          ('Calm', 'CALM', '&lt;110'),
-          ('Elevated', 'ELEVATED', '110–125'),
-          ('Acute', 'ACUTE', '125–150'),
-          ('Severe', 'SEVERE', '150–180'),
-          ('Extreme', 'EXTREME', '180+')] %}
-      <span class="gauge-label-item {% if snapshot.level_label == band[0] %}active{% endif %}">
+          ('Calm', 'CALM', '&lt;110', 'green'),
+          ('Elevated', 'ELEVATED', '110–125', 'yellow'),
+          ('Acute', 'ACUTE', '125–150', 'orange'),
+          ('Severe', 'SEVERE', '150–180', 'red'),
+          ('Extreme', 'EXTREME', '180+', 'purple')] %}
+      <span class="gauge-label-item band-{{ band[3] }} {% if snapshot.level_label == band[0] %}active{% endif %}">
         <span class="gauge-band-name">{{ band[1] }}</span>
         <span class="gauge-band-range">({{ band[2]|safe }})</span>
       </span>
       {% endfor %}
-    </div>
-
-    <div class="gauge-readout-compact">
-      <div class="gauge-score-display">
-        <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
-        <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
-      </div>
-      <dl class="gauge-readout-facts">
-        <div>
-          <dt>vs baseline</dt>
-          <dd class="is-above">+{{ "%.1f"|format(press.points_above_baseline) }}</dd>
-        </div>
-        <div>
-          <dt>vs last week</dt>
-          <dd class="{{ 'is-above' if delta >= 0 else 'is-below' }}">
-            {{ '+' if delta >= 0 else '−' }}{{ "%.1f"|format(delta|abs) }}
-          </dd>
-        </div>
-        {% if snapshot.degraded %}
-        <div>
-          <dt>coverage</dt>
-          <dd class="is-stale">{{ "%.0f"|format((1 - snapshot.stale_weight) * 100) }}% fresh</dd>
-        </div>
-        {% endif %}
-      </dl>
     </div>
   </div>
 
@@ -216,9 +206,12 @@
          data-available="{{ 'true' if sentiment.available else 'false' }}"
          data-min-votes="{{ sentiment.min_votes }}">
       <div class="ppi-header">
-        <div class="ppi-title-group">
-          <h3 class="ppi-title" id="ppi-heading">Public Perception Index</h3>
-          <span class="card-sub">(1–10 reader opinion mapped to 100–200 scale)</span>
+        <div class="gauge-title-with-icon">
+          <span class="card-icon-box card-icon-blue" aria-hidden="true">👥</span>
+          <div>
+            <h3 class="ppi-title" id="ppi-heading">Public Perception Index</h3>
+            <span class="card-sub-desc">Reader opinion mapped to 100–200 scale (1–10 input)</span>
+          </div>
         </div>
 
         <div class="ppi-header-actions">
@@ -231,7 +224,7 @@
           </div>
           <button type="button" class="ppi-vote-btn" id="ppi-submit" disabled
                   aria-describedby="ppi-hint">
-            <span id="ppi-submit-label">Cast your read</span> <span aria-hidden="true">→</span>
+            <span class="btn-icon" aria-hidden="true">📈</span> <span id="ppi-submit-label">Cast your read</span> <span aria-hidden="true">→</span>
           </button>
         </div>
       </div>
@@ -262,81 +255,86 @@
         <span>200 · Open war</span>
       </div>
 
-      <div class="ppi-footer-info">
-        <p class="ppi-hint" id="ppi-hint">
-          <span id="ppi-hint-text">Drag the marker to where you think this week sits, then press <strong>Cast your read</strong>.</span>
-        </p>
+      <div class="ppi-hint-callout" id="ppi-hint">
+        <span class="callout-icon" aria-hidden="true">✋</span>
+        <span id="ppi-hint-text">Drag the marker to where you think this week sits, then press <strong>Cast your read</strong>.</span>
+      </div>
 
+      <div class="ppi-footnotes-container">
         <p class="ppi-footnote">
           <span class="ppi-marker-key" aria-hidden="true"></span>
           Hollow marker is model score ({{ "%.1f"|format(snapshot.score) }}). Anonymous weekly vote.
           <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw my vote</button>
         </p>
+
+        <details class="ppi-privacy-toggle">
+          <summary><span aria-hidden="true">🔒</span> We do not store or track your identity when you vote. <span class="toggle-link">What we store when you vote →</span></summary>
+          <p class="ppi-privacy">
+            Your 1–10 rating, the week, and a random ID generated in local storage to allow updating or withdrawing your vote.
+          </p>
+        </details>
       </div>
 
       <p class="ppi-error" id="ppi-error" role="alert" hidden></p>
-
-      <details class="ppi-privacy-toggle">
-        <summary>What we store when you vote</summary>
-        <p class="ppi-privacy">
-          Your 1–10 rating, the week, and a random ID generated in local storage to allow updating or withdrawing your vote.
-        </p>
-      </details>
     </div>
   </div>
 </section>
 
-{# Signals: the readings that explain the composite, as label/value rows.
-
-   These were three paragraphs. Every figure they carried — the war-risk
-   multiple, transits against baseline, the reroute share — is stated exactly
-   once more in the Component Breakdown Matrix further down the page, with its
-   weight, stress score and source. So the prose was a second telling, and at a
-   third of the width it was three dense blocks against a gauge. The row form
-   answers "where do we stand" at a glance and leaves the detail to the table
-   that exists for detail. #}
+<!-- Signals Column (Key Indicators) -->
 <section class="signal-stack" aria-labelledby="briefing-heading">
-  <h2 id="briefing-heading" class="sr-only">Executive briefing</h2>
+  <h2 id="briefing-heading" class="sr-only">Key Indicators</h2>
   <div class="signal-card">
-    <div class="signal-row">
-      <span class="signal-label"><span class="signal-icon" aria-hidden="true">⚠️</span> Threat Level</span>
+    <div class="signal-card-header">
+      <div class="gauge-title-with-icon">
+        <span class="card-icon-box card-icon-blue" aria-hidden="true">📈</span>
+        <h2 class="signal-card-title">Key Indicators</h2>
+      </div>
       <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
     </div>
 
     <div class="signal-row">
-      <span class="signal-label"><span class="signal-icon" aria-hidden="true">📊</span> Key Driver</span>
-      {# Component labels carry a parenthetical scope — "Hormuz Transits (all
-         commercial vessels)" — which wraps to three lines in a value column.
-         The qualifier is in the breakdown table; the name is what belongs here.
+      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">⚠️</span> Threat Level</span>
+      <div class="signal-value-group">
+        <span class="status-text-bold status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
+        <span class="signal-subtext">Very high risk</span>
+      </div>
+    </div>
 
-         The contribution rides in this row rather than claiming one of its own:
-         it is an attribute of the driver, and a separate row needed an icon
-         outside the system's fixed glyph set. #}
-      <span class="signal-value" {% if top_driver %}title="{{ top_driver.component.label }}"{% endif %}>
-        {{ top_driver.component.label.split('(')[0]|trim if top_driver else '—' }}
-        {%- if top_driver %} <span class="signal-delta">+{{ "%.1f"|format(top_driver.contribution) }} pts</span>{% endif %}
-      </span>
+    <div class="signal-row">
+      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">📊</span> Key Driver</span>
+      <div class="signal-value-group">
+        <span class="signal-value-title">{{ top_driver.component.label.split('(')[0]|trim if top_driver else '—' }}</span>
+        {%- if top_driver %} <span class="signal-value-green">+{{ "%.1f"|format(top_driver.contribution) }} pts ↗</span>{% endif %}
+      </div>
     </div>
 
     {% if press.traffic is not none %}
     <div class="signal-row">
-      <span class="signal-label"><span class="signal-icon" aria-hidden="true">⚓</span> Chokepoint Transits</span>
-      <span class="signal-value signal-value-num">{{ "%.0f"|format(press.traffic) }}/wk
-        {%- if press.traffic_drop_pct %} <span class="signal-delta">({{ "%.0f"|format(press.traffic_drop_pct) }}% {{ press.traffic_direction }})</span>{% endif %}</span>
+      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">⚓</span> Chokepoint Transits</span>
+      <div class="signal-value-group">
+        <span class="signal-value-bold">{{ "%.0f"|format(press.traffic) }} <span class="unit-text">/wk</span></span>
+        {%- if press.traffic_drop_pct %} <span class="signal-subtext">{{ "%.0f"|format(press.traffic_drop_pct) }}% below baseline</span>{% endif %}
+      </div>
     </div>
     {% endif %}
 
     {% if press.war_risk_multiple %}
     <div class="signal-row">
-      <span class="signal-label"><span class="signal-icon" aria-hidden="true">🛡️</span> War-Risk Premium</span>
-      <span class="signal-value signal-value-num">{{ "%.1f"|format(press.war_risk_multiple) }}× baseline</span>
+      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">🛡️</span> War-Risk Premium</span>
+      <div class="signal-value-group">
+        <span class="signal-value-bold">{{ "%.1f"|format(press.war_risk_multiple) }}×</span>
+        <span class="signal-subtext">vs baseline</span>
+      </div>
     </div>
     {% endif %}
 
     {% if press.reroutes %}
     <div class="signal-row">
-      <span class="signal-label"><span class="signal-icon" aria-hidden="true">🌍</span> Cape Reroutes</span>
-      <span class="signal-value signal-value-num">{{ "%.0f"|format(press.reroutes) }}% of traffic</span>
+      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">🌐</span> Cape Reroutes</span>
+      <div class="signal-value-group">
+        <span class="signal-value-bold">{{ "%.0f"|format(press.reroutes) }}%</span>
+        <span class="signal-subtext">of total traffic</span>
+      </div>
     </div>
     {% endif %}
   </div>
