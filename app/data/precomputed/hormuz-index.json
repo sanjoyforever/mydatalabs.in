@@ -5,21 +5,21 @@
     "vix": 16.56999969482422
   },
   "sentiment": {
-    "available": false,
+    "available": true,
     "week_start": "2026-08-03",
-    "votes": 0,
-    "index": null,
-    "level_label": null,
-    "level_status": null,
-    "scale_pct": null,
-    "mean_rating": null,
+    "votes": 2,
+    "index": 155.6,
+    "level_label": "Severe",
+    "level_status": "serious",
+    "scale_pct": 55.6,
+    "mean_rating": 6.0,
     "distribution": [
       0,
       0,
       0,
       0,
       0,
-      0,
+      2,
       0,
       0,
       0,
@@ -28,8 +28,24 @@
     "min_votes": 1,
     "your_vote": null
   },
-  "sentiment_history": [],
-  "perception_by_week": {},
+  "sentiment_history": [
+    {
+      "week_start": "2026-07-27",
+      "votes": 12,
+      "mean_rating": 7.02,
+      "index": 166.9
+    },
+    {
+      "week_start": "2026-08-03",
+      "votes": 2,
+      "mean_rating": 6.0,
+      "index": 155.6
+    }
+  ],
+  "perception_by_week": {
+    "2026-07-27": 166.9,
+    "2026-08-03": 155.6
+  },
   "perception_series": [
     null,
     null,
@@ -60,7 +76,7 @@
     null,
     null,
     null,
-    null,
-    null
+    166.9,
+    155.6
   ]
 }

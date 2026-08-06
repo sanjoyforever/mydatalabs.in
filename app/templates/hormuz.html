@@ -133,101 +133,7 @@
     </div>
   </div>
 
-  <!-- Executive Summary & Intelligence Dispatch -->
-  <section class="citation-card exec-summary-card-full" aria-labelledby="press-heading" style="margin: 20px 0 28px;">
-    <div class="citation-head">
-      <div>
-        <span class="badge-tag badge-tag-blue"><span aria-hidden="true">💡</span> EXECUTIVE SUMMARY</span>
-        <h2 id="press-heading" style="font-size: 1.25rem; font-weight: 700; margin: 4px 0;">Executive Summary &amp; Press Wire Dispatch</h2>
-        <p class="section-desc">
-          Every figure below is generated from the current index reading. News outlets and analysts may reproduce or
-          cite this summary under {{ license_name }} with attribution to MyDataLabs.
-        </p>
-      </div>
-      <button type="button" class="btn-primary" data-copy-target="press-story-container">
-        <span aria-hidden="true">📋</span> Copy full summary
-      </button>
-    </div>
 
-    <div id="press-story-container" class="press-story">
-      <div class="press-story-head">
-        <span>FOR IMMEDIATE RELEASE | EXECUTIVE SUMMARY</span>
-        <span>DATELINE: {{ press.week_start }}</span>
-      </div>
-
-      <h3 class="press-headline">
-        Hormuz Crisis Index at {{ "%.1f"|format(press.score) }} ({{ press.level }})
-        {%- if press.driver_label %} as {{ press.driver_label }} leads weekly stress{% endif %}
-      </h3>
-
-      <p>
-        <strong>{{ press.week_start }}</strong> — Geopolitical and maritime stress across
-        the Strait of Hormuz registered a <strong>{{ press.level_lower }} reading of
-        {{ "%.1f"|format(press.score) }}</strong> ({{ "%.1f"|format(press.points_above_baseline) }} points
-        above the 100.0 calm baseline) for the reporting week of {{ press.week_start }}, according to the
-        Hormuz Crisis Index (HMX-INDEX) published by MyDataLabs.
-      </p>
-
-      <p>
-        {% if press.driver_label %}
-        <strong>{{ press.driver_label }}</strong> was the largest contributor to the composite this week,
-        adding {{ "%.1f"|format(press.driver_points) }} points{% if press.driver_2_label %}, ahead of
-        {{ press.driver_2_label }} at {{ "%.1f"|format(press.driver_2_points) }} points{% endif %}.
-        {% endif %}
-        {% if press.traffic is not none and press.traffic_drop_pct %}
-        Commercial ship transits through the 21-nautical-mile chokepoint stand at
-        {{ "%.0f"|format(press.traffic) }} per week, {{ "%.1f"|format(press.traffic_drop_pct) }}%
-        {{ press.traffic_direction }} the baseline of {{ "%.0f"|format(press.traffic_baseline) }}.
-        {% endif %}
-        {% if press.ceasefire_months %}
-        Diplomatic truces in {{ press.ceasefire_months|join(', ') }} produced temporary operational lulls
-        without returning conditions to baseline.
-        {% endif %}
-      </p>
-
-      <p>
-        {% if press.brent is not none %}
-        Brent crude traded at <strong>${{ "%.2f"|format(press.brent) }} per barrel</strong>
-        ({{ "%.1f"|format(press.brent_change_pct|abs) }}% {{ press.brent_direction }} the
-        ${{ "%.2f"|format(press.brent_baseline) }} baseline).
-        {% endif %}
-        {% if press.war_risk is not none %}
-        Marine war-risk insurance surcharges stand at
-        <strong>{{ "%.2f"|format(press.war_risk) }}% of hull value</strong>{% if press.war_risk_multiple %},
-        {{ "%.1f"|format(press.war_risk_multiple) }} times the baseline rate{% endif %}.
-        {% endif %}
-        {% if press.reroutes %}
-        Reroutes via the Cape of Good Hope account for {{ "%.1f"|format(press.reroutes) }}% of regional traffic.
-        {% endif %}
-      </p>
-
-      <p>
-        The HMX-INDEX is a weekly composite of seven weighted market and shipping indicators scored
-        against a calm baseline week of {{ baseline_window.replace('/', ' to ') if baseline_window else 'January 2026' }}. Its full methodology, component weights and
-        cap thresholds are published on the <a href="{{ url_for('main.hormuz_index') }}#methodology" data-report-tab="methodology">Methodology tab</a>, and the underlying series is available
-        as open JSON and CSV.
-        {%- if press.degraded %}
-        MyDataLabs notes that part of the index weight is currently stale and this week's reading should
-        be treated as provisional.
-        {%- endif %}
-        <em>(Source: MyDataLabs Hormuz Crisis Index — mydatalabs.in)</em>
-      </p>
-    </div>
-
-    <div class="ticker-box">
-      <div class="ticker-body">
-        <span class="ticker-label">BROADCAST TICKER QUOTE:</span>
-        <div class="ticker-quote" id="ticker-quote-text">
-          "According to the MyDataLabs Hormuz Crisis Index (HMX-INDEX), geopolitical risk in the Strait of
-          Hormuz registered {{ snapshot.level_label }} {{ "%.1f"|format(snapshot.score) }} for the week of
-          {{ snapshot.week_start }} (baseline 100.0). Source: mydatalabs.in."
-        </div>
-      </div>
-      <button type="button" class="btn-secondary" data-copy-target="ticker-quote-text">
-        <span aria-hidden="true">📋</span> Copy ticker quote
-      </button>
-    </div>
-  </section>
 
 {# Summary row: the model's reading, the crowd's reading, and the three signals
    that explain both — side by side, so the whole weekly summary lands in one
@@ -240,11 +146,29 @@
 <!-- Crisis Severity Scale Gauge -->
 <section class="gauge-card" aria-labelledby="gauge-heading">
   <div class="gauge-card-header">
-    <div>
+    <div class="gauge-card-header-left">
       <h2 id="gauge-heading">Crisis Severity Gauge</h2>
+      <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
       <span class="card-sub">({{ scale_min|int }} = baseline)</span>
     </div>
-    <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
+    <div class="gauge-card-header-right">
+      <div class="gauge-readout-inline">
+        <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
+        <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
+      </div>
+      <dl class="gauge-readout-facts-inline">
+        <div>
+          <dt>vs baseline</dt>
+          <dd class="is-above">+{{ "%.1f"|format(press.points_above_baseline) }}</dd>
+        </div>
+        <div>
+          <dt>vs last week</dt>
+          <dd class="{{ 'is-above' if delta >= 0 else 'is-below' }}">
+            {{ '+' if delta >= 0 else '−' }}{{ "%.1f"|format(delta|abs) }}
+          </dd>
+        </div>
+      </dl>
+    </div>
   </div>
 
   <div class="gauge-track-container"
@@ -259,39 +183,6 @@
     {% endfor %}
     <div class="gauge-pointer" style="left: {{ scale_pct }}%;" title="Current score: {{ '%.1f'|format(snapshot.score) }}"></div>
   </div>
-
-  {# The gauge's own readout. The score also appears in the page header, but a
-     gauge without a number on it is a picture of a number — and this is where
-     the distance from baseline and the week-on-week move belong, next to the
-     scale they are measured on. #}
-  <div class="gauge-readout">
-    <div>
-      <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
-      <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
-    </div>
-    <dl class="gauge-readout-facts">
-      <div>
-        <dt>vs baseline</dt>
-        <dd class="is-above">+{{ "%.1f"|format(press.points_above_baseline) }}</dd>
-      </div>
-      <div>
-        <dt>vs last week</dt>
-        <dd class="{{ 'is-above' if delta >= 0 else 'is-below' }}">
-          {{ '+' if delta >= 0 else '−' }}{{ "%.1f"|format(delta|abs) }}
-        </dd>
-      </div>
-      {% if snapshot.degraded %}
-      <div>
-        <dt>coverage</dt>
-        <dd class="is-stale">{{ "%.0f"|format((1 - snapshot.stale_weight) * 100) }}% fresh</dd>
-      </div>
-      {% endif %}
-    </dl>
-  </div>
-
-  {# Five even columns, band name over its range. Stacking the two lines is what
-     lets all five ranges stay on the page in a third-width column — the earlier
-     single-line version had to hide four of them to fit. #}
   <div class="gauge-labels-row">
     {% for band in [
         ('Calm', 'CALM', '&lt;110'),
@@ -322,42 +213,49 @@
        data-model-score="{{ "%.1f"|format(snapshot.score) }}"
        data-available="{{ 'true' if sentiment.available else 'false' }}"
        data-min-votes="{{ sentiment.min_votes }}">
+    {# Title left, reading right — the same header shape as the Crisis Severity
+       gauge stacked above it. The two cards publish one scale, so their numbers
+       belong in the same place on the card; as a block of its own below the
+       title, the crowd figure sat a row lower than the model figure it exists
+       to be compared against, and cost the card a row of height besides. #}
     <div class="ppi-header">
-      <div>
+      {# Band beside the title, not beside the figure — the same place the Crisis
+         Severity header puts it, so the two stacked cards read as one pair. #}
+      <div class="ppi-header-left">
         <h3 class="ppi-title" id="ppi-heading">Public Perception Index</h3>
+        <span class="status-badge status-{{ sentiment.level_status or 'good' }}" id="ppi-level"
+              {% if not sentiment.level_label %}hidden{% endif %}>{{ (sentiment.level_label or '')|upper }}</span>
         <span class="card-sub">(reader opinion on the same {{ scale_min|int }}–{{ scale_max|int }} scale)</span>
       </div>
-    </div>
 
-    <div class="ppi-readout" id="ppi-readout">
-      <div class="ppi-figure">
-        <span class="ppi-value" id="ppi-value">
-          {{ "%.1f"|format(sentiment.index) if sentiment.index is not none else "—" }}
-        </span>
-        <span class="ppi-meta">
-          <span class="status-badge status-{{ sentiment.level_status or 'good' }}" id="ppi-level"
-                {% if not sentiment.level_label %}hidden{% endif %}>{{ (sentiment.level_label or '')|upper }}</span>
+      <div class="ppi-readout" id="ppi-readout">
+        <div class="ppi-figure">
+          <span class="ppi-value" id="ppi-value">
+            {{ "%.1f"|format(sentiment.index) if sentiment.index is not none else "—" }}
+          </span>
+        </div>
+
+        <div class="ppi-meta">
           <span class="ppi-count" id="ppi-count">
             {% if sentiment.votes > 0 %}
               {{ sentiment.votes }} vote{{ '' if sentiment.votes == 1 else 's' }} this week
             {% elif sentiment.available %}
-              0 votes this week
+              Be the first to vote this week
             {% else %}
               Voting unavailable
             {% endif %}
           </span>
-        </span>
-      </div>
-
-      <div class="ppi-gap" id="ppi-gap"
-           {% if sentiment.index is none %}hidden{% endif %}>
-        {% if sentiment.index is not none %}
-        {% set gap = sentiment.index - snapshot.score %}
-        <span class="ppi-gap-value {{ 'is-hotter' if gap > 0 else 'is-cooler' }}">
-          {{ '+' if gap > 0 else '' }}{{ "%.1f"|format(gap) }}
-        </span>
-        <span class="ppi-gap-label">vs model score</span>
-        {% endif %}
+          <span class="ppi-gap" id="ppi-gap"
+                {% if sentiment.index is none %}hidden{% endif %}>
+            {% if sentiment.index is not none %}
+            {% set gap = sentiment.index - snapshot.score %}
+            <span class="ppi-gap-value {{ 'is-hotter' if gap > 0 else 'is-cooler' }}">
+              {{ '+' if gap > 0 else '' }}{{ "%.1f"|format(gap) }}
+            </span>
+            <span class="ppi-gap-label">vs model</span>
+            {% endif %}
+          </span>
+        </div>
       </div>
     </div>
 
@@ -389,43 +287,40 @@
            aria-describedby="ppi-hint"></div>
     </div>
 
-    <div class="ppi-scale-ends" aria-hidden="true">
+    {# The scale ends and the legend for the second marker share one line. As a
+       separate footnote below the button, the legend explained a marker three
+       blocks after the reader had stopped looking at it — and cost the card a
+       row of height it could not spare beside the gauge. #}
+    <div class="ppi-scale-ends">
       <span>100 · Calm</span>
+      <span class="ppi-model-key">
+        <span class="ppi-marker-key" aria-hidden="true"></span>
+        Model {{ "%.1f"|format(snapshot.score) }}
+      </span>
       <span>200 · Open war</span>
     </div>
 
-    <p class="ppi-hint" id="ppi-hint">
-      <span id="ppi-hint-text">Drag the marker to where you think this week sits, then press
-      <strong>Cast your read</strong>.</span>
-    </p>
-
-    {# The vote control sits under the scale it acts on rather than in the card
-       header. As a header button it read as a page action; here it reads as the
-       last step of the thing you just dragged. #}
-    <button type="button" class="ppi-vote-btn" id="ppi-submit" disabled
-            aria-describedby="ppi-hint">
-      <span id="ppi-submit-label">Cast your read</span> <span aria-hidden="true">→</span>
-    </button>
+    {# The instruction and the control it arms sit on one row. Stacked, the
+       button read as a page action unrelated to the marker above it; here it
+       reads as the last step of the thing you just dragged. #}
+    <div class="ppi-action">
+      <p class="ppi-hint" id="ppi-hint">
+        <span id="ppi-hint-text">Drag the marker to where you think this week sits.</span>
+      </p>
+      {# The disclosure itself lives on the Methodology tab. As a <details> on
+         the card it cost a row of height in the one card that has none to give,
+         to hide text almost nobody opens — but the promise still has to be one
+         click from the ballot, so the link stays on the action row where it
+         costs nothing. #}
+      <a class="ppi-privacy-link" href="#perception" data-report-tab="methodology">What we store</a>
+      <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw</button>
+      <button type="button" class="ppi-vote-btn" id="ppi-submit" disabled
+              aria-describedby="ppi-hint">
+        <span id="ppi-submit-label">Cast your read</span> <span aria-hidden="true">→</span>
+      </button>
+    </div>
 
     <p class="ppi-error" id="ppi-error" role="alert" hidden></p>
-
-    <p class="ppi-footnote">
-      <span class="ppi-marker-key" aria-hidden="true"></span>
-      Hollow marker is the model score ({{ "%.1f"|format(snapshot.score) }}). Votes reset each week
-      and are anonymous.
-      <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw my vote</button>
-    </p>
-
-    <details class="ppi-privacy-toggle">
-      <summary>What we store when you vote</summary>
-      <p class="ppi-privacy">
-        Your 1–10 rating, the week, and a random ID this browser generates so you can
-        change or delete your vote. No account, no cookie, no IP address, no tracking,
-        nothing shared with anyone else. The random ID is kept in this browser's local
-        storage and means nothing outside this poll — clear it any time from your
-        browser settings.
-      </p>
-    </details>
   </div>
 </section>
 
@@ -441,8 +336,11 @@
    answers "where do we stand" at a glance and leaves the detail to the table
    that exists for detail. #}
 <section class="signal-stack" aria-labelledby="briefing-heading">
-  <h2 id="briefing-heading" class="sr-only">Executive briefing</h2>
   <div class="signal-card">
+    {# Visible heading, not the screen-reader-only one this card used to carry:
+       the gauges beside it both name themselves, and an unlabelled column of
+       figures made the reader work out what the five rows had in common. #}
+    <h2 id="briefing-heading" class="signal-card-title">Key Drivers</h2>
     <div class="signal-row">
       <span class="signal-label"><span class="signal-icon" aria-hidden="true">⚠️</span> Threat Level</span>
       <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
@@ -462,6 +360,19 @@
         {%- if top_driver %} <span class="signal-delta">+{{ "%.1f"|format(top_driver.contribution) }} pts</span>{% endif %}
       </span>
     </div>
+
+    {# Brent carries 30% of index weight — the largest single share — so a card
+       named for the drivers that leaves it out is naming four of the five that
+       matter. Stated against baseline like the rows below it, not as a bare
+       price, because $79 means nothing without the calm month to read it
+       against. #}
+    {% if press.brent is not none %}
+    <div class="signal-row">
+      <span class="signal-label"><span class="signal-icon" aria-hidden="true">🛢️</span> Brent Crude</span>
+      <span class="signal-value signal-value-num">${{ "%.0f"|format(press.brent) }}/bbl
+        {%- if press.brent_change_pct %} <span class="signal-delta">({{ "%.0f"|format(press.brent_change_pct|abs) }}% {{ press.brent_direction }})</span>{% endif %}</span>
+    </div>
+    {% endif %}
 
     {% if press.traffic is not none %}
     <div class="signal-row">
@@ -739,6 +650,101 @@
     and last-updated date above.
   </p>
 </section>
+  <!-- Executive Summary & Intelligence Dispatch -->
+  <section class="citation-card exec-summary-card-full" aria-labelledby="press-heading" style="margin: 20px 0 28px;">
+    <div class="citation-head">
+      <div>
+        <span class="badge-tag badge-tag-blue"><span aria-hidden="true">💡</span> EXECUTIVE SUMMARY</span>
+        <h2 id="press-heading" style="font-size: 1.25rem; font-weight: 700; margin: 4px 0;">Executive Summary &amp; Press Wire Dispatch</h2>
+        <p class="section-desc">
+          Every figure below is generated from the current index reading. News outlets and analysts may reproduce or
+          cite this summary under {{ license_name }} with attribution to MyDataLabs.
+        </p>
+      </div>
+      <button type="button" class="btn-primary" data-copy-target="press-story-container">
+        <span aria-hidden="true">📋</span> Copy full summary
+      </button>
+    </div>
+
+    <div id="press-story-container" class="press-story">
+      <div class="press-story-head">
+        <span>FOR IMMEDIATE RELEASE | EXECUTIVE SUMMARY</span>
+        <span>DATELINE: {{ press.week_start }}</span>
+      </div>
+
+      <h3 class="press-headline">
+        Hormuz Crisis Index at {{ "%.1f"|format(press.score) }} ({{ press.level }})
+        {%- if press.driver_label %} as {{ press.driver_label }} leads weekly stress{% endif %}
+      </h3>
+
+      <p>
+        <strong>{{ press.week_start }}</strong> — Geopolitical and maritime stress across
+        the Strait of Hormuz registered a <strong>{{ press.level_lower }} reading of
+        {{ "%.1f"|format(press.score) }}</strong> ({{ "%.1f"|format(press.points_above_baseline) }} points
+        above the 100.0 calm baseline) for the reporting week of {{ press.week_start }}, according to the
+        Hormuz Crisis Index (HMX-INDEX) published by MyDataLabs.
+      </p>
+
+      <p>
+        {% if press.driver_label %}
+        <strong>{{ press.driver_label }}</strong> was the largest contributor to the composite this week,
+        adding {{ "%.1f"|format(press.driver_points) }} points{% if press.driver_2_label %}, ahead of
+        {{ press.driver_2_label }} at {{ "%.1f"|format(press.driver_2_points) }} points{% endif %}.
+        {% endif %}
+        {% if press.traffic is not none and press.traffic_drop_pct %}
+        Commercial ship transits through the 21-nautical-mile chokepoint stand at
+        {{ "%.0f"|format(press.traffic) }} per week, {{ "%.1f"|format(press.traffic_drop_pct) }}%
+        {{ press.traffic_direction }} the baseline of {{ "%.0f"|format(press.traffic_baseline) }}.
+        {% endif %}
+        {% if press.ceasefire_months %}
+        Diplomatic truces in {{ press.ceasefire_months|join(', ') }} produced temporary operational lulls
+        without returning conditions to baseline.
+        {% endif %}
+      </p>
+
+      <p>
+        {% if press.brent is not none %}
+        Brent crude traded at <strong>${{ "%.2f"|format(press.brent) }} per barrel</strong>
+        ({{ "%.1f"|format(press.brent_change_pct|abs) }}% {{ press.brent_direction }} the
+        ${{ "%.2f"|format(press.brent_baseline) }} baseline).
+        {% endif %}
+        {% if press.war_risk is not none %}
+        Marine war-risk insurance surcharges stand at
+        <strong>{{ "%.2f"|format(press.war_risk) }}% of hull value</strong>{% if press.war_risk_multiple %},
+        {{ "%.1f"|format(press.war_risk_multiple) }} times the baseline rate{% endif %}.
+        {% endif %}
+        {% if press.reroutes %}
+        Reroutes via the Cape of Good Hope account for {{ "%.1f"|format(press.reroutes) }}% of regional traffic.
+        {% endif %}
+      </p>
+
+      <p>
+        The HMX-INDEX is a weekly composite of seven weighted market and shipping indicators scored
+        against a calm baseline week of {{ baseline_window.replace('/', ' to ') if baseline_window else 'January 2026' }}. Its full methodology, component weights and
+        cap thresholds are published on the <a href="{{ url_for('main.hormuz_index') }}#methodology" data-report-tab="methodology">Methodology tab</a>, and the underlying series is available
+        as open JSON and CSV.
+        {%- if press.degraded %}
+        MyDataLabs notes that part of the index weight is currently stale and this week's reading should
+        be treated as provisional.
+        {%- endif %}
+        <em>(Source: MyDataLabs Hormuz Crisis Index — mydatalabs.in)</em>
+      </p>
+    </div>
+
+    <div class="ticker-box">
+      <div class="ticker-body">
+        <span class="ticker-label">BROADCAST TICKER QUOTE:</span>
+        <div class="ticker-quote" id="ticker-quote-text">
+          "According to the MyDataLabs Hormuz Crisis Index (HMX-INDEX), geopolitical risk in the Strait of
+          Hormuz registered {{ snapshot.level_label }} {{ "%.1f"|format(snapshot.score) }} for the week of
+          {{ snapshot.week_start }} (baseline 100.0). Source: mydatalabs.in."
+        </div>
+      </div>
+      <button type="button" class="btn-secondary" data-copy-target="ticker-quote-text">
+        <span aria-hidden="true">📋</span> Copy ticker quote
+      </button>
+    </div>
+  </section>
 </div><!-- /#tab-dashboard -->
 
 <div id="tab-methodology" class="report-panel" role="tabpanel">

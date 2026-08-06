@@ -9,7 +9,7 @@ from datetime import date, datetime
 
 from flask import Blueprint, Response, abort, jsonify, redirect, render_template, request
 
-from app import precomputed, scoring, storage, votes
+from app import db, precomputed, scoring, storage, votes
 from app.indices import hormuz
 
 bp = Blueprint("main", __name__)
@@ -456,7 +456,15 @@ def hormuz_index():
     sentiment_history = pre.get("sentiment_history", [])
     perception_by_week = pre.get("perception_by_week", {})
     perception_series = pre.get("perception_series") or [None] * len(history)
-    sentiment = pre.get("sentiment") or votes.empty_summary()
+    sentiment = dict(pre.get("sentiment") or votes.empty_summary())
+
+    # `available` in the artifact records whether the *build machine* could
+    # reach Postgres, which says nothing about whether this request can. Baked
+    # in, one failed update run left the block reading "Voting unavailable" on
+    # a perfectly healthy deploy until the next successful precompute. Recheck
+    # it here — is_configured() reads an environment variable and a cooldown
+    # flag, so it costs nothing and never opens a connection.
+    sentiment["available"] = db.is_configured()
 
     html = render_template(
         "hormuz.html",
@@ -759,6 +767,12 @@ def api_sentiment_vote():
     # comparison also rejects NaN, which survives float() intact.
     if not votes.RATING_MIN <= value <= votes.RATING_MAX:
         return _no_store(jsonify(bad_rating)), 400
+
+    # A missing database is not the caller being throttled. Answering the 429
+    # below for it sent anyone reading the logs looking for a ballot-stuffer
+    # when the real fault was an unset DATABASE_URL.
+    if not db.is_configured():
+        return _no_store(jsonify({"error": "Voting is not available right now."})), 503
 
     week_start = votes.current_week_start()
     try:
