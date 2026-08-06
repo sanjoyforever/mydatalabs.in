@@ -36,8 +36,19 @@ app/elections/engine/trend_analytics.py
 # engine/paths.py, engine/events.py and engine/tracker_schema.py stay: routes.py
 # imports paths at module scope, and events.py serves the filtered timeline.
 
+# Design source. The reference mockups and tokens the dashboards are built
+# against — read at authoring time, never at request time. The values that
+# matter end up in app/static/css/style.css as custom properties.
+MyDataLabs Design System/
+# ...and the archive it came out of. Excluding only the folder left the 11.5 MB
+# zip in the bundle, which is most of the serverless size limit spent on a file
+# no request opens.
+*.zip
+
 tests/
 scripts/
+docs/
+trash/
 feedback_claude.md
 README_CLOUDRUN.md
 Dockerfile

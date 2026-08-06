@@ -109,7 +109,7 @@
           ctx.translate(labelX, top + 6);
           ctx.rotate(-Math.PI / 2);
           ctx.textAlign = "right";
-          ctx.font = "600 10px Outfit, sans-serif";
+          ctx.font = "600 10px Inter, system-ui, sans-serif";
           ctx.fillStyle = ev.color;
           ctx.fillText(ev.label, -4, 3);
         }
@@ -155,13 +155,18 @@
 
   // --- Tabs ---------------------------------------------------------------
 
-  function switchTab(tabName, btn) {
+  function switchTab(tabName) {
     root.querySelectorAll(".tab-btn").forEach(function (b) {
       b.classList.remove("active");
       b.setAttribute("aria-selected", "false");
     });
     root.querySelectorAll(".tab-content").forEach(function (c) { c.classList.remove("active"); });
 
+    // Find the tab button by name rather than trusting whatever was clicked.
+    // "Read full briefing →" is also a [data-tab] element: passing it through
+    // marked a link as the selected tab and left the real tab bar showing
+    // Dashboard while the Methodology panel was open.
+    var btn = root.querySelector(".tab-btn[data-tab='" + tabName + "']");
     if (btn) {
       btn.classList.add("active");
       btn.setAttribute("aria-selected", "true");
@@ -294,8 +299,8 @@
   // --- Control wiring -----------------------------------------------------
 
   function bindControls() {
-    root.querySelectorAll("[data-tab]").forEach(function (btn) {
-      btn.addEventListener("click", function () { switchTab(btn.getAttribute("data-tab"), btn); });
+    root.querySelectorAll("[data-tab]").forEach(function (el) {
+      el.addEventListener("click", function () { switchTab(el.getAttribute("data-tab")); });
     });
 
     root.querySelectorAll(".range-btn[data-range]").forEach(function (btn) {
@@ -513,11 +518,20 @@
 
     if (dailyChart) dailyChart.destroy();
 
-    var theme = document.documentElement.getAttribute("data-theme");
-    var gridColor = theme === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.05)";
-    var tickColor = theme === "light" ? "#64748B" : "#94A3B8";
-    var tooltipBg = theme === "light" ? "rgba(255, 255, 255, 0.96)" : "rgba(11, 15, 25, 0.96)";
-    var tooltipText = theme === "light" ? "#0F172A" : "#F8FAFC";
+    // One palette for both dashboards; see window.MDL.chartPalette in theme.js.
+    // This chart used to carry its own slightly different grid alpha, tick
+    // colour and tooltip chrome, which is what made it look like it came from a
+    // different site than the Hormuz trajectory chart.
+    var p = (window.MDL && window.MDL.chartPalette) ? window.MDL.chartPalette() : {
+      text: "#94A3B8", grid: "rgba(255,255,255,0.08)", tooltipBg: "#0F172A",
+      tooltipBorder: "#334155", tooltipText: "#F8FAFC",
+      tickFont: "JetBrains Mono, monospace", labelFont: "Inter, system-ui, sans-serif",
+      tickSize: 11
+    };
+    var gridColor = p.grid;
+    var tickColor = p.text;
+    var tooltipBg = p.tooltipBg;
+    var tooltipText = p.tooltipText;
 
     // The x axis is a real time scale, so each point carries its own timestamp
     // and zoom windows are date ranges, not row offsets.
@@ -558,13 +572,13 @@
             backgroundColor: tooltipBg,
             titleColor: tooltipText,
             bodyColor: tooltipText,
-            borderColor: gridColor,
+            borderColor: p.tooltipBorder,
             borderWidth: 1,
             padding: 10,
             boxPadding: 4,
             cornerRadius: 8,
-            titleFont: { family: 'Outfit, sans-serif', size: 12, weight: '700' },
-            bodyFont: { family: 'Outfit, sans-serif', size: 11 },
+            titleFont: { family: p.labelFont, size: 12, weight: '700' },
+            bodyFont: { family: p.tickFont, size: 11 },
             // Nine series at once makes the tooltip unreadable. Two things are
             // dropped: anything the user has hidden via the legend, and the
             // flat reference lines, whose values never change and are already
@@ -626,12 +640,12 @@
               displayFormats: { day: "dd MMM yy", month: "MMM yy", year: "yyyy" }
             },
             grid: { color: gridColor },
-            ticks: { color: tickColor, maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
+            ticks: { color: tickColor, font: { family: p.tickFont, size: p.tickSize }, maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
           },
           y: {
             grid: { color: gridColor },
-            ticks: { color: tickColor },
-            title: { display: true, text: "Projected seats (of 543)", color: tickColor },
+            ticks: { color: tickColor, font: { family: p.tickFont, size: p.tickSize } },
+            title: { display: true, text: "Projected seats (of 543)", color: tickColor, font: { family: p.labelFont, size: 12 } },
             // Bounds are set by autoscaleY() from whatever is actually on
             // screen. A fixed 225–310 window wasted most of the plot area
             // whenever the user narrowed to one series or zoomed into a few

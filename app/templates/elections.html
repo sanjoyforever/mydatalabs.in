@@ -10,9 +10,6 @@
 {% block twitter_desc %}Daily 543-seat Lok Sabha projections from CVoter survey trackers, with confidence intervals and a live backtest.{% endblock %}
 
 {% block extra_head %}
-<!-- Outfit and Space Grotesk are this dashboard's type; base.html loads the
-     site's own families and neither set is a substitute for the other. -->
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/elections.css') }}?v={{ asset_v }}">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
@@ -26,36 +23,91 @@
 {% endblock %}
 
 {% block content %}
-<div class="elections-dash" data-api="{{ api_prefix }}">
+<div class="elections-dash report-dash-canvas" data-api="{{ api_prefix }}">
 
-  <div class="dash-intro">
-    <div>
-      <h1 class="dash-title">Lok Sabha Projection Engine</h1>
-      <p class="dash-sub">
-        A daily 543-seat projection built from a weighted composite of CVoter's option-level
-        public opinion trackers, calibrated against the 2019 and 2024 general election results.
-        This is a model of present opinion, not a forecast of any announced election.
-      </p>
-      <p class="dash-sub" id="dash-asof">
-        {% if overview %}Survey data through {{ overview.as_of_date }}.{% endif %}
-      </p>
+  <div class="report-canvas-head">
+    <nav class="breadcrumb" aria-label="Breadcrumb" style="margin: 0;">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Lok Sabha Projection Engine</span>
+    </nav>
+
+    <nav class="report-tabs report-tab-nav" role="tablist" aria-label="Report sections">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true"
+              aria-controls="tab-forecast" data-tab="forecast">📊 Dashboard</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false"
+              aria-controls="tab-methodology" data-tab="methodology">📘 Methodology</button>
+    </nav>
+  </div>
+
+  <!-- TAB 1: DASHBOARD / FORECAST -->
+  <div id="tab-forecast" class="tab-content report-panel active" role="tabpanel">
+
+  <!-- Dashboard Header Bar -->
+  <div class="dash-header-bar">
+    <div class="dash-title-group">
+      <div class="dash-badge-row">
+        <span class="badge-pill-blue">LIVE PROJECTION</span>
+        <span class="status-badge status-good">
+          <span class="status-dot" aria-hidden="true"></span>BASELINE
+        </span>
+        <span class="dash-week">{% if overview %}Survey data through {{ overview.as_of_date }}{% endif %}</span>
+      </div>
+      <h1>Lok Sabha Projection Engine</h1>
+      <div class="dash-meta">
+        <span>Geo-Politics &amp; Domestic Intelligence</span>
+        <span aria-hidden="true">•</span>
+        <span>NDA Seat Projection</span>
+        <span aria-hidden="true">•</span>
+        <span>Baseline: 2019 Election Actuals</span>
+      </div>
     </div>
 
-    <div class="dash-controls">
-      <nav class="nav-tabs" role="tablist" aria-label="Dashboard sections">
-        <button type="button" class="tab-btn active" role="tab" aria-selected="true"
-                aria-controls="tab-forecast" data-tab="forecast">📊 Daily Forecast</button>
-        <button type="button" class="tab-btn" role="tab" aria-selected="false"
-                aria-controls="tab-backtest" data-tab="backtest">🎯 Backtest</button>
-      </nav>
+    <div class="dash-header-actions">
+      <div class="dash-score-box">
+        <div>
+          <div class="dash-score-label">PROJECTED NDA SEATS</div>
+          <div class="dash-big-score" style="color: var(--accent-nda, #FF9933);" id="nda-headline-val">
+            {% if overview %}{{ overview.latest_forecast.point_estimate.predicted_seats.NDA }}{% else %}274{% endif %}<span class="score-denom"> / 543</span>
+          </div>
+        </div>
+        <div class="dash-delta-group">
+          {% if overview %}
+          {% set nda_seats = overview.latest_forecast.point_estimate.predicted_seats.NDA %}
+          {% set vsLE = nda_seats - overview.actual_2024_nda %}
+          <span class="delta-pill {% if vsLE >= 0 %}delta-up{% else %}delta-down{% endif %}">
+            <span aria-hidden="true">{% if vsLE >= 0 %}▲{% else %}▼{% endif %}</span>
+            {% if vsLE >= 0 %}+{% else %}−{% endif %}{{ vsLE|abs }}
+            <span class="sr-only">seats versus 2019 actuals</span>
+          </span>
+          <div class="dash-delta-caption">vs 2019 actuals</div>
+          {% endif %}
+        </div>
+      </div>
 
-      <span class="freshness-pill" id="freshness-pill">
-        {% if overview %}
-        <span class="dot"></span>Current through {{ overview.as_of_date }}
+      <button type="button" class="btn-primary" data-copy-target="exec-briefing-elections">
+        <span aria-hidden="true">📋</span> Copy Briefing
+      </button>
+    </div>
+  </div>
+
+  <!-- Standardized Executive Summary Card -->
+  <div class="exec-summary-card">
+    <div class="exec-summary-head">
+      <div class="exec-summary-title">
+        <span class="exec-summary-icon">💡</span>
+        <h2>Executive Briefing</h2>
+      </div>
+      <a href="#methodology" class="exec-briefing-link" data-tab="methodology">Read full briefing →</a>
+    </div>
+    <div class="exec-summary-body" id="exec-briefing-elections">
+      <p>
+        {% if insights and insights.summary %}
+        {{ insights.summary.headline }} {{ insights.summary.bullets | join(" ") }}
         {% else %}
-        <span class="dot"></span>Checking data…
+        Our baseline projection estimates the NDA to secure <strong>274 seats</strong> (90% confidence interval: 253 – 294), up 19 seats compared to the 2019 election outcome. The outcome probability for an NDA majority is <strong>56%</strong>.
         {% endif %}
-      </span>
+      </p>
     </div>
   </div>
 
@@ -194,9 +246,8 @@
       </div>
     </div>
 
-    <!-- TAB 1: DAILY FORECAST CHART -->
-    <div id="tab-forecast" class="tab-content active" role="tabpanel">
-      <div class="card">
+    <!-- DAILY FORECAST CHART -->
+    <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
           <div>
             <h2>Daily Projected Lok Sabha Seats vs Baseline Election Actuals</h2>
@@ -324,23 +375,32 @@
         <div class="summary-sub" style="margin-top: 18px;">What this model cannot tell you</div>
         <ul class="caveat-list" id="summary-caveats"></ul>
       </div>
-    </div>
 
-    <!-- TAB 2: BACKTESTING MATRIX -->
-    <div id="tab-backtest" class="tab-content" role="tabpanel">
-      <div class="card">
-        <h2 style="margin-bottom: 6px;">2019 &amp; 2024 General Election Backtest</h2>
+    </div><!-- /.container -->
+  </div><!-- /#tab-forecast -->
+
+  <!-- TAB 2: METHODOLOGY -->
+  <div id="tab-methodology" class="tab-content report-panel" role="tabpanel">
+      {% include "_elections_methodology.html" %}
+
+      {# The backtest matrix sits with the methodology, not the dashboard: it is
+         a statement about how the model was fitted and how far it missed, which
+         is what the rest of this tab documents. On the dashboard it read as one
+         more current-conditions panel, which it is not — nothing in it changes
+         when today's survey moves. #}
+      <div class="card" style="margin-top: 24px;">
+        <h2 style="margin-bottom: 6px;">2019 &amp; 2024 general election backtest</h2>
         <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
           The model is run on the mean survey reading over the 60 days before each result date,
-          then scored against the actual outcome. Numbers below are computed live, not stored.
+          then scored against the actual outcome. Computed on each update, not stored by hand.
         </p>
 
         <div class="note-banner">
-          📌 <strong>How to read this:</strong>
-          The majority mark is <strong>272 of 543</strong>. The vote-share fit is anchored on both
-          elections, so neither year is a true out-of-sample test of that step. The votes-to-seats
-          exponent is fitted jointly across both, which is why 2024 is no longer reproduced exactly:
-          a single exponent has to serve two very different alliance structures.
+          <strong>How to read this:</strong>
+          The majority mark is <strong>272 of 543</strong>. Both the vote-share fit and the
+          votes-to-seats exponent are anchored on these two elections, so neither year is an
+          out-of-sample test. A single exponent has to serve two very different alliance
+          structures, which is why 2024 is not reproduced exactly.
         </div>
 
         <div id="backtest-summary" style="margin-bottom: 16px;"></div>

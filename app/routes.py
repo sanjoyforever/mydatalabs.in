@@ -535,6 +535,12 @@ def data_page():
     return _cached(Response(html, mimetype="text/html"))
 
 
+@bp.route("/terms")
+def terms_page():
+    html = render_template("terms.html", **_common())
+    return _cached(Response(html, mimetype="text/html"))
+
+
 @bp.route("/reports/<slug>")
 def coming_soon(slug):
     category = next((c for c in NAV_CATEGORIES if c["slug"] == slug), None)
@@ -798,6 +804,7 @@ def sitemap():
         {"loc": f"{SITE_ORIGIN}/hormuz-index", "priority": "0.9", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/lok-sabha-index", "priority": "0.9", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/data", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": f"{SITE_ORIGIN}/terms", "priority": "0.5", "changefreq": "monthly"},
     ]
 
     xml = ['<?xml version="1.0" encoding="UTF-8"?>']

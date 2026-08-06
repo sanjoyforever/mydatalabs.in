@@ -24,7 +24,11 @@
 
   var charts = [];
 
+  // Shared with the projection dashboard's Chart.js charts; defined in theme.js
+  // so the two engines cannot drift apart. The fallback keeps this file working
+  // if theme.js ever fails to load.
   function palette() {
+    if (window.MDL && window.MDL.chartPalette) return window.MDL.chartPalette();
     var isDark = document.documentElement.getAttribute("data-theme") !== "light";
     return {
       isDark: isDark,
@@ -33,6 +37,9 @@
       tooltipBg: isDark ? "#0F172A" : "#FFFFFF",
       tooltipBorder: isDark ? "#334155" : "#E2E8F0",
       tooltipText: isDark ? "#F8FAFC" : "#0F172A",
+      tickFont: "JetBrains Mono, monospace",
+      labelFont: "Inter, system-ui, sans-serif",
+      tickSize: 11,
       blue: isDark ? "#38BDF8" : "#0284C7",
       red: isDark ? "#EF4444" : "#DC2626",
       green: isDark ? "#10B981" : "#059669",
@@ -135,7 +142,7 @@
         type: "category",
         data: DATA.trend.dates,
         axisLine: { lineStyle: { color: p.grid } },
-        axisLabel: { color: p.text, fontSize: 11, fontFamily: "JetBrains Mono" }
+        axisLabel: { color: p.text, fontSize: p.tickSize, fontFamily: p.tickFont }
       },
       yAxis: {
         type: "value",
@@ -143,7 +150,7 @@
         min: 95,
         max: function (v) { return Math.ceil(v.max + 10); },
         splitLine: { lineStyle: { color: p.grid } },
-        axisLabel: { color: p.text, fontSize: 11, fontFamily: "JetBrains Mono" }
+        axisLabel: { color: p.text, fontSize: p.tickSize, fontFamily: p.tickFont }
       },
       series: [{
         name: "HMX-INDEX",
@@ -197,13 +204,13 @@
         type: "value",
         minInterval: 1,
         splitLine: { lineStyle: { color: p.grid } },
-        axisLabel: { color: p.text, fontSize: 11 }
+        axisLabel: { color: p.text, fontSize: p.tickSize, fontFamily: p.tickFont }
       },
       yAxis: {
         type: "category",
         data: (DATA.flags.countries || []).slice().reverse(),
         axisLine: { lineStyle: { color: p.grid } },
-        axisLabel: { color: p.text, fontSize: 11, fontWeight: "bold" },
+        axisLabel: { color: p.text, fontSize: p.tickSize, fontFamily: p.tickFont, fontWeight: "bold" },
         axisTick: { show: false }
       },
       series: [{
@@ -232,14 +239,14 @@
         type: "category",
         data: DATA.months.labels,
         axisLine: { lineStyle: { color: p.grid } },
-        axisLabel: { color: p.text, fontSize: 11, fontFamily: "JetBrains Mono" }
+        axisLabel: { color: p.text, fontSize: p.tickSize, fontFamily: p.tickFont }
       },
       yAxis: {
         type: "value",
         minInterval: 1,
         max: top,
         splitLine: { lineStyle: { color: p.grid } },
-        axisLabel: { color: p.text, fontSize: 11 }
+        axisLabel: { color: p.text, fontSize: p.tickSize, fontFamily: p.tickFont }
       },
       series: [{
         name: "Cumulative modelled incidents",

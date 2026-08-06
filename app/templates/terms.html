@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+
+{% block title %}Terms of Use &amp; Disclaimers — MyDataLabs{% endblock %}
+{% block meta_desc %}Terms of use, financial disclaimers, limitation of liability, third-party data attribution, and licence terms for MyDataLabs quantitative intelligence indices.{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="{{ url_for('main.home') }}">Home</a>
+  <span aria-hidden="true">/</span>
+  <span aria-current="page">Terms &amp; Disclaimers</span>
+</nav>
+
+<article class="prose-page">
+  <header class="prose-header">
+    <span class="badge-tag">LEGAL &amp; GOVERNANCE</span>
+    <h1>Terms of Use &amp; Disclaimers</h1>
+    <p class="prose-lede">
+      Please read these terms and disclaimers carefully before using the MyDataLabs platform, quantitative indices, or API endpoints.
+    </p>
+  </header>
+
+  <section aria-labelledby="financial-disclaimer-h">
+    <h2 id="financial-disclaimer-h">1. Financial &amp; Investment Disclaimer</h2>
+    <div class="callout warning-callout" style="border-left: 4px solid var(--accent-orange, #f59e0b); padding: 1rem; background: rgba(245, 158, 11, 0.08); border-radius: 4px; margin-bottom: 1.5rem;">
+      <strong>IMPORTANT NOTICE:</strong> The quantitative indices, composite scores, asset price transformations, and risk indicators published on MyDataLabs (including the Hormuz Crisis Index / HMX-INDEX) are provided solely for general information, quantitative analysis, academic research, and news reporting purposes.
+    </div>
+    <p>
+      Nothing on this website or in our API outputs constitutes financial, investment, trading, commodity, legal, or tax advice. MyDataLabs is an independent intelligence network and is not a registered investment advisor, broker-dealer, or financial services provider.
+    </p>
+    <p>
+      Do not make financial, trading, hedging, or commercial investment decisions based on figures published here. Users assume all responsibility and risk for any actions taken or not taken based on information provided by MyDataLabs.
+    </p>
+  </section>
+
+  <section aria-labelledby="warranty-h">
+    <h2 id="warranty-h">2. Disclaimer of Warranties &amp; Limitation of Liability</h2>
+    <p>
+      All data, composite indices, calculation metrics, historical series, and API endpoints are provided on an <strong>"AS IS"</strong> and <strong>"AS AVAILABLE"</strong> basis without warranties of any kind, either express or implied, including but not limited to:
+    </p>
+    <ul>
+      <li>Warranties of merchantability, title, or fitness for a particular purpose;</li>
+      <li>Warranties regarding the accuracy, completeness, timeliness, reliability, or availability of data feeds;</li>
+      <li>Warranties that third-party data feeds (such as market tickers or maritime incident reports) are free of latency, interruption, or errors.</li>
+    </ul>
+    <p>
+      To the maximum extent permitted by applicable law, MyDataLabs, its creators, operators, and data contributors shall not be liable for any direct, indirect, incidental, consequential, special, or punitive damages (including loss of profits, trading losses, or business disruption) arising out of or in connection with the use of or inability to use this website, data feeds, or API endpoints.
+    </p>
+  </section>
+
+  <section aria-labelledby="attribution-h">
+    <h2 id="attribution-h">3. Third-Party Data &amp; Trademark Attribution</h2>
+    <p>
+      MyDataLabs aggregates public data, historical statistics, and market feeds (such as Brent Crude, TTF Gas, VIX Index, and vessel transit counts) to compute composite indices.
+    </p>
+    <ul>
+      <li>All product names, trademarks, service marks, logos, and brand names referenced on this site belong to their respective owners.</li>
+      <li>Reference to or inclusion of third-party datasets or market tickers does not constitute an endorsement, sponsorship, or affiliation between MyDataLabs and those data providers.</li>
+      <li>Incident reports and annotations published in our event logs represent internal analytical syntheses derived from public reports and do not represent wire service statements from named news agencies.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="elections-h">
+    <h2 id="elections-h">4. Independent Projection Engine Disclaimer</h2>
+    <p>
+      The Lok Sabha Projection Engine (LS-PROJ) is an independent statistical model utilizing Monte Carlo simulations, historical electoral baselines, and public opinion tracking data.
+    </p>
+    <p>
+      Seat projections represent probabilistic statistical estimates, not official election results or official forecasts issued by election commissions or government bodies.
+    </p>
+  </section>
+
+  <section aria-labelledby="licence-h">
+    <h2 id="licence-h">5. Data Licence &amp; Fair Use</h2>
+    <p>
+      MyDataLabs composite index scores and historical series are licensed under
+      <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_name }}</a>.
+      You are free to share, copy, redistribute, and transform the index figures for commercial or non-commercial purposes, provided appropriate attribution is given to MyDataLabs with a link back to <code>mydatalabs.in</code>.
+    </p>
+    <p>
+      We kindly request automated systems and API consumers to cache responses in accordance with HTTP headers to prevent server overload.
+    </p>
+  </section>
+</article>
+{% endblock %}

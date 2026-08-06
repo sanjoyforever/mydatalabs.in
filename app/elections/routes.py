@@ -374,6 +374,11 @@ def lok_sabha_index():
     events = _get_events_data()
     backtest = _get_backtest_data()
     insights = _get_insights_data()
+    # The methodology tab quotes the fitted constants — cube exponent, the
+    # vote-share fit, the opposition split. Passing them in keeps the prose
+    # true after every refit; the previous version stated them as prose and
+    # had already drifted from the values the model actually uses.
+    calibration = _section("calibration") or {}
 
     if overview is None or trend_analytics is None:
         # No artifact and nothing to build one from. Rendering the shell would
@@ -404,6 +409,10 @@ def lok_sabha_index():
             events=events,
             backtest=backtest,
             insights=insights,
+            calibration=calibration,
+            majority=MAJORITY,
+            monte_carlo_runs=MONTE_CARLO_RUNS,
+            monte_carlo_seed=MONTE_CARLO_SEED,
             # Emitted raw inside a <script type="application/json"> block, so
             # the one sequence that can break out of it has to be neutralised.
             # An event label or an insight sentence containing "</script>"

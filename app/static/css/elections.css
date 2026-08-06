@@ -55,18 +55,20 @@
 .elections-dash,
 .elections-dash * {
     box-sizing: border-box;
-    font-family: 'Outfit', system-ui, sans-serif;
 }
+
+/* `font-family: inherit` used to live in the rule above, inherited from the
+   standalone app where it was harmless. Here it flattened every heading to the
+   body face: h1 rendered in Inter on this page and Plus Jakarta Sans on
+   /hormuz-index, which is most of why the two dashboards read as different
+   products. Headings now take var(--font-heading) from style.css like
+   everywhere else. */
 
 .elections-dash {
     color: var(--text-main);
-    background-color: var(--bg-dark);
-    background-image:
-        radial-gradient(circle at 15% 15%, var(--bg-gradient-1) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, var(--bg-gradient-2) 0%, transparent 40%);
-    padding: 28px 10px 20px;
-    border-radius: 20px;
-    border: 1px solid var(--border-glow);
+    /* The canvas surface — background, padding, radius, border — comes from
+       .report-dash-canvas in style.css, which this element also carries. It was
+       declared in both places with slightly different values; one owner now. */
 }
 
 /* --- Page head ---------------------------------------------------------- */
@@ -81,7 +83,7 @@
 }
 
 .elections-dash .dash-title {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: var(--font-heading, 'Plus Jakarta Sans', system-ui, sans-serif);
     font-size: 26px;
     font-weight: 700;
     color: var(--text-main);
@@ -102,33 +104,6 @@
     flex-wrap: wrap;
 }
 
-.elections-dash .nav-tabs {
-    display: flex;
-    gap: 6px;
-    background: var(--card-sub-bg);
-    padding: 4px;
-    border-radius: 12px;
-    border: 1px solid var(--border-glow);
-}
-
-.elections-dash .tab-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    background: transparent;
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-.elections-dash .tab-btn.active,
-.elections-dash .tab-btn:hover {
-    background: var(--bg-card);
-    color: var(--text-main);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
 .elections-dash .container {
     margin: 24px 0;
 }
@@ -144,8 +119,8 @@
     background: var(--bg-card);
     backdrop-filter: blur(12px);
     border: 1px solid var(--border-glow);
-    border-radius: 16px;
-    padding: 22px;
+    border-radius: var(--card-radius);
+    padding: var(--card-pad);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
@@ -159,7 +134,7 @@
 }
 
 .elections-dash .stat-val {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: var(--font-mono);
     font-size: 36px;
     font-weight: 700;
     display: flex;
@@ -192,7 +167,7 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-family: 'Space Grotesk', monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 700;
     padding: 3px 8px;
@@ -202,7 +177,7 @@
 }
 
 .elections-dash .delta-chip .d-label {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--font-sans);
     font-weight: 500;
     font-size: 11px;
     color: var(--text-muted);
@@ -267,12 +242,34 @@
 
 /* --- Impact tables ------------------------------------------------------ */
 
+/* Helped and hurt stack, they do not sit side by side. Two columns forced each
+   table into half the width, which wrapped the incident names and the overlap
+   notes on to three and four lines while the number columns stayed narrow — and
+   it invited a reading across the gap that the data does not support: the row
+   beside "Delta wave" is not its counterpart, the two lists are ranked
+   independently. Full width also lets both tables share one column geometry, so
+   SEATS, SENTIMENT and Z line up down the page. */
 .elections-dash .impact-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-    gap: 20px;
+    grid-template-columns: 1fr;
+    gap: 28px;
     margin-top: 16px;
 }
+
+/* Stacked, the two tables are read one after the other, so their columns have
+   to land in the same places — auto layout sized each to its own content and
+   put WHEN 200px apart between them. Fixed widths for everything except the
+   incident name, which takes the remainder. */
+.elections-dash .impact-grid .table-custom {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.elections-dash .impact-grid .table-custom th:nth-child(2),
+.elections-dash .impact-grid .table-custom td:nth-child(2) { width: 210px; }
+
+.elections-dash .impact-grid .table-custom th:nth-child(n+3),
+.elections-dash .impact-grid .table-custom td:nth-child(n+3) { width: 120px; }
 
 .elections-dash .impact-heading {
     font-size: 13px;
@@ -292,7 +289,7 @@
 .elections-dash .impact-note { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; }
 
 .elections-dash .num {
-    font-family: 'Space Grotesk', monospace;
+    font-family: var(--font-mono);
     font-weight: 700;
     text-align: right;
     white-space: nowrap;
@@ -360,7 +357,7 @@
 }
 
 .elections-dash .driver-list li strong { color: var(--text-main); }
-.elections-dash .driver-val { font-family: 'Space Grotesk', monospace; font-weight: 700; }
+.elections-dash .driver-val { font-family: var(--font-mono); font-weight: 700; }
 
 /* --- Attribution block -------------------------------------------------- */
 /* The site footer comes from base.html. This is the dashboard's own source
@@ -509,7 +506,7 @@
 
 .elections-dash .backtest-card {
     background: var(--card-sub-bg);
-    border-radius: 12px;
+    border-radius: var(--panel-radius);
     padding: 16px;
     border: 1px solid var(--border-glow);
 }
@@ -528,7 +525,7 @@
 .elections-dash .metric-tile {
     background: var(--card-sub-bg);
     border: 1px solid var(--border-glow);
-    border-radius: 12px;
+    border-radius: var(--panel-radius);
     padding: 14px 18px;
 }
 
@@ -541,7 +538,7 @@
 }
 
 .elections-dash .m-value {
-    font-family: 'Space Grotesk', monospace;
+    font-family: var(--font-mono);
     font-size: 28px;
     font-weight: 700;
     margin-top: 4px;
@@ -620,7 +617,7 @@
 .elections-dash .note-banner {
     background: var(--banner-bg);
     border: 1px solid var(--banner-border);
-    border-radius: 10px;
+    border-radius: var(--panel-radius);
     padding: 12px 16px;
     margin-bottom: 20px;
     font-size: 13px;

@@ -130,27 +130,17 @@
 </main>
 
 <footer class="site-footer">
-  <div class="footer-content">
-    <div>
-      <div class="brand footer-brand">
-        <img src="{{ url_for('static', filename='img/logo-64.png') }}?v={{ asset_v }}" alt="" width="26" height="26" class="brand-logo" aria-hidden="true">
-        <span>MyDataLabs<span class="brand-dot">.</span></span>
-      </div>
-      <p class="footer-blurb">
-        Quantitative composite indices tracking geopolitical stress, energy dislocation, and maritime chokepoints. Fully documented, reproducible methodology.
-      </p>
-    </div>
-    <div class="footer-links">
-      <a href="{{ url_for('main.home') }}">Home</a>
-      <a href="{{ url_for('main.hormuz_index') }}">Hormuz Index</a>
-      <a href="{{ url_for('elections.lok_sabha_index') }}">Lok Sabha Projection</a>
-    </div>
-  </div>
   <div class="footer-legal">
-    <span>© {{ current_year }} MyDataLabs Intelligence Network. Index data licensed under
+    <span>© {{ current_year }} MyDataLabs Intelligence Network. Data licensed under
       <a href="{{ license_url|default('https://creativecommons.org/licenses/by/4.0/') }}" rel="license noopener" target="_blank">{{ license_name|default('CC BY 4.0') }}</a>.
     </span>
-    <span>Cite: <em>MyDataLabs Hormuz Crisis Index (HMX-INDEX)</em></span>
+    <div class="footer-right-links">
+      <a href="{{ url_for('main.terms_page') }}">Disclaimer</a>
+      <a href="{{ url_for('main.hormuz_index') }}#methodology">Methodology</a>
+      <a href="{{ url_for('main.data_page') }}">API</a>
+      <a href="mailto:contact@mydatalabs.in">Contact</a>
+      <span class="version-tag">v1.0.0</span>
+    </div>
   </div>
 </footer>
 

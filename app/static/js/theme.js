@@ -18,6 +18,43 @@
       (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   }
 
+  // --- Shared chart palette ------------------------------------------------
+  // The two dashboards draw with different engines — ECharts on /hormuz-index,
+  // Chart.js on /lok-sabha-index — and each used to carry its own grid colour,
+  // tick colour, tooltip chrome and label font. Small divergences (0.06 vs 0.08
+  // grid alpha, #64748B vs #475569 ticks, Inter vs JetBrains Mono numerals) are
+  // exactly what made two otherwise identical layouts read as two products.
+  // One source of truth; both engines map it to their own option names.
+  //
+  // Canvas and ECharts cannot read CSS custom properties, which is why these
+  // are literals here rather than var(--grid-color) — but they are the same
+  // values style.css uses, and both charts rebuild on `themechange`.
+  window.MDL = window.MDL || {};
+  window.MDL.chartPalette = function () {
+    var isDark = currentTheme() !== "light";
+    return {
+      isDark: isDark,
+      // Axis labels and other chart text.
+      text: isDark ? "#94A3B8" : "#475569",
+      // Grid lines, axis lines and tooltip borders.
+      grid: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
+      tooltipBg: isDark ? "#0F172A" : "#FFFFFF",
+      tooltipBorder: isDark ? "#334155" : "#E2E8F0",
+      tooltipText: isDark ? "#F8FAFC" : "#0F172A",
+      // Numerals are monospaced on both charts so columns of figures line up
+      // the way they do in every table on the site.
+      tickFont: "JetBrains Mono, monospace",
+      labelFont: "Inter, system-ui, sans-serif",
+      tickSize: 11,
+      // Series colours shared by both dashboards.
+      blue: isDark ? "#38BDF8" : "#0284C7",
+      red: isDark ? "#EF4444" : "#DC2626",
+      green: isDark ? "#10B981" : "#059669",
+      greenText: isDark ? "#34D399" : "#047857",
+      violet: isDark ? "#A78BFA" : "#7C3AED"
+    };
+  };
+
   // --- Theme toggle --------------------------------------------------------
   var toggle = document.getElementById("theme-toggle");
   if (toggle) {

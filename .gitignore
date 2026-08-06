@@ -26,4 +26,17 @@ Thumbs.db
 .env
 .env.local
 
+# Local working notes and tooling output — not part of the deployed site.
+graphify-out/
+.graphify_*.json
+docs/knowledge/
+trash/
+rollingfeedback.txt
+RELEASE_NOTES_*.md
+
+# Design system and temp archives
+MyDataLabs Design System/
+MyDataLabs Design System.zip
+
 .vercel
+

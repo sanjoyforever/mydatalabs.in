@@ -1,0 +1,221 @@
+{# ---------------------------------------------------------------------------
+   Lok Sabha Projection Engine Methodology
+   Matching the exact structure, tables, formula callouts, and limitation lists
+   used in the Hormuz Crisis Index methodology.
+   --------------------------------------------------------------------------- #}
+{% set cal = calibration or {} %}
+{% set vs = cal.get('vote_share_model', {}) if cal else {} %}
+{% set split = cal.get('opposition_split', {}) if cal else {} %}
+{% set rng = cal.get('data_range', {}) if cal else {} %}
+
+<article class="prose-page">
+  <header class="prose-header">
+    <span class="badge-tag">METHODOLOGY</span>
+    <h1>How the Lok Sabha Projection Engine is calculated</h1>
+    <p class="prose-lede">
+      The LS-PROJ engine is a daily 543-seat model converting public opinion trackers into probabilistic seat projections
+      calibrated against historical election outcomes. This page documents every input, every formula, and every known
+      weakness, so the numbers can be checked rather than taken on trust.
+    </p>
+  </header>
+
+  <nav class="toc" aria-label="On this page">
+    <h2>On this page</h2>
+    <ol>
+      <li><a href="#formula">The formula &amp; sentiment conversion</a></li>
+      <li><a href="#components">Conversion models, exponents and weights</a></li>
+      <li><a href="#baseline">Baseline selection &amp; historical anchors</a></li>
+      <li><a href="#monte-carlo">Monte Carlo simulation framework</a></li>
+      <li><a href="#cadence">Data cadence and staleness</a></li>
+      <li><a href="#limitations">Known limitations</a></li>
+      <li><a href="#citation">Citation</a></li>
+    </ol>
+  </nav>
+
+  <section id="formula" aria-labelledby="formula-h">
+    <h2 id="formula-h">The formula &amp; sentiment conversion</h2>
+    <div class="formula-box">
+      NDA Vote Share = Intercept + Slope × Composite Sentiment Score
+    </div>
+    <p>
+      Daily survey trackers are reduced to a composite net sentiment score on a −100 to +100 scale.
+      This composite sentiment is converted to an NDA national vote share by a linear transformation calibrated
+      against historical general election results:
+    </p>
+    {% if vs %}
+    <div class="formula-box formula-box-sm">
+      NDA Vote Share = {{ "%.3f"|format(vs.get('intercept', 0.380)) }} + {{ "%.4f"|format(vs.get('slope', 0.0018)) }} × CompositeSentiment
+    </div>
+    {% else %}
+    <div class="formula-box formula-box-sm">
+      NDA Vote Share = 0.380 + 0.0018 × CompositeSentiment
+    </div>
+    {% endif %}
+    <p>
+      <strong>Seat Allocation:</strong> In First-Past-The-Post (FPTP) single-member constituencies, vote share translates non-linearly into seats according to Kendall's extended cube law:
+    </p>
+    <div class="formula-box formula-box-sm">
+      Seats<sub>i</sub> = 543 × [ ( VoteShare<sub>i</sub> )<sup>k</sup> / ∑ ( VoteShare<sub>j</sub> )<sup>k</sup> ]
+      &nbsp;&nbsp;where&nbsp;&nbsp; k = {{ "%.3f"|format(cal.get('cube_exponent', 2.655)) if cal else '2.655' }}
+    </div>
+    <p>
+      <strong>Clamping &amp; Ratios:</strong> Vote share outputs are clamped to a realistic 25%–65% range to prevent extreme polling swings from producing impossible totals. Opposition vote share is split between the INDIA alliance and regional parties in a fixed baseline ratio.
+    </p>
+  </section>
+
+  <section id="components" aria-labelledby="components-h">
+    <h2 id="components-h">Conversion models, exponents and weights</h2>
+    <p>
+      Five complementary model paradigms run in parallel to evaluate seat distribution. Where these models agree or diverge provides a robust measure of structural model uncertainty.
+    </p>
+
+    <div class="table-responsive">
+      <table class="components-table table-sticky-first">
+        <caption class="sr-only">Lok Sabha Projection Engine model components, exponents, and sources</caption>
+        <thead>
+          <tr>
+            <th scope="col">Model Paradigm</th>
+            <th scope="col">Method / Exponent</th>
+            <th scope="col">Baseline Anchor</th>
+            <th scope="col">Primary Target</th>
+            <th scope="col">Source</th>
+            <th scope="col">Cadence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Extended Cube Law (Headline)</th>
+            <td class="font-mono">Exponent k = {{ "%.3f"|format(cal.get('cube_exponent', 2.655)) if cal else '2.655' }}</td>
+            <td class="font-mono">2019 &amp; 2024 LE</td>
+            <td class="cell-strong">543 Lok Sabha Seats</td>
+            <td><span class="source-badge">CVoter / MDL</span></td>
+            <td class="cell-sub">Daily</td>
+          </tr>
+          <tr>
+            <th scope="row">Softmax Swing Transfer</th>
+            <td class="font-mono">Fitted Temperature T</td>
+            <td class="font-mono">2024 General Election</td>
+            <td>Alliance Blocs</td>
+            <td><span class="source-badge">CVoter / MDL</span></td>
+            <td class="cell-sub">Daily</td>
+          </tr>
+          <tr>
+            <th scope="row">Uniform Regional Swing (URS)</th>
+            <td class="font-mono">State Multipliers</td>
+            <td class="font-mono">2024 State Results</td>
+            <td>State Blocs</td>
+            <td><span class="source-badge">ECI / CVoter</span></td>
+            <td class="cell-sub">Daily</td>
+          </tr>
+          <tr>
+            <th scope="row">Ridge Regression (L2)</th>
+            <td class="font-mono">Regularized Linear Fit</td>
+            <td class="font-mono">Tracker Nets</td>
+            <td>Smoothed Seat Count</td>
+            <td><span class="source-badge">MDL Machine Learning</span></td>
+            <td class="cell-sub">Daily</td>
+          </tr>
+          <tr>
+            <th scope="row">Gradient-Boosted Trees (GBM)</th>
+            <td class="font-mono">Decision Ensemble</td>
+            <td class="font-mono">Tracker Nets</td>
+            <td>Non-linear Check</td>
+            <td><span class="source-badge">MDL Machine Learning</span></td>
+            <td class="cell-sub">Daily</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Why each model parameter was set where it was</h3>
+    <p>
+      Model parameters are anchored to historical general election outcomes rather than arbitrary curve fitting:
+    </p>
+    <dl class="cap-list">
+      <div class="cap-item">
+        <dt>Extended Cube Law Exponent <span class="cap-value">k = {{ "%.3f"|format(cal.get('cube_exponent', 2.655)) if cal else '2.655' }}</span></dt>
+        <dd>Fitted jointly across the 2019 and 2024 general election results to balance majoritarian seat bonuses against multi-party alliance splits.</dd>
+      </div>
+      <div class="cap-item">
+        <dt>Softmax Swing Transfer Temperature</dt>
+        <dd>Fitted to constrain winner-take-all seat amplification at wide polling margins, acting as a conservative floor on seat swings.</dd>
+      </div>
+      <div class="cap-item">
+        <dt>Opposition Split Ratio <span class="cap-value">INDIA: 84.2% / Others: 15.8%</span></dt>
+        <dd>Anchored to the 2024 general election result ratio among non-NDA vote shares to maintain realistic third-party seat distributions.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section id="baseline" aria-labelledby="baseline-h">
+    <h2 id="baseline-h">Baseline selection &amp; historical anchors</h2>
+    <p>
+      The model is anchored on the actual constituency-level and national election outcomes of the <strong>2019 and 2024 general elections</strong>.
+      Vote share sentiment equations are calibrated directly against the mean survey readings over the 60-day window preceding each election date.
+    </p>
+    <p>
+      <strong>Calibration Anchors:</strong> 2019 (NDA Vote Share: 45.0%, 353 seats) and 2024 (NDA Vote Share: 43.6%, 293 seats). Baseline constants are fixed and published in full so anyone can rebase or verify model projections independently.
+    </p>
+  </section>
+
+  <section id="monte-carlo" aria-labelledby="mc-h">
+    <h2 id="mc-h">Monte Carlo simulation framework</h2>
+    <div class="formula-box">
+      N = {{ "{:,}".format(monte_carlo_runs|default(20000)) }} draws per run · fixed seed = {{ monte_carlo_seed|default(42) }} · majority = {{ majority|default(272) }} of 543 seats
+    </div>
+    <p>
+      To evaluate polling error and sample variance, each daily update runs <strong>{{ "{:,}".format(monte_carlo_runs|default(20000)) }} Monte Carlo draws</strong>.
+      The published 90% confidence envelope represents the p5 to p95 seat range for NDA, INDIA, and regional party blocs.
+    </p>
+    <p>
+      The random seed is fixed at 42 to ensure every simulation run is deterministic and perfectly reproducible.
+    </p>
+  </section>
+
+  <section id="cadence" aria-labelledby="cadence-h">
+    <h2 id="cadence-h">Data cadence and staleness</h2>
+    <p>
+      Daily fieldwork updates are processed from CVoter's published tracking polls covering 41 individual indicator questions across 7 core categories.
+    </p>
+    <h3>What happens when polling data is missing or delayed</h3>
+    <ul>
+      <li>The <strong>last known survey reading is carried forward</strong>. Values are never reset to a zero baseline, preventing artificial seat swings during field holidays.</li>
+      <li>The dataset status is marked <strong>provisional</strong> if any core tracker feed is missing for more than 7 consecutive days.</li>
+      <li>Simulation confidence bounds widen automatically when survey sample size drops below baseline thresholds.</li>
+    </ul>
+  </section>
+
+  <section id="limitations" aria-labelledby="limitations-h">
+    <h2 id="limitations-h">Known limitations</h2>
+    <p>Stated plainly, because a reader who finds these on their own trusts everything else less.</p>
+    <ol class="limitations-list">
+      <li>
+        <strong>This is not a forecast of an unannounced election.</strong> It models present public opinion projected onto a hypothetical immediate poll. It carries no official status and does not replace Election Commission of India results.
+      </li>
+      <li>
+        <strong>National uniform swing model.</strong> There is no live constituency-level polling in the model. Calibration anchors on national vote shares and seat totals.
+      </li>
+      <li>
+        <strong>Alliance arithmetic is static.</strong> Seat-sharing deals, candidate selection, local party defections, and candidate-level popularity effects are invisible to national survey trackers.
+      </li>
+      <li>
+        <strong>Two anchor points.</strong> Every fitted constant rests on the 2019 and 2024 general election outcomes. That is the binding constraint on precision, regardless of daily survey volume.
+      </li>
+      <li>
+        <strong>Event impacts are associations, not causes.</strong> Attributing a seat move to a news event means public survey responses shifted during that window, which is consistent with the event having an effect but does not prove causation.
+      </li>
+      <li>
+        <strong>Confidence envelopes cover polling variance only.</strong> The 90% Monte Carlo confidence interval captures survey sampling noise, but does not capture vote-to-seat model conversion error.
+      </li>
+    </ol>
+  </section>
+
+  <section id="citation" aria-labelledby="citation-h">
+    <h2 id="citation-h">Citation</h2>
+    <p>
+      Projection data and model outputs are published under
+      <a href="{{ license_url|default('https://creativecommons.org/licenses/by/4.0/') }}" rel="license noopener" target="_blank">{{ license_name|default('CC BY 4.0') }}</a>.
+      Attribution formats and downloadable JSON/CSV datasets are available on the <a href="{{ url_for('main.data_page') }}">Data &amp; API page</a>.
+    </p>
+  </section>
+</article>

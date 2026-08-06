@@ -83,6 +83,11 @@ CODE_PATHS = [
     "vercel.json",
     ".vercelignore",
     "README.md",
+    # The design system the stylesheet is built against. Version-controlled
+    # because it is a source of truth, .vercelignore'd because no request reads
+    # it. Its 11 MB source photograph is the reason it is listed here rather
+    # than swept up by a broader rule.
+    "MyDataLabs Design System",
 ]
 
 
