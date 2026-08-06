@@ -133,208 +133,355 @@
     </div>
   </div>
 
+  <!-- Executive Summary & Intelligence Dispatch -->
+  <section class="citation-card exec-summary-card-full" aria-labelledby="press-heading" style="margin: 20px 0 28px;">
+    <div class="citation-head">
+      <div>
+        <span class="badge-tag badge-tag-blue"><span aria-hidden="true">💡</span> EXECUTIVE SUMMARY</span>
+        <h2 id="press-heading" style="font-size: 1.25rem; font-weight: 700; margin: 4px 0;">Executive Summary &amp; Press Wire Dispatch</h2>
+        <p class="section-desc">
+          Every figure below is generated from the current index reading. News outlets and analysts may reproduce or
+          cite this summary under {{ license_name }} with attribution to MyDataLabs.
+        </p>
+      </div>
+      <button type="button" class="btn-primary" data-copy-target="press-story-container">
+        <span aria-hidden="true">📋</span> Copy full summary
+      </button>
+    </div>
+
+    <div id="press-story-container" class="press-story">
+      <div class="press-story-head">
+        <span>FOR IMMEDIATE RELEASE | EXECUTIVE SUMMARY</span>
+        <span>DATELINE: {{ press.week_start }}</span>
+      </div>
+
+      <h3 class="press-headline">
+        Hormuz Crisis Index at {{ "%.1f"|format(press.score) }} ({{ press.level }})
+        {%- if press.driver_label %} as {{ press.driver_label }} leads weekly stress{% endif %}
+      </h3>
+
+      <p>
+        <strong>{{ press.week_start }}</strong> — Geopolitical and maritime stress across
+        the Strait of Hormuz registered a <strong>{{ press.level_lower }} reading of
+        {{ "%.1f"|format(press.score) }}</strong> ({{ "%.1f"|format(press.points_above_baseline) }} points
+        above the 100.0 calm baseline) for the reporting week of {{ press.week_start }}, according to the
+        Hormuz Crisis Index (HMX-INDEX) published by MyDataLabs.
+      </p>
+
+      <p>
+        {% if press.driver_label %}
+        <strong>{{ press.driver_label }}</strong> was the largest contributor to the composite this week,
+        adding {{ "%.1f"|format(press.driver_points) }} points{% if press.driver_2_label %}, ahead of
+        {{ press.driver_2_label }} at {{ "%.1f"|format(press.driver_2_points) }} points{% endif %}.
+        {% endif %}
+        {% if press.traffic is not none and press.traffic_drop_pct %}
+        Commercial ship transits through the 21-nautical-mile chokepoint stand at
+        {{ "%.0f"|format(press.traffic) }} per week, {{ "%.1f"|format(press.traffic_drop_pct) }}%
+        {{ press.traffic_direction }} the baseline of {{ "%.0f"|format(press.traffic_baseline) }}.
+        {% endif %}
+        {% if press.ceasefire_months %}
+        Diplomatic truces in {{ press.ceasefire_months|join(', ') }} produced temporary operational lulls
+        without returning conditions to baseline.
+        {% endif %}
+      </p>
+
+      <p>
+        {% if press.brent is not none %}
+        Brent crude traded at <strong>${{ "%.2f"|format(press.brent) }} per barrel</strong>
+        ({{ "%.1f"|format(press.brent_change_pct|abs) }}% {{ press.brent_direction }} the
+        ${{ "%.2f"|format(press.brent_baseline) }} baseline).
+        {% endif %}
+        {% if press.war_risk is not none %}
+        Marine war-risk insurance surcharges stand at
+        <strong>{{ "%.2f"|format(press.war_risk) }}% of hull value</strong>{% if press.war_risk_multiple %},
+        {{ "%.1f"|format(press.war_risk_multiple) }} times the baseline rate{% endif %}.
+        {% endif %}
+        {% if press.reroutes %}
+        Reroutes via the Cape of Good Hope account for {{ "%.1f"|format(press.reroutes) }}% of regional traffic.
+        {% endif %}
+      </p>
+
+      <p>
+        The HMX-INDEX is a weekly composite of seven weighted market and shipping indicators scored
+        against a calm baseline week of {{ baseline_window.replace('/', ' to ') if baseline_window else 'January 2026' }}. Its full methodology, component weights and
+        cap thresholds are published on the <a href="{{ url_for('main.hormuz_index') }}#methodology" data-report-tab="methodology">Methodology tab</a>, and the underlying series is available
+        as open JSON and CSV.
+        {%- if press.degraded %}
+        MyDataLabs notes that part of the index weight is currently stale and this week's reading should
+        be treated as provisional.
+        {%- endif %}
+        <em>(Source: MyDataLabs Hormuz Crisis Index — mydatalabs.in)</em>
+      </p>
+    </div>
+
+    <div class="ticker-box">
+      <div class="ticker-body">
+        <span class="ticker-label">BROADCAST TICKER QUOTE:</span>
+        <div class="ticker-quote" id="ticker-quote-text">
+          "According to the MyDataLabs Hormuz Crisis Index (HMX-INDEX), geopolitical risk in the Strait of
+          Hormuz registered {{ snapshot.level_label }} {{ "%.1f"|format(snapshot.score) }} for the week of
+          {{ snapshot.week_start }} (baseline 100.0). Source: mydatalabs.in."
+        </div>
+      </div>
+      <button type="button" class="btn-secondary" data-copy-target="ticker-quote-text">
+        <span aria-hidden="true">📋</span> Copy ticker quote
+      </button>
+    </div>
+  </section>
 
 {# Summary row: the model's reading, the crowd's reading, and the three signals
    that explain both — side by side, so the whole weekly summary lands in one
    screen instead of three scrolls. Collapses to one column under 1100px. #}
 <div class="summary-row">
 
-<div class="summary-row">
+<!-- Merged Indices: Crisis Severity + Public Perception stacked -->
+<div class="merged-indices-col">
 
-<!-- Merged Indices Column (Model Score Gauge + Public Perception Gauge Stacked) -->
-<section class="gauge-card merged-indices-card" aria-label="Crisis Severity and Public Perception Gauges">
-  <!-- Upper Section: Crisis Severity Scale Gauge -->
-  <div class="merged-gauge-block model-gauge-block">
-    <div class="gauge-card-header">
-      <div class="gauge-title-with-icon">
-        <span class="card-icon-box card-icon-red" aria-hidden="true">🛡️</span>
-        <div>
-          <div class="gauge-title-row">
-            <h2 id="gauge-heading">Crisis Severity Gauge</h2>
-            <span class="status-badge status-{{ snapshot.level_status }}"><span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="gauge-header-readout">
-        <div class="gauge-score-headline">
-          <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
-          <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
-        </div>
-        <div class="gauge-micro-facts">
-          <span><span class="micro-label">VS BASELINE</span> <span class="is-above">+{{ "%.1f"|format(press.points_above_baseline) }}</span></span>
-          <span><span class="micro-label">VS LAST WEEK</span> <span class="{{ 'is-above' if delta >= 0 else 'is-below' }}">{{ '+' if delta >= 0 else '−' }}{{ "%.1f"|format(delta|abs) }}</span></span>
-        </div>
-      </div>
+<!-- Crisis Severity Scale Gauge -->
+<section class="gauge-card" aria-labelledby="gauge-heading">
+  <div class="gauge-card-header">
+    <div>
+      <h2 id="gauge-heading">Crisis Severity Gauge</h2>
+      <span class="card-sub">({{ scale_min|int }} = baseline)</span>
     </div>
-
-    <div class="gauge-track-container"
-         role="meter"
-         aria-valuenow="{{ "%.1f"|format(snapshot.score) }}"
-         aria-valuemin="{{ scale_min }}"
-         aria-valuemax="{{ scale_max }}"
-         aria-label="HMX-INDEX composite score, {{ "%.1f"|format(snapshot.score) }} of {{ scale_max|int }}, classified {{ snapshot.level_label }}">
-      <div class="gauge-fill-bar" style="width: {{ scale_pct }}%;"></div>
-      {% for band in band_positions %}
-      <div class="gauge-tick-mark" style="left: {{ band.pct }}%;" title="{{ band.label }} begins at {{ band.lower|int }}"></div>
-      {% endfor %}
-      <div class="gauge-pointer" style="left: {{ scale_pct }}%;" title="Current score: {{ '%.1f'|format(snapshot.score) }}"></div>
-    </div>
-
-    <div class="gauge-labels-row">
-      {% for band in [
-          ('Calm', 'CALM', '&lt;110', 'green'),
-          ('Elevated', 'ELEVATED', '110–125', 'yellow'),
-          ('Acute', 'ACUTE', '125–150', 'orange'),
-          ('Severe', 'SEVERE', '150–180', 'red'),
-          ('Extreme', 'EXTREME', '180+', 'purple')] %}
-      <span class="gauge-label-item band-{{ band[3] }} {% if snapshot.level_label == band[0] %}active{% endif %}">
-        <span class="gauge-band-name">{{ band[1] }}</span>
-        <span class="gauge-band-range">({{ band[2]|safe }})</span>
-      </span>
-      {% endfor %}
-    </div>
+    <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
   </div>
 
-  <div class="indices-divider"></div>
+  <div class="gauge-track-container"
+       role="meter"
+       aria-valuenow="{{ "%.1f"|format(snapshot.score) }}"
+       aria-valuemin="{{ scale_min }}"
+       aria-valuemax="{{ scale_max }}"
+       aria-label="HMX-INDEX composite score, {{ "%.1f"|format(snapshot.score) }} of {{ scale_max|int }}, classified {{ snapshot.level_label }}">
+    <div class="gauge-fill-bar" style="width: {{ scale_pct }}%;"></div>
+    {% for band in band_positions %}
+    <div class="gauge-tick-mark" style="left: {{ band.pct }}%;" title="{{ band.label }} begins at {{ band.lower|int }}"></div>
+    {% endfor %}
+    <div class="gauge-pointer" style="left: {{ scale_pct }}%;" title="Current score: {{ '%.1f'|format(snapshot.score) }}"></div>
+  </div>
 
-  <!-- Lower Section: Public Perception Index -->
-  <div class="merged-gauge-block ppi-gauge-block ppi-card">
-    <div class="ppi-block"
-         id="ppi-block"
-         data-model-score="{{ "%.1f"|format(snapshot.score) }}"
-         data-available="{{ 'true' if sentiment.available else 'false' }}"
-         data-min-votes="{{ sentiment.min_votes }}">
-      <div class="ppi-header">
-        <div class="gauge-title-with-icon">
-          <span class="card-icon-box card-icon-blue" aria-hidden="true">👥</span>
-          <div>
-            <h3 class="ppi-title" id="ppi-heading">Public Perception Index</h3>
-            <span class="card-sub-desc">Reader opinion mapped to 100–200 scale (1–10 input)</span>
-          </div>
-        </div>
-
-        <div class="ppi-header-actions">
-          <div class="ppi-figure-inline" id="ppi-readout">
-            <span class="ppi-value" id="ppi-value">
-              {{ "%.1f"|format(sentiment.index) if sentiment.index is not none else "—" }}
-            </span>
-            <span class="status-badge status-{{ sentiment.level_status or 'good' }}" id="ppi-level"
-                  {% if not sentiment.level_label %}hidden{% endif %}>{{ (sentiment.level_label or '')|upper }}</span>
-          </div>
-          <button type="button" class="ppi-vote-btn" id="ppi-submit" disabled
-                  aria-describedby="ppi-hint">
-            <span class="btn-icon" aria-hidden="true">📈</span> <span id="ppi-submit-label">Cast your read</span> <span aria-hidden="true">→</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="gauge-track-container ppi-track"
-           role="meter"
-           id="ppi-meter"
-           aria-valuenow="{{ "%.1f"|format(sentiment.index) if sentiment.index is not none else scale_min }}"
-           aria-valuemin="{{ scale_min }}"
-           aria-valuemax="{{ scale_max }}"
-           aria-label="Public Perception Index, community sentiment score on a {{ scale_min|int }} to {{ scale_max|int }} scale">
-        <div class="gauge-fill-bar ppi-fill" id="ppi-fill"
-             style="width: {{ sentiment.scale_pct if sentiment.scale_pct is not none else 0 }}%;"></div>
-        <div class="gauge-pointer ppi-model-marker" style="left: {{ scale_pct }}%;"
-             title="Model score: {{ '%.1f'|format(snapshot.score) }}"></div>
-        <div class="gauge-pointer ppi-pointer{% if sentiment.scale_pct is none %} is-empty{% endif %}" id="ppi-pointer"
-             style="left: {{ sentiment.scale_pct if sentiment.scale_pct is not none else 50 }}%;"
-             role="slider"
-             tabindex="0"
-             aria-label="Drag to cast your read of this week, 1 (calm) to 10 (open war)"
-             aria-valuemin="1" aria-valuemax="10" aria-valuenow="5"
-             aria-valuetext="Not yet cast"
-             aria-describedby="ppi-hint"></div>
-      </div>
-
-      <div class="ppi-scale-ends" aria-hidden="true">
-        <span>100 · Calm</span>
-        <span>200 · Open war</span>
-      </div>
-
-      <div class="ppi-hint-callout" id="ppi-hint">
-        <span class="callout-icon" aria-hidden="true">✋</span>
-        <span id="ppi-hint-text">Drag the marker to where you think this week sits, then press <strong>Cast your read</strong>.</span>
-      </div>
-
-      <div class="ppi-footnotes-container">
-        <p class="ppi-footnote">
-          <span class="ppi-marker-key" aria-hidden="true"></span>
-          Hollow marker is model score ({{ "%.1f"|format(snapshot.score) }}). Anonymous weekly vote.
-          <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw my vote</button>
-        </p>
-
-        <details class="ppi-privacy-toggle">
-          <summary><span aria-hidden="true">🔒</span> We do not store or track your identity when you vote. <span class="toggle-link">What we store when you vote →</span></summary>
-          <p class="ppi-privacy">
-            Your 1–10 rating, the week, and a random ID generated in local storage to allow updating or withdrawing your vote.
-          </p>
-        </details>
-      </div>
-
-      <p class="ppi-error" id="ppi-error" role="alert" hidden></p>
+  {# The gauge's own readout. The score also appears in the page header, but a
+     gauge without a number on it is a picture of a number — and this is where
+     the distance from baseline and the week-on-week move belong, next to the
+     scale they are measured on. #}
+  <div class="gauge-readout">
+    <div>
+      <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
+      <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
     </div>
+    <dl class="gauge-readout-facts">
+      <div>
+        <dt>vs baseline</dt>
+        <dd class="is-above">+{{ "%.1f"|format(press.points_above_baseline) }}</dd>
+      </div>
+      <div>
+        <dt>vs last week</dt>
+        <dd class="{{ 'is-above' if delta >= 0 else 'is-below' }}">
+          {{ '+' if delta >= 0 else '−' }}{{ "%.1f"|format(delta|abs) }}
+        </dd>
+      </div>
+      {% if snapshot.degraded %}
+      <div>
+        <dt>coverage</dt>
+        <dd class="is-stale">{{ "%.0f"|format((1 - snapshot.stale_weight) * 100) }}% fresh</dd>
+      </div>
+      {% endif %}
+    </dl>
+  </div>
+
+  {# Five even columns, band name over its range. Stacking the two lines is what
+     lets all five ranges stay on the page in a third-width column — the earlier
+     single-line version had to hide four of them to fit. #}
+  <div class="gauge-labels-row">
+    {% for band in [
+        ('Calm', 'CALM', '&lt;110'),
+        ('Elevated', 'ELEVATED', '110–125'),
+        ('Acute', 'ACUTE', '125–150'),
+        ('Severe', 'SEVERE', '150–180'),
+        ('Extreme', 'EXTREME', '180+')] %}
+    <span class="gauge-label-item {% if snapshot.level_label == band[0] %}active{% endif %}">
+      <span class="gauge-band-name">{{ band[1] }}</span>
+      <span class="gauge-band-range">({{ band[2]|safe }})</span>
+    </span>
+    {% endfor %}
   </div>
 </section>
 
-<!-- Signals Column (Key Indicators) -->
-<section class="signal-stack" aria-labelledby="briefing-heading">
-  <h2 id="briefing-heading" class="sr-only">Key Indicators</h2>
-  <div class="signal-card">
-    <div class="signal-card-header">
-      <div class="gauge-title-with-icon">
-        <span class="card-icon-box card-icon-blue" aria-hidden="true">📈</span>
-        <h2 class="signal-card-title">Key Indicators</h2>
+{# Community sentiment, on the same 100-200 scale as the model score beside it,
+   so the crowd reading and the composite can be compared without arithmetic.
+
+   This is a live vote and it needs the database. When Postgres is unreachable
+   the block still renders — the marker still drags, the scale still reads —
+   and vote.js reports "Voting unavailable" rather than the page failing. The
+   server-rendered figures are a fallback in the other direction too: the page
+   is CDN-cached for 30 minutes, so vote.js refreshes them from the no-store
+   API as soon as it runs. #}
+<section class="gauge-card ppi-card" aria-labelledby="ppi-heading">
+  <div class="ppi-block"
+       id="ppi-block"
+       data-model-score="{{ "%.1f"|format(snapshot.score) }}"
+       data-available="{{ 'true' if sentiment.available else 'false' }}"
+       data-min-votes="{{ sentiment.min_votes }}">
+    <div class="ppi-header">
+      <div>
+        <h3 class="ppi-title" id="ppi-heading">Public Perception Index</h3>
+        <span class="card-sub">(reader opinion on the same {{ scale_min|int }}–{{ scale_max|int }} scale)</span>
       </div>
+    </div>
+
+    <div class="ppi-readout" id="ppi-readout">
+      <div class="ppi-figure">
+        <span class="ppi-value" id="ppi-value">
+          {{ "%.1f"|format(sentiment.index) if sentiment.index is not none else "—" }}
+        </span>
+        <span class="ppi-meta">
+          <span class="status-badge status-{{ sentiment.level_status or 'good' }}" id="ppi-level"
+                {% if not sentiment.level_label %}hidden{% endif %}>{{ (sentiment.level_label or '')|upper }}</span>
+          <span class="ppi-count" id="ppi-count">
+            {% if sentiment.votes > 0 %}
+              {{ sentiment.votes }} vote{{ '' if sentiment.votes == 1 else 's' }} this week
+            {% elif sentiment.available %}
+              0 votes this week
+            {% else %}
+              Voting unavailable
+            {% endif %}
+          </span>
+        </span>
+      </div>
+
+      <div class="ppi-gap" id="ppi-gap"
+           {% if sentiment.index is none %}hidden{% endif %}>
+        {% if sentiment.index is not none %}
+        {% set gap = sentiment.index - snapshot.score %}
+        <span class="ppi-gap-value {{ 'is-hotter' if gap > 0 else 'is-cooler' }}">
+          {{ '+' if gap > 0 else '' }}{{ "%.1f"|format(gap) }}
+        </span>
+        <span class="ppi-gap-label">vs model score</span>
+        {% endif %}
+      </div>
+    </div>
+
+    {# One marker does both jobs: at rest it shows where the crowd sits, and
+       dragging it turns it into your own answer on the very same scale. It
+       moves freely — the ballot is a position, not one of ten buttons — and
+       the wording under it names the decile the position falls in. #}
+    <div class="gauge-track-container ppi-track"
+         role="meter"
+         id="ppi-meter"
+         aria-valuenow="{{ "%.1f"|format(sentiment.index) if sentiment.index is not none else scale_min }}"
+         aria-valuemin="{{ scale_min }}"
+         aria-valuemax="{{ scale_max }}"
+         aria-label="Public Perception Index, community sentiment score on a {{ scale_min|int }} to {{ scale_max|int }} scale">
+      <div class="gauge-fill-bar ppi-fill" id="ppi-fill"
+           style="width: {{ sentiment.scale_pct if sentiment.scale_pct is not none else 0 }}%;"></div>
+      <div class="gauge-pointer ppi-model-marker" style="left: {{ scale_pct }}%;"
+           title="Model score: {{ '%.1f'|format(snapshot.score) }}"></div>
+      {# With no votes in yet there is no crowd position to show, but the marker
+         still has to be there to be dragged — park it at the midpoint and mute
+         it, rather than hiding the only way to vote. #}
+      <div class="gauge-pointer ppi-pointer{% if sentiment.scale_pct is none %} is-empty{% endif %}" id="ppi-pointer"
+           style="left: {{ sentiment.scale_pct if sentiment.scale_pct is not none else 50 }}%;"
+           role="slider"
+           tabindex="0"
+           aria-label="Drag to cast your read of this week, 1 (calm) to 10 (open war)"
+           aria-valuemin="1" aria-valuemax="10" aria-valuenow="5"
+           aria-valuetext="Not yet cast"
+           aria-describedby="ppi-hint"></div>
+    </div>
+
+    <div class="ppi-scale-ends" aria-hidden="true">
+      <span>100 · Calm</span>
+      <span>200 · Open war</span>
+    </div>
+
+    <p class="ppi-hint" id="ppi-hint">
+      <span id="ppi-hint-text">Drag the marker to where you think this week sits, then press
+      <strong>Cast your read</strong>.</span>
+    </p>
+
+    {# The vote control sits under the scale it acts on rather than in the card
+       header. As a header button it read as a page action; here it reads as the
+       last step of the thing you just dragged. #}
+    <button type="button" class="ppi-vote-btn" id="ppi-submit" disabled
+            aria-describedby="ppi-hint">
+      <span id="ppi-submit-label">Cast your read</span> <span aria-hidden="true">→</span>
+    </button>
+
+    <p class="ppi-error" id="ppi-error" role="alert" hidden></p>
+
+    <p class="ppi-footnote">
+      <span class="ppi-marker-key" aria-hidden="true"></span>
+      Hollow marker is the model score ({{ "%.1f"|format(snapshot.score) }}). Votes reset each week
+      and are anonymous.
+      <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw my vote</button>
+    </p>
+
+    <details class="ppi-privacy-toggle">
+      <summary>What we store when you vote</summary>
+      <p class="ppi-privacy">
+        Your 1–10 rating, the week, and a random ID this browser generates so you can
+        change or delete your vote. No account, no cookie, no IP address, no tracking,
+        nothing shared with anyone else. The random ID is kept in this browser's local
+        storage and means nothing outside this poll — clear it any time from your
+        browser settings.
+      </p>
+    </details>
+  </div>
+</section>
+
+</div><!-- /.merged-indices-col -->
+
+{# Signals: the readings that explain the composite, as label/value rows.
+
+   These were three paragraphs. Every figure they carried — the war-risk
+   multiple, transits against baseline, the reroute share — is stated exactly
+   once more in the Component Breakdown Matrix further down the page, with its
+   weight, stress score and source. So the prose was a second telling, and at a
+   third of the width it was three dense blocks against a gauge. The row form
+   answers "where do we stand" at a glance and leaves the detail to the table
+   that exists for detail. #}
+<section class="signal-stack" aria-labelledby="briefing-heading">
+  <h2 id="briefing-heading" class="sr-only">Executive briefing</h2>
+  <div class="signal-card">
+    <div class="signal-row">
+      <span class="signal-label"><span class="signal-icon" aria-hidden="true">⚠️</span> Threat Level</span>
       <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
     </div>
 
     <div class="signal-row">
-      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">⚠️</span> Threat Level</span>
-      <div class="signal-value-group">
-        <span class="status-text-bold status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
-        <span class="signal-subtext">Very high risk</span>
-      </div>
-    </div>
+      <span class="signal-label"><span class="signal-icon" aria-hidden="true">📊</span> Key Driver</span>
+      {# Component labels carry a parenthetical scope — "Hormuz Transits (all
+         commercial vessels)" — which wraps to three lines in a value column.
+         The qualifier is in the breakdown table; the name is what belongs here.
 
-    <div class="signal-row">
-      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">📊</span> Key Driver</span>
-      <div class="signal-value-group">
-        <span class="signal-value-title">{{ top_driver.component.label.split('(')[0]|trim if top_driver else '—' }}</span>
-        {%- if top_driver %} <span class="signal-value-green">+{{ "%.1f"|format(top_driver.contribution) }} pts ↗</span>{% endif %}
-      </div>
+         The contribution rides in this row rather than claiming one of its own:
+         it is an attribute of the driver, and a separate row needed an icon
+         outside the system's fixed glyph set. #}
+      <span class="signal-value" {% if top_driver %}title="{{ top_driver.component.label }}"{% endif %}>
+        {{ top_driver.component.label.split('(')[0]|trim if top_driver else '—' }}
+        {%- if top_driver %} <span class="signal-delta">+{{ "%.1f"|format(top_driver.contribution) }} pts</span>{% endif %}
+      </span>
     </div>
 
     {% if press.traffic is not none %}
     <div class="signal-row">
-      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">⚓</span> Chokepoint Transits</span>
-      <div class="signal-value-group">
-        <span class="signal-value-bold">{{ "%.0f"|format(press.traffic) }} <span class="unit-text">/wk</span></span>
-        {%- if press.traffic_drop_pct %} <span class="signal-subtext">{{ "%.0f"|format(press.traffic_drop_pct) }}% below baseline</span>{% endif %}
-      </div>
+      <span class="signal-label"><span class="signal-icon" aria-hidden="true">⚓</span> Chokepoint Transits</span>
+      <span class="signal-value signal-value-num">{{ "%.0f"|format(press.traffic) }}/wk
+        {%- if press.traffic_drop_pct %} <span class="signal-delta">({{ "%.0f"|format(press.traffic_drop_pct) }}% {{ press.traffic_direction }})</span>{% endif %}</span>
     </div>
     {% endif %}
 
     {% if press.war_risk_multiple %}
     <div class="signal-row">
-      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">🛡️</span> War-Risk Premium</span>
-      <div class="signal-value-group">
-        <span class="signal-value-bold">{{ "%.1f"|format(press.war_risk_multiple) }}×</span>
-        <span class="signal-subtext">vs baseline</span>
-      </div>
+      <span class="signal-label"><span class="signal-icon" aria-hidden="true">🛡️</span> War-Risk Premium</span>
+      <span class="signal-value signal-value-num">{{ "%.1f"|format(press.war_risk_multiple) }}× baseline</span>
     </div>
     {% endif %}
 
     {% if press.reroutes %}
     <div class="signal-row">
-      <span class="signal-label"><span class="card-icon-box card-icon-subtle" aria-hidden="true">🌐</span> Cape Reroutes</span>
-      <div class="signal-value-group">
-        <span class="signal-value-bold">{{ "%.0f"|format(press.reroutes) }}%</span>
-        <span class="signal-subtext">of total traffic</span>
-      </div>
+      <span class="signal-label"><span class="signal-icon" aria-hidden="true">🌍</span> Cape Reroutes</span>
+      <span class="signal-value signal-value-num">{{ "%.0f"|format(press.reroutes) }}% of traffic</span>
     </div>
     {% endif %}
   </div>
@@ -592,104 +739,7 @@
     and last-updated date above.
   </p>
 </section>
-  <!-- Executive Summary & Intelligence Dispatch -->
-  <section class="citation-card exec-summary-card-full" aria-labelledby="press-heading" style="margin: 20px 0 28px;">
-    <div class="citation-head">
-      <div>
-        <span class="badge-tag badge-tag-blue"><span aria-hidden="true">💡</span> EXECUTIVE SUMMARY</span>
-        <h2 id="press-heading" style="font-size: 1.25rem; font-weight: 700; margin: 4px 0;">Executive Summary &amp; Press Wire Dispatch</h2>
-        <p class="section-desc">
-          Every figure below is generated from the current index reading. News outlets and analysts may reproduce or
-          cite this summary under {{ license_name }} with attribution to MyDataLabs.
-        </p>
-      </div>
-      <button type="button" class="btn-primary" data-copy-target="press-story-container">
-        <span aria-hidden="true">📋</span> Copy full summary
-      </button>
-    </div>
-
-    <div id="press-story-container" class="press-story">
-      <div class="press-story-head">
-        <span>FOR IMMEDIATE RELEASE | EXECUTIVE SUMMARY</span>
-        <span>DATELINE: {{ press.week_start }}</span>
-      </div>
-
-      <h3 class="press-headline">
-        Hormuz Crisis Index at {{ "%.1f"|format(press.score) }} ({{ press.level }})
-        {%- if press.driver_label %} as {{ press.driver_label }} leads weekly stress{% endif %}
-      </h3>
-
-      <p>
-        <strong>{{ press.week_start }}</strong> — Geopolitical and maritime stress across
-        the Strait of Hormuz registered a <strong>{{ press.level_lower }} reading of
-        {{ "%.1f"|format(press.score) }}</strong> ({{ "%.1f"|format(press.points_above_baseline) }} points
-        above the 100.0 calm baseline) for the reporting week of {{ press.week_start }}, according to the
-        Hormuz Crisis Index (HMX-INDEX) published by MyDataLabs.
-      </p>
-
-      <p>
-        {% if press.driver_label %}
-        <strong>{{ press.driver_label }}</strong> was the largest contributor to the composite this week,
-        adding {{ "%.1f"|format(press.driver_points) }} points{% if press.driver_2_label %}, ahead of
-        {{ press.driver_2_label }} at {{ "%.1f"|format(press.driver_2_points) }} points{% endif %}.
-        {% endif %}
-        {% if press.traffic is not none and press.traffic_drop_pct %}
-        Commercial ship transits through the 21-nautical-mile chokepoint stand at
-        {{ "%.0f"|format(press.traffic) }} per week, {{ "%.1f"|format(press.traffic_drop_pct) }}%
-        {{ press.traffic_direction }} the baseline of {{ "%.0f"|format(press.traffic_baseline) }}.
-        {% endif %}
-        {% if press.ceasefire_months %}
-        Diplomatic truces in {{ press.ceasefire_months|join(', ') }} produced temporary operational lulls
-        without returning conditions to baseline.
-        {% endif %}
-      </p>
-
-      <p>
-        {% if press.brent is not none %}
-        Brent crude traded at <strong>${{ "%.2f"|format(press.brent) }} per barrel</strong>
-        ({{ "%.1f"|format(press.brent_change_pct|abs) }}% {{ press.brent_direction }} the
-        ${{ "%.2f"|format(press.brent_baseline) }} baseline).
-        {% endif %}
-        {% if press.war_risk is not none %}
-        Marine war-risk insurance surcharges stand at
-        <strong>{{ "%.2f"|format(press.war_risk) }}% of hull value</strong>{% if press.war_risk_multiple %},
-        {{ "%.1f"|format(press.war_risk_multiple) }} times the baseline rate{% endif %}.
-        {% endif %}
-        {% if press.reroutes %}
-        Reroutes via the Cape of Good Hope account for {{ "%.1f"|format(press.reroutes) }}% of regional traffic.
-        {% endif %}
-      </p>
-
-      <p>
-        The HMX-INDEX is a weekly composite of seven weighted market and shipping indicators scored
-        against a calm baseline week of {{ baseline_window.replace('/', ' to ') if baseline_window else 'January 2026' }}. Its full methodology, component weights and
-        cap thresholds are published on the <a href="{{ url_for('main.hormuz_index') }}#methodology" data-report-tab="methodology">Methodology tab</a>, and the underlying series is available
-        as open JSON and CSV.
-        {%- if press.degraded %}
-        MyDataLabs notes that part of the index weight is currently stale and this week's reading should
-        be treated as provisional.
-        {%- endif %}
-        <em>(Source: MyDataLabs Hormuz Crisis Index — mydatalabs.in)</em>
-      </p>
-    </div>
-
-    <div class="ticker-box">
-      <div class="ticker-body">
-        <span class="ticker-label">BROADCAST TICKER QUOTE:</span>
-        <div class="ticker-quote" id="ticker-quote-text">
-          "According to the MyDataLabs Hormuz Crisis Index (HMX-INDEX), geopolitical risk in the Strait of
-          Hormuz registered {{ snapshot.level_label }} {{ "%.1f"|format(snapshot.score) }} for the week of
-          {{ snapshot.week_start }} (baseline 100.0). Source: mydatalabs.in."
-        </div>
-      </div>
-      <button type="button" class="btn-secondary" data-copy-target="ticker-quote-text">
-        <span aria-hidden="true">📋</span> Copy ticker quote
-      </button>
-    </div>
-  </section>
-
 </div><!-- /#tab-dashboard -->
-
 
 <div id="tab-methodology" class="report-panel" role="tabpanel">
   {% include "_methodology.html" %}
