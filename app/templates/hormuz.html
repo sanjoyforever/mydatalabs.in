@@ -144,11 +144,13 @@
   <!-- Upper Section: Crisis Severity Scale Gauge -->
   <div class="merged-gauge-block model-gauge-block">
     <div class="gauge-card-header">
-      <div>
+      <div class="gauge-title-group">
         <h2 id="gauge-heading">Crisis Severity Gauge</h2>
-        <span class="card-sub">({{ scale_min|int }} = baseline)</span>
+        <span class="card-sub">(100–200 composite risk scale)</span>
       </div>
-      <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
+      <div class="gauge-header-right">
+        <span class="status-badge status-{{ snapshot.level_status }}"><span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}</span>
+      </div>
     </div>
 
     <div class="gauge-track-container"
@@ -164,8 +166,22 @@
       <div class="gauge-pointer" style="left: {{ scale_pct }}%;" title="Current score: {{ '%.1f'|format(snapshot.score) }}"></div>
     </div>
 
-    <div class="gauge-readout">
-      <div>
+    <div class="gauge-labels-row">
+      {% for band in [
+          ('Calm', 'CALM', '&lt;110'),
+          ('Elevated', 'ELEVATED', '110–125'),
+          ('Acute', 'ACUTE', '125–150'),
+          ('Severe', 'SEVERE', '150–180'),
+          ('Extreme', 'EXTREME', '180+')] %}
+      <span class="gauge-label-item {% if snapshot.level_label == band[0] %}active{% endif %}">
+        <span class="gauge-band-name">{{ band[1] }}</span>
+        <span class="gauge-band-range">({{ band[2]|safe }})</span>
+      </span>
+      {% endfor %}
+    </div>
+
+    <div class="gauge-readout-compact">
+      <div class="gauge-score-display">
         <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
         <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
       </div>
@@ -188,20 +204,6 @@
         {% endif %}
       </dl>
     </div>
-
-    <div class="gauge-labels-row">
-      {% for band in [
-          ('Calm', 'CALM', '&lt;110'),
-          ('Elevated', 'ELEVATED', '110–125'),
-          ('Acute', 'ACUTE', '125–150'),
-          ('Severe', 'SEVERE', '150–180'),
-          ('Extreme', 'EXTREME', '180+')] %}
-      <span class="gauge-label-item {% if snapshot.level_label == band[0] %}active{% endif %}">
-        <span class="gauge-band-name">{{ band[1] }}</span>
-        <span class="gauge-band-range">({{ band[2]|safe }})</span>
-      </span>
-      {% endfor %}
-    </div>
   </div>
 
   <div class="indices-divider"></div>
@@ -214,41 +216,23 @@
          data-available="{{ 'true' if sentiment.available else 'false' }}"
          data-min-votes="{{ sentiment.min_votes }}">
       <div class="ppi-header">
-        <div>
+        <div class="ppi-title-group">
           <h3 class="ppi-title" id="ppi-heading">Public Perception Index</h3>
-          <span class="card-sub">(reader opinion on the same {{ scale_min|int }}–{{ scale_max|int }} scale)</span>
+          <span class="card-sub">(1–10 reader opinion mapped to 100–200 scale)</span>
         </div>
-      </div>
 
-      <div class="ppi-readout" id="ppi-readout">
-        <div class="ppi-figure">
-          <span class="ppi-value" id="ppi-value">
-            {{ "%.1f"|format(sentiment.index) if sentiment.index is not none else "—" }}
-          </span>
-          <span class="ppi-meta">
+        <div class="ppi-header-actions">
+          <div class="ppi-figure-inline" id="ppi-readout">
+            <span class="ppi-value" id="ppi-value">
+              {{ "%.1f"|format(sentiment.index) if sentiment.index is not none else "—" }}
+            </span>
             <span class="status-badge status-{{ sentiment.level_status or 'good' }}" id="ppi-level"
                   {% if not sentiment.level_label %}hidden{% endif %}>{{ (sentiment.level_label or '')|upper }}</span>
-            <span class="ppi-count" id="ppi-count">
-              {% if sentiment.votes > 0 %}
-                {{ sentiment.votes }} vote{{ '' if sentiment.votes == 1 else 's' }} this week
-              {% elif sentiment.available %}
-                0 votes this week
-              {% else %}
-                Voting unavailable
-              {% endif %}
-            </span>
-          </span>
-        </div>
-
-        <div class="ppi-gap" id="ppi-gap"
-             {% if sentiment.index is none %}hidden{% endif %}>
-          {% if sentiment.index is not none %}
-          {% set gap = sentiment.index - snapshot.score %}
-          <span class="ppi-gap-value {{ 'is-hotter' if gap > 0 else 'is-cooler' }}">
-            {{ '+' if gap > 0 else '' }}{{ "%.1f"|format(gap) }}
-          </span>
-          <span class="ppi-gap-label">vs model score</span>
-          {% endif %}
+          </div>
+          <button type="button" class="ppi-vote-btn" id="ppi-submit" disabled
+                  aria-describedby="ppi-hint">
+            <span id="ppi-submit-label">Cast your read</span> <span aria-hidden="true">→</span>
+          </button>
         </div>
       </div>
 
@@ -278,35 +262,24 @@
         <span>200 · Open war</span>
       </div>
 
-      <div class="ppi-action-row">
+      <div class="ppi-footer-info">
         <p class="ppi-hint" id="ppi-hint">
-          <span id="ppi-hint-text">Drag the marker to where you think this week sits, then press
-          <strong>Cast your read</strong>.</span>
+          <span id="ppi-hint-text">Drag the marker to where you think this week sits, then press <strong>Cast your read</strong>.</span>
         </p>
 
-        <button type="button" class="ppi-vote-btn" id="ppi-submit" disabled
-                aria-describedby="ppi-hint">
-          <span id="ppi-submit-label">Cast your read</span> <span aria-hidden="true">→</span>
-        </button>
+        <p class="ppi-footnote">
+          <span class="ppi-marker-key" aria-hidden="true"></span>
+          Hollow marker is model score ({{ "%.1f"|format(snapshot.score) }}). Anonymous weekly vote.
+          <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw my vote</button>
+        </p>
       </div>
 
       <p class="ppi-error" id="ppi-error" role="alert" hidden></p>
 
-      <p class="ppi-footnote">
-        <span class="ppi-marker-key" aria-hidden="true"></span>
-        Hollow marker is the model score ({{ "%.1f"|format(snapshot.score) }}). Votes reset each week
-        and are anonymous.
-        <button type="button" class="ppi-withdraw" id="ppi-withdraw" hidden>Withdraw my vote</button>
-      </p>
-
       <details class="ppi-privacy-toggle">
         <summary>What we store when you vote</summary>
         <p class="ppi-privacy">
-          Your 1–10 rating, the week, and a random ID this browser generates so you can
-          change or delete your vote. No account, no cookie, no IP address, no tracking,
-          nothing shared with anyone else. The random ID is kept in this browser's local
-          storage and means nothing outside this poll — clear it any time from your
-          browser settings.
+          Your 1–10 rating, the week, and a random ID generated in local storage to allow updating or withdrawing your vote.
         </p>
       </details>
     </div>

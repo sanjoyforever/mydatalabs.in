@@ -787,7 +787,10 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 22px 24px;
+  padding: 20px 24px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
 }
 
 .merged-gauge-block {
@@ -798,22 +801,70 @@ main {
 .indices-divider {
   height: 1px;
   background: var(--border-subtle);
-  margin: 16px 0;
+  margin: 14px 0;
   flex-shrink: 0;
 }
 
-.ppi-action-row {
+.gauge-title-group h2,
+.ppi-title-group h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  margin: 0 0 2px;
+  font-weight: 700;
+}
+
+.ppi-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 8px 0 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.ppi-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ppi-figure-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gauge-readout-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 10px;
   flex-wrap: wrap;
 }
 
-.ppi-action-row .ppi-hint {
+.gauge-score-display {
+  display: flex;
+  align-items: baseline;
+}
+
+.ppi-footer-info {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ppi-footer-info .ppi-hint {
+  font-size: 0.76rem;
+  color: var(--text-sub);
   margin: 0;
-  flex: 1 1 200px;
+}
+
+.ppi-footer-info .ppi-footnote {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
 }
 
 .signal-stack { display: flex; }
