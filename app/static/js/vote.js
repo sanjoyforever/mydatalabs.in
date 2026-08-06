@@ -207,7 +207,11 @@
   }
 
   function track(name, params) {
-    if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
+    if (typeof window.trackEvent === 'function') {
+      window.trackEvent(name, params);
+    } else if (typeof window.gtag === 'function') {
+      window.gtag('event', name, Object.assign({ page_path: location.pathname }, params || {}));
+    }
   }
 
   /* --- Wiring ----------------------------------------------------------- */
@@ -223,7 +227,7 @@
        published number would bias the very thing being measured. */
     setSlider(myVote === null ? 5 : myVote);
     dialog.showModal();
-    track('ppi_dialog_open');
+    track('ppi_dialog_open', { report_slug: 'hormuz-index', page_path: location.pathname });
   });
 
   submitBtn.addEventListener('click', function () {
@@ -236,12 +240,17 @@
       .then(function (data) {
         render(data);
         dialog.close();
-        if (isEdit) {
-          track('ppi_vote_edited', { value: value, previous_value: previousValue, page_path: location.pathname });
-        } else {
-          track('ppi_vote_done', { value: value, page_path: location.pathname });
-        }
-        track('ppi_vote', { value: value, is_edit: isEdit, action: isEdit ? 'edited' : 'done', page_path: location.pathname });
+        var mapped = ratingToIndex(value);
+        var word = wordFor(value);
+        track('ppi_vote_submit', {
+          rating_value: value,
+          mapped_score: Math.round(mapped * 10) / 10,
+          sentiment_word: word,
+          is_edit: isEdit,
+          previous_value: previousValue,
+          report_slug: 'hormuz-index',
+          page_path: location.pathname
+        });
       })
       .catch(function (err) {
         showError(err.message);
@@ -260,7 +269,7 @@
         data.your_vote = null;
         render(data);
         dialog.close();
-        track('ppi_withdraw');
+        track('ppi_vote_withdraw', { report_slug: 'hormuz-index', page_path: location.pathname });
       })
       .catch(function (err) {
         showError(err.message);

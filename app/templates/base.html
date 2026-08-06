@@ -72,19 +72,26 @@
     var saved = localStorage.getItem("theme");
     if (saved) document.documentElement.setAttribute("data-theme", saved);
   })();
+
+  // Global GA4 Event Tracking Helper — resilient against ad-blockers and missing scripts
+  window.trackEvent = function (eventName, params) {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", eventName, Object.assign({ page_path: window.location.pathname }, params || {}));
+    }
+  };
 </script>
 
 {% if ga_measurement_id %}
-<!-- Google Analytics (GA4) — every page: page_view is automatic on load.
-     Custom events (copy actions, theme toggle, outbound clicks) are sent
-     from static/js/theme.js. -->
+<!-- Google Analytics 4 (GA4) Global Site Tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_measurement_id }}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
   gtag("js", new Date());
   gtag("config", "{{ ga_measurement_id }}", {
-    page_path: "{{ request.path }}"
+    page_path: "{{ request.path }}",
+    page_title: document.title,
+    send_page_view: true
   });
 </script>
 {% endif %}

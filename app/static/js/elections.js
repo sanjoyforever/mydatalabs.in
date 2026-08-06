@@ -145,6 +145,14 @@
     return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
   }
 
+  function track(name, params) {
+    if (typeof window.trackEvent === "function") {
+      window.trackEvent(name, params);
+    } else if (typeof window.gtag === "function") {
+      window.gtag("event", name, Object.assign({ page_path: location.pathname }, params || {}));
+    }
+  }
+
   // --- Tabs ---------------------------------------------------------------
 
   function switchTab(tabName, btn) {
@@ -164,6 +172,12 @@
     // Chart.js sizes to a hidden container as 0x0. Re-measure whenever a panel
     // becomes visible so a chart drawn while hidden is not stuck collapsed.
     if (dailyChart) dailyChart.resize();
+
+    track("report_tab_switch", {
+      report_slug: "lok-sabha-index",
+      tab_name: tabName,
+      page_path: location.pathname
+    });
   }
 
   // --- Theme --------------------------------------------------------------
@@ -429,6 +443,8 @@
   }
 
   function toggleSeries(index) {
+    var spec = SERIES_SPEC[index];
+    var isHiddenNow = !hiddenSeries.has(index);
     if (hiddenSeries.has(index)) hiddenSeries.delete(index);
     else hiddenSeries.add(index);
 
@@ -438,11 +454,22 @@
       autoscaleY();
     }
     renderSeriesLegend();
+
+    track("chart_series_toggle", {
+      series_name: spec ? spec.label : "Series " + index,
+      series_index: index,
+      action: isHiddenNow ? "hide" : "show",
+      page_path: location.pathname
+    });
   }
 
   function toggleEvents() {
     showEvents = $("chk-events").checked;
     if (dailyChart) dailyChart.update("none");
+    track("chart_events_toggle", {
+      show_events: showEvents,
+      page_path: location.pathname
+    });
   }
 
   function renderEventLegend(categories) {
@@ -467,10 +494,16 @@
   }
 
   function toggleCategory(name) {
+    var isHiddenNow = !hiddenCategories.has(name);
     if (hiddenCategories.has(name)) hiddenCategories.delete(name);
     else hiddenCategories.add(name);
     renderEventLegend(globalEventCategories);
     if (dailyChart) dailyChart.update("none");
+    track("chart_event_filter", {
+      category_name: name,
+      action: isHiddenNow ? "hide" : "show",
+      page_path: location.pathname
+    });
   }
 
   function renderDailyChart(data) {
@@ -697,6 +730,12 @@
     root.querySelectorAll(".range-btn[data-range]").forEach(function (b) { b.classList.remove("active"); });
     if (btn) btn.classList.add("active");
 
+    track("chart_range_select", {
+      range_value: String(days),
+      chart_name: "lok_sabha_daily_forecast",
+      page_path: location.pathname
+    });
+
     if (days === "all") {
       dailyChart.resetZoom();
       afterViewportChange();
@@ -714,6 +753,11 @@
     var allBtn = root.querySelector('.range-btn[data-range="all"]');
     if (allBtn) allBtn.classList.add("active");
     afterViewportChange();
+
+    track("chart_reset_zoom", {
+      chart_name: "lok_sabha_daily_forecast",
+      page_path: location.pathname
+    });
   }
 
   // --- Horizontal scrollbar -----------------------------------------------

@@ -4,13 +4,12 @@
   var root = document.documentElement;
 
   // --- Analytics -------------------------------------------------------
-  // GA4 is loaded in base.html on every page (page_view fires automatically
-  // on load). This wraps gtag so a missing/blocked GA script never breaks a
-  // click handler — an ad blocker dropping analytics must not also break
-  // the copy button it's attached to.
+  // Safe GA4 tracking wrapper — delegates to global window.trackEvent or gtag
   function track(name, params) {
-    if (typeof window.gtag === "function") {
-      window.gtag("event", name, params || {});
+    if (typeof window.trackEvent === "function") {
+      window.trackEvent(name, params);
+    } else if (typeof window.gtag === "function") {
+      window.gtag("event", name, Object.assign({ page_path: location.pathname }, params || {}));
     }
   }
 
@@ -35,6 +34,36 @@
       track("theme_toggle", { theme: next });
     });
   }
+
+  // --- Navigation Clicks ---------------------------------------------------
+  document.addEventListener("click", function (e) {
+    var navLink = e.target.closest ? e.target.closest(".site-nav a, .footer-links a, .brand") : null;
+    if (!navLink || !navLink.href) return;
+    var isFooter = !!navLink.closest(".site-footer");
+    var isHeader = !!navLink.closest(".site-header");
+    track("nav_click", {
+      nav_label: (navLink.textContent || "").trim(),
+      nav_target: navLink.getAttribute("href"),
+      nav_location: isHeader ? "header" : (isFooter ? "footer" : "body")
+    });
+  });
+
+  // --- Data Download Clicks ------------------------------------------------
+  document.addEventListener("click", function (e) {
+    var link = e.target.closest ? e.target.closest("[data-track-download], a[href*='.csv'], a[href*='.json']") : null;
+    if (!link) return;
+    var href = link.getAttribute("href") || link.getAttribute("data-href") || "";
+    if (href.endsWith(".csv") || href.endsWith(".json") || link.hasAttribute("data-track-download")) {
+      var filename = href.split("/").pop() || href;
+      var ext = filename.split(".").pop() || "file";
+      track("file_download", {
+        file_name: filename,
+        file_extension: ext,
+        link_url: href,
+        dataset_name: link.getAttribute("data-dataset") || "HMX-INDEX"
+      });
+    }
+  });
 
   // --- Categories dropdown -------------------------------------------------
   // Previously CSS :hover / :focus-within only, which left keyboard users
@@ -195,8 +224,13 @@
 
     reportTabs.forEach(function (btn) {
       btn.addEventListener("click", function () {
-        showTab(btn.getAttribute("data-report-tab"), true);
-        track("report_tab", { tab: btn.getAttribute("data-report-tab") });
+        var tabName = btn.getAttribute("data-report-tab");
+        showTab(tabName, true);
+        track("report_tab_switch", {
+          report_slug: location.pathname.replace(/^\//, "") || "home",
+          tab_name: tabName,
+          page_path: location.pathname
+        });
       });
     });
 

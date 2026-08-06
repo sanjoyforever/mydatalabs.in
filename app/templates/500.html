@@ -3,6 +3,11 @@
 {% block robots %}noindex, follow{% endblock %}
 
 {% block content %}
+<script>
+  if (typeof window.trackEvent === "function") {
+    window.trackEvent("exception", { description: "500_server_error", fatal: true });
+  }
+</script>
 <section class="error-page">
   <span class="badge-tag">500</span>
   <h1>Something went wrong on our side</h1>

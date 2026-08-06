@@ -58,21 +58,23 @@
     <div class="endpoint-card">
       <div class="endpoint-head">
         <span class="method-pill">GET</span>
-        <code>/api/hormuz-index/data.json</code>
+        <a href="/api/hormuz-index/data.json" target="_blank" data-track-download data-dataset="HMX-INDEX"><code>/api/hormuz-index/data.json</code></a>
       </div>
       <p>Current snapshot, full per-component breakdown, baseline values, correlation matrix and the
         complete weekly history.</p>
       <pre class="code-block"><code>curl {{ origin }}/api/hormuz-index/data.json</code></pre>
+      <a href="/api/hormuz-index/data.json" class="btn-secondary btn-sm" target="_blank" data-track-download data-dataset="HMX-INDEX" style="display:inline-block; margin-top:8px;">Download JSON</a>
     </div>
 
     <div class="endpoint-card">
       <div class="endpoint-head">
         <span class="method-pill">GET</span>
-        <code>/api/hormuz-index/data.csv</code>
+        <a href="/api/hormuz-index/data.csv" download data-track-download data-dataset="HMX-INDEX"><code>/api/hormuz-index/data.csv</code></a>
       </div>
       <p>Weekly history with raw component values, one row per week — ready for a spreadsheet or a
         dataframe.</p>
       <pre class="code-block"><code>curl -O {{ origin }}/api/hormuz-index/data.csv</code></pre>
+      <a href="/api/hormuz-index/data.csv" class="btn-secondary btn-sm" download data-track-download data-dataset="HMX-INDEX" style="display:inline-block; margin-top:8px;">Download CSV</a>
     </div>
 
     <div class="endpoint-card">

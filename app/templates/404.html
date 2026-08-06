@@ -3,6 +3,11 @@
 {% block robots %}noindex, follow{% endblock %}
 
 {% block content %}
+<script>
+  if (typeof window.trackEvent === "function") {
+    window.trackEvent("exception", { description: "404_not_found", fatal: false });
+  }
+</script>
 <section class="error-page">
   <span class="badge-tag">404</span>
   <h1>That page does not exist</h1>
