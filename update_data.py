@@ -50,7 +50,9 @@ def stamp_manual_dates() -> None:
 def update_index(persist: bool) -> int:
     print("=" * 62)
     print("Hormuz Crisis Index (HMX-INDEX)")
-    snapshot = hormuz.compute_snapshot(persist=persist)
+    # allow_network=True: this is the one place that is supposed to wait on
+    # yfinance. Every page render reads what this run writes.
+    snapshot = hormuz.compute_snapshot(persist=persist, allow_network=True)
 
     print(f"  Week of {snapshot.week_start}: {snapshot.score:.1f} ({snapshot.level_label})")
     print(f"  Storage: {storage.storage_backend()}")
@@ -74,6 +76,12 @@ def update_index(persist: bool) -> int:
             f"\n  WARNING: {snapshot.stale_weight * 100:.0f}% of index weight is stale."
             " This week's score is provisional."
         )
+
+    # Rebuild the per-route artifacts the site serves. Without this the pages
+    # keep rendering the previous run's live values and perception series.
+    print("\n  Precomputing route artifacts:")
+    from app import precomputed
+    precomputed.build_all(verbose=True)
 
     if persist:
         if snapshot.persisted:
@@ -103,36 +111,9 @@ def report_incident_dataset() -> None:
           " nothing to the composite score and is not served by the API.")
 
 
-def push_to_github() -> int:
-    """Commit the updated data files and push, which is what triggers the
-    Vercel deploy. Only ever touches app/data/*.json — a broad `git add .`
-    here would sweep up whatever unrelated edit happens to be sitting in the
-    working tree when the weekly cron fires."""
-    print("=" * 62)
-    print("Committing and pushing to GitHub...")
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    commit_msg = f"Automated weekly data update [{timestamp}]"
-
-    data_files = [
-        os.path.join("app", "data", "hormuz_history.json"),
-        os.path.join("app", "data", "vessel_attacks.json"),
-    ]
-    try:
-        subprocess.run(["git", "add", *data_files], cwd=ROOT_DIR, check=True)
-        status = subprocess.run(
-            ["git", "status", "--porcelain", *data_files],
-            cwd=ROOT_DIR, capture_output=True, text=True, check=True,
-        )
-        if not status.stdout.strip():
-            print("  No data changes to commit; repository is already up to date.")
-            return 0
-        subprocess.run(["git", "commit", "-m", commit_msg], cwd=ROOT_DIR, check=True)
-        subprocess.run(["git", "push", "origin", "main"], cwd=ROOT_DIR, check=True)
-        print("  Pushed to GitHub -> Vercel deployment triggered.")
-        return 0
-    except subprocess.CalledProcessError as e:
-        print(f"  ERROR: git command failed: {e}")
-        return 1
+# push_to_github() lived here. It is now push_to_prod.py, so that publishing is
+# a separate, deliberate command rather than a flag on the updater — and so the
+# "only ever add the data paths, never `git add .`" rule has a single home.
 
 
 def main() -> int:
@@ -154,7 +135,11 @@ def main() -> int:
     report_incident_dataset()
 
     if code == 0 and not args.dry_run and not args.local:
-        code = push_to_github()
+        # Publishing moved to push_to_prod.py. This path is kept so the
+        # documented `python update_data.py` invocation still deploys, but the
+        # git logic now lives in one place instead of two.
+        from push_to_prod import push_to_prod
+        code = push_to_prod()
 
     print("=" * 62)
     return code

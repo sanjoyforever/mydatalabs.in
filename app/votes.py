@@ -173,6 +173,15 @@ def _empty(week_start: str) -> dict:
     }
 
 
+def empty_summary(week_start: str | None = None) -> dict:
+    """A zero-vote summary shaped like a real one, without touching the DB.
+
+    Lets a page render the vote block's initial state when the precomputed
+    artifact is missing. vote.js replaces it with live figures on load.
+    """
+    return _empty(week_start or current_week_start())
+
+
 def _decorate(result: dict) -> dict:
     """Attach the label/position fields the gauge needs."""
     if result["index"] is not None:
@@ -230,16 +239,42 @@ def _summarise(cur, week_start: str, voter_hash: str | None) -> dict:
     return _decorate(summary)
 
 
+import threading
+import time
+
+_read_cache: dict = {}
+_read_cache_lock = threading.Lock()
+READ_CACHE_TTL = 60.0
+
+
+def clear_read_cache():
+    with _read_cache_lock:
+        _read_cache.clear()
+
+
 def get_summary(week_start: str | None = None, voter_hash: str | None = None) -> dict:
     """Aggregate for one week. Never raises — a dead DB disables the feature."""
     week_start = week_start or current_week_start()
     if not db.is_configured():
         return _empty(week_start)
 
+    # Only cache un-authenticated/general summary queries (voter_hash=None)
+    if not voter_hash:
+        cache_key = f"summary:{week_start}"
+        now = time.time()
+        with _read_cache_lock:
+            cached_val, fetched_at = _read_cache.get(cache_key, (None, 0))
+            if cached_val is not None and (now - fetched_at) < READ_CACHE_TTL:
+                return dict(cached_val)
+
     try:
         db.ensure_schema(SCHEMA)
         with db.cursor() as cur:
-            return _summarise(cur, week_start, voter_hash)
+            res = _summarise(cur, week_start, voter_hash)
+            if not voter_hash:
+                with _read_cache_lock:
+                    _read_cache[f"summary:{week_start}"] = (res, time.time())
+            return res
     except Exception:
         # Sentiment is a decoration on a data page. It must never be the reason
         # the index itself fails to render.
@@ -259,6 +294,14 @@ def get_history(weeks: int = HISTORY_WEEKS) -> list[dict]:
     """
     if not db.is_configured():
         return []
+
+    cache_key = f"history:{weeks}"
+    now = time.time()
+    with _read_cache_lock:
+        cached_val, fetched_at = _read_cache.get(cache_key, (None, 0))
+        if cached_val is not None and (now - fetched_at) < READ_CACHE_TTL:
+            return list(cached_val)
+
     try:
         db.ensure_schema(SCHEMA)
         with db.cursor() as cur:
@@ -288,6 +331,10 @@ def get_history(weeks: int = HISTORY_WEEKS) -> list[dict]:
             "mean_rating": round(mean, 2) if published else None,
             "index": to_index(mean) if published else None,
         })
+
+    with _read_cache_lock:
+        _read_cache[cache_key] = (series, time.time())
+
     return series
 
 
@@ -341,6 +388,7 @@ def cast_vote(rating: float, voter_hash: str, origin_hash: str,
             (INDEX_KEY, week_start, rating, voter_hash, origin_hash),
         )
 
+        clear_read_cache()
         return _summarise(cur, week_start, voter_hash)
 
 
@@ -358,4 +406,5 @@ def withdraw_vote(voter_hash: str, week_start: str | None = None) -> dict:
             """,
             (INDEX_KEY, week_start, voter_hash),
         )
+        clear_read_cache()
         return _summarise(cur, week_start, voter_hash)

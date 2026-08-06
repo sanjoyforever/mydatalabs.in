@@ -103,13 +103,6 @@
 
   // --- 1. Weekly trend trajectory -----------------------------------------
   register("echart-trend-container", function (p) {
-    var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    var fmtDateShort = function (iso) {
-      var parts = iso.split("-");
-      if (parts.length !== 3) return iso;
-      return parts[2] + "-" + MONTHS[parseInt(parts[1], 10) - 1];
-    };
-
     var truceLines = (DATA.trend.ceasefires || []).map(function (d) {
       return {
         xAxis: d,
@@ -134,7 +127,7 @@
             var v = (s.value === null || s.value === undefined) ? "no votes" : s.value;
             return s.seriesName + ": <strong>" + v + "</strong>";
           });
-          return "<strong>Week of " + fmtDateShort(params[0].name) + "</strong><br/>" + rows.join("<br/>");
+          return "<strong>Week of " + params[0].name + "</strong><br/>" + rows.join("<br/>");
         }
       }, tooltipBase(p)),
       grid: { top: 35, right: 30, bottom: 45, left: 55 },
@@ -142,7 +135,7 @@
         type: "category",
         data: DATA.trend.dates,
         axisLine: { lineStyle: { color: p.grid } },
-        axisLabel: { color: p.text, fontSize: 11, fontFamily: "JetBrains Mono", formatter: fmtDateShort }
+        axisLabel: { color: p.text, fontSize: 11, fontFamily: "JetBrains Mono" }
       },
       yAxis: {
         type: "value",

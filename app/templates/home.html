@@ -86,7 +86,7 @@
 
       <div class="spotlight-actions">
         <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">Explore dashboard</a>
-        <a href="{{ url_for('main.methodology') }}" class="btn-secondary">How it is calculated</a>
+        <a href="{{ url_for('main.hormuz_index') }}#methodology" class="btn-secondary">How it is calculated</a>
       </div>
     </div>
 
@@ -142,7 +142,7 @@
       <div>
         <div class="report-card-top">
           <span class="report-card-cat">{{ report.category }}</span>
-          <span class="status-badge status-{{ snapshot.level_status }}">
+          <span class="status-badge status-{{ report.status }}">
             <span class="status-dot" aria-hidden="true"></span>LIVE
           </span>
         </div>
@@ -151,8 +151,10 @@
       </div>
       <div class="report-card-footer">
         <div>
-          <span class="report-score">{{ "%.1f"|format(snapshot.score) }}</span>
-          <span class="report-score-unit">score</span>
+          {% if report.value %}
+          <span class="report-score">{{ report.value }}</span>
+          <span class="report-score-unit">{{ report.unit }}</span>
+          {% endif %}
         </div>
         <a href="{{ report.url }}" class="btn-secondary btn-sm">Access report <span aria-hidden="true">→</span></a>
       </div>

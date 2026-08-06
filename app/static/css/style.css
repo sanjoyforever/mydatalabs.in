@@ -56,6 +56,16 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* Single source of truth for the site's content column. Set from the
+     projection dashboard's original 1340px: the widest thing on the site is a
+     time-series chart, and 140px of extra canvas is 140px more of readable
+     series. Every full-width container reads this, so the header, the content
+     column and the footer cannot drift apart.
+
+     Prose pages deliberately opt out below (main:has(> .prose-page)) — a
+     paragraph set to 1340px is not more readable, it is less. */
+  --content-max: 1340px;
 }
 
 :root[data-theme="light"] {
@@ -119,7 +129,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); margin: 0 0 0.4em; font-weigh
 code, pre, .font-mono { font-family: var(--font-mono); }
 
 main {
-  max-width: 1200px;
+  max-width: var(--content-max);
   margin: 0 auto;
   padding: 32px 24px 80px;
 }
@@ -1082,7 +1092,7 @@ main {
 }
 
 .footer-content {
-  max-width: 1200px;
+  max-width: var(--content-max);
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -1168,7 +1178,7 @@ main:focus { outline: none; }
 .footer-brand { font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
 .footer-blurb { margin: 6px 0 0; color: var(--text-sub); max-width: 450px; }
 .footer-legal {
-  max-width: 1200px;
+  max-width: var(--content-max);
   margin: 24px auto 0;
   padding-top: 16px;
   border-top: 1px solid var(--border-subtle);
@@ -2386,3 +2396,53 @@ background: linear-gradient(90deg,
    agent's `[hidden] { display: none }` and leaves elements the templates and
    vote.js believe are hidden still painted. Restate it with the weight to win. */
 [hidden] { display: none !important; }
+
+/* --- Report tabs (Dashboard / Methodology) -------------------------------
+   The methodology used to be its own page. It documents one index's formula
+   and constants, so it now sits beside the number it explains. */
+.report-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 24px;
+  padding: 4px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: var(--surface-card);
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.report-tab {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-sub);
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.report-tab:hover { color: var(--text-main); }
+
+.report-tab.active {
+  background: var(--surface-card-hover);
+  color: var(--text-main);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+.report-tab:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+.report-panel { display: none; }
+.report-panel.active { display: block; }
+
+/* The methodology partial keeps its own prose measure inside the tab, so it
+   does not inherit the dashboard's full-width column. */
+.report-panel .prose-page { max-width: 1080px; margin: 0 auto; }

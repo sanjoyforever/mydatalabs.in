@@ -81,6 +81,18 @@
   <span aria-current="page">Hormuz Crisis Index</span>
 </nav>
 
+{# Dashboard and methodology are one page in two tabs. The methodology is not a
+   general document — it describes this index's formula and constants — so it
+   belongs beside the number it explains rather than one navigation hop away. #}
+<nav class="report-tabs" role="tablist" aria-label="Report sections">
+  <button type="button" class="report-tab active" role="tab" aria-selected="true"
+          aria-controls="tab-dashboard" data-report-tab="dashboard">Dashboard</button>
+  <button type="button" class="report-tab" role="tab" aria-selected="false"
+          aria-controls="tab-methodology" data-report-tab="methodology">Methodology</button>
+</nav>
+
+<div id="tab-dashboard" class="report-panel active" role="tabpanel">
+
 <!-- Dashboard Header Bar -->
 <div class="dash-header-bar">
   <div class="dash-title-group">
@@ -500,7 +512,7 @@
     <h2 id="components-heading">Component Breakdown Matrix</h2>
     <span class="section-desc">
       Composite = 100 + ∑(weight × stress score). Full derivation on the
-      <a href="{{ url_for('main.methodology') }}">methodology page</a>.
+      <a href="{{ url_for('main.hormuz_index') }}#methodology">methodology page</a>.
     </span>
   </div>
 
@@ -598,7 +610,7 @@
   </div>
 
   <p class="method-cta">
-    <a href="{{ url_for('main.methodology') }}" class="btn-secondary">Full methodology, cap rationale &amp; limitations →</a>
+    <a href="{{ url_for('main.hormuz_index') }}#methodology" class="btn-secondary">Full methodology, cap rationale &amp; limitations →</a>
   </p>
 </section>
 
@@ -673,7 +685,7 @@
     <p>
       The HMX-INDEX is a weekly composite of seven weighted market and shipping indicators scored
       against a calm baseline week of {{ baseline_window.replace('/', ' to ') }}. Its full methodology, component weights and
-      cap thresholds are published at mydatalabs.in/methodology, and the underlying series is available
+      cap thresholds are published at mydatalabs.in/hormuz-index#methodology, and the underlying series is available
       as open JSON and CSV.
       {%- if press.degraded %}
       MyDataLabs notes that part of the index weight is currently stale and this week's reading should
@@ -697,6 +709,12 @@
     </button>
   </div>
 </section>
+</div><!-- /#tab-dashboard -->
+
+<div id="tab-methodology" class="report-panel" role="tabpanel">
+  {% include "_methodology.html" %}
+</div>
+
 {% endblock %}
 
 {% block extra_scripts %}

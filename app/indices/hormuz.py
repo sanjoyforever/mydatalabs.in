@@ -16,6 +16,9 @@ back to baseline — a value we could not fetch is not a value that is calm.
 """
 from __future__ import annotations
 
+import os
+import threading
+import time
 from datetime import date, datetime, timedelta, timezone
 
 from app.scoring import Component, CompositeResult, compute_composite
@@ -168,22 +171,103 @@ COMPONENTS_BY_KEY = {c.key: c for c in COMPONENTS}
 LIVE_STALE_AFTER_DAYS = 2
 
 
-def fetch_live_values() -> dict[str, float | None]:
-    """Fetch the free/live-sourced components via yfinance. Manual-only keys
-    come back as None here; the caller fills them from manual_overrides."""
+_live_cache: dict = {"data": None, "fetched_at": 0.0}
+_live_cache_lock = threading.Lock()
+
+
+# Cold yfinance fetches measure ~5.6s for the three tickers in parallel. A
+# tighter budget does not make the page faster, it makes it wrong: Brent, TTF
+# gas and VIX are 50% of the index weight between them, and every one of them
+# times out at 2.5s, so the composite silently falls back on stored values for
+# half its inputs. This runs at most once per LIVE_CACHE_TTL_SECONDS per
+# instance — and behind routes.get_snapshot()'s own hour-long cache — so the
+# cost is paid rarely and buys a correct headline number.
+LIVE_FETCH_TIMEOUT_SECONDS = float(os.environ.get("LIVE_FETCH_TIMEOUT_SECONDS", "8"))
+LIVE_CACHE_TTL_SECONDS = int(os.environ.get("LIVE_CACHE_TTL_SECONDS", "900"))
+
+
+def fetch_live_values(
+    timeout_sec: float = LIVE_FETCH_TIMEOUT_SECONDS,
+    allow_network: bool = False,
+) -> dict[str, float | None]:
+    """The free/live-sourced components. Manual-only keys come back as None
+    here; the caller fills them from manual_overrides.
+
+    `allow_network` defaults to False, so this is a disk read on the request
+    path: the values come from the artifact the last update run wrote. Only
+    the updater (and anything explicitly asking) goes out to yfinance, because
+    a page render that waits on a third-party API makes the site's latency a
+    property of somebody else's uptime. A missing artifact yields all-None,
+    which compute_snapshot already handles by carrying the previous week's
+    reading forward.
+    """
+    if not allow_network:
+        from app import precomputed
+
+        stored = precomputed.load("hormuz-index").get("live_values") or {}
+        return {k: stored.get(k) for k in YFINANCE_TICKERS}
+
+    now = time.time()
+    with _live_cache_lock:
+        if _live_cache["data"] is not None and (now - _live_cache["fetched_at"]) < LIVE_CACHE_TTL_SECONDS:
+            return dict(_live_cache["data"])
+
     try:
         import yfinance as yf
     except ImportError:
         return {k: None for k in YFINANCE_TICKERS}
 
-    values: dict[str, float | None] = {}
-    for key, ticker in YFINANCE_TICKERS.items():
+    import concurrent.futures
+
+    def _fetch_one(item):
+        key, ticker = item
         try:
-            hist = yf.Ticker(ticker).history(period="5d")
-            values[key] = float(hist["Close"].dropna().iloc[-1]) if not hist.empty else None
+            hist = yf.Ticker(ticker).history(period="5d", timeout=timeout_sec)
+            if not hist.empty and "Close" in hist:
+                val = float(hist["Close"].dropna().iloc[-1])
+                return key, val
         except Exception:
-            values[key] = None
+            pass
+        return key, None
+
+    values: dict[str, float | None] = {k: None for k in YFINANCE_TICKERS}
+
+    # The executor is shut down with wait=False deliberately, and is therefore
+    # not used as a context manager. `with ThreadPoolExecutor(...)` calls
+    # shutdown(wait=True) on the way out, which blocks until every yfinance
+    # call has returned — so the as_completed timeout below would bound nothing
+    # and a hung ticker would still hold the request open for its full socket
+    # timeout. Abandoning stragglers is the point: a component we could not
+    # fetch in time is reported as None, which the caller already handles by
+    # falling back to the stored value rather than to baseline.
+    executor = concurrent.futures.ThreadPoolExecutor(max_workers=len(YFINANCE_TICKERS))
+    try:
+        future_map = {
+            executor.submit(_fetch_one, item): item[0]
+            for item in YFINANCE_TICKERS.items()
+        }
+        try:
+            for future in concurrent.futures.as_completed(future_map, timeout=timeout_sec + 0.5):
+                try:
+                    k, val = future.result(timeout=0.1)
+                    values[k] = val
+                except Exception:
+                    pass
+        except concurrent.futures.TimeoutError:
+            pass
+    finally:
+        executor.shutdown(wait=False, cancel_futures=True)
+
+    # Only cache a result that actually got something. Caching an all-None
+    # sweep for 15 minutes would turn one bad network moment into a quarter
+    # hour of the dashboard falling back on every live component at once.
+    if any(v is not None for v in values.values()):
+        with _live_cache_lock:
+            _live_cache["data"] = values
+            _live_cache["fetched_at"] = now
+
     return values
+
 
 
 def _current_week_start() -> str:
@@ -199,7 +283,7 @@ def _days_old(iso_date: str) -> int | None:
         return None
 
 
-def compute_snapshot(persist: bool = False) -> CompositeResult:
+def compute_snapshot(persist: bool = False, allow_network: bool = False) -> CompositeResult:
     """Fetch live values, merge with manual overrides, and score the composite.
 
     Values that cannot be fetched are carried forward from the most recent
@@ -222,7 +306,7 @@ def compute_snapshot(persist: bool = False) -> CompositeResult:
     # any hand-entered override.
     carried = {**latest_raw, **manual_overrides}
 
-    live = fetch_live_values()
+    live = fetch_live_values(allow_network=allow_network)
     today_iso = date.today().isoformat()
 
     current_values: dict[str, float | None] = {}

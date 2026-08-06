@@ -161,4 +161,49 @@
       page_path: location.pathname
     });
   });
+
+  /* --- Report tabs ------------------------------------------------------
+     Dashboard / Methodology on /hormuz-index. The hash is kept in sync so
+     /hormuz-index#methodology deep-links straight to the methodology tab —
+     that is the target of the /methodology redirect, of the event log's
+     source links, and of any citation made while it was its own page. */
+  var reportTabs = Array.prototype.slice.call(document.querySelectorAll("[data-report-tab]"));
+  if (reportTabs.length) {
+    var showTab = function (name, pushHash) {
+      var matched = false;
+      reportTabs.forEach(function (btn) {
+        var isTarget = btn.getAttribute("data-report-tab") === name;
+        btn.classList.toggle("active", isTarget);
+        btn.setAttribute("aria-selected", isTarget ? "true" : "false");
+        if (isTarget) matched = true;
+      });
+      if (!matched) return false;
+
+      Array.prototype.forEach.call(document.querySelectorAll(".report-panel"), function (panel) {
+        panel.classList.toggle("active", panel.id === "tab-" + name);
+      });
+
+      if (pushHash) {
+        // replaceState, not a hash assignment: setting location.hash would
+        // scroll to the panel and push an entry per tab click.
+        history.replaceState(null, "", name === "dashboard" ? location.pathname : "#" + name);
+      }
+      // Charts sized while their panel was display:none come out 0x0.
+      window.dispatchEvent(new Event("resize"));
+      return true;
+    };
+
+    reportTabs.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        showTab(btn.getAttribute("data-report-tab"), true);
+        track("report_tab", { tab: btn.getAttribute("data-report-tab") });
+      });
+    });
+
+    if (location.hash) showTab(location.hash.slice(1), false);
+    window.addEventListener("hashchange", function () {
+      if (location.hash) showTab(location.hash.slice(1), false);
+    });
+  }
+
 })();

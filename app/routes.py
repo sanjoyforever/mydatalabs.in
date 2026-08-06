@@ -9,7 +9,7 @@ from datetime import date, datetime
 
 from flask import Blueprint, Response, abort, jsonify, redirect, render_template, request
 
-from app import scoring, storage, votes
+from app import precomputed, scoring, storage, votes
 from app.indices import hormuz
 
 bp = Blueprint("main", __name__)
@@ -43,6 +43,15 @@ REPORTS = [
         "url": "/hormuz-index",
         "live": True,
     },
+    {
+        "slug": "lok-sabha-index",
+        "title": "Lok Sabha Projection Engine",
+        "ticker": "LS-PROJ",
+        "blurb": "Daily 543-seat Lok Sabha projection from CVoter's option-level public opinion trackers, calibrated on the 2019 and 2024 general election results.",
+        "category": "Geo Politics",
+        "url": "/lok-sabha-index",
+        "live": True,
+    },
 ]
 
 # Internal event log. These entries are MyDataLabs' own annotations of the
@@ -56,7 +65,7 @@ GEOPOLITICAL_EVENTS = [
         "description": "Composite score anchored at 100.0 baseline across normal non-crisis maritime operations.",
         "impact": "Neutral",
         "source_name": "MyDataLabs methodology note",
-        "source_url": "/methodology",
+        "source_url": "/hormuz-index#methodology",
     },
     {
         "date": "2026-02-23",
@@ -64,7 +73,7 @@ GEOPOLITICAL_EVENTS = [
         "description": "Increased naval advisory presence reported. War-risk insurance premiums increased by +50%.",
         "impact": "Moderate (+9.5 pts)",
         "source_name": "MyDataLabs internal event log",
-        "source_url": "/methodology",
+        "source_url": "/hormuz-index#methodology",
     },
     {
         "date": "2026-03-02",
@@ -72,7 +81,7 @@ GEOPOLITICAL_EVENTS = [
         "description": "Tankers reporting GPS spoofing and elevated spoofing warnings near Qeshm Island.",
         "impact": "High (+8.4 pts)",
         "source_name": "MyDataLabs internal event log",
-        "source_url": "/methodology",
+        "source_url": "/hormuz-index#methodology",
     },
     {
         "date": "2026-03-09",
@@ -80,7 +89,7 @@ GEOPOLITICAL_EVENTS = [
         "description": "Naval live-fire exercises announced in international shipping lanes. Cape reroutes rise to 21%.",
         "impact": "High (+4.7 pts)",
         "source_name": "MyDataLabs internal event log",
-        "source_url": "/methodology",
+        "source_url": "/hormuz-index#methodology",
     },
     {
         "date": "2026-03-16",
@@ -89,7 +98,7 @@ GEOPOLITICAL_EVENTS = [
         "impact": "Ceasefire Easing (-7.1 pts)",
         "is_ceasefire": True,
         "source_name": "MyDataLabs internal event log",
-        "source_url": "/methodology",
+        "source_url": "/hormuz-index#methodology",
     },
     {
         "date": "2026-04-06",
@@ -98,7 +107,7 @@ GEOPOLITICAL_EVENTS = [
         "impact": "Ceasefire Easing (-5.1 pts)",
         "is_ceasefire": True,
         "source_name": "MyDataLabs internal event log",
-        "source_url": "/methodology",
+        "source_url": "/hormuz-index#methodology",
     },
     {
         "date": "2026-06-15",
@@ -107,7 +116,7 @@ GEOPOLITICAL_EVENTS = [
         "impact": "Ceasefire Easing (-9.2 pts)",
         "is_ceasefire": True,
         "source_name": "MyDataLabs internal event log",
-        "source_url": "/methodology",
+        "source_url": "/hormuz-index#methodology",
     },
 ]
 
@@ -343,6 +352,47 @@ def _common(**extra):
 # --- Pages -----------------------------------------------------------------
 
 
+def _report_cards(snapshot):
+    """REPORTS with each entry's own headline figure and status attached.
+
+    The home page's card loop previously read snapshot.score and
+    snapshot.level_status directly, which was correct while there was exactly
+    one report and silently wrong the moment there were two: the Lok Sabha card
+    displayed the Hormuz index score.
+
+    Figures come from the precomputed home artifact. The in-request fallback
+    below only runs before the first update, and derives the Hormuz figure from
+    the snapshot already in hand rather than fetching anything.
+    """
+    figures = dict(precomputed.load("home").get("cards") or {})
+
+    if "hormuz-index" not in figures:
+        figures["hormuz-index"] = {
+            "value": f"{snapshot.score:.1f}",
+            "unit": "score",
+            "status": snapshot.level_status,
+        }
+
+    if "lok-sabha-index" not in figures:
+        from app.elections.routes import headline as elections_headline
+
+        ls = elections_headline()
+        figures["lok-sabha-index"] = {
+            "value": str(ls["value"]) if ls else None,
+            "unit": ls["unit"] if ls else None,
+            # The projection has no crisis banding, so it carries the neutral
+            # status rather than borrowing the Hormuz index's colour.
+            "status": "good",
+        }
+
+    cards = []
+    for report in REPORTS:
+        card = dict(report)
+        card.update(figures.get(report["slug"], {"value": None, "unit": None, "status": "good"}))
+        cards.append(card)
+    return cards
+
+
 @bp.route("/")
 def home():
     snapshot = get_snapshot()
@@ -353,7 +403,7 @@ def home():
     html = render_template(
         "home.html",
         **_common(
-            reports=REPORTS,
+            reports=_report_cards(snapshot),
             snapshot=snapshot,
             hormuz_score=snapshot.score,
             hormuz_level=snapshot.level_label,
@@ -395,9 +445,18 @@ def hormuz_index():
     # Reader perception, plotted on the model's own week axis. Weeks with no
     # ballots (or too few to publish) map to None, which reaches the chart as
     # a null and draws a gap rather than a fabricated point.
-    sentiment_history = votes.get_history()
-    perception_by_week = {h["week_start"]: h["index"] for h in sentiment_history}
-    perception_series = [perception_by_week.get(h["week_start"]) for h in history]
+    #
+    # Read from the precomputed artifact, not from the database. These three
+    # values used to cost ~19s on a cold hit while a sleeping Neon compute node
+    # woke up, and they are settled weekly aggregates — there is nothing to
+    # gain from asking Postgres for them on every page view. The current week's
+    # figure is the one that moves, and vote.js re-fetches that from
+    # /api/hormuz-index/sentiment as soon as the page loads.
+    pre = precomputed.load("hormuz-index")
+    sentiment_history = pre.get("sentiment_history", [])
+    perception_by_week = pre.get("perception_by_week", {})
+    perception_series = pre.get("perception_series") or [None] * len(history)
+    sentiment = pre.get("sentiment") or votes.empty_summary()
 
     html = render_template(
         "hormuz.html",
@@ -415,7 +474,7 @@ def hormuz_index():
             total_attacks=total_attacks,
             month_labels=month_labels,
             cumulative_attacks=cumulative_attacks,
-            sentiment=votes.get_summary(),
+            sentiment=sentiment,
             sentiment_history=sentiment_history,
             perception_series=perception_series,
             perception_by_week=perception_by_week,
@@ -427,6 +486,8 @@ def hormuz_index():
             scale_max=scoring.SCALE_MAX,
             license_name=DATA_LICENSE_NAME,
             license_url=DATA_LICENSE_URL,
+            # The methodology now renders as a tab on this page.
+            **_methodology_context(),
         ),
     )
     return _cached(Response(html, mimetype="text/html"))
@@ -434,23 +495,26 @@ def hormuz_index():
 
 @bp.route("/methodology")
 def methodology():
-    snapshot = get_snapshot()
-    html = render_template(
-        "methodology.html",
-        **_common(
-            snapshot=snapshot,
-            components=hormuz.COMPONENTS,
-            baseline_values=hormuz.BASELINE_VALUES,
-            baseline_window=hormuz.BASELINE_WINDOW,
-            bands=scoring.LEVEL_BANDS,
-            scale_min=scoring.SCALE_MIN,
-            scale_max=scoring.SCALE_MAX,
-            degraded_threshold=scoring.DEGRADED_STALE_WEIGHT,
-            vessel_data_synthetic=VESSEL_DATA_IS_SYNTHETIC,
-            durable_storage=storage.is_durable(),
-        ),
+    """Permanent redirect to the methodology tab on the index it documents.
+
+    The methodology stopped being its own page: it describes one index's
+    formula, weights and caps, so a reader checking the number should not have
+    to leave the page showing it. The URL is kept as a 301 rather than deleted
+    because it was indexed, is cited in the event log's source links, and may
+    have been quoted externally — a 404 would break all three.
+    """
+    return redirect("/hormuz-index#methodology", code=301)
+
+
+def _methodology_context():
+    """Context the methodology partial needs, wherever it is rendered."""
+    return dict(
+        components=hormuz.COMPONENTS,
+        bands=scoring.LEVEL_BANDS,
+        degraded_threshold=scoring.DEGRADED_STALE_WEIGHT,
+        durable_storage=storage.is_durable(),
     )
-    return _cached(Response(html, mimetype="text/html"))
+
 
 
 @bp.route("/data")
@@ -732,7 +796,7 @@ def sitemap():
     pages = [
         {"loc": f"{SITE_ORIGIN}/", "priority": "1.0", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/hormuz-index", "priority": "0.9", "changefreq": "daily"},
-        {"loc": f"{SITE_ORIGIN}/methodology", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": f"{SITE_ORIGIN}/lok-sabha-index", "priority": "0.9", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/data", "priority": "0.8", "changefreq": "monthly"},
     ]
 
@@ -784,7 +848,8 @@ Current HMX-INDEX reading: {snapshot.score:.1f} ({snapshot.level_label}), week o
 ## Core pages
 
 - [Hormuz Crisis Index dashboard]({SITE_ORIGIN}/hormuz-index): live composite score, component breakdown, weekly trajectory since January 2026.
-- [Methodology]({SITE_ORIGIN}/methodology): index formula, component weights, cap thresholds and their rationale, baseline selection, known limitations.
+- [Lok Sabha Projection Engine]({SITE_ORIGIN}/lok-sabha-index): daily 543-seat projection from CVoter's option-level opinion trackers, Monte Carlo intervals, event impact analysis, 2019/2024 backtest.
+- [Methodology]({SITE_ORIGIN}/hormuz-index#methodology): index formula, component weights, cap thresholds and their rationale, baseline selection, known limitations.
 - [Data & API]({SITE_ORIGIN}/data): endpoint documentation, response schema, licence and citation formats.
 
 ## Machine-readable data

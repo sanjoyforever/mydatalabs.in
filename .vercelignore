@@ -7,6 +7,35 @@
 # /static/img/logo.png, so excluding it would 404 a live schema reference.
 app/static/img/image1.jpg
 
+# The entire Lok Sabha source dataset, ~10 MB. Nothing in a request path opens
+# it any more: `python update.py` turns all of it into
+# app/data/precomputed/lok-sabha-index.json on the build machine, and the
+# deployment reads that. See app/elections/routes.py for the fallback rules —
+# with no CSVs present, `_heavy_stack_available()` is False and the heavy code
+# paths are never entered, which is what lets requirements.txt drop pandas.
+app/data/elections/
+
+# Dataset builders. Every module in here imports pandas or numpy at module
+# scope, so none of them can be imported by the deployed function. They are
+# reachable only through fallbacks that the missing dataset already closes off,
+# but excluding them turns "unreachable" into "not present", which is the
+# stronger guarantee.
+app/elections/engine/backtest_engine.py
+app/elections/engine/calibration.py
+app/elections/engine/cvoter_scraper.py
+app/elections/engine/daily_predictor.py
+app/elections/engine/data_updater.py
+app/elections/engine/election_data.py
+app/elections/engine/insights.py
+app/elections/engine/ml_models.py
+app/elections/engine/model_optimizer.py
+app/elections/engine/precompute.py
+app/elections/engine/seat_predictive_model.py
+app/elections/engine/sentiment_index.py
+app/elections/engine/trend_analytics.py
+# engine/paths.py, engine/events.py and engine/tracker_schema.py stay: routes.py
+# imports paths at module scope, and events.py serves the filtered timeline.
+
 tests/
 scripts/
 feedback_claude.md
@@ -20,3 +49,6 @@ __pycache__/
 .pytest_cache/
 venv/
 .venv/
+
+# Precomputed route artifacts are the render path — they must ship.
+# (Listed here only as a reminder not to add app/data/ wholesale above.)

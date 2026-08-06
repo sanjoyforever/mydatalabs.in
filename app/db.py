@@ -34,26 +34,47 @@ except ImportError:  # pragma: no cover
     pass
 
 
+import time
+
 CONNECT_TIMEOUT = int(os.environ.get("DB_CONNECT_TIMEOUT", "10"))
 
 _schema_lock = threading.Lock()
 _schema_ready = False
+_db_down_until = 0.0
+_down_lock = threading.Lock()
 
 
 def dsn() -> str | None:
     return os.environ.get("DATABASE_URL") or os.environ.get("db") or None
 
 
+def mark_down(cooldown: float = 30.0):
+    global _db_down_until
+    with _down_lock:
+        _db_down_until = time.time() + cooldown
+
+
 def is_configured() -> bool:
+    if time.time() < _db_down_until:
+        return False
     return bool(dsn()) and psycopg is not None
 
 
 @contextmanager
 def connection():
     """Yield a connection, committing on clean exit and rolling back on error."""
-    if not is_configured():
+    if not dsn() or psycopg is None:
         raise RuntimeError("No database configured (set DATABASE_URL)")
-    conn = psycopg.connect(dsn(), connect_timeout=CONNECT_TIMEOUT)
+    if not is_configured():
+        # Configured, but inside the post-failure cooldown. Saying "no database
+        # configured" here would send whoever reads the log looking for a
+        # missing environment variable that is in fact set.
+        raise RuntimeError("Database unreachable; retrying after cooldown")
+    try:
+        conn = psycopg.connect(dsn(), connect_timeout=CONNECT_TIMEOUT)
+    except Exception:
+        mark_down(30.0)
+        raise
     try:
         with conn:
             yield conn

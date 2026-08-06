@@ -1,46 +1,16 @@
-{% extends "base.html" %}
-{% set origin = site_origin|default('https://mydatalabs.in') %}
+{# ---------------------------------------------------------------------------
+   Methodology, included as a tab on /hormuz-index.
 
-{% block title %}HMX-INDEX Methodology — How the Hormuz Crisis Index Is Calculated | MyDataLabs{% endblock %}
-{% block meta_desc %}Full methodology for the Hormuz Crisis Index: the composite formula, all seven component weights, the rationale behind each cap threshold, baseline selection, data cadence, and the index's known limitations.{% endblock %}
-{% block og_title %}How the Hormuz Crisis Index is calculated{% endblock %}
-{% block og_desc %}Component weights, cap rationale, baseline selection, refresh cadence and stated limitations for the HMX-INDEX.{% endblock %}
+   It was a standalone page until it became clear the content is entirely about
+   one index — the formula, the seven component weights and the cap rationale
+   describe HMX-INDEX and nothing else. A reader who wants to check the number
+   should not have to leave the page showing it, and a second index would have
+   needed a second methodology page anyway.
 
-{% block extra_head %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "TechArticle",
-      "@id": "{{ origin }}/methodology#article",
-      "headline": "Hormuz Crisis Index (HMX-INDEX) methodology",
-      "description": "Composite formula, component weights, cap thresholds and rationale, baseline selection, data cadence and known limitations for the HMX-INDEX.",
-      "url": "{{ origin }}/methodology",
-      "author": { "@id": "{{ origin }}/#organization" },
-      "publisher": { "@id": "{{ origin }}/#organization" },
-      "about": { "@id": "{{ origin }}/hormuz-index#dataset" },
-      "inLanguage": "en"
-    },
-    {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ origin }}/" },
-        { "@type": "ListItem", "position": 2, "name": "Methodology", "item": "{{ origin }}/methodology" }
-      ]
-    }
-  ]
-}
-</script>
-{% endblock %}
-
-{% block content %}
-<nav class="breadcrumb" aria-label="Breadcrumb">
-  <a href="{{ url_for('main.home') }}">Home</a>
-  <span aria-hidden="true">/</span>
-  <span aria-current="page">Methodology</span>
-</nav>
-
+   /methodology still resolves: it 301s to /hormuz-index#methodology, so the
+   indexed URL, the event log's source links and any external citation keep
+   working.
+   --------------------------------------------------------------------------- #}
 <article class="prose-page">
   <header class="prose-header">
     <span class="badge-tag">METHODOLOGY</span>
@@ -265,4 +235,3 @@
       Attribution formats are on the <a href="{{ url_for('main.data_page') }}">Data &amp; API page</a>.</p>
   </section>
 </article>
-{% endblock %}

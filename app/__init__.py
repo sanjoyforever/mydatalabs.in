@@ -76,9 +76,11 @@ def create_app() -> Flask:
     )
     app.config["SEND_FILE_MAX_AGE_DEFAULT"] = STATIC_MAX_AGE
 
+    from app.elections.routes import bp as elections_bp
     from app.routes import bp
 
     app.register_blueprint(bp)
+    app.register_blueprint(elections_bp)
 
     # Cache-busting token for /static assets. Derived from the newest mtime in
     # the static tree so a deploy invalidates the year-long cache above.

@@ -1,0 +1,29 @@
+# Offline-only dependencies: needed to *build* the datasets, never to serve a
+# request. Kept out of requirements.txt because the deployed function is size
+# limited and matplotlib plus a browser driver would be dead weight in it.
+#
+#     pip install -r requirements.txt -r requirements-pipeline.txt
+
+-r requirements.txt
+
+# The scientific stack. Used by app/elections/engine/* and by the precompute
+# builders in app/precomputed.py, all of which run here and never in a request.
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.3.0
+
+# yfinance drives the Hormuz live sweep in update.py. The site reads the
+# result from app/data/precomputed/hormuz-index.json and never calls it.
+yfinance==0.2.43
+
+# CVoter fetch, and the remote freshness check.
+requests>=2.31.0
+
+# scripts/elections_pipeline.py renders the static projection PNG.
+matplotlib>=3.7.0
+
+# Fallback transport in cvoter_scraper, used only when direct HTTP to
+# cvoterindia.com is blocked. The normal fetch path needs neither.
+selenium>=4.15.0
+webdriver-manager>=4.0.0

@@ -76,12 +76,14 @@ marks the whole snapshot `degraded`, which surfaces a reduced-confidence notice 
 | `/hormuz-index` | HMX-INDEX dashboard: gauge, trajectory, component matrix, press dispatch |
 | `/methodology` | Formula, weights, cap rationale, baseline selection, limitations |
 | `/data` | API documentation, response schema, correlation matrix, citation formats |
+| `/lok-sabha-index` | Lok Sabha Projection Engine: daily seat forecast + 2019/2024 backtest |
 | `/reports/<slug>` | Coming-soon placeholders (`noindex`) |
 | `/api/hormuz-index/data.json` | Current snapshot, components, correlations, full history |
 | `/api/hormuz-index/data.csv` | Weekly history with raw component values |
 | `/api/health` | Liveness, storage durability, snapshot cache age |
 | `/api/cron/update-hormuz` | Scheduled recompute + persist (`CRON_SECRET` protected) |
 | `/api/hormuz-index/sentiment` | Public Perception Index: `GET` aggregate, `POST` vote, `DELETE` withdraw |
+| `/api/lok-sabha-index/*` | Projection engine API — see `app/elections/routes.py` for the 15 endpoints |
 | `/sitemap.xml`, `/robots.txt`, `/llms.txt` | Crawler-facing files |
 
 ---
@@ -94,14 +96,21 @@ mydatalabs-in/
 ├── app/
 │   ├── data/
 │   │   ├── hormuz_history.json     # Weekly history + manual_overrides + manual_updated
-│   │   └── vessel_attacks.json     # dashboard incident log (not an index input)
+│   │   ├── vessel_attacks.json     # dashboard incident log (not an index input)
+│   │   └── elections/              # CVoter trackers, projections, calibration, catalog
+│   ├── elections/             # Lok Sabha Projection Engine
+│   │   ├── routes.py          # Page + API blueprint, mtime-keyed response cache
+│   │   └── engine/            # Model: scraper, calibration, seat model, ML suite,
+│   │                          #   backtest, insights, events, trend analytics, paths
 │   ├── indices/hormuz.py      # Component definitions, fetchers, snapshot assembly
 │   ├── static/
 │   │   ├── css/style.css      # Design tokens, dark/light themes, a11y primitives
+│   │   ├── css/elections.css  # Projection dashboard, scoped under .elections-dash
 │   │   ├── js/theme.js        # Theme toggle, keyboard-accessible nav, clipboard
 │   │   ├── js/charts.js       # ECharts setup, theme-reactive, fallback handling
+│   │   ├── js/elections.js    # Chart.js forecast chart, tabs, event overlay
 │   │   └── js/vote.js         # HMX-PPI drag-to-vote gauge, anonymous token handling
-│   ├── templates/             # base, home, hormuz, methodology, data, 404, 500, coming_soon
+│   ├── templates/             # base, home, hormuz, elections, methodology, data, errors
 │   ├── routes.py              # Routing, snapshot cache, press dispatch derivation
 │   ├── scoring.py             # Generic composite engine (index-agnostic)
 │   ├── storage.py             # History persistence with durability reporting
@@ -111,9 +120,12 @@ mydatalabs-in/
 ├── scripts/
 │   ├── build_assets.py        # Regenerate icons + 1200x630 OG card from logo.png
 │   ├── restate_2026_07_26.py  # Revision artifact: units/cap fix + full recompute
-│   └── update_hormuz.py       # Wrapper around update_data.py
+│   ├── update_hormuz.py       # Wrapper around update_data.py
+│   ├── update_elections.py    # Operational CVoter refresh (schedule this one)
+│   └── elections_pipeline.py  # Full model pipeline: fetch → calibrate → backtest → plot
 ├── tests/test_scoring.py      # Scoring engine edge cases
 ├── update_data.py             # Weekly updater
+├── requirements-pipeline.txt  # Offline-only deps (matplotlib, selenium fallback)
 ├── vercel.json                # Rewrites, cache/security headers, cron schedule
 └── app.py                     # Local dev entrypoint
 ```
@@ -153,6 +165,41 @@ pushes to `origin/main` — that push is what triggers the Vercel deployment, si
 filesystem is read-only outside `/tmp` and cannot persist the update itself. This is the mode the
 scheduled cron job runs in. `--local` skips the git step for local testing; the commit only ever
 touches those two data files, never a broad `git add .`.
+
+### Lok Sabha projection data update
+
+```bash
+# Update if CVoter has published new survey days; refits the model and rebuilds
+# every derived file. Safe to run on a timer — it exits without writing when
+# there is nothing new.
+python scripts/update_elections.py
+
+python scripts/update_elections.py --check    # report freshness, write nothing
+python scripts/update_elections.py --force    # refetch + rebuild after a weight change
+python scripts/update_elections.py --quiet    # for Task Scheduler / cron
+```
+
+The web app needs no restart: its response cache is keyed on the mtimes of
+`cvoter_daily_trackers.csv`, `ideal_model_daily_projections.csv` and
+`model_calibration.json`, so the next request after an update rebuilds everything.
+
+Refreshing over HTTP (`POST /api/lok-sabha-index/refresh_data`) is disabled unless
+`ALLOW_WEB_REFRESH=1`. An anonymous visitor must not be able to make the server
+fetch 41 upstream files and rewrite the dataset.
+
+For model work rather than a routine refresh, the full pipeline — calibration
+diagnostics, backtest, Monte Carlo, static chart — is:
+
+```bash
+pip install -r requirements.txt -r requirements-pipeline.txt
+python scripts/elections_pipeline.py              # fetch if new, then full run
+python scripts/elections_pipeline.py --no-fetch   # cached CSVs only
+python scripts/elections_pipeline.py --optimize   # + tracker/parameter grid search
+```
+
+Like the Hormuz updater, this writes to the repo rather than to the deployed
+filesystem: Vercel's is read-only outside `/tmp`, so a data refresh reaches
+production by being committed and pushed.
 
 ### Regenerating image assets
 

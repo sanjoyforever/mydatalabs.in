@@ -1,5 +1,13 @@
+# Runtime dependencies — what the deployed site needs to serve a request.
+#
+# Deliberately small. Every page answers out of app/data/precomputed/*.json,
+# so nothing here computes a projection, fits a model or reads a CSV. pandas,
+# numpy, scipy and scikit-learn moved to requirements-pipeline.txt: they are
+# build-machine tools, and shipping them spent most of a 250 MB serverless
+# bundle on work whose answer is identical for every visitor.
+#
+# Before adding anything here, check it is needed to *render*, not to *update*.
 flask==3.0.3
-yfinance==0.2.43
 python-dateutil==2.9.0.post0
 gunicorn==22.0.0
 psycopg[binary]==3.2.3
