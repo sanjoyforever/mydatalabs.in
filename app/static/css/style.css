@@ -56,6 +56,7 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Geist', system-ui, sans-serif;
 
   /* Surface geometry. Two dashboards built at different times had four card
      paddings (16/20/22/24/28px) and three radii (12/14/16/20px) between them,
@@ -99,8 +100,14 @@
      column and the footer cannot drift apart.
 
      Prose pages deliberately opt out below (main:has(> .prose-page)) — a
-     paragraph set to 1340px is not more readable, it is less. */
-  --content-max: 1540px;
+     paragraph set to 1340px is not more readable, it is less.
+
+     1440, not 1540: a 1536px-wide laptop — the most common Windows width there
+     is, and what this is read on — sits just under 1540, so the cap never
+     engaged and the content ran edge to edge with a 15px margin. The column now
+     actually centres on the screens most people bring to it, and the 100px it
+     gives back is margin, not chart: the widest chart still gets 1410px. */
+  --content-max: 1440px;
 }
 
 :root[data-theme="light"] {
@@ -227,27 +234,53 @@ main {
 .site-header {
   background: var(--surface-header);
   border-bottom: 1px solid var(--border-subtle);
-  padding: 16px 32px;
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 100;
+  height: 64px;
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  flex-wrap: nowrap;
 }
 
 .brand-wrapper {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .brand {
   font-family: var(--font-heading);
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent-blue-bg);
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-icon .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.brand-name {
   color: var(--text-main);
 }
 
@@ -268,27 +301,58 @@ main {
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .nav-link {
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--text-sub);
-  padding: 8px 14px;
-  border-radius: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  white-space: nowrap;
+  line-height: 1.2;
   transition: all 0.15s ease;
 }
 
-.nav-link:hover, .nav-link.active {
+.nav-link:hover {
   color: var(--text-main);
   background: var(--surface-card-hover);
+}
+
+.nav-link.active {
+  color: var(--accent-blue);
+  background: var(--accent-blue-bg);
+  border-color: rgba(56, 189, 248, 0.25);
+  font-weight: 600;
+}
+
+.nav-link .nav-icon,
+.nav-link .material-symbols-outlined {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+  color: inherit;
+  transition: transform 0.15s ease;
+}
+
+.nav-link:hover .nav-icon {
+  transform: translateY(-1px);
+}
+
+.header-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-subtle);
+  margin: 0 4px;
+  flex-shrink: 0;
 }
 
 .dropdown { position: relative; }
@@ -327,7 +391,8 @@ main {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .btn-primary {
@@ -374,20 +439,11 @@ main {
 }
 
 .theme-toggle {
-  background: var(--surface-card-hover);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  width: 38px;
-  height: 38px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-sub);
-  transition: all 0.15s ease;
+  /* Dimensional and layout styles now come from .header-icon-btn.
+     This rule only retains the icon toggle visibility. */
 }
 
-.theme-toggle:hover { color: var(--text-main); border-color: var(--border-bright); }
+.theme-toggle:hover { color: var(--text-main); }
 .icon-moon { display: none; }
 :root[data-theme="dark"] .icon-sun { display: none; }
 :root[data-theme="dark"] .icon-moon { display: inline; }
@@ -1136,8 +1192,58 @@ main {
   background: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--card-radius);
-  padding: var(--card-pad);
+  padding: 14px 20px;
   margin-bottom: 32px;
+}
+
+.components-card .components-card-head {
+  margin-bottom: 8px;
+}
+
+.components-card .components-card-head h2 {
+  font-size: 1.15rem;
+  margin-bottom: 2px;
+}
+
+.components-card .components-table {
+  margin-top: 6px;
+  font-size: 0.84rem;
+}
+
+.components-card .components-table thead th {
+  padding: 6px 10px;
+  font-size: 0.72rem;
+}
+
+.components-card .components-table td,
+.components-card .components-table tbody th {
+  padding: 5px 10px;
+}
+
+.components-card .source-freshness {
+  margin-top: 1px;
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
+.components-card .source-badge {
+  font-size: 0.72rem;
+  padding: 2px 6px;
+}
+
+.components-card .stress-bar-wrapper {
+  gap: 8px;
+  width: 130px;
+}
+
+.components-card .stress-track {
+  height: 5px;
+}
+
+.components-card .components-footnote {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
 }
 
 .table-responsive {
@@ -1344,7 +1450,7 @@ main {
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  .site-header { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
+  .site-header { padding: 0 16px; gap: 12px; }
   .ticker-bar { display: none; }
   .hero-title { font-size: 2rem; }
   .dash-big-score { font-size: 2.6rem; }
@@ -2189,7 +2295,7 @@ html, body { overflow-x: hidden; }
   gap: 16px;
   margin-left: auto;
 }
-.header-right .site-nav { gap: 4px; }
+.header-right .site-nav { }
 
 /* ==========================================================================
    HERO CAROUSEL — one slide today; the track is here so adding a second
@@ -2904,8 +3010,10 @@ background: linear-gradient(90deg,
 .report-panel.active { display: block; }
 
 /* The methodology partial keeps its own prose measure inside the tab, so it
-   does not inherit the dashboard's full-width column. */
-.report-panel .prose-page { max-width: 1480px; margin: 0 auto; }
+   does not inherit the dashboard's full-width column. Derived from the column
+   rather than restated: the literal here was 1480, chosen against a 1540 cap,
+   and it silently stopped binding the moment that cap moved. */
+.report-panel .prose-page { max-width: calc(var(--content-max) - 60px); margin: 0 auto; }
 
 /* ==========================================================================
    UNIVERSAL INTELLIGENCE CANVAS & EXECUTIVE SUMMARY
@@ -3030,29 +3138,28 @@ background: linear-gradient(90deg,
 }
 
 .nav-link {
-  font-size: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-sub);
-  padding: 6px 14px;
-  border-radius: 8px;
+  padding: 6px 0;
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: all 0.15s ease;
+  gap: 4px;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+  height: 100%;
 }
 
 .nav-link:hover {
-  color: var(--text-main);
-  background: var(--surface-card-hover);
+  color: var(--accent-blue);
 }
 
 .nav-link.active {
-  color: var(--accent-blue, #2563EB);
-  background: rgba(37, 99, 235, 0.1);
-  border-color: rgba(37, 99, 235, 0.25);
+  color: var(--accent-blue);
   font-weight: 600;
 }
 
@@ -3090,4 +3197,422 @@ background: linear-gradient(90deg,
 
 .exec-summary-body p:last-child {
   margin-bottom: 0;
+}
+
+/* ==========================================================================
+   REDESIGN v2 — Header, Hero, Material Symbols
+   ========================================================================== */
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* --- Brand icon --------------------------------------------------------- */
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--accent-blue);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.brand-icon .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* Remove old brand-dot color since brand is now blue */
+.brand-name {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--accent-blue);
+}
+
+/* --- Header nav (desktop) ----------------------------------------------- */
+.header-nav {
+  display: none;
+  align-items: center;
+  gap: 24px;
+  height: 100%;
+}
+
+@media (min-width: 769px) {
+  .header-nav {
+    display: flex;
+  }
+}
+
+/* --- Header icon buttons ------------------------------------------------ */
+.header-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-sub);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.header-icon-btn:hover {
+  background: var(--surface-card-hover);
+  color: var(--text-main);
+}
+
+.header-icon-btn .material-symbols-outlined {
+  font-size: 22px;
+}
+
+/* --- Breadcrumb v2 ------------------------------------------------------ */
+.breadcrumb-v2 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--text-sub);
+}
+
+.breadcrumb-v2 a {
+  color: var(--text-sub);
+  transition: color 0.15s ease;
+}
+
+.breadcrumb-v2 a:hover {
+  color: var(--accent-blue);
+}
+
+.breadcrumb-v2 .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.breadcrumb-v2 .breadcrumb-current {
+  color: var(--text-main);
+}
+
+/* --- Segmented tab control ---------------------------------------------- */
+.tab-segmented {
+  display: flex;
+  align-items: center;
+  background: var(--surface-card-hover);
+  border-radius: 8px;
+  padding: 4px;
+  border: 1px solid var(--border-subtle);
+  gap: 2px;
+}
+
+.tab-segmented .tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-sub);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tab-segmented .tab-btn:hover {
+  color: var(--text-main);
+}
+
+.tab-segmented .tab-btn.active {
+  background: var(--surface-card);
+  color: var(--accent-blue);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
+.tab-segmented .tab-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+/* --- Hero projection card ----------------------------------------------- */
+.hero-projection-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.hero-projection-card .hero-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.08;
+  z-index: 0;
+}
+
+.hero-projection-card .hero-watermark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-projection-card .hero-blur-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 256px;
+  height: 256px;
+  background: var(--accent-blue-bg);
+  opacity: 0.6;
+  border-radius: 50%;
+  filter: blur(48px);
+  transform: translate(33%, -50%);
+  pointer-events: none;
+}
+
+.hero-projection-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+@media (min-width: 1024px) {
+  .hero-projection-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .hero-right {
+    align-items: flex-end;
+  }
+}
+
+/* --- Hero badge row ----------------------------------------------------- */
+.hero-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.hero-badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--accent-blue);
+  color: #FFFFFF;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.hero-badge-live .pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero-badge-baseline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-card-hover);
+  color: var(--text-sub);
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  border: 1px solid var(--border-subtle);
+}
+
+.hero-badge-baseline .badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-sub);
+}
+
+.hero-survey-date {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-sub);
+  letter-spacing: 0;
+}
+
+/* --- Hero title --------------------------------------------------------- */
+.hero-projection-card h1 {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-projection-card h1 {
+    font-size: 1.5rem;
+    line-height: 1.35;
+  }
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: var(--text-sub);
+}
+
+.hero-meta .meta-dot {
+  color: var(--border-bright);
+}
+
+/* --- Hero metric -------------------------------------------------------- */
+.hero-metric-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-sub);
+  margin-bottom: 4px;
+}
+
+.hero-metric-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.hero-metric-value {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent-amber);
+}
+
+.hero-metric-denom {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.hero-trend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.hero-trend-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.hero-trend-pill.trend-down {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.hero-trend-pill.trend-up {
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+}
+
+.hero-trend-pill .material-symbols-outlined {
+  font-size: 14px;
+}
+
+.hero-trend-caption {
+  font-size: 0.875rem;
+  color: var(--text-sub);
+}
+
+/* --- Breadcrumb + tab bar layout ---------------------------------------- */
+.elections-topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 769px) {
+  .elections-topbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* --- Mobile adjustments ------------------------------------------------- */
+@media (max-width: 768px) {
+  .site-header {
+    padding: 0 16px;
+  }
+
+  .hero-projection-card {
+    padding: 20px;
+  }
+
+  .hero-metric-value {
+    font-size: 2.5rem;
+  }
+
+  .hero-metric-denom {
+    font-size: 1.1rem;
+  }
 }

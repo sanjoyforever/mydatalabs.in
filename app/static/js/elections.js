@@ -201,15 +201,15 @@
   // clickable legend is generated from it, so adding a line means adding one
   // entry rather than editing three places.
   var SERIES_SPEC = [
-    { key: "NDA_proj_seats",        label: "Projected NDA seats",      color: "#FF9933", width: 2,   dash: null },
-    { key: "INDIA_proj_seats",      label: "Projected INDIA seats",    color: "#00BFFF", width: 2,   dash: null },
-    { key: "NDA_proj_seats_ma7",    label: "NDA 7-day average",        color: "#FFD9A8", width: 1.6, dash: null },
-    { key: "NDA_proj_seats_ma30",   label: "NDA 30-day average",       color: "#B45309", width: 1.8, dash: [5, 3] },
-    { key: "INDIA_proj_seats_ma7",  label: "INDIA 7-day average",      color: "#A5E4FF", width: 1.6, dash: null },
-    { key: "INDIA_proj_seats_ma30", label: "INDIA 30-day average",     color: "#0369A1", width: 1.8, dash: [5, 3] },
-    { key: null, constant: 293,     label: "2024 actual NDA (293)",    color: "#FF9933", width: 1.6, dash: [6, 6] },
-    { key: null, constant: 234,     label: "2024 actual INDIA (234)",  color: "#00BFFF", width: 1.6, dash: [6, 6] },
-    { key: null, constant: 272,     label: "Majority threshold (272)", color: "#EF4444", width: 1.5, dash: [2, 4] }
+    { key: "NDA_proj_seats",        label: "NDA Projected",            color: "#FF9933", width: 2,   dash: null },
+    { key: "INDIA_proj_seats",      label: "INDIA Projected",          color: "#00BFFF", width: 2,   dash: null },
+    { key: "NDA_proj_seats_ma7",    label: "NDA 7D Avg",               color: "#FFD9A8", width: 1.6, dash: null },
+    { key: "NDA_proj_seats_ma30",   label: "NDA 30D Avg",              color: "#B45309", width: 1.8, dash: [5, 3] },
+    { key: "INDIA_proj_seats_ma7",  label: "INDIA 7D Avg",             color: "#A5E4FF", width: 1.6, dash: null },
+    { key: "INDIA_proj_seats_ma30", label: "INDIA 30D Avg",            color: "#0369A1", width: 1.8, dash: [5, 3] },
+    { key: null, constant: 293,     label: "2024 NDA (293)",           color: "#FF9933", width: 1.6, dash: [6, 6] },
+    { key: null, constant: 234,     label: "2024 INDIA (234)",         color: "#00BFFF", width: 1.6, dash: [6, 6] },
+    { key: null, constant: 272,     label: "Majority (272)",           color: "#EF4444", width: 1.5, dash: [2, 4] }
   ];
 
   // Datasets the user has hidden by clicking the legend, kept outside the
@@ -353,7 +353,7 @@
 
     var cards = [
       {
-        valueId: "nda-seat-val", deltaId: "nda-deltas", ciId: "nda-ci", badgeId: "nda-badge",
+        valueId: "nda-seat-val", prefix: "nda", ciId: "nda-ci", badgeId: "nda-badge",
         seats: seats.NDA,
         lastElection: ovData.actual_2024_nda,
         ma30: series.NDA_proj_seats ? series.NDA_proj_seats.ma_30d : null,
@@ -361,7 +361,7 @@
         prob: prob.NDA
       },
       {
-        valueId: "india-seat-val", deltaId: "india-deltas", ciId: "india-ci", badgeId: "india-badge",
+        valueId: "india-seat-val", prefix: "india", ciId: "india-ci", badgeId: "india-badge",
         seats: seats.INDIA,
         lastElection: ovData.actual_2024_india,
         ma30: series.INDIA_proj_seats ? series.INDIA_proj_seats.ma_30d : null,
@@ -371,58 +371,71 @@
     ];
 
     cards.forEach(function (card) {
-      $(card.valueId).innerText = card.seats;
+      var valEl = $(card.valueId);
+      if (valEl) valEl.innerText = card.seats;
 
       var vsLE = card.seats - card.lastElection;
       var vs30 = (card.ma30 === null || card.ma30 === undefined) ? null : card.seats - card.ma30;
 
-      $(card.deltaId).innerHTML =
-        deltaChip("vs LE (" + card.lastElection + ")", vsLE, 0) +
-        deltaChip("vs 30d avg", vs30, 1);
+      var vsleEl = $(card.prefix + "-delta-vsle");
+      if (vsleEl) {
+        var sign = vsLE >= 0 ? "+" : "";
+        var iconSvg = vsLE >= 0
+          ? '<svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>'
+          : '<svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>';
+        vsleEl.className = "kpi-delta-val " + (vsLE >= 0 ? "kpi-delta-up" : "kpi-delta-down");
+        vsleEl.innerHTML = iconSvg + " " + sign + vsLE;
+      }
 
-      // Half the 90% interval width is the plus/minus most readers expect to
-      // see next to a point estimate.
-      var halfWidth = Math.round((card.ci.p95 - card.ci.p5) / 2);
-      $(card.ciId).innerHTML =
-        "<strong>±" + halfWidth + "</strong> seats at 90% confidence " +
-        "(" + card.ci.p5 + "–" + card.ci.p95 + ")<br>" +
-        "P(majority) <strong>" + (card.prob * 100).toFixed(0) + "%</strong>";
+      var vs30El = $(card.prefix + "-delta-vs30");
+      if (vs30El && vs30 !== null) {
+        var sign30 = vs30 >= 0 ? "+" : "";
+        var icon30 = vs30 >= 0
+          ? '<svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>'
+          : '<svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>';
+        vs30El.className = "kpi-delta-val " + (vs30 >= 0 ? "kpi-delta-up" : "kpi-delta-down");
+        vs30El.innerHTML = icon30 + " " + sign30 + vs30.toFixed(1);
+      }
+
+      var ciEl = $(card.ciId);
+      if (ciEl) {
+        ciEl.innerText = card.ci.p5 + "–" + card.ci.p95;
+      }
 
       var badge = $(card.badgeId);
       if (badge) {
         var wins = card.seats >= ovData.majority_threshold;
-        badge.className = "badge " + (wins ? "badge-winner" : "badge-others");
-        badge.innerText = wins ? "Majority (≥272)" : "Short of 272";
+        badge.className = "kpi-status-badge " + (wins ? "kpi-status-majority" : "kpi-status-short");
+        badge.innerHTML = (wins ? '<svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg> MAJORITY (≥272)' : '<svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg> SHORT OF 272');
       }
     });
 
-    // Others card: no interval is modelled for the residual bloc, so it shows
-    // the deltas only rather than inventing a confidence band.
-    var othersLE = ovData.actual_2024_others;
-    $("others-seat-val").innerText = seats.OTHERS;
-    $("others-deltas").innerHTML = deltaChip("vs LE (" + othersLE + ")", seats.OTHERS - othersLE, 0);
-    $("others-ci").innerHTML =
-      "Residual of the 543 seats after NDA and INDIA.<br>No separate interval is modelled.";
-
-    // Outcome card: the single most likely result and how sure we are.
     var outcomes = [
-      { name: "NDA majority", p: prob.NDA, color: "var(--accent-nda)" },
-      { name: "INDIA majority", p: prob.INDIA, color: "var(--accent-india)" },
-      { name: "Hung parliament", p: prob.HUNG, color: "#EF4444" }
+      { name: "NDA MAJORITY", p: prob.NDA, color: "var(--accent-nda, #F97316)" },
+      { name: "INDIA MAJORITY", p: prob.INDIA, color: "var(--accent-india, #2563EB)" },
+      { name: "HUNG PARLIAMENT", p: prob.HUNG, color: "#16A34A" }
     ].sort(function (a, b) { return b.p - a.p; });
 
     var top = outcomes[0];
     var outcomeVal = $("outcome-val");
-    outcomeVal.innerText = (top.p * 100).toFixed(0) + "%";
-    outcomeVal.parentElement.style.color = top.color;
+    if (outcomeVal) {
+      outcomeVal.innerText = (top.p * 100).toFixed(0) + "%";
+    }
 
-    $("outcome-deltas").innerHTML =
-      '<span class="delta-chip d-flat" style="font-weight:700">' + top.name + "</span>";
-    $("outcome-sub").innerHTML =
-      outcomes.slice(1).map(function (o) {
-        return o.name + " " + (o.p * 100).toFixed(0) + "%";
-      }).join(" · ") +
-      "<br>From " + forecast.n_simulations.toLocaleString() + " Monte Carlo draws";
+    var outcomeBadge = $("outcome-badge");
+    if (outcomeBadge) {
+      outcomeBadge.innerText = top.name;
+    }
+
+    var alt1Val = $("outcome-alt1-val");
+    if (alt1Val && outcomes[1]) {
+      alt1Val.innerText = (outcomes[1].p * 100).toFixed(0) + "%";
+    }
+
+    var alt2Val = $("outcome-alt2-val");
+    if (alt2Val && outcomes[2]) {
+      alt2Val.innerText = (outcomes[2].p * 100).toFixed(0) + "%";
+    }
   }
 
   // --- Clickable series legend --------------------------------------------
@@ -929,15 +942,16 @@
   }
 
   function whenLabel(row) {
-    if (!row.end_date) return row.date;
     var fmt = function (iso) {
       var d = new Date(iso);
       return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
     };
+    if (!row.end_date) {
+      var d = new Date(row.date);
+      return fmt(row.date) + " " + d.getFullYear();
+    }
     var y0 = new Date(row.date).getFullYear();
     var y1 = new Date(row.end_date).getFullYear();
-    // A range crossing a year boundary must name both years, or the farm
-    // protests read as "26 Nov – 19 Nov 2021".
     return y0 === y1
       ? fmt(row.date) + " – " + fmt(row.end_date) + " " + y1
       : fmt(row.date) + " " + y0 + " – " + fmt(row.end_date) + " " + y1;

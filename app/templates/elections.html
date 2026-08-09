@@ -24,70 +24,91 @@
 
 {% block content %}
 <div class="elections-dash report-dash-canvas" data-api="{{ api_prefix }}">
-
-  <div class="report-canvas-head">
-    <nav class="breadcrumb" aria-label="Breadcrumb" style="margin: 0;">
+  <!-- Breadcrumbs + Tab Bar -->
+  <div class="elections-topbar">
+    <nav class="breadcrumb-v2" aria-label="Breadcrumb">
       <a href="{{ url_for('main.home') }}">Home</a>
-      <span aria-hidden="true">/</span>
-      <span aria-current="page">Lok Sabha Projection Engine</span>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <span class="breadcrumb-current" aria-current="page">Lok Sabha Projection Engine</span>
     </nav>
 
-    <nav class="report-tabs report-tab-nav" role="tablist" aria-label="Report sections">
+    <div class="tab-segmented" role="tablist" aria-label="Report sections">
       <button type="button" class="tab-btn active" role="tab" aria-selected="true"
-              aria-controls="tab-forecast" data-tab="forecast">📊 Dashboard</button>
+              aria-controls="tab-forecast" data-tab="forecast">
+        <span class="material-symbols-outlined">dashboard</span>
+        Dashboard
+      </button>
       <button type="button" class="tab-btn" role="tab" aria-selected="false"
-              aria-controls="tab-methodology" data-tab="methodology">📘 Methodology</button>
-    </nav>
+              aria-controls="tab-methodology" data-tab="methodology">
+        <span class="material-symbols-outlined">science</span>
+        Methodology
+      </button>
+    </div>
   </div>
 
   <!-- TAB 1: DASHBOARD / FORECAST -->
   <div id="tab-forecast" class="tab-content report-panel active" role="tabpanel">
 
-  <!-- Dashboard Header Bar -->
-  <div class="dash-header-bar">
-    <div class="dash-title-group">
-      <div class="dash-badge-row">
-        <span class="badge-pill-blue">LIVE PROJECTION</span>
-        <span class="status-badge status-good">
-          <span class="status-dot" aria-hidden="true"></span>BASELINE
-        </span>
-        <span class="dash-week">{% if overview %}Survey data through {{ overview.as_of_date }}{% endif %}</span>
-      </div>
-      <h1>Lok Sabha Projection Engine</h1>
-      <div class="dash-meta">
-        <span>Geo-Politics &amp; Domestic Intelligence</span>
-        <span aria-hidden="true">•</span>
-        <span>NDA Seat Projection</span>
-        <span aria-hidden="true">•</span>
-        <span>Baseline: 2019 Election Actuals</span>
-      </div>
+  <!-- Hero Projection Card -->
+  <div class="hero-projection-card">
+    <div class="hero-watermark">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGn0mR2CBWIgcQEbs4JvoNLy_NFJZLvtgyjRS2phE_FQWa31HawJSQbWqy9INoXEYbbUBtDKjd_YxYeVFY948BMS4VdclkBxmVpI8PDl0H1uVU6U8x2pGv6ToMjTxiF36gjZJQrLOxlVoZVZK92Yr7pXuQbNfOYR2hGM-ePoqbvl1qbNxtecth6yFtn-tj5OWGdO94ICbSa4yNkKBNn3fpmND3VZBaf53_h8hmpnl86nJwM_NkQQl3bg" alt="" aria-hidden="true">
     </div>
+    <div class="hero-blur-accent"></div>
 
-    <div class="dash-header-actions">
-      <div class="dash-score-box">
+    <div class="hero-projection-content">
+      <!-- Left: Title & Meta -->
+      <div class="hero-left">
+        <div class="hero-badge-row">
+          <span class="hero-badge-live">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            Live Projection
+          </span>
+          <span class="hero-badge-baseline">
+            <span class="badge-dot" aria-hidden="true"></span>
+            Baseline
+          </span>
+          <span class="hero-survey-date">
+            {% if overview %}Survey data through {{ overview.as_of_date }}{% endif %}
+          </span>
+        </div>
+
         <div>
-          <div class="dash-score-label">PROJECTED NDA SEATS</div>
-          <div class="dash-big-score" style="color: var(--accent-nda, #FF9933);" id="nda-headline-val">
-            {% if overview %}{{ overview.latest_forecast.point_estimate.predicted_seats.NDA }}{% else %}274{% endif %}<span class="score-denom"> / 543</span>
+          <h1>Lok Sabha Projection Engine</h1>
+          <div class="hero-meta">
+            <span>Geo-Politics &amp; Domestic Intelligence</span>
+            <span class="meta-dot" aria-hidden="true">•</span>
+            <span>NDA Seat Projection</span>
+            <span class="meta-dot" aria-hidden="true">•</span>
+            <span>Baseline: 2019 Election Actuals</span>
           </div>
         </div>
-        <div class="dash-delta-group">
+      </div>
+
+      <!-- Right: Key Metric -->
+      <div class="hero-right">
+        <div>
+          <div class="hero-metric-label">Projected NDA Seats</div>
+          <div class="hero-metric-row">
+            <span class="hero-metric-value" id="nda-headline-val">
+              {% if overview %}{{ overview.latest_forecast.point_estimate.predicted_seats.NDA }}{% else %}274{% endif %}
+            </span>
+            <span class="hero-metric-denom">/ 543</span>
+          </div>
+          <!-- Trend Indicator -->
           {% if overview %}
           {% set nda_seats = overview.latest_forecast.point_estimate.predicted_seats.NDA %}
           {% set vsLE = nda_seats - overview.actual_2024_nda %}
-          <span class="delta-pill {% if vsLE >= 0 %}delta-up{% else %}delta-down{% endif %}">
-            <span aria-hidden="true">{% if vsLE >= 0 %}▲{% else %}▼{% endif %}</span>
-            {% if vsLE >= 0 %}+{% else %}−{% endif %}{{ vsLE|abs }}
-            <span class="sr-only">seats versus 2019 actuals</span>
-          </span>
-          <div class="dash-delta-caption">vs 2019 actuals</div>
+          <div class="hero-trend">
+            <span class="hero-trend-pill {% if vsLE >= 0 %}trend-up{% else %}trend-down{% endif %}">
+              <span class="material-symbols-outlined">{% if vsLE >= 0 %}arrow_upward{% else %}arrow_downward{% endif %}</span>
+              {% if vsLE >= 0 %}+{% endif %}{{ vsLE }}
+            </span>
+            <span class="hero-trend-caption">vs 2019 actuals</span>
+          </div>
           {% endif %}
         </div>
       </div>
-
-      <button type="button" class="btn-primary" data-copy-target="exec-briefing-elections">
-        <span aria-hidden="true">📋</span> Copy Briefing
-      </button>
     </div>
   </div>
 
@@ -113,171 +134,304 @@
 
   <div class="container">
 
-    <!-- STATS OVERVIEW CARDS -->
-    <div class="stats-grid">
-      <!-- NDA Card -->
-      <div class="card">
-        <div class="stat-label">Predicted NDA Seats (Latest Survey)</div>
-        <div class="stat-val" style="color: var(--accent-nda)">
-          <span id="nda-seat-val">{% if overview %}{{ overview.latest_forecast.point_estimate.predicted_seats.NDA }}{% else %}—{% endif %}</span>
+    <!-- 3 KPI CARDS CONTAINER -->
+    <div class="kpi-grid">
+      <!-- BEGIN: NDACard -->
+      <article class="kpi-card" data-purpose="nda-card">
+        <div class="kpi-accent-bar kpi-accent-nda"></div>
+        <div class="kpi-card-body">
+          <header class="kpi-header">
+            <div class="kpi-icon-wrapper kpi-icon-nda">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path><path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"></path></svg>
+            </div>
+            <div class="kpi-title-group">
+              <h2>PREDICTED NDA SEATS</h2>
+              <p>(LATEST SURVEY)</p>
+            </div>
+          </header>
+
+          <div class="kpi-main-val-row">
+            <span class="kpi-val-number kpi-val-nda" id="nda-seat-val">{% if overview %}{{ overview.latest_forecast.point_estimate.predicted_seats.NDA }}{% else %}274{% endif %}</span>
+            {% if overview %}
+            {% set nda_seats = overview.latest_forecast.point_estimate.predicted_seats.NDA %}
+            {% set nda_wins = nda_seats >= overview.majority_threshold %}
+            <div class="kpi-status-badge {{ 'kpi-status-majority' if nda_wins else 'kpi-status-short' }}" id="nda-badge">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+              {{ 'MAJORITY (≥272)' if nda_wins else 'SHORT OF 272' }}
+            </div>
+            {% else %}
+            <div class="kpi-status-badge kpi-status-majority" id="nda-badge">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+              MAJORITY (≥272)
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="kpi-footer-grid">
+            <div class="kpi-footer-col">
+              {% if overview %}
+              {% set vsLE = overview.latest_forecast.point_estimate.predicted_seats.NDA - overview.actual_2024_nda %}
+              <div class="kpi-delta-val {{ 'kpi-delta-up' if vsLE >= 0 else 'kpi-delta-down' }}" id="nda-delta-vsle">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="{% if vsLE >= 0 %}M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z{% else %}M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z{% endif %}" fill-rule="evenodd"></path></svg>
+                {{ "+%d" | format(vsLE) if vsLE >= 0 else "%d" | format(vsLE) }}
+              </div>
+              <div class="kpi-footer-label">vs LE ({{ overview.actual_2024_nda }})</div>
+              {% else %}
+              <div class="kpi-delta-val kpi-delta-down" id="nda-delta-vsle">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+                -19
+              </div>
+              <div class="kpi-footer-label">vs LE (293)</div>
+              {% endif %}
+            </div>
+
+            <div class="kpi-footer-col bordered">
+              {% if overview %}
+              {% set nda_ma30 = trend_analytics.series.NDA_proj_seats.ma_30d if (trend_analytics and trend_analytics.series and trend_analytics.series.NDA_proj_seats) else None %}
+              {% set vs30 = (overview.latest_forecast.point_estimate.predicted_seats.NDA - nda_ma30) if nda_ma30 is not none else None %}
+              {% if vs30 is not none %}
+              <div class="kpi-delta-val {{ 'kpi-delta-up' if vs30 >= 0 else 'kpi-delta-down' }}" id="nda-delta-vs30">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="{% if vs30 >= 0 %}M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z{% else %}M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z{% endif %}" fill-rule="evenodd"></path></svg>
+                {{ "+%.1f" | format(vs30) if vs30 >= 0 else "%.1f" | format(vs30) }}
+              </div>
+              <div class="kpi-footer-label">vs 30d avg</div>
+              {% endif %}
+              {% else %}
+              <div class="kpi-delta-val kpi-delta-up" id="nda-delta-vs30">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>
+                +0.5
+              </div>
+              <div class="kpi-footer-label">vs 30d avg</div>
+              {% endif %}
+            </div>
+
+            <div class="kpi-footer-col">
+              <div class="flex items-center justify-center gap-1 font-bold mb-1 text-sm" style="color: var(--text-main);">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="color: var(--accent-nda, #F97316);"><path clip-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+                90% CI
+              </div>
+              <div class="kpi-ci-val" id="nda-ci">
+                {% if overview %}
+                {% set ci = overview.latest_forecast.confidence_intervals.NDA %}
+                {{ ci.p5 }}–{{ ci.p95 }}
+                {% else %}
+                247–300
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- END: NDACard -->
+
+      <!-- BEGIN: IndiaCard -->
+      <article class="kpi-card" data-purpose="india-card">
+        <div class="kpi-accent-bar kpi-accent-india"></div>
+        <div class="kpi-card-body">
+          <header class="kpi-header">
+            <div class="kpi-icon-wrapper kpi-icon-india">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path><path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"></path></svg>
+            </div>
+            <div class="kpi-title-group">
+              <h2>PREDICTED INDIA ALLIANCE SEATS</h2>
+              <p>(LATEST)</p>
+            </div>
+          </header>
+
+          <div class="kpi-main-val-row">
+            <span class="kpi-val-number kpi-val-india" id="india-seat-val">{% if overview %}{{ overview.latest_forecast.point_estimate.predicted_seats.INDIA }}{% else %}253{% endif %}</span>
+            {% if overview %}
+            {% set ind_seats = overview.latest_forecast.point_estimate.predicted_seats.INDIA %}
+            {% set ind_wins = ind_seats >= overview.majority_threshold %}
+            <div class="kpi-status-badge {{ 'kpi-status-majority' if ind_wins else 'kpi-status-short' }}" id="india-badge">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+              {{ 'MAJORITY (≥272)' if ind_wins else 'SHORT OF 272' }}
+            </div>
+            {% else %}
+            <div class="kpi-status-badge kpi-status-short" id="india-badge">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+              SHORT OF 272
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="kpi-footer-grid">
+            <div class="kpi-footer-col">
+              {% if overview %}
+              {% set vsLE = overview.latest_forecast.point_estimate.predicted_seats.INDIA - overview.actual_2024_india %}
+              <div class="kpi-delta-val {{ 'kpi-delta-up' if vsLE >= 0 else 'kpi-delta-down' }}" id="india-delta-vsle">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="{% if vsLE >= 0 %}M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z{% else %}M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z{% endif %}" fill-rule="evenodd"></path></svg>
+                {{ "+%d" | format(vsLE) if vsLE >= 0 else "%d" | format(vsLE) }}
+              </div>
+              <div class="kpi-footer-label">vs LE ({{ overview.actual_2024_india }})</div>
+              {% else %}
+              <div class="kpi-delta-val kpi-delta-up" id="india-delta-vsle">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>
+                +19
+              </div>
+              <div class="kpi-footer-label">vs LE (234)</div>
+              {% endif %}
+            </div>
+
+            <div class="kpi-footer-col bordered">
+              {% if overview %}
+              {% set ind_ma30 = trend_analytics.series.INDIA_proj_seats.ma_30d if (trend_analytics and trend_analytics.series and trend_analytics.series.INDIA_proj_seats) else None %}
+              {% set vs30 = (overview.latest_forecast.point_estimate.predicted_seats.INDIA - ind_ma30) if ind_ma30 is not none else None %}
+              {% if vs30 is not none %}
+              <div class="kpi-delta-val {{ 'kpi-delta-up' if vs30 >= 0 else 'kpi-delta-down' }}" id="india-delta-vs30">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="{% if vs30 >= 0 %}M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z{% else %}M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z{% endif %}" fill-rule="evenodd"></path></svg>
+                {{ "+%.1f" | format(vs30) if vs30 >= 0 else "%.1f" | format(vs30) }}
+              </div>
+              <div class="kpi-footer-label">vs 30d avg</div>
+              {% endif %}
+              {% else %}
+              <div class="kpi-delta-val kpi-delta-down" id="india-delta-vs30">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+                -0.5
+              </div>
+              <div class="kpi-footer-label">vs 30d avg</div>
+              {% endif %}
+            </div>
+
+            <div class="kpi-footer-col">
+              <div class="flex items-center justify-center gap-1 font-bold mb-1 text-sm" style="color: var(--text-main);">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="color: var(--accent-india, #2563EB);"><path clip-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+                90% CI
+              </div>
+              <div class="kpi-ci-val" id="india-ci">
+                {% if overview %}
+                {% set ci = overview.latest_forecast.confidence_intervals.INDIA %}
+                {{ ci.p5 }}–{{ ci.p95 }}
+                {% else %}
+                228–279
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- END: IndiaCard -->
+
+      <!-- BEGIN: ProbabilityCard -->
+      <article class="kpi-card" data-purpose="probability-card">
+        <div class="kpi-accent-bar kpi-accent-prob"></div>
+        <div class="kpi-card-body">
+          <header class="kpi-header">
+            <div class="kpi-icon-wrapper kpi-icon-prob">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"></path></svg>
+            </div>
+            <div class="kpi-title-group">
+              <h2>OUTCOME PROBABILITY</h2>
+            </div>
+          </header>
+
           {% if overview %}
-          {% set nda_seats = overview.latest_forecast.point_estimate.predicted_seats.NDA %}
-          {% set nda_wins = nda_seats >= overview.majority_threshold %}
-          <span class="badge {{ 'badge-winner' if nda_wins else 'badge-others' }}" id="nda-badge">
-            {{ 'Majority (≥272)' if nda_wins else 'Short of 272' }}
-          </span>
+          {% set prob = overview.latest_forecast.majority_probability %}
+          {% set outcomes = [
+            {'name': 'NDA MAJORITY', 'p': prob.NDA, 'color': 'var(--accent-nda, #F97316)'},
+            {'name': 'INDIA MAJORITY', 'p': prob.INDIA, 'color': 'var(--accent-india, #2563EB)'},
+            {'name': 'HUNG PARLIAMENT', 'p': prob.HUNG, 'color': '#16A34A'}
+          ] | sort(attribute='p', reverse=True) %}
+          {% set top = outcomes[0] %}
+          <div class="kpi-main-val-row">
+            <span class="kpi-val-number kpi-val-prob" id="outcome-val">{{ (top.p * 100) | round | int }}%</span>
+            <div class="kpi-status-badge kpi-status-majority" id="outcome-badge">
+              {{ top.name }}
+            </div>
+          </div>
+
+          <div class="kpi-footer-grid">
+            <div class="kpi-footer-col">
+              <div class="flex items-center justify-center gap-1 text-xs font-bold mb-1" style="color: var(--text-main);">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background: {{ outcomes[1].color }}"></span>
+                {{ outcomes[1].name | title }}
+              </div>
+              <div class="kpi-ci-val" id="outcome-alt1-val">{{ (outcomes[1].p * 100) | round | int }}%</div>
+            </div>
+
+            <div class="kpi-footer-col bordered">
+              <div class="flex items-center justify-center gap-1 text-xs font-bold mb-1" style="color: var(--text-main);">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background: {{ outcomes[2].color }}"></span>
+                {{ outcomes[2].name | title }}
+              </div>
+              <div class="kpi-ci-val" id="outcome-alt2-val">{{ (outcomes[2].p * 100) | round | int }}%</div>
+            </div>
+
+            <div class="kpi-footer-col flex flex-col items-center justify-center">
+              <div class="flex items-center justify-center gap-1 font-bold mb-1 text-sm" style="color: var(--accent-emerald, #16A34A);" id="outcome-sims-val">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                {{ "{:,}".format(overview.latest_forecast.n_simulations) }}
+              </div>
+              <div class="kpi-footer-label" style="font-size: 10px; line-height: 1.2;">Monte Carlo simulations</div>
+            </div>
+          </div>
           {% else %}
-          <span class="badge" id="nda-badge">—</span>
-          {% endif %}
-        </div>
-        <div class="delta-row" id="nda-deltas">
-          {% if overview %}
-          {% set vsLE = overview.latest_forecast.point_estimate.predicted_seats.NDA - overview.actual_2024_nda %}
-          {% set nda_ma30 = trend_analytics.series.NDA_proj_seats.ma_30d if (trend_analytics and trend_analytics.series and trend_analytics.series.NDA_proj_seats) else None %}
-          {% set vs30 = (overview.latest_forecast.point_estimate.predicted_seats.NDA - nda_ma30) if nda_ma30 is not none else None %}
-          <span class="delta-chip {{ 'd-flat' if vsLE == 0 else ('d-up' if vsLE > 0 else 'd-down') }}">
-            {{ '▲ ' if vsLE > 0 else ('▼ ' if vsLE < 0 else '') }}{{ "+%d" | format(vsLE) if vsLE > 0 else "%d" | format(vsLE) }} <span class="d-label">vs LE ({{ overview.actual_2024_nda }})</span>
-          </span>
-          {% if vs30 is not none %}
-          <span class="delta-chip {{ 'd-flat' if vs30 == 0 else ('d-up' if vs30 > 0 else 'd-down') }}">
-            {{ '▲ ' if vs30 > 0 else ('▼ ' if vs30 < 0 else '') }}{{ "+%.1f" | format(vs30) if vs30 > 0 else "%.1f" | format(vs30) }} <span class="d-label">vs 30d avg</span>
-          </span>
-          {% endif %}
-          {% endif %}
-        </div>
-        <div class="stat-sub" id="nda-ci">
-          {% if overview %}
-          {% set ci = overview.latest_forecast.confidence_intervals.NDA %}
-          {% set hw = ((ci.p95 - ci.p5) / 2) | round | int %}
-          <strong>±{{ hw }}</strong> seats at 90% confidence ({{ ci.p5 }}–{{ ci.p95 }})<br>
-          P(majority) <strong>{{ (overview.latest_forecast.majority_probability.NDA * 100) | round | int }}%</strong>
-          {% endif %}
-        </div>
-      </div>
+          <div class="kpi-main-val-row">
+            <span class="kpi-val-number kpi-val-prob" id="outcome-val">56%</span>
+            <div class="kpi-status-badge kpi-status-majority" id="outcome-badge">
+              NDA MAJORITY
+            </div>
+          </div>
 
-      <!-- INDIA Card -->
-      <div class="card">
-        <div class="stat-label">Predicted INDIA Alliance Seats (Latest)</div>
-        <div class="stat-val" style="color: var(--accent-india)">
-          <span id="india-seat-val">{% if overview %}{{ overview.latest_forecast.point_estimate.predicted_seats.INDIA }}{% else %}—{% endif %}</span>
-          {% if overview %}
-          {% set ind_seats = overview.latest_forecast.point_estimate.predicted_seats.INDIA %}
-          {% set ind_wins = ind_seats >= overview.majority_threshold %}
-          <span class="badge {{ 'badge-winner' if ind_wins else 'badge-others' }}" id="india-badge">
-            {{ 'Majority (≥272)' if ind_wins else 'Short of 272' }}
-          </span>
-          {% else %}
-          <span class="badge" id="india-badge">—</span>
-          {% endif %}
-        </div>
-        <div class="delta-row" id="india-deltas">
-          {% if overview %}
-          {% set vsLE = overview.latest_forecast.point_estimate.predicted_seats.INDIA - overview.actual_2024_india %}
-          {% set ind_ma30 = trend_analytics.series.INDIA_proj_seats.ma_30d if (trend_analytics and trend_analytics.series and trend_analytics.series.INDIA_proj_seats) else None %}
-          {% set vs30 = (overview.latest_forecast.point_estimate.predicted_seats.INDIA - ind_ma30) if ind_ma30 is not none else None %}
-          <span class="delta-chip {{ 'd-flat' if vsLE == 0 else ('d-up' if vsLE > 0 else 'd-down') }}">
-            {{ '▲ ' if vsLE > 0 else ('▼ ' if vsLE < 0 else '') }}{{ "+%d" | format(vsLE) if vsLE > 0 else "%d" | format(vsLE) }} <span class="d-label">vs LE ({{ overview.actual_2024_india }})</span>
-          </span>
-          {% if vs30 is not none %}
-          <span class="delta-chip {{ 'd-flat' if vs30 == 0 else ('d-up' if vs30 > 0 else 'd-down') }}">
-            {{ '▲ ' if vs30 > 0 else ('▼ ' if vs30 < 0 else '') }}{{ "+%.1f" | format(vs30) if vs30 > 0 else "%.1f" | format(vs30) }} <span class="d-label">vs 30d avg</span>
-          </span>
-          {% endif %}
-          {% endif %}
-        </div>
-        <div class="stat-sub" id="india-ci">
-          {% if overview %}
-          {% set ci = overview.latest_forecast.confidence_intervals.INDIA %}
-          {% set hw = ((ci.p95 - ci.p5) / 2) | round | int %}
-          <strong>±{{ hw }}</strong> seats at 90% confidence ({{ ci.p5 }}–{{ ci.p95 }})<br>
-          P(majority) <strong>{{ (overview.latest_forecast.majority_probability.INDIA * 100) | round | int }}%</strong>
-          {% endif %}
-        </div>
-      </div>
+          <div class="kpi-footer-grid">
+            <div class="kpi-footer-col">
+              <div class="flex items-center justify-center gap-1 text-xs font-bold mb-1" style="color: var(--text-main);">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background: #16A34A"></span>
+                Hung Parliament
+              </div>
+              <div class="kpi-ci-val">32%</div>
+            </div>
 
-      <!-- Others Card -->
-      <div class="card">
-        <div class="stat-label">Predicted Others Seats (Latest)</div>
-        <div class="stat-val" style="color: var(--accent-others)">
-          <span id="others-seat-val">{% if overview %}{{ overview.latest_forecast.point_estimate.predicted_seats.OTHERS }}{% else %}—{% endif %}</span>
-          <span class="badge badge-others">Regional Parties</span>
-        </div>
-        <div class="delta-row" id="others-deltas">
-          {% if overview %}
-          {% set vsLE = overview.latest_forecast.point_estimate.predicted_seats.OTHERS - overview.actual_2024_others %}
-          <span class="delta-chip {{ 'd-flat' if vsLE == 0 else ('d-up' if vsLE > 0 else 'd-down') }}">
-            {{ '▲ +' if vsLE > 0 else ('▼ ' if vsLE < 0 else '') }}{{ vsLE }} <span class="d-label">vs LE ({{ overview.actual_2024_others }})</span>
-          </span>
+            <div class="kpi-footer-col bordered">
+              <div class="flex items-center justify-center gap-1 text-xs font-bold mb-1" style="color: var(--text-main);">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background: #2563EB"></span>
+                INDIA Majority
+              </div>
+              <div class="kpi-ci-val">12%</div>
+            </div>
+
+            <div class="kpi-footer-col flex flex-col items-center justify-center">
+              <div class="flex items-center justify-center gap-1 font-bold mb-1 text-sm" style="color: var(--accent-emerald, #16A34A);" id="outcome-sims-val">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                20,000
+              </div>
+              <div class="kpi-footer-label" style="font-size: 10px; line-height: 1.2;">Monte Carlo simulations</div>
+            </div>
+          </div>
           {% endif %}
         </div>
-        <div class="stat-sub" id="others-ci">
-          Residual of the 543 seats after NDA and INDIA.<br>No separate interval is modelled.
-        </div>
-      </div>
-
-      <!-- Outcome Probability Card -->
-      <div class="card">
-        <div class="stat-label">Outcome Probability</div>
-        {% if overview %}
-        {% set prob = overview.latest_forecast.majority_probability %}
-        {% set outcomes = [
-          {'name': 'NDA majority', 'p': prob.NDA, 'color': 'var(--accent-nda)'},
-          {'name': 'INDIA majority', 'p': prob.INDIA, 'color': 'var(--accent-india)'},
-          {'name': 'Hung parliament', 'p': prob.HUNG, 'color': '#EF4444'}
-        ] | sort(attribute='p', reverse=True) %}
-        {% set top = outcomes[0] %}
-        <div class="stat-val" style="color: {{ top.color }}">
-          <span id="outcome-val">{{ (top.p * 100) | round | int }}%</span>
-        </div>
-        <div class="delta-row" id="outcome-deltas">
-          <span class="delta-chip d-flat" style="font-weight:700">{{ top.name }}</span>
-        </div>
-        <div class="stat-sub" id="outcome-sub">
-          {{ outcomes[1].name }} {{ (outcomes[1].p * 100) | round | int }}% · {{ outcomes[2].name }} {{ (outcomes[2].p * 100) | round | int }}%<br>
-          From {{ "{:,}".format(overview.latest_forecast.n_simulations) }} Monte Carlo draws
-        </div>
-        {% else %}
-        <div class="stat-val" style="color: #EF4444">
-          <span id="outcome-val">—</span>
-        </div>
-        <div class="delta-row" id="outcome-deltas"></div>
-        <div class="stat-sub" id="outcome-sub">Majority needs 272 of 543 seats</div>
-        {% endif %}
-      </div>
+      </article>
+      <!-- END: ProbabilityCard -->
     </div>
 
     <!-- DAILY FORECAST CHART -->
-    <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <div>
+    <div class="card chart-card-compact">
+        <div class="chart-header-row">
+          <div class="chart-title-group">
             <h2>Daily Projected Lok Sabha Seats vs Baseline Election Actuals</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
-              Daily seat projections from the option-level CVoter trackers (2019 to present),
-              benchmarked against the 2024 result. Click any legend entry to hide that line.
-            </p>
+            <p class="chart-sub">Option-level CVoter trackers (2019–present) benchmarked against 2024 actuals</p>
+          </div>
+
+          <div class="chart-controls-group">
+            <div class="range-selector">
+              <span class="range-label">Range</span>
+              <button type="button" class="range-btn" data-range="30">30D</button>
+              <button type="button" class="range-btn" data-range="90">90D</button>
+              <button type="button" class="range-btn" data-range="180">6M</button>
+              <button type="button" class="range-btn" data-range="365">1Y</button>
+              <button type="button" class="range-btn" data-range="1095">3Y</button>
+              <button type="button" class="range-btn active" data-range="all">All</button>
+              <button type="button" class="range-btn" id="btn-reset-zoom" title="Reset zoom level">Reset</button>
+            </div>
+
+            <label class="toggle-chip" title="Show or hide event markers on chart">
+              <input type="checkbox" id="chk-events" checked> Events
+            </label>
           </div>
         </div>
 
-        <!-- Series legend. Each entry toggles its dataset; the index maps to
-             a dataset index inside renderDailyChart. -->
+        <!-- Series legend: sleek single-row clickable items -->
         <div class="legend-box" id="series-legend"></div>
-
-        <div class="chart-toolbar">
-          <span style="font-size:12px; font-weight:600; color:var(--text-muted);">Range</span>
-          <button type="button" class="range-btn" data-range="30">30D</button>
-          <button type="button" class="range-btn" data-range="90">90D</button>
-          <button type="button" class="range-btn" data-range="180">6M</button>
-          <button type="button" class="range-btn" data-range="365">1Y</button>
-          <button type="button" class="range-btn" data-range="1095">3Y</button>
-          <button type="button" class="range-btn active" data-range="all">All</button>
-          <button type="button" class="range-btn" id="btn-reset-zoom">Reset zoom</button>
-
-          <label class="toggle-chip">
-            <input type="checkbox" id="chk-events" checked> Event markers
-          </label>
-
-          <span class="toolbar-hint">Scroll to zoom · drag to pan · scrollbar below to move through time</span>
-        </div>
 
         <div class="chart-container">
           <canvas id="dailyForecastChart"></canvas>
@@ -297,7 +451,7 @@
       <!-- Highest-impact events, measured from the projection series -->
       <div class="card" style="margin-top: 24px;">
         <h2>Top 5 Incidents by Impact</h2>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;" id="impact-method"></p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;" id="impact-method"></p>
 
         <div class="impact-grid">
           <div>
@@ -307,9 +461,9 @@
                 <thead>
                   <tr>
                     <th>Incident</th><th>When</th>
-                    <th title="Change in projected NDA seats out of 543">Seats</th>
-                    <th title="Change in the composite sentiment index, a -100 to +100 scale">Sentiment</th>
-                    <th title="Size of the move relative to the series' normal 30-day drift">z</th>
+                    <th class="num" title="Change in projected NDA seats out of 543">Seats</th>
+                    <th class="num" title="Change in composite sentiment index (-100 to +100)">Sent</th>
+                    <th class="num" title="Size of move relative to 30-day normal drift">z</th>
                   </tr>
                 </thead>
                 <tbody id="impact-positive"></tbody>
@@ -324,9 +478,9 @@
                 <thead>
                   <tr>
                     <th>Incident</th><th>When</th>
-                    <th title="Change in projected NDA seats out of 543">Seats</th>
-                    <th title="Change in the composite sentiment index, a -100 to +100 scale">Sentiment</th>
-                    <th title="Size of the move relative to the series' normal 30-day drift">z</th>
+                    <th class="num" title="Change in projected NDA seats out of 543">Seats</th>
+                    <th class="num" title="Change in composite sentiment index (-100 to +100)">Sent</th>
+                    <th class="num" title="Size of move relative to 30-day normal drift">z</th>
                   </tr>
                 </thead>
                 <tbody id="impact-negative"></tbody>
@@ -336,19 +490,14 @@
         </div>
 
         <div class="units-key">
-          <span><b>Seats</b> — change in projected NDA seats, out of 543.</span>
-          <span><b>Sentiment</b> — change in the composite sentiment index, a −100 to +100 scale
-                built from the weighted survey answers. It is what drives the seat number,
-                so the two always move together.</span>
-          <span><b>z</b> — the move divided by how much this series normally drifts over any
-                30 days. Below ±1 is ordinary wandering.</span>
+          <span><b>Seats</b> — change in projected NDA seats (out of 543).</span>
+          <span><b>Sentiment</b> — change in composite sentiment index (−100 to +100 scale).</span>
+          <span><b>z</b> — move relative to 30-day normal drift (below ±1 is ordinary wandering).</span>
         </div>
 
-        <div class="note-banner" style="margin-top: 14px; margin-bottom: 0;">
-          📌 <strong>Read this as association, not causation.</strong>
-          The model has no event variable — it only sees survey answers, so an impact here
-          means the electorate's answers moved across that window, indicating potentially the event may have caused
-          the move.
+        <div class="note-banner" style="margin-top: 8px; margin-bottom: 0; padding: 6px 12px; font-size: 11.5px; line-height: 1.35;">
+          📌 <strong>Read as association, not causation:</strong>
+          The model only sees survey answers; an impact indicates survey responses shifted across that window, consistent with the event having an effect.
           <span id="impact-excluded"></span>
         </div>
       </div>
@@ -374,6 +523,39 @@
 
         <div class="summary-sub" style="margin-top: 18px;">What this model cannot tell you</div>
         <ul class="caveat-list" id="summary-caveats"></ul>
+      </div>
+
+      <!-- Data source & attribution card -->
+      <div class="card dash-attribution" style="margin-top: 24px;">
+        <div>
+          <div class="footer-heading">Data source</div>
+          <p>
+            Every projection on this page is derived from the daily public opinion trackers
+            published by <a href="https://cvoterindia.com/" target="_blank" rel="noopener noreferrer">CVoter
+            India</a>. CVoter runs the fieldwork, the sampling and the daily surveys; all 41
+            labelled answer series used here come from their published trackers.
+            The modelling, weighting and seat projection are MyDataLabs' own and are
+            <strong>not</strong> endorsed by, affiliated with, or produced in collaboration
+            with CVoter.
+          </p>
+          <p>
+            Source data: <a href="https://cvoterindia.com/" target="_blank" rel="noopener noreferrer">cvoterindia.com</a>
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-heading">About this projection</div>
+          <p>
+            543-seat Lok Sabha projection from a weighted composite of CVoter's option-level
+            survey responses, calibrated against the 2019 and 2024 general election results.
+            Backtest error against those two elections averages 5.3 seats.
+          </p>
+          <p>
+            This is a model, not a forecast of any announced election. It carries no
+            seat-level or state-level contest data and cannot see alliance arithmetic or
+            candidate effects.
+          </p>
+        </div>
       </div>
 
     </div><!-- /.container -->
@@ -406,38 +588,6 @@
         <div id="backtest-summary" style="margin-bottom: 16px;"></div>
         <div class="backtest-matrix" id="backtest-matrix"></div>
       </div>
-    </div>
-  </div>
-
-  <div class="dash-attribution">
-    <div>
-      <div class="footer-heading">Data source</div>
-      <p>
-        Every projection on this page is derived from the daily public opinion trackers
-        published by <a href="https://cvoterindia.com/" target="_blank" rel="noopener noreferrer">CVoter
-        India</a>. CVoter runs the fieldwork, the sampling and the daily surveys; all 41
-        labelled answer series used here come from their published trackers.
-        The modelling, weighting and seat projection are MyDataLabs' own and are
-        <strong>not</strong> endorsed by, affiliated with, or produced in collaboration
-        with CVoter.
-      </p>
-      <p>
-        Source data: <a href="https://cvoterindia.com/" target="_blank" rel="noopener noreferrer">cvoterindia.com</a>
-      </p>
-    </div>
-
-    <div>
-      <div class="footer-heading">About this projection</div>
-      <p>
-        543-seat Lok Sabha projection from a weighted composite of CVoter's option-level
-        survey responses, calibrated against the 2019 and 2024 general election results.
-        Backtest error against those two elections averages 5.3 seats.
-      </p>
-      <p>
-        This is a model, not a forecast of any announced election. It carries no
-        seat-level or state-level contest data and cannot see alliance arithmetic or
-        candidate effects.
-      </p>
     </div>
   </div>
 </div>

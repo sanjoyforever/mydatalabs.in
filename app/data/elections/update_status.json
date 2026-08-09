@@ -1,10 +1,11 @@
 {
-  "started_at": "2026-08-05T09:29:04+00:00",
-  "forced": true,
+  "started_at": "2026-08-09T05:57:58+00:00",
+  "forced": false,
   "local_latest_date": "2026-08-02",
-  "status": "failed",
-  "reason": "probe_failed",
-  "error": "HTTPSConnectionPool(host='cvoterindia.com', port=443): Read timed out. (read timeout=3)",
-  "finished_at": "2026-08-05T09:29:08+00:00",
-  "duration_seconds": 4.25
+  "remote_latest_date": "2026-08-02",
+  "status": "up_to_date",
+  "reason": "no_new_data",
+  "new_rows": 0,
+  "finished_at": "2026-08-09T05:58:01+00:00",
+  "duration_seconds": 3.08
 }

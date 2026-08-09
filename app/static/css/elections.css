@@ -157,7 +157,7 @@
 .elections-dash .badge-others { background: rgba(148, 163, 184, 0.15); color: var(--accent-others); border: 1px solid var(--accent-others); }
 .elections-dash .badge-winner { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981; }
 
-.elections-dash .chart-container { position: relative; height: 520px; width: 100%; margin-top: 16px; }
+.elections-dash .chart-container { position: relative; height: 400px; width: 100%; margin-top: 16px; }
 
 /* --- KPI delta chips ---------------------------------------------------- */
 
@@ -252,31 +252,76 @@
 .elections-dash .impact-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 28px;
-    margin-top: 16px;
+    gap: 16px;
+    margin-top: 12px;
 }
 
-/* Stacked, the two tables are read one after the other, so their columns have
-   to land in the same places — auto layout sized each to its own content and
-   put WHEN 200px apart between them. Fixed widths for everything except the
-   incident name, which takes the remainder. */
 .elections-dash .impact-grid .table-custom {
     table-layout: fixed;
     width: 100%;
 }
 
-.elections-dash .impact-grid .table-custom th:nth-child(2),
-.elections-dash .impact-grid .table-custom td:nth-child(2) { width: 210px; }
+.elections-dash .impact-grid .table-custom th,
+.elections-dash .impact-grid .table-custom td {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.3;
+    border-bottom: 1px solid var(--border-glow);
+}
 
-.elections-dash .impact-grid .table-custom th:nth-child(n+3),
-.elections-dash .impact-grid .table-custom td:nth-child(n+3) { width: 120px; }
-
-.elections-dash .impact-heading {
-    font-size: 13px;
+.elections-dash .impact-grid .table-custom th {
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 8px;
+    color: var(--text-muted);
+    padding: 6px 10px;
+    text-align: left;
+}
+
+.elections-dash .impact-grid .table-custom th.num {
+    text-align: right;
+}
+
+/* Col 1: Incident Name (Takes all remaining space ~400px+) */
+.elections-dash .impact-grid .table-custom th:nth-child(1),
+.elections-dash .impact-grid .table-custom td:nth-child(1) {
+    width: auto;
+}
+
+/* Col 2: When (Fixed 200px across both tables) */
+.elections-dash .impact-grid .table-custom th:nth-child(2),
+.elections-dash .impact-grid .table-custom td:nth-child(2) {
+    width: 200px;
+    white-space: nowrap;
+}
+
+/* Col 3: Seats (Fixed 90px, right-aligned) */
+.elections-dash .impact-grid .table-custom th:nth-child(3),
+.elections-dash .impact-grid .table-custom td:nth-child(3) {
+    width: 90px;
+    text-align: right;
+}
+
+/* Col 4: Sent (Fixed 90px, right-aligned) */
+.elections-dash .impact-grid .table-custom th:nth-child(4),
+.elections-dash .impact-grid .table-custom td:nth-child(4) {
+    width: 90px;
+    text-align: right;
+}
+
+/* Col 5: z (Fixed 75px, right-aligned) */
+.elections-dash .impact-grid .table-custom th:nth-child(5),
+.elections-dash .impact-grid .table-custom td:nth-child(5) {
+    width: 75px;
+    text-align: right;
+}
+
+.elections-dash .impact-heading {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
 }
 
 .elections-dash .impact-plus { color: #10B981; }
@@ -285,14 +330,15 @@
 /* Wide tables scroll inside their own box rather than pushing the page. */
 .elections-dash .table-scroll { overflow-x: auto; }
 
-.elections-dash .impact-label { font-weight: 600; }
-.elections-dash .impact-note { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; }
+.elections-dash .impact-label { font-weight: 600; font-size: 11.5px; }
+.elections-dash .impact-note { font-size: 10px; color: var(--text-muted); display: block; margin-top: 1px; }
 
 .elections-dash .num {
     font-family: var(--font-mono);
     font-weight: 700;
     text-align: right;
     white-space: nowrap;
+    font-size: 11.5px;
 }
 
 .elections-dash .pill-partial {
@@ -361,12 +407,9 @@
 
 /* --- Attribution block -------------------------------------------------- */
 /* The site footer comes from base.html. This is the dashboard's own source
-   credit, which has to sit with the numbers it describes. */
+   credit, which sits inside a card within the container. */
 
 .elections-dash .dash-attribution {
-    margin: 32px 0 0;
-    padding: 26px 0 0;
-    border-top: 1px solid var(--border-glow);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 32px;
@@ -386,6 +429,10 @@
     line-height: 1.65;
     color: var(--text-muted);
     margin-bottom: 10px;
+}
+
+.elections-dash .dash-attribution p:last-child {
+    margin-bottom: 0;
 }
 
 .elections-dash .dash-attribution a { color: var(--accent-india); text-decoration: none; font-weight: 600; }
@@ -422,41 +469,102 @@
 
 .elections-dash .units-key b { color: var(--text-main); }
 
-/* --- Chart toolbar ------------------------------------------------------ */
+/* --- Compact Chart Header Layout ----------------------------------------- */
 
-.elections-dash .chart-toolbar {
+.elections-dash .chart-card-compact {
+    position: relative;
+}
+
+.elections-dash .chart-header-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border-glow);
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.elections-dash .chart-title-group h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.25;
+}
+
+.elections-dash .chart-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 2px 0 0 0;
+}
+
+.elections-dash .chart-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.elections-dash .range-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--card-sub-bg);
+    padding: 3px 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border-glow);
+}
+
+.elections-dash .range-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 0 4px 0 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .elections-dash .range-btn {
-    background: var(--card-sub-bg);
-    border: 1px solid var(--border-glow);
-    color: var(--text-main);
-    border-radius: 7px;
-    padding: 5px 11px;
-    font-size: 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.15s ease;
 }
 
-.elections-dash .range-btn:hover { border-color: var(--accent-india); }
-.elections-dash .range-btn.active { background: var(--accent-india); border-color: var(--accent-india); color: #fff; }
-.elections-dash .toolbar-hint { font-size: 11.5px; color: var(--text-muted); margin-left: auto; }
+.elections-dash .range-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.elections-dash .range-btn.active {
+    background: var(--accent-india);
+    border-color: var(--accent-india);
+    color: #ffffff;
+}
 
 .elections-dash .toggle-chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12px;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 500;
     color: var(--text-muted);
+    background: var(--card-sub-bg);
+    padding: 4px 9px;
+    border-radius: 8px;
+    border: 1px solid var(--border-glow);
     cursor: pointer;
     user-select: none;
+    transition: all 0.15s ease;
+}
+
+.elections-dash .toggle-chip:hover {
+    color: var(--text-main);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .elections-dash .toggle-chip input { cursor: pointer; }
@@ -594,25 +702,42 @@
 
 .elections-dash .legend-box {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     flex-wrap: wrap;
-    font-size: 12px;
-    margin-top: 12px;
-    margin-bottom: 8px;
+    align-items: center;
+    font-size: 11px;
+    margin: 8px 0 10px 0;
 }
 
 .elections-dash .legend-item {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     background: var(--card-sub-bg);
-    padding: 6px 12px;
-    border-radius: 6px;
+    padding: 3px 8px;
+    border-radius: 5px;
     border: 1px solid var(--border-glow);
     color: var(--text-main);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
 }
 
-.elections-dash .color-pill { width: 16px; height: 4px; border-radius: 2px; }
+.elections-dash .legend-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.elections-dash .legend-item.legend-off {
+    opacity: 0.45;
+    text-decoration: line-through;
+    background: transparent;
+}
+
+.elections-dash .color-pill { width: 12px; height: 3px; border-radius: 2px; flex-shrink: 0; }
 
 .elections-dash .note-banner {
     background: var(--banner-bg);
@@ -631,4 +756,199 @@
     .elections-dash .backtest-matrix,
     .elections-dash .grid-2 { grid-template-columns: 1fr; }
     .elections-dash .toolbar-hint { margin-left: 0; }
+}
+
+/* --- 3 KPI Cards Layout ------------------------------------------------ */
+.elections-dash .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+    align-items: stretch;
+}
+
+@media (min-width: 900px) {
+    .elections-dash .kpi-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.elections-dash .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glow);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.elections-dash .kpi-accent-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+.elections-dash .kpi-accent-nda { background-color: var(--accent-nda, #F97316); }
+.elections-dash .kpi-accent-india { background-color: var(--accent-india, #2563EB); }
+.elections-dash .kpi-accent-prob { background-color: #16A34A; }
+
+.elections-dash .kpi-card-body {
+    padding: 14px 18px 12px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 100%;
+}
+
+.elections-dash .kpi-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.elections-dash .kpi-icon-wrapper {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.elections-dash .kpi-icon-wrapper svg {
+    width: 18px;
+    height: 18px;
+}
+
+.elections-dash .kpi-icon-nda {
+    background: rgba(249, 115, 22, 0.12);
+    color: var(--accent-nda, #F97316);
+}
+
+.elections-dash .kpi-icon-india {
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--accent-india, #2563EB);
+}
+
+.elections-dash .kpi-icon-prob {
+    background: rgba(22, 163, 74, 0.12);
+    color: #16A34A;
+}
+
+.elections-dash .kpi-title-group h2 {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.elections-dash .kpi-title-group p {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 1px 0 0 0;
+}
+
+.elections-dash .kpi-main-val-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.elections-dash .kpi-val-number {
+    font-family: var(--font-display, 'Geist', sans-serif);
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.elections-dash .kpi-val-nda { color: var(--accent-nda, #F97316); }
+.elections-dash .kpi-val-india { color: var(--accent-india, #2563EB); }
+.elections-dash .kpi-val-prob { color: #16A34A; }
+
+.elections-dash .kpi-status-badge {
+    padding: 3px 8px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.elections-dash .kpi-status-badge svg {
+    width: 13px;
+    height: 13px;
+}
+
+.elections-dash .kpi-status-majority {
+    background: rgba(22, 163, 74, 0.12);
+    border: 1px solid rgba(22, 163, 74, 0.3);
+    color: #16A34A;
+}
+
+.elections-dash .kpi-status-short {
+    background: var(--card-sub-bg);
+    border: 1px solid var(--border-glow);
+    color: var(--text-muted);
+}
+
+.elections-dash .kpi-footer-grid {
+    border-top: 1px solid var(--border-glow);
+    padding-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.elections-dash .kpi-footer-col {
+    text-align: center;
+}
+
+.elections-dash .kpi-footer-col.bordered {
+    border-left: 1px solid var(--border-glow);
+    border-right: 1px solid var(--border-glow);
+}
+
+.elections-dash .kpi-delta-val {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 1px;
+    font-family: var(--font-mono);
+}
+
+.elections-dash .kpi-delta-up { color: #16A34A; }
+.elections-dash .kpi-delta-down { color: #EF4444; }
+.elections-dash .kpi-delta-flat { color: var(--text-muted); }
+
+.elections-dash .kpi-footer-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.elections-dash .kpi-ci-val {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main);
 }
