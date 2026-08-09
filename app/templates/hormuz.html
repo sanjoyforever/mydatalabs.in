@@ -138,15 +138,12 @@
           <div class="hero-metric-row">
             <span class="hero-metric-value font-mono">{{ "%.1f"|format(snapshot.score) }}</span>
           </div>
-          <div class="hero-trend" style="align-items: center; margin-top: 8px;">
+          <div class="hero-trend">
             <span class="hero-trend-pill {% if delta >= 0 %}trend-up{% else %}trend-down{% endif %}">
               <span class="material-symbols-outlined">{% if delta >= 0 %}arrow_upward{% else %}arrow_downward{% endif %}</span>
               {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
             </span>
             <span class="hero-trend-caption">vs last week</span>
-            <button type="button" class="btn-primary" data-copy-target="ticker-quote-text" style="margin-left: 12px; padding: 6px 12px; font-size: 0.8rem; height: auto;">
-              <span aria-hidden="true">📋</span> Copy Quote
-            </button>
           </div>
         </div>
       </div>
