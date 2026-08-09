@@ -55,7 +55,7 @@
       <h2 class="section-title" id="spotlight-heading">Flagship intelligence report</h2>
       <p class="section-desc">Composite metric monitoring conflict and blockade risk in the Strait of Hormuz.</p>
     </div>
-    <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">View full dashboard <span aria-hidden="true">→</span></a>
+    <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary" data-cta="/hormuz-index">View full dashboard <span aria-hidden="true">→</span></a>
   </div>
 
   <div class="spotlight-card">
@@ -85,8 +85,8 @@
       </div>
 
       <div class="spotlight-actions">
-        <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary">Explore dashboard</a>
-        <a href="{{ url_for('main.hormuz_index') }}#methodology" class="btn-secondary">How it is calculated</a>
+        <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary" data-cta="/hormuz-index">Explore dashboard</a>
+        <a href="{{ url_for('main.hormuz_index') }}#methodology" class="btn-secondary" data-cta="/hormuz-index#methodology">How it is calculated</a>
       </div>
     </div>
 
@@ -122,7 +122,7 @@
           <span>{{ scale_min|int }}</span>
           <span>{{ scale_max|int }}</span>
         </div>
-      </div>
+        </div>
     </div>
   </div>
 </section>
@@ -156,7 +156,7 @@
           <span class="report-score-unit">{{ report.unit }}</span>
           {% endif %}
         </div>
-        <a href="{{ report.url }}" class="btn-secondary btn-sm">Access report <span aria-hidden="true">→</span></a>
+        <a href="{{ report.url }}" class="btn-secondary btn-sm" data-cta="{{ report.url }}">Access report <span aria-hidden="true">→</span></a>
       </div>
     </div>
     {% endfor %}

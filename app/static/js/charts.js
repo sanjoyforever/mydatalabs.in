@@ -66,6 +66,14 @@
     if (fallback) fallback.textContent = message;
   }
 
+  function track(name, params) {
+    if (typeof window.trackEvent === "function") {
+      window.trackEvent(name, params);
+    } else if (typeof window.gtag === "function") {
+      window.gtag("event", name, Object.assign({ page_path: location.pathname }, params || {}));
+    }
+  }
+
   /* Registers a chart: builds it now, rebuilds it on theme change, and keeps
    * it sized to its container. */
   function register(domId, buildOption) {
@@ -81,6 +89,12 @@
     try {
       instance = echarts.init(dom);
       instance.setOption(buildOption(palette()));
+      instance.on("datazoom", function () {
+        track("chart_pan_zoom", {
+          chart_id: domId,
+          page_path: location.pathname
+        });
+      });
     } catch (err) {
       failFallback(dom, "This chart could not be drawn. The figures are in the data table below.");
       return;

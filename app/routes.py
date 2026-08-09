@@ -527,20 +527,8 @@ def _methodology_context():
 
 @bp.route("/data")
 def data_page():
-    snapshot = get_snapshot()
-    history = hormuz.get_history()
-    html = render_template(
-        "data.html",
-        **_common(
-            snapshot=snapshot,
-            components=hormuz.COMPONENTS,
-            history_weeks=len(history),
-            first_week=history[0]["week_start"] if history else "",
-            last_week=history[-1]["week_start"] if history else "",
-            correlations=component_correlations(history),
-        ),
-    )
-    return _cached(Response(html, mimetype="text/html"))
+    """Permanent 301 redirect to the raw JSON data endpoint."""
+    return redirect("/api/hormuz-index/data.json", code=301)
 
 
 @bp.route("/terms")
@@ -817,7 +805,6 @@ def sitemap():
         {"loc": f"{SITE_ORIGIN}/", "priority": "1.0", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/hormuz-index", "priority": "0.9", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/lok-sabha-index", "priority": "0.9", "changefreq": "daily"},
-        {"loc": f"{SITE_ORIGIN}/data", "priority": "0.8", "changefreq": "monthly"},
         {"loc": f"{SITE_ORIGIN}/terms", "priority": "0.5", "changefreq": "monthly"},
     ]
 
@@ -871,7 +858,6 @@ Current HMX-INDEX reading: {snapshot.score:.1f} ({snapshot.level_label}), week o
 - [Hormuz Crisis Index dashboard]({SITE_ORIGIN}/hormuz-index): live composite score, component breakdown, weekly trajectory since January 2026.
 - [Lok Sabha Projection Engine]({SITE_ORIGIN}/lok-sabha-index): daily 543-seat projection from CVoter's option-level opinion trackers, Monte Carlo intervals, event impact analysis, 2019/2024 backtest.
 - [Methodology]({SITE_ORIGIN}/hormuz-index#methodology): index formula, component weights, cap thresholds and their rationale, baseline selection, known limitations.
-- [Data & API]({SITE_ORIGIN}/data): endpoint documentation, response schema, licence and citation formats.
 
 ## Machine-readable data
 

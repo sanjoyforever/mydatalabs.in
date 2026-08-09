@@ -134,7 +134,7 @@
       week, but a different month would move every historical score by a point or so. A trailing
       multi-month median would be more robust and is on the roadmap. Until then, the baseline values
       are published in full — in the table above, in the
-      <a href="{{ url_for('main.data_page') }}">JSON API</a>, and in the CSV export — so anyone can
+      <a href="/api/hormuz-index/data.json">JSON API</a>, and in the CSV export — so anyone can
       rebase the series themselves and check how sensitive a conclusion is to that choice.
     </p>
   </section>
@@ -252,6 +252,6 @@
     <h2 id="citation-h">Citation</h2>
     <p>Index data is published under
       <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_name }}</a>.
-      Attribution formats are on the <a href="{{ url_for('main.data_page') }}">Data &amp; API page</a>.</p>
+      Attribution formats and raw datasets are available via the <a href="/api/hormuz-index/data.json">JSON API</a> and <a href="/api/hormuz-index/data.csv">CSV export</a>.</p>
   </section>
 </article>

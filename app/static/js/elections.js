@@ -747,6 +747,10 @@
   function afterViewportChange() {
     autoscaleY();
     syncScrollbar();
+    track("chart_pan_zoom", {
+      chart_id: "dailyForecastChart",
+      page_path: location.pathname
+    });
   }
 
   // --- Chart controls -----------------------------------------------------

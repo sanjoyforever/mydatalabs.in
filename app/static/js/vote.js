@@ -367,6 +367,10 @@
        the most discoverable way to answer — nobody has to find the dot first. */
     try { track.setPointerCapture(event.pointerId); } catch (e) { /* older engines */ }
     setDraft(ratingFromClientX(event.clientX));
+    track_('ppi_vote_interact', {
+      starting_rating: draft,
+      page_path: location.pathname
+    });
     event.preventDefault();
   }
 

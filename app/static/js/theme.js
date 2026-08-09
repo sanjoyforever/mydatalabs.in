@@ -277,4 +277,52 @@
     });
   }
 
+  // --- Table & Details Expansion Tracking ---------------------------------
+  document.addEventListener("toggle", function (e) {
+    if (!e.target || e.target.tagName !== "DETAILS") return;
+    var summary = e.target.querySelector("summary");
+    var label = summary ? (summary.textContent || "").trim() : "details";
+    var name = e.target.className || e.target.id || label.slice(0, 40);
+    track("table_expand", {
+      element_name: name,
+      element_label: label,
+      is_open: e.target.open,
+      page_path: location.pathname
+    });
+  }, true);
+
+  // --- CTA & Deep Link Clicks ----------------------------------------------
+  document.addEventListener("click", function (e) {
+    var cta = e.target.closest ? e.target.closest("[data-cta], .exec-briefing-link, .ppi-privacy-link") : null;
+    if (!cta) return;
+    var target = cta.getAttribute("href") || cta.getAttribute("data-cta") || "";
+    var label = (cta.textContent || "").trim();
+    track("cta_click", {
+      cta_label: label,
+      cta_target: target,
+      page_path: location.pathname
+    });
+  });
+
+  // --- Global Exception Tracking -------------------------------------------
+  window.addEventListener("error", function (e) {
+    var message = e.message || (e.error && e.error.message) || "Script error";
+    var filename = e.filename ? e.filename.split("/").pop() : "inline";
+    track("exception", {
+      description: (filename + ": " + message).slice(0, 100),
+      fatal: false,
+      page_path: location.pathname
+    });
+  });
+
+  window.addEventListener("unhandledrejection", function (e) {
+    var reason = e.reason ? (e.reason.message || String(e.reason)) : "Unhandled promise rejection";
+    track("exception", {
+      description: ("Promise: " + reason).slice(0, 100),
+      fatal: false,
+      page_path: location.pathname
+    });
+  });
+
 })();
+
