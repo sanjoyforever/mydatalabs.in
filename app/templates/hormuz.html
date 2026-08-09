@@ -76,66 +76,80 @@
 
 {% block content %}
 <div class="report-dash-canvas">
-  <div class="report-canvas-head">
-    <nav class="breadcrumb" aria-label="Breadcrumb" style="margin: 0;">
+  <!-- Breadcrumbs + Tab Bar -->
+  <div class="elections-topbar">
+    <nav class="breadcrumb-v2" aria-label="Breadcrumb">
       <a href="{{ url_for('main.home') }}">Home</a>
-      <span aria-hidden="true">/</span>
-      <span aria-current="page">Hormuz Crisis Index</span>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <span class="breadcrumb-current" aria-current="page">Hormuz Crisis Index</span>
     </nav>
 
-    <nav class="report-tabs report-tab-nav" role="tablist" aria-label="Report sections">
-      <button type="button" class="report-tab active" role="tab" aria-selected="true"
+    <div class="tab-segmented" role="tablist" aria-label="Report sections">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true"
               aria-controls="tab-dashboard" data-report-tab="dashboard">
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">dashboard</span>
-        <span>Dashboard</span>
+        <span class="material-symbols-outlined">dashboard</span>
+        Dashboard
       </button>
-      <button type="button" class="report-tab" role="tab" aria-selected="false"
+      <button type="button" class="tab-btn" role="tab" aria-selected="false"
               aria-controls="tab-methodology" data-report-tab="methodology">
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">science</span>
-        <span>Methodology</span>
+        <span class="material-symbols-outlined">science</span>
+        Methodology
       </button>
-    </nav>
+    </div>
   </div>
 
   <div id="tab-dashboard" class="report-panel active" role="tabpanel">
 
-  <!-- Dashboard Header Bar -->
-  <div class="dash-header-bar">
-    <div class="dash-title-group">
-      <div class="dash-badge-row">
-        <span class="badge-pill-blue">LIVE INDEX</span>
-        <span class="status-badge status-{{ snapshot.level_status }}">
-          <span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}
-        </span>
-        <span class="dash-week">Week of {{ snapshot.week_start }}</span>
-      </div>
-      <h1>Hormuz Crisis Index</h1>
-      <div class="dash-meta">
-        <span>Geo-Politics &amp; Maritime Security</span>
-        <span aria-hidden="true">•</span>
-        <span>Strait of Hormuz Chokepoint Monitor</span>
-      </div>
+  <!-- Hero Projection Card -->
+  <div class="hero-projection-card" style="margin-bottom: 24px;">
+    <div class="hero-watermark">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGn0mR2CBWIgcQEbs4JvoNLy_NFJZLvtgyjRS2phE_FQWa31HawJSQbWqy9INoXEYbbUBtDKjd_YxYeVFY948BMS4VdclkBxmVpI8PDl0H1uVU6U8x2pGv6ToMjTxiF36gjZJQrLOxlVoZVZK92Yr7pXuQbNfOYR2hGM-ePoqbvl1qbNxtecth6yFtn-tj5OWGdO94ICbSa4yNkKBNn3fpmND3VZBaf53_h8hmpnl86nJwM_NkQQl3bg" alt="" aria-hidden="true">
     </div>
+    <div class="hero-blur-accent"></div>
 
-    <div class="dash-header-actions">
-      <div class="dash-score-box">
-        <div>
-          <div class="dash-score-label">COMPOSITE SCORE</div>
-          <div class="dash-big-score">{{ "%.1f"|format(snapshot.score) }}</div>
-        </div>
-        <div class="dash-delta-group">
-          <span class="delta-pill {% if delta >= 0 %}delta-up{% else %}delta-down{% endif %}">
-            <span aria-hidden="true">{% if delta >= 0 %}▲{% else %}▼{% endif %}</span>
-            {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
-            <span class="sr-only">points {% if delta >= 0 %}up{% else %}down{% endif %} versus last week</span>
+    <div class="hero-projection-content">
+      <!-- Left: Title & Meta -->
+      <div class="hero-left">
+        <div class="hero-badge-row">
+          <span class="hero-badge-live">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            Live Index
           </span>
-          <div class="dash-delta-caption">vs last week</div>
+          <span class="status-badge status-{{ snapshot.level_status }}">
+            <span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}
+          </span>
+          <span class="hero-survey-date">Week of {{ snapshot.week_start }}</span>
+        </div>
+
+        <div>
+          <h1>Hormuz Crisis Index</h1>
+          <div class="hero-meta">
+            <span>Geo-Politics &amp; Maritime Security</span>
+            <span class="meta-dot" aria-hidden="true">•</span>
+            <span>Strait of Hormuz Chokepoint Monitor</span>
+          </div>
         </div>
       </div>
 
-      <button type="button" class="btn-primary" data-copy-target="ticker-quote-text">
-        <span aria-hidden="true">📋</span> Copy Quote
-      </button>
+      <!-- Right: Key Metric -->
+      <div class="hero-right">
+        <div>
+          <div class="hero-metric-label">COMPOSITE SCORE</div>
+          <div class="hero-metric-row">
+            <span class="hero-metric-value font-mono">{{ "%.1f"|format(snapshot.score) }}</span>
+          </div>
+          <div class="hero-trend" style="align-items: center; margin-top: 8px;">
+            <span class="hero-trend-pill {% if delta >= 0 %}trend-up{% else %}trend-down{% endif %}">
+              <span class="material-symbols-outlined">{% if delta >= 0 %}arrow_upward{% else %}arrow_downward{% endif %}</span>
+              {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
+            </span>
+            <span class="hero-trend-caption">vs last week</span>
+            <button type="button" class="btn-primary" data-copy-target="ticker-quote-text" style="margin-left: 12px; padding: 6px 12px; font-size: 0.8rem; height: auto;">
+              <span aria-hidden="true">📋</span> Copy Quote
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
