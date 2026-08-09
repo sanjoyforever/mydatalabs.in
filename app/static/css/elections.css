@@ -157,7 +157,7 @@
 .elections-dash .badge-others { background: rgba(148, 163, 184, 0.15); color: var(--accent-others); border: 1px solid var(--accent-others); }
 .elections-dash .badge-winner { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981; }
 
-.elections-dash .chart-container { position: relative; height: 400px; width: 100%; margin-top: 16px; }
+.elections-dash .chart-container { position: relative; height: 460px; width: 100%; margin-top: 16px; }
 
 /* --- KPI delta chips ---------------------------------------------------- */
 

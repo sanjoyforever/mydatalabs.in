@@ -686,22 +686,22 @@
   // Called after every action that changes either of those two inputs:
   // build, legend toggle, range button, reset, zoom, pan, scrollbar drag.
 
-  var Y_PAD_FRACTION = 0.08;   // headroom above and below, as a share of span
-  var Y_MIN_SPAN = 6;          // seats; stops a dead-flat series filling the axis
+  var Y_PAD_FRACTION = 0.06;   // headroom above and below, as a share of span
+  var Y_MIN_SPAN = 1.0;        // tight minimum span (1 seat) so subtle moves fill available height
 
   function autoscaleY(update) {
     if (!dailyChart || !globalForecastData) return;
 
     var x = dailyChart.scales.x;
     if (!x) return;
-    var lo = x.min;
-    var hi = x.max;
+    var lo = (x && isFinite(x.min)) ? x.min : (fullRange ? fullRange.min : -Infinity);
+    var hi = (x && isFinite(x.max)) ? x.max : (fullRange ? fullRange.max : Infinity);
 
     var min = Infinity;
     var max = -Infinity;
 
     dailyChart.data.datasets.forEach(function (ds, i) {
-      if (hiddenSeries.has(i)) return;
+      if (hiddenSeries.has(i) || ds.hidden) return;
       var spec = SERIES_SPEC[i];
 
       // A reference line is a single constant; it has no points worth
@@ -727,17 +727,27 @@
     if (!isFinite(min) || !isFinite(max)) return;
 
     var span = max - min;
-    if (span < Y_MIN_SPAN) {
+    if (span <= 0) {
+      min = min - 0.5;
+      max = max + 0.5;
+      span = 1.0;
+    } else if (span < Y_MIN_SPAN) {
       var mid = (max + min) / 2;
       min = mid - Y_MIN_SPAN / 2;
       max = mid + Y_MIN_SPAN / 2;
       span = Y_MIN_SPAN;
     }
 
-    var pad = span * Y_PAD_FRACTION;
-    // Seats are a count out of 543, so the axis has no business leaving it.
-    dailyChart.options.scales.y.min = Math.max(0, Math.floor(min - pad));
-    dailyChart.options.scales.y.max = Math.min(543, Math.ceil(max + pad));
+    var pad = Math.max(0.4, span * Y_PAD_FRACTION);
+    var computedMin = Math.max(0, Math.floor(min - pad));
+    var computedMax = Math.min(543, Math.ceil(max + pad));
+
+    if (computedMax <= computedMin) {
+      computedMax = Math.min(543, computedMin + 2);
+    }
+
+    dailyChart.options.scales.y.min = computedMin;
+    dailyChart.options.scales.y.max = computedMax;
 
     if (update !== false) dailyChart.update("none");
   }
