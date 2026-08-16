@@ -476,6 +476,21 @@
         "vix": 14.899999618530273,
         "reroutes": 24
       }
+    },
+    {
+      "week_start": "2026-08-10",
+      "score": 161.6,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 83.55000305175781,
+        "ship_traffic": 105,
+        "war_risk": 7.5,
+        "tanker_freight": 1360,
+        "ttf_gas": 55.54399871826172,
+        "vix": 14.899999618530273,
+        "reroutes": 24
+      }
     }
   ],
   "reconstructed_series": [

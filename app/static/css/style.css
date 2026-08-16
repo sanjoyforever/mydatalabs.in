@@ -3768,6 +3768,16 @@ background: linear-gradient(90deg,
   color: var(--status-good-text);
 }
 
+.hero-trend-pill.trend-good {
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+}
+
+.hero-trend-pill.trend-critical {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
 .hero-trend-pill .material-symbols-outlined {
   font-size: 14px;
 }

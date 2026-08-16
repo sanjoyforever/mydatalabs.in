@@ -40,3 +40,6 @@ MyDataLabs Design System.zip
 
 .vercel
 
+
+# npm — only the vercel CLI is a devDependency; the tree is 157 MB.
+node_modules/

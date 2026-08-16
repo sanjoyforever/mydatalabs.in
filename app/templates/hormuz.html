@@ -139,7 +139,7 @@
             <span class="hero-metric-value font-mono">{{ "%.1f"|format(snapshot.score) }}</span>
           </div>
           <div class="hero-trend">
-            <span class="hero-trend-pill {% if delta >= 0 %}trend-up{% else %}trend-down{% endif %}">
+            <span class="hero-trend-pill {% if delta >= 0 %}trend-critical{% else %}trend-good{% endif %}">
               <span class="material-symbols-outlined">{% if delta >= 0 %}arrow_upward{% else %}arrow_downward{% endif %}</span>
               {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
             </span>
