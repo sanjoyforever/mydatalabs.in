@@ -47,12 +47,56 @@ def stamp_manual_dates() -> None:
     print(f"  Stamped manual components as updated {today}: {sorted(hormuz.MANUAL_KEYS)}")
 
 
+def failed_live_components(snapshot) -> list[str]:
+    """Automatic components whose live fetch did not land this run.
+
+    A manual component going stale is expected — it is waiting on a human, and
+    the dashboard says so. An automatic one carrying forward is a different
+    animal: yfinance returned nothing, and the score is last week's number
+    wearing this week's date.
+
+    That distinction matters because the failure is invisible. A crash gets
+    noticed; a silently carried-forward price looks exactly like a quiet
+    market. Brent, TTF and VIX sat frozen for a month behind a dashboard that
+    looked fine, because every layer here degrades politely: a missing
+    yfinance returns all-None, a failed fetch returns None per ticker, and
+    compute_snapshot turns None into "keep last week's value".
+    """
+    return [
+        cr.component.label
+        for cr in snapshot.components
+        if not cr.component.manual and cr.carried_forward
+    ]
+
+
 def update_index(persist: bool) -> int:
     print("=" * 62)
     print("Hormuz Crisis Index (HMX-INDEX)")
+    # Computed without persisting first, so a failed live sweep can be caught
+    # before it is written to history. The values are cached for
+    # LIVE_CACHE_TTL_SECONDS, so the persisting call below reuses this run's
+    # fetch rather than going back out to yfinance.
+    #
     # allow_network=True: this is the one place that is supposed to wait on
     # yfinance. Every page render reads what this run writes.
-    snapshot = hormuz.compute_snapshot(persist=persist, allow_network=True)
+    snapshot = hormuz.compute_snapshot(persist=False, allow_network=True)
+
+    failed = failed_live_components(snapshot)
+    if failed:
+        print(f"\n  ERROR: the live sweep returned nothing for {len(failed)} automatic"
+              f" component(s):", file=sys.stderr)
+        for label in failed:
+            print(f"    - {label}", file=sys.stderr)
+        print("\n  These would be published as this week's reading while actually"
+              " holding\n  the previous week's value. Refusing to write or deploy.",
+              file=sys.stderr)
+        print("\n  Usual causes: yfinance not installed in this interpreter, or a"
+              "\n  yfinance too old for Yahoo's current API (see"
+              " requirements-pipeline.txt).", file=sys.stderr)
+        return 1
+
+    if persist:
+        snapshot = hormuz.compute_snapshot(persist=True, allow_network=True)
 
     print(f"  Week of {snapshot.week_start}: {snapshot.score:.1f} ({snapshot.level_label})")
     print(f"  Storage: {storage.storage_backend()}")

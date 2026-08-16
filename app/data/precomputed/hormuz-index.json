@@ -1,12 +1,13 @@
 {
   "live_values": {
-    "brent": 83.55000305175781,
-    "ttf_gas": 55.54399871826172,
-    "vix": 14.899999618530273
+    "brent": 88.5199966430664,
+    "ttf_gas": 61.42399978637695,
+    "vix": 14.25
   },
+  "live_values_at": "2026-08-17",
   "sentiment": {
     "available": true,
-    "week_start": "2026-08-10",
+    "week_start": "2026-08-17",
     "votes": 0,
     "index": null,
     "level_label": null,
@@ -40,11 +41,18 @@
       "votes": 5,
       "mean_rating": 6.25,
       "index": 158.3
+    },
+    {
+      "week_start": "2026-08-10",
+      "votes": 5,
+      "mean_rating": 6.44,
+      "index": 160.4
     }
   ],
   "perception_by_week": {
     "2026-07-27": 166.9,
-    "2026-08-03": 158.3
+    "2026-08-03": 158.3,
+    "2026-08-10": 160.4
   },
   "perception_series": [
     null,
@@ -78,6 +86,7 @@
     null,
     166.9,
     158.3,
+    160.4,
     null
   ]
 }

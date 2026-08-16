@@ -207,17 +207,6 @@ def fetch_live_values(
         stored = precomputed.load("hormuz-index").get("live_values") or {}
         return {k: stored.get(k) for k in YFINANCE_TICKERS}
 
-
-def stored_live_date() -> str:
-    """Date the artifact's live_values were fetched, or "" if not recorded.
-
-    Artifacts written before live_values_at existed have no date, hence the
-    empty string rather than a guess — callers fall back to the week instead.
-    """
-    from app import precomputed
-
-    return (precomputed.load("hormuz-index").get("live_values_at") or "")[:10]
-
     now = time.time()
     with _live_cache_lock:
         if _live_cache["data"] is not None and (now - _live_cache["fetched_at"]) < LIVE_CACHE_TTL_SECONDS:
@@ -279,6 +268,16 @@ def stored_live_date() -> str:
 
     return values
 
+
+def stored_live_date() -> str:
+    """Date the artifact's live_values were fetched, or "" if not recorded.
+
+    Artifacts written before live_values_at existed have no date, hence the
+    empty string rather than a guess — callers fall back to the week instead.
+    """
+    from app import precomputed
+
+    return (precomputed.load("hormuz-index").get("live_values_at") or "")[:10]
 
 
 def _current_week_start() -> str:
