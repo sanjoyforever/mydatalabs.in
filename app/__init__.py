@@ -13,6 +13,11 @@ STATIC_MAX_AGE = int(os.environ.get("STATIC_MAX_AGE", 60 * 60 * 24 * 365))
 # sends custom events for copy actions, the theme toggle, and outbound clicks.
 GA_MEASUREMENT_ID = os.environ.get("GA_MEASUREMENT_ID", "G-3376VRHZW8")
 
+# Microsoft Clarity session recording and heatmaps, loaded sitewide from
+# base.html alongside GA4. Clarity is behaviour-only (no pageview metrics), so
+# it complements rather than replaces the GA4 tag.
+CLARITY_PROJECT_ID = os.environ.get("CLARITY_PROJECT_ID", "y3gm1j4qyn")
+
 SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "strict-origin-when-cross-origin",
@@ -21,19 +26,23 @@ SECURITY_HEADERS = {
 }
 
 # ECharts is loaded from jsDelivr, fonts from Google Fonts, GA4 from
-# googletagmanager.com/google-analytics.com. Inline styles remain in the
-# templates, so style-src still needs 'unsafe-inline' until those are fully
-# migrated to classes; gtag's inline bootstrap snippet needs the same for
-# script-src.
+# googletagmanager.com/google-analytics.com, Clarity from *.clarity.ms (the
+# bootstrap tag injects a second script from a region-specific subdomain, and
+# the recorder ships payloads to *.clarity.ms and c.bing.com). Inline styles
+# remain in the templates, so style-src still needs 'unsafe-inline' until those
+# are fully migrated to classes; the gtag and Clarity inline bootstrap snippets
+# need the same for script-src.
 CONTENT_SECURITY_POLICY = "; ".join([
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net"
-    " https://www.googletagmanager.com https://*.google-analytics.com",
+    " https://www.googletagmanager.com https://*.google-analytics.com"
+    " https://*.clarity.ms",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com",
+    "img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com"
+    " https://*.clarity.ms",
     "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com"
-    " https://www.googletagmanager.com",
+    " https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com",
     "frame-ancestors 'self'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -94,6 +103,7 @@ def create_app() -> Flask:
             "asset_v": asset_version,
             "current_year": date.today().year,
             "ga_measurement_id": GA_MEASUREMENT_ID,
+            "clarity_project_id": CLARITY_PROJECT_ID,
         }
 
     @app.after_request
