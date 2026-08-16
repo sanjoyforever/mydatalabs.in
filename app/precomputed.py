@@ -38,6 +38,7 @@ from __future__ import annotations
 import json
 import os
 import threading
+from datetime import date
 
 PRECOMPUTED_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "precomputed")
 
@@ -109,11 +110,20 @@ def _build_hormuz_index() -> dict:
     previous = load("hormuz-index")
 
     live = hormuz.fetch_live_values(allow_network=True)
+    # Stamped here because this is the only place the values are actually
+    # fetched. The request path reads them back off disk, where "when were
+    # these obtained" is otherwise unrecoverable — it can only assume "now",
+    # which is how a week-old artifact ends up reporting itself as current.
+    live_at = date.today().isoformat()
     # A failed sweep must not overwrite good values with nulls: the page would
     # then carry every live component forward and mark the snapshot degraded
     # until the next successful run.
     if not any(v is not None for v in live.values()):
         live = previous.get("live_values") or live
+        # Carry the original date with the carried-forward values. Leaving
+        # today's date on them would let a run that fetched nothing advance the
+        # page's "Updated" line, which is precisely the failure it should show.
+        live_at = previous.get("live_values_at") or ""
 
     history = hormuz.get_history()
 
@@ -134,6 +144,7 @@ def _build_hormuz_index() -> dict:
 
     return {
         "live_values": live,
+        "live_values_at": live_at,
         "sentiment": sentiment,
         "sentiment_history": sentiment_history,
         "perception_by_week": perception_by_week,

@@ -88,6 +88,22 @@ class CompositeResult:
     generated_at: str = ""  # ISO timestamp the snapshot was computed
     persisted: Optional[bool] = None  # None = not attempted; False = write did not survive
 
+    @property
+    def last_updated(self) -> str:
+        """Most recent date any component's underlying value was refreshed.
+
+        Distinct from week_start, which is the reporting period and moves only
+        on Mondays — on every other day it reads as a stalled page even when a
+        component refreshed that morning. Distinct from generated_at too: that
+        is merely when this object was built, so it says "now" even for a
+        snapshot whose every value was carried forward.
+
+        Falls back to week_start when no component carries a date, which is the
+        case before the first successful fetch.
+        """
+        dates = [c.last_updated[:10] for c in self.components if c.last_updated]
+        return max(dates) if dates else self.week_start
+
 
 # If this fraction of index weight or more is stale, the composite is flagged
 # as degraded so the UI can say so instead of presenting a confident number.

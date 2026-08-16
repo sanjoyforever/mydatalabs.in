@@ -271,7 +271,16 @@
       body: body ? JSON.stringify(body) : undefined
     }).then(function (res) {
       return res.json().then(function (data) {
-        if (!res.ok) throw new Error(data.error || 'Request failed.');
+        if (!res.ok) {
+          /* Carry the status on the error. The message alone is the server's
+             prose, which is written for the reader and changes freely; the
+             status is what distinguishes a rate-limited ballot from a database
+             that is down, and ppi_vote_error is only worth having if it can
+             tell those apart. */
+          var err = new Error(data.error || 'Request failed.');
+          err.status = res.status;
+          throw err;
+        }
         data._seq = seq;
         return data;
       });
@@ -458,6 +467,18 @@
       })
       .catch(function (err) {
         showError(err.message);
+        track_('ppi_vote_error', {
+          vote_action: 'submit',
+          /* 0 means the request never reached the server — fetch itself
+             rejected. Worth separating from any HTTP status: it is the site
+             being unreachable, not the ballot being refused. */
+          status_code: err.status || 0,
+          error_message: String(err.message).slice(0, 100),
+          rating_value: value,
+          is_edit: isEdit,
+          report_slug: 'hormuz-index',
+          page_path: location.pathname
+        });
       })
       .then(function () {
         sending = false;
@@ -484,6 +505,13 @@
       })
       .catch(function (err) {
         showError(err.message);
+        track_('ppi_vote_error', {
+          vote_action: 'withdraw',
+          status_code: err.status || 0,
+          error_message: String(err.message).slice(0, 100),
+          report_slug: 'hormuz-index',
+          page_path: location.pathname
+        });
       })
       .then(function () {
         sending = false;
