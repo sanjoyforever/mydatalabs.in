@@ -226,6 +226,23 @@
       outbound: true,
       page_path: location.pathname
     });
+
+    // Dedicated event for exits to CVoter — the elections page's data source
+    // and licensor — so traffic sent their way is countable on its own rather
+    // than buried in the generic outbound "click" stream.
+    var hostname;
+    try {
+      hostname = new URL(link.href).hostname;
+    } catch (err) {
+      hostname = "";
+    }
+    if (hostname === "cvoterindia.com" || hostname.endsWith(".cvoterindia.com")) {
+      track("exit_to_cvoter", {
+        link_url: link.href,
+        link_text: (link.textContent || "").trim(),
+        page_path: location.pathname
+      });
+    }
   });
 
   /* --- Report tabs ------------------------------------------------------
