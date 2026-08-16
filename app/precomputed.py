@@ -142,9 +142,17 @@ def _build_hormuz_index() -> dict:
     else:
         perception_by_week = {h["week_start"]: h["index"] for h in sentiment_history}
 
+    # Which PortWatch week the transit figure came from. Carried alongside the
+    # values because, unlike the market components, it is not "as of the fetch"
+    # — see hormuz.portwatch_asof.
+    portwatch_week_end = hormuz.portwatch_asof(allow_network=True) or (
+        previous.get("portwatch_week_end") or ""
+    )
+
     return {
         "live_values": live,
         "live_values_at": live_at,
+        "portwatch_week_end": portwatch_week_end,
         "sentiment": sentiment,
         "sentiment_history": sentiment_history,
         "perception_by_week": perception_by_week,

@@ -494,12 +494,12 @@
     },
     {
       "week_start": "2026-08-17",
-      "score": 167.6,
+      "score": 169.0,
       "level_label": "Severe",
       "level_status": "serious",
       "raw_values": {
-        "brent": 88.5199966430664,
-        "ship_traffic": 105,
+        "brent": 88.70999908447266,
+        "ship_traffic": 31.0,
         "war_risk": 7.5,
         "tanker_freight": 1360,
         "ttf_gas": 61.42399978637695,

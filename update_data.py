@@ -47,6 +47,13 @@ def stamp_manual_dates() -> None:
     print(f"  Stamped manual components as updated {today}: {sorted(hormuz.MANUAL_KEYS)}")
 
 
+_MARKET_LABELS = {
+    hormuz.COMPONENTS_BY_KEY[k].label
+    for k in hormuz.YFINANCE_TICKERS
+    if k in hormuz.COMPONENTS_BY_KEY
+}
+
+
 def failed_live_components(snapshot) -> list[str]:
     """Automatic components whose live fetch did not land this run.
 
@@ -90,9 +97,16 @@ def update_index(persist: bool) -> int:
         print("\n  These would be published as this week's reading while actually"
               " holding\n  the previous week's value. Refusing to write or deploy.",
               file=sys.stderr)
-        print("\n  Usual causes: yfinance not installed in this interpreter, or a"
-              "\n  yfinance too old for Yahoo's current API (see"
-              " requirements-pipeline.txt).", file=sys.stderr)
+        market = [c for c in failed if c in _MARKET_LABELS]
+        transits = [c for c in failed if c not in _MARKET_LABELS]
+        if market:
+            print("\n  For the market components: yfinance may not be installed in this"
+                  "\n  interpreter, or may be too old for Yahoo's current API (see"
+                  " requirements-pipeline.txt).", file=sys.stderr)
+        if transits:
+            print("\n  For the transit components: IMF PortWatch was unreachable, or has"
+                  "\n  published no complete Mon-Sun week inside the lookback window.",
+                  file=sys.stderr)
         return 1
 
     if persist:
@@ -123,9 +137,17 @@ def update_index(persist: bool) -> int:
 
     # Rebuild the per-route artifacts the site serves. Without this the pages
     # keep rendering the previous run's live values and perception series.
-    print("\n  Precomputing route artifacts:")
-    from app import precomputed
-    precomputed.build_all(verbose=True)
+    #
+    # Skipped on a dry run: build_all writes app/data/precomputed/*.json, so
+    # running it here made --dry-run modify tracked files while printing
+    # "nothing written". A dry run that edits the working tree is worse than no
+    # dry run, because it is trusted.
+    if persist:
+        print("\n  Precomputing route artifacts:")
+        from app import precomputed
+        precomputed.build_all(verbose=True)
+    else:
+        print("\n  Skipping precompute (dry run writes no artifacts).")
 
     if persist:
         if snapshot.persisted:

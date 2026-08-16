@@ -59,8 +59,7 @@ COMPONENTS: list[Component] = [
             "discrimination this component exists to make. -90% keeps that range "
             "resolvable while still reserving the top of the scale for full closure."
         ),
-        manual=True,
-        update_cadence="Weekly (manual entry, IMF PortWatch publishes with a 2-day lag)",
+        update_cadence="Weekly (automatic, IMF PortWatch publishes ~8 days in arrears)",
     ),
     Component(
         key="war_risk",
@@ -163,7 +162,34 @@ YFINANCE_TICKERS = {
     "vix": "^VIX",
 }
 
+# IMF PortWatch publishes daily vessel counts for 28 maritime chokepoints
+# through an open ArcGIS feature service — no key, no auth. This is the same
+# source the component already cited; it was simply being read by hand.
+PORTWATCH_QUERY_URL = (
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/"
+    "Daily_Chokepoints_Data/FeatureServer/0/query"
+)
+
+# Component key -> the `portname` PortWatch files it under. Only transits are
+# wired up: PortWatch also carries Cape of Good Hope, but the reroutes
+# component is a *share* of regional traffic and the denominator behind its
+# published 8% baseline is not recorded anywhere, so deriving it here would be
+# inventing a methodology rather than automating one.
+PORTWATCH_CHOKEPOINTS = {
+    "ship_traffic": "Strait of Hormuz",
+}
+
+# PortWatch runs roughly a week behind — the observed gap was 8 days, not the
+# 2 the component's cadence string used to claim. A transit figure is therefore
+# *expected* to be older than LIVE_STALE_AFTER_DAYS and must not be flagged on
+# the yfinance clock; this threshold only trips when PortWatch itself stops
+# publishing, which is the condition actually worth surfacing.
+PORTWATCH_STALE_AFTER_DAYS = 21
+
 MANUAL_KEYS = {c.key for c in COMPONENTS if c.manual}
+
+# Every component fetched without a human in the loop.
+AUTO_KEYS = set(YFINANCE_TICKERS) | set(PORTWATCH_CHOKEPOINTS)
 
 COMPONENTS_BY_KEY = {c.key: c for c in COMPONENTS}
 
@@ -173,6 +199,102 @@ LIVE_STALE_AFTER_DAYS = 2
 
 _live_cache: dict = {"data": None, "fetched_at": 0.0}
 _live_cache_lock = threading.Lock()
+
+# End date of the PortWatch week the last network fetch actually used. Held
+# separately from _live_cache because it is not a value, it is the answer to
+# "how old is that value" — and unlike the yfinance components, whose answer is
+# always "today", a transit count is a week-long aggregate finished days ago.
+_portwatch_asof: dict = {"week_end": ""}
+
+
+def _complete_week_transits(rows: list[tuple[str, float]]) -> tuple[float | None, str]:
+    """Total transits for the most recent fully-covered Mon-Sun week.
+
+    `rows` is (iso_date, count), any order. Partial weeks are rejected: with a
+    multi-day publishing lag the newest week on hand is almost always missing
+    days, and summing it would report a collapse in traffic that is really just
+    a collapse in coverage — the exact artefact this component would otherwise
+    read as a closed strait.
+
+    Returns (total, week_end_iso), or (None, "") if no week is complete.
+    """
+    by_week: dict[date, list[float]] = {}
+    for iso, count in rows:
+        try:
+            day = date.fromisoformat(iso[:10])
+        except (ValueError, TypeError):
+            continue
+        monday = day - timedelta(days=day.weekday())
+        by_week.setdefault(monday, []).append(count or 0)
+
+    for monday in sorted(by_week, reverse=True):
+        days = by_week[monday]
+        if len(days) >= 7:
+            return float(sum(days)), (monday + timedelta(days=6)).isoformat()
+    return None, ""
+
+
+def fetch_portwatch_transits(
+    chokepoint: str,
+    timeout_sec: float = 15.0,
+    lookback_days: int = 45,
+) -> tuple[float | None, str]:
+    """Weekly vessel transits for one chokepoint, from IMF PortWatch.
+
+    Returns (transits_per_week, week_end_iso) for the most recent complete
+    week, or (None, "") if the service is unreachable or has published no
+    complete week inside the lookback.
+    """
+    import requests
+
+    try:
+        resp = requests.get(
+            PORTWATCH_QUERY_URL,
+            params={
+                "where": f"portname='{chokepoint}'",
+                "outFields": "date,n_total",
+                "orderByFields": "date DESC",
+                "resultRecordCount": lookback_days,
+                "returnGeometry": "false",
+                "f": "json",
+            },
+            timeout=timeout_sec,
+        )
+        resp.raise_for_status()
+        payload = resp.json()
+    except Exception:  # noqa: BLE001 - an outage is reported as None, not raised
+        return None, ""
+
+    if not isinstance(payload, dict) or "features" not in payload:
+        # ArcGIS reports failures as HTTP 200 with an {"error": ...} body, so a
+        # successful response is not by itself a successful query.
+        return None, ""
+
+    rows = []
+    for feature in payload["features"]:
+        attrs = feature.get("attributes") or {}
+        raw_date, total = attrs.get("date"), attrs.get("n_total")
+        if raw_date is None:
+            continue
+        if isinstance(raw_date, (int, float)):
+            # Epoch milliseconds — the service has returned both this and an
+            # ISO string depending on layer configuration.
+            iso = datetime.fromtimestamp(raw_date / 1000.0, tz=timezone.utc).date().isoformat()
+        else:
+            iso = str(raw_date)[:10]
+        rows.append((iso, total))
+
+    return _complete_week_transits(rows)
+
+
+def portwatch_asof(allow_network: bool = False) -> str:
+    """End date of the PortWatch week backing the current transit figure."""
+    if allow_network and _portwatch_asof["week_end"]:
+        return _portwatch_asof["week_end"]
+
+    from app import precomputed
+
+    return (precomputed.load("hormuz-index").get("portwatch_week_end") or "")[:10]
 
 
 # Cold yfinance fetches measure ~5.6s for the three tickers in parallel. A
@@ -205,17 +327,27 @@ def fetch_live_values(
         from app import precomputed
 
         stored = precomputed.load("hormuz-index").get("live_values") or {}
-        return {k: stored.get(k) for k in YFINANCE_TICKERS}
+        return {k: stored.get(k) for k in AUTO_KEYS}
 
     now = time.time()
     with _live_cache_lock:
         if _live_cache["data"] is not None and (now - _live_cache["fetched_at"]) < LIVE_CACHE_TTL_SECONDS:
             return dict(_live_cache["data"])
 
+    # PortWatch is a plain HTTP call on a different host from yfinance, so a
+    # yfinance outage must not take the transit figure down with it — and vice
+    # versa. Fetched first and merged in at the end for that reason.
+    portwatch: dict[str, float | None] = {}
+    for key, chokepoint in PORTWATCH_CHOKEPOINTS.items():
+        total, week_end = fetch_portwatch_transits(chokepoint)
+        portwatch[key] = total
+        if week_end:
+            _portwatch_asof["week_end"] = week_end
+
     try:
         import yfinance as yf
     except ImportError:
-        return {k: None for k in YFINANCE_TICKERS}
+        return {**{k: None for k in YFINANCE_TICKERS}, **portwatch}
 
     import concurrent.futures
 
@@ -257,6 +389,8 @@ def fetch_live_values(
             pass
     finally:
         executor.shutdown(wait=False, cancel_futures=True)
+
+    values.update(portwatch)
 
     # Only cache a result that actually got something. Caching an all-None
     # sweep for 15 minutes would turn one bad network moment into a quarter
@@ -336,7 +470,19 @@ def compute_snapshot(persist: bool = False, allow_network: bool = False) -> Comp
 
         if fresh is not None:
             current_values[key] = fresh
-            last_updated[key] = live_iso
+
+            if key in PORTWATCH_CHOKEPOINTS:
+                # A transit count is a completed week, not a spot price. Dating
+                # it "today" because that is when it was downloaded would claim
+                # a freshness the underlying data does not have — PortWatch
+                # publishes about a week in arrears.
+                asof = portwatch_asof(allow_network=allow_network)
+                last_updated[key] = asof or live_iso
+                age = _days_old(asof) if asof else None
+                if age is None or age > PORTWATCH_STALE_AFTER_DAYS:
+                    stale_keys.add(key)
+            else:
+                last_updated[key] = live_iso
             continue
 
         # No fresh value — carry the last known reading forward.
