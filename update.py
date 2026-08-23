@@ -65,6 +65,16 @@ def _hr(title: str) -> None:
     print(SEP)
 
 
+# --- Aviation --------------------------------------------------------------
+
+
+def update_aviation(dry_run: bool = False) -> int:
+    """Refresh the Airline Pressure Index. Returns 0 on success."""
+    import update_data
+
+    return update_data.update_aviation_index(persist=not dry_run)
+
+
 # --- Hormuz ----------------------------------------------------------------
 
 
@@ -130,12 +140,16 @@ def update_elections(dry_run: bool = False, force: bool = False, quiet: bool = F
 
 
 def check_freshness() -> int:
-    """Report where both datasets stand without writing anything."""
+    """Report where all datasets stand without writing anything."""
     from app.elections.engine.data_updater import data_status
     from app.elections.engine.paths import DATA_DIR
-    from app.indices import hormuz
+    from app.indices import aviation, hormuz
 
     _hr("Freshness check — no writes")
+
+    av_history = aviation.get_history()
+    av_last_week = av_history[-1]["week_start"] if av_history else "none"
+    print(f"  Aviation  : {len(av_history)} weekly snapshots, latest {av_last_week}")
 
     history = hormuz.get_history()
     last_week = history[-1]["week_start"] if history else "none"
@@ -162,6 +176,7 @@ def main() -> int:
         description="Refresh every data point behind every page.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    parser.add_argument("--aviation", action="store_true", help="Airline Pressure Index only")
     parser.add_argument("--hormuz", action="store_true", help="Hormuz Crisis Index only")
     parser.add_argument("--elections", action="store_true", help="Lok Sabha projection only")
     parser.add_argument("--check", action="store_true", help="report freshness and exit, no writes")
@@ -177,15 +192,25 @@ def main() -> int:
     if args.check:
         return check_freshness()
 
-    # Neither flag means both, which is the normal case.
-    do_hormuz = args.hormuz or not args.elections
-    do_elections = args.elections or not args.hormuz
+    # If no specific target is given, update all three
+    any_specified = args.aviation or args.hormuz or args.elections
+    do_aviation = args.aviation or not any_specified
+    do_hormuz = args.hormuz or not any_specified
+    do_elections = args.elections or not any_specified
 
     started = datetime.datetime.now()
     print(f"MyDataLabs data update — {started.isoformat(timespec='seconds')}")
     print(f"Mode: {'DRY RUN' if args.dry_run else 'WRITE (no git push — run push_to_prod.py to publish)'}")
 
     failures = []
+
+    if do_aviation:
+        try:
+            if update_aviation(dry_run=args.dry_run) != 0:
+                failures.append("aviation")
+        except Exception as err:  # noqa: BLE001
+            print(f"  ERROR: Aviation update raised: {err}", file=sys.stderr)
+            failures.append("aviation")
 
     if do_hormuz:
         try:

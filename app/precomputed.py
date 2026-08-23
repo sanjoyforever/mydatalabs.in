@@ -162,19 +162,49 @@ def _build_hormuz_index() -> dict:
     }
 
 
+def _build_airline_index() -> dict:
+    """Live component values and historical series for the Airline Pressure Index."""
+    from app.indices import aviation
+
+    previous = load("airline-index")
+    live = aviation.fetch_live_values(allow_network=True)
+    live_at = date.today().isoformat()
+
+    if not any(v is not None for v in live.values()):
+        live = previous.get("live_values") or live
+        live_at = previous.get("live_values_at") or ""
+
+    history = aviation.get_history()
+    snapshot = aviation.compute_snapshot(values=live, allow_network=False)
+
+    return {
+        "live_values": live,
+        "live_values_at": live_at,
+        "snapshot": {
+            "score": snapshot.score,
+            "level_label": snapshot.level_label,
+            "level_status": snapshot.level_status,
+            "week_start": snapshot.week_start,
+        },
+        "history": history,
+    }
+
+
 def _build_home() -> dict:
     """Headline figure for each report card on the landing page."""
-    from app.indices import hormuz
+    from app.indices import aviation, hormuz
 
+    aviation_snap = aviation.compute_snapshot(allow_network=False)
     snapshot = hormuz.compute_snapshot(persist=False)
-    # Read from the artifact the Lok Sabha builder just wrote, not from the
-    # CSV: the deployment has no CSV, and rebuilding home against a stale
-    # source would put a different seat count on the card than on the
-    # dashboard it links to.
     ls = load("lok-sabha-index").get("headline")
 
     return {
         "cards": {
+            "airline-index": {
+                "value": f"{aviation_snap.score:.1f}",
+                "unit": "score",
+                "status": aviation_snap.level_status,
+            },
             "hormuz-index": {
                 "value": f"{snapshot.score:.1f}",
                 "unit": "score",
@@ -295,6 +325,7 @@ def _build_lok_sabha_index() -> dict:
 
 
 BUILDERS = {
+    "airline-index": _build_airline_index,
     "hormuz-index": _build_hormuz_index,
     "lok-sabha-index": _build_lok_sabha_index,
     "home": _build_home,

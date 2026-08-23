@@ -129,6 +129,10 @@
         <span class="material-symbols-outlined nav-icon" aria-hidden="true">home</span>
         <span>Home</span>
       </a>
+      <a class="nav-link {% if request.path == '/airline-index' %}active{% endif %}" href="{{ url_for('main.airline_index') }}"{% if request.path == '/airline-index' %} aria-current="page"{% endif %}>
+        <span class="material-symbols-outlined nav-icon" aria-hidden="true">flight_takeoff</span>
+        <span>Aviation</span>
+      </a>
       <a class="nav-link {% if request.path == '/hormuz-index' %}active{% endif %}" href="{{ url_for('main.hormuz_index') }}"{% if request.path == '/hormuz-index' %} aria-current="page"{% endif %}>
         <span class="material-symbols-outlined nav-icon" aria-hidden="true">monitoring</span>
         <span>Intelligence</span>

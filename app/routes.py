@@ -10,7 +10,7 @@ from datetime import date, datetime
 from flask import Blueprint, Response, abort, jsonify, redirect, render_template, request
 
 from app import db, manual_data, precomputed, scoring, storage, votes
-from app.indices import hormuz
+from app.indices import aviation, hormuz
 
 bp = Blueprint("main", __name__)
 
@@ -34,6 +34,15 @@ NAV_CATEGORIES = [
 ]
 
 REPORTS = [
+    {
+        "slug": "airline-index",
+        "title": "Airline Pressure Index",
+        "ticker": "API-INDEX",
+        "blurb": "Weekly composite index tracking jet fuel crack spreads, fleet grounding, ATC delays, and geopolitical detours across global aviation.",
+        "category": "Maritime & Supply",
+        "url": "/airline-index",
+        "live": True,
+    },
     {
         "slug": "hormuz-index",
         "title": "Hormuz Crisis Index",
@@ -159,6 +168,32 @@ def get_snapshot(force: bool = False):
             raise
         _snapshot_cache["value"] = value
         _snapshot_cache["fetched_at"] = time.time()
+        return value
+
+
+_aviation_snapshot_lock = threading.Lock()
+_aviation_snapshot_cache: dict = {"value": None, "fetched_at": 0.0}
+
+
+def get_aviation_snapshot(force: bool = False):
+    """Cached composite snapshot for the Airline Pressure Index."""
+    now = time.time()
+    cached = _aviation_snapshot_cache["value"]
+    if not force and cached is not None and (now - _aviation_snapshot_cache["fetched_at"]) < SNAPSHOT_TTL_SECONDS:
+        return cached
+
+    with _aviation_snapshot_lock:
+        cached = _aviation_snapshot_cache["value"]
+        if not force and cached is not None and (time.time() - _aviation_snapshot_cache["fetched_at"]) < SNAPSHOT_TTL_SECONDS:
+            return cached
+        try:
+            value = aviation.compute_snapshot(allow_network=False)
+        except Exception:
+            if cached is not None:
+                return cached
+            raise
+        _aviation_snapshot_cache["value"] = value
+        _aviation_snapshot_cache["fetched_at"] = time.time()
         return value
 
 
@@ -370,18 +405,16 @@ def _common(**extra):
 
 
 def _report_cards(snapshot):
-    """REPORTS with each entry's own headline figure and status attached.
-
-    The home page's card loop previously read snapshot.score and
-    snapshot.level_status directly, which was correct while there was exactly
-    one report and silently wrong the moment there were two: the Lok Sabha card
-    displayed the Hormuz index score.
-
-    Figures come from the precomputed home artifact. The in-request fallback
-    below only runs before the first update, and derives the Hormuz figure from
-    the snapshot already in hand rather than fetching anything.
-    """
+    """REPORTS with each entry's own headline figure and status attached."""
     figures = dict(precomputed.load("home").get("cards") or {})
+
+    if "airline-index" not in figures:
+        av_snap = get_aviation_snapshot()
+        figures["airline-index"] = {
+            "value": f"{av_snap.score:.1f}",
+            "unit": "score",
+            "status": av_snap.level_status,
+        }
 
     if "hormuz-index" not in figures:
         figures["hormuz-index"] = {
@@ -397,8 +430,6 @@ def _report_cards(snapshot):
         figures["lok-sabha-index"] = {
             "value": str(ls["value"]) if ls else None,
             "unit": ls["unit"] if ls else None,
-            # The projection has no crisis banding, so it carries the neutral
-            # status rather than borrowing the Hormuz index's colour.
             "status": "good",
         }
 
@@ -412,6 +443,11 @@ def _report_cards(snapshot):
 
 @bp.route("/")
 def home():
+    av_snapshot = get_aviation_snapshot()
+    av_history = aviation.get_history()
+    av_prev_score = av_history[-2]["score"] if len(av_history) >= 2 else None
+    av_delta = (av_snapshot.score - av_prev_score) if av_prev_score is not None else 0.0
+
     snapshot = get_snapshot()
     history = hormuz.get_history()
     prev_score = history[-2]["score"] if len(history) >= 2 else None
@@ -421,6 +457,12 @@ def home():
         "home.html",
         **_common(
             reports=_report_cards(snapshot),
+            aviation_snapshot=av_snapshot,
+            aviation_score=av_snapshot.score,
+            aviation_level=av_snapshot.level_label,
+            aviation_status=av_snapshot.level_status,
+            aviation_delta=av_delta,
+            aviation_scale_pct=scoring.scale_pct(av_snapshot.score),
             snapshot=snapshot,
             hormuz_score=snapshot.score,
             hormuz_level=snapshot.level_label,
@@ -432,6 +474,97 @@ def home():
         ),
     )
     return _cached(Response(html, mimetype="text/html"))
+
+
+@bp.route("/airline-index")
+def airline_index():
+    snapshot = get_aviation_snapshot()
+    history = aviation.get_history()
+    prev_score = history[-2]["score"] if len(history) >= 2 else None
+    delta = (snapshot.score - prev_score) if prev_score is not None else 0.0
+
+    html = render_template(
+        "aviation.html",
+        **_common(
+            snapshot=snapshot,
+            history=history,
+            score=snapshot.score,
+            level_label=snapshot.level_label,
+            level_status=snapshot.level_status,
+            delta=delta,
+            scale_pct=scoring.scale_pct(snapshot.score),
+            scale_min=scoring.SCALE_MIN,
+            scale_max=scoring.SCALE_MAX,
+            components=snapshot.components,
+        ),
+    )
+    return _cached(Response(html, mimetype="text/html"))
+
+
+@bp.route("/api/airline-index/data.json")
+def api_airline_data():
+    snapshot = get_aviation_snapshot()
+    history = aviation.get_history()
+    components_payload = [
+        {
+            "key": cr.component.key,
+            "label": cr.component.label,
+            "weight": cr.component.weight,
+            "source": cr.component.source,
+            "unit": cr.component.unit,
+            "baseline": cr.baseline_value,
+            "current_value": cr.current_value,
+            "stress_score": cr.stress,
+            "contribution": cr.contribution,
+            "cap_rationale": cr.component.cap_rationale,
+        }
+        for cr in snapshot.components
+    ]
+
+    payload = {
+        "index": "API-INDEX",
+        "name": "Airline Pressure Index",
+        "description": "Weekly composite index tracking operational, fuel crack, fleet grounding, and macroeconomic stress across commercial aviation.",
+        "baseline": 100.0,
+        "score": snapshot.score,
+        "level_label": snapshot.level_label,
+        "level_status": snapshot.level_status,
+        "week_start": snapshot.week_start,
+        "components": components_payload,
+        "history": history,
+        "license": {"name": DATA_LICENSE_NAME, "url": DATA_LICENSE_URL},
+    }
+    return jsonify(payload)
+
+
+@bp.route("/api/airline-index/data.csv")
+def api_airline_csv():
+    history = aviation.get_history()
+    out = io.StringIO()
+    writer = csv.writer(out)
+    writer.writerow([
+        "week_start", "score", "level_label", "level_status",
+        "crack_spread_usd", "fleet_grounding_pct", "atfm_delay_min",
+        "detour_pct", "equity_stress", "fx_stress", "cancellation_rate_pct"
+    ])
+    for h in history:
+        raw = h.get("raw_values", {})
+        writer.writerow([
+            h.get("week_start"),
+            h.get("score"),
+            h.get("level_label"),
+            h.get("level_status"),
+            raw.get("crack_spread"),
+            raw.get("fleet_grounding"),
+            raw.get("atfm_delay"),
+            raw.get("detour_pct"),
+            raw.get("equity_stress"),
+            raw.get("fx_stress"),
+            raw.get("cancellation_rate"),
+        ])
+    resp = Response(out.getvalue(), mimetype="text/csv")
+    resp.headers["Content-Disposition"] = "attachment; filename=airline-pressure-index-history.csv"
+    return resp
 
 
 @bp.route("/hormuz-index")
@@ -827,6 +960,7 @@ def sitemap():
     # them here would submit five thin duplicates for indexing.
     pages = [
         {"loc": f"{SITE_ORIGIN}/", "priority": "1.0", "changefreq": "daily"},
+        {"loc": f"{SITE_ORIGIN}/airline-index", "priority": "1.0", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/hormuz-index", "priority": "0.9", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/lok-sabha-index", "priority": "0.9", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/terms", "priority": "0.5", "changefreq": "monthly"},

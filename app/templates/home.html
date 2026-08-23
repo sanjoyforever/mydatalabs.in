@@ -48,34 +48,34 @@
   </div>
 </section>
 
-<!-- Spotlight Card: Hormuz Crisis Index -->
+<!-- Spotlight Card: Airline Pressure Index -->
 <section class="section-block" aria-labelledby="spotlight-heading">
   <div class="section-header">
     <div>
       <h2 class="section-title" id="spotlight-heading">Flagship intelligence report</h2>
-      <p class="section-desc">Composite metric monitoring conflict and blockade risk in the Strait of Hormuz.</p>
+      <p class="section-desc">Composite metric monitoring operational, fuel crack, fleet grounding, and supply chain stress across global commercial aviation.</p>
     </div>
-    <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary" data-cta="/hormuz-index">View full dashboard <span aria-hidden="true">→</span></a>
+    <a href="{{ url_for('main.airline_index') }}" class="btn-primary" data-cta="/airline-index">View full dashboard <span aria-hidden="true">→</span></a>
   </div>
 
   <div class="spotlight-card">
     <div>
       <div class="spotlight-info-top">
-        <span class="badge-tag">HMX-INDEX</span>
-        <span class="status-badge status-{{ hormuz_status }}">
-          <span class="status-dot" aria-hidden="true"></span>{{ hormuz_level }}
+        <span class="badge-tag">API-INDEX</span>
+        <span class="status-badge status-{{ aviation_status }}">
+          <span class="status-dot" aria-hidden="true"></span>{{ aviation_level }}
         </span>
       </div>
-      <h3 class="spotlight-title">Hormuz Crisis Index</h3>
+      <h3 class="spotlight-title">Airline Pressure Index</h3>
       <p class="spotlight-desc">
-        Tracks crude price escalation, war-risk insurance premiums, vessel transits, tanker freight
-        rates, European gas, equity volatility and Cape of Good Hope reroutes against a non-crisis
-        100.0 baseline.
+        Tracks jet fuel crack spreads, engine inspection groundings (P&amp;W GTF &amp; CFM), en-route
+        ATFM delays, geopolitical detour flight durations, and airline equity stress against a
+        non-crisis 100.0 baseline.
       </p>
 
       <div class="spotlight-drivers-label">Key drivers this week</div>
       <div class="spotlight-drivers">
-        {% for cr in snapshot.components[:3] %}
+        {% for cr in aviation_snapshot.components[:3] %}
         <div class="driver-chip">
           <span class="driver-bullet" aria-hidden="true">•</span>
           <span class="driver-chip-label">{{ cr.component.label }}:</span>
@@ -85,8 +85,8 @@
       </div>
 
       <div class="spotlight-actions">
-        <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary" data-cta="/hormuz-index">Explore dashboard</a>
-        <a href="{{ url_for('main.hormuz_index') }}#methodology" class="btn-secondary" data-cta="/hormuz-index#methodology">How it is calculated</a>
+        <a href="{{ url_for('main.airline_index') }}" class="btn-primary" data-cta="/airline-index">Explore dashboard</a>
+        <a href="{{ url_for('main.airline_index') }}#methodology" class="btn-secondary" data-cta="/airline-index#methodology">How it is calculated</a>
       </div>
     </div>
 
@@ -94,12 +94,12 @@
       <div class="spotlight-score-header">
         <div>
           <div class="spotlight-score-label">Composite score</div>
-          <div class="spotlight-score-number">{{ "%.1f"|format(hormuz_score) }}</div>
+          <div class="spotlight-score-number">{{ "%.1f"|format(aviation_score) }}</div>
         </div>
         <div class="spotlight-delta">
-          <div class="delta-pill {% if delta >= 0 %}delta-up{% else %}delta-down{% endif %}">
-            <span aria-hidden="true">{% if delta >= 0 %}▲{% else %}▼{% endif %}</span>
-            {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
+          <div class="delta-pill {% if aviation_delta >= 0 %}delta-up{% else %}delta-down{% endif %}">
+            <span aria-hidden="true">{% if aviation_delta >= 0 %}▲{% else %}▼{% endif %}</span>
+            {% if aviation_delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(aviation_delta|abs) }}
           </div>
           <div class="spotlight-delta-caption">vs previous week</div>
         </div>
@@ -108,21 +108,21 @@
       <div class="spotlight-scale">
         <div class="spotlight-scale-head">
           <span>Crisis scale</span>
-          <span class="font-mono">Baseline = {{ scale_min|int }}</span>
+          <span class="font-mono">Baseline = 100</span>
         </div>
         <div class="mini-gauge"
              role="meter"
-             aria-valuenow="{{ "%.1f"|format(hormuz_score) }}"
+             aria-valuenow="{{ "%.1f"|format(aviation_score) }}"
              aria-valuemin="{{ scale_min }}"
              aria-valuemax="{{ scale_max }}"
-             aria-label="HMX-INDEX score {{ "%.1f"|format(hormuz_score) }} on a scale from {{ scale_min|int }} to {{ scale_max|int }}">
-          <div class="mini-gauge-fill" style="width: {{ scale_pct }}%;"></div>
+             aria-label="API-INDEX score {{ "%.1f"|format(aviation_score) }} on a scale from {{ scale_min|int }} to {{ scale_max|int }}">
+          <div class="mini-gauge-fill" style="width: {{ aviation_scale_pct }}%;"></div>
         </div>
         <div class="mini-gauge-ends" aria-hidden="true">
           <span>{{ scale_min|int }}</span>
           <span>{{ scale_max|int }}</span>
         </div>
-        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -27,6 +27,7 @@ def test_sitemap_contains_only_visible_pages(client):
 
     # Must contain visible pages
     assert "<loc>https://mydatalabs.in/</loc>" in xml_data
+    assert "<loc>https://mydatalabs.in/airline-index</loc>" in xml_data
     assert "<loc>https://mydatalabs.in/hormuz-index</loc>" in xml_data
     assert "<loc>https://mydatalabs.in/lok-sabha-index</loc>" in xml_data
     assert "<loc>https://mydatalabs.in/terms</loc>" in xml_data
@@ -42,7 +43,7 @@ def test_data_route_redirects(client):
     assert response.headers["Location"] == "/api/hormuz-index/data.json"
 
 
-@pytest.mark.parametrize("path", ["/", "/hormuz-index", "/lok-sabha-index", "/terms"])
+@pytest.mark.parametrize("path", ["/", "/airline-index", "/hormuz-index", "/lok-sabha-index", "/terms"])
 def test_analytics_tags_render_on_every_page(client, path):
     """GA4 and Clarity are sitewide, so they belong on every rendered page."""
     html_data = client.get(path).get_data(as_text=True)

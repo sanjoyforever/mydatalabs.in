@@ -1,0 +1,815 @@
+{
+  "live_values": {
+    "crack_spread": 94.39,
+    "fleet_grounding": 13.54,
+    "atfm_delay": 2.13,
+    "detour_pct": 4.81,
+    "equity_stress": 95.0,
+    "fx_stress": 20.1,
+    "cancellation_rate": 1.46
+  },
+  "live_values_at": "2026-08-23",
+  "snapshot": {
+    "score": 127.6,
+    "level_label": "Elevated Strain",
+    "level_status": "warning",
+    "week_start": "2026-08-17"
+  },
+  "history": [
+    {
+      "week_start": "2025-08-18",
+      "score": 96.0,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 27.08,
+        "fleet_grounding": 7.31,
+        "atfm_delay": 2.09,
+        "detour_pct": 10.27,
+        "equity_stress": 35.0,
+        "fx_stress": 18.5,
+        "cancellation_rate": 1.44
+      }
+    },
+    {
+      "week_start": "2025-08-25",
+      "score": 95.6,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 27.08,
+        "fleet_grounding": 7.49,
+        "atfm_delay": 1.97,
+        "detour_pct": 10.22,
+        "equity_stress": 34.5,
+        "fx_stress": 19.8,
+        "cancellation_rate": 1.39
+      }
+    },
+    {
+      "week_start": "2025-09-01",
+      "score": 97.2,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 30.55,
+        "fleet_grounding": 7.32,
+        "atfm_delay": 1.87,
+        "detour_pct": 11.01,
+        "equity_stress": 36.3,
+        "fx_stress": 18.5,
+        "cancellation_rate": 1.33
+      }
+    },
+    {
+      "week_start": "2025-09-08",
+      "score": 99.0,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 29.19,
+        "fleet_grounding": 7.77,
+        "atfm_delay": 1.81,
+        "detour_pct": 11.38,
+        "equity_stress": 39.7,
+        "fx_stress": 18.0,
+        "cancellation_rate": 1.31
+      }
+    },
+    {
+      "week_start": "2025-09-15",
+      "score": 98.4,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 29.87,
+        "fleet_grounding": 8.32,
+        "atfm_delay": 1.5,
+        "detour_pct": 11.23,
+        "equity_stress": 42.5,
+        "fx_stress": 16.0,
+        "cancellation_rate": 1.15
+      }
+    },
+    {
+      "week_start": "2025-09-22",
+      "score": 100.1,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 31.88,
+        "fleet_grounding": 8.49,
+        "atfm_delay": 1.54,
+        "detour_pct": 11.52,
+        "equity_stress": 47.4,
+        "fx_stress": 19.0,
+        "cancellation_rate": 1.17
+      }
+    },
+    {
+      "week_start": "2025-09-29",
+      "score": 100.3,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 29.39,
+        "fleet_grounding": 8.55,
+        "atfm_delay": 1.36,
+        "detour_pct": 11.81,
+        "equity_stress": 47.4,
+        "fx_stress": 17.8,
+        "cancellation_rate": 1.08
+      }
+    },
+    {
+      "week_start": "2025-10-06",
+      "score": 98.5,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 29.85,
+        "fleet_grounding": 8.37,
+        "atfm_delay": 1.31,
+        "detour_pct": 11.89,
+        "equity_stress": 47.2,
+        "fx_stress": 22.1,
+        "cancellation_rate": 1.06
+      }
+    },
+    {
+      "week_start": "2025-10-13",
+      "score": 99.2,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 30.27,
+        "fleet_grounding": 8.7,
+        "atfm_delay": 1.36,
+        "detour_pct": 12.05,
+        "equity_stress": 43.9,
+        "fx_stress": 20.6,
+        "cancellation_rate": 1.08
+      }
+    },
+    {
+      "week_start": "2025-10-20",
+      "score": 102.0,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 34.99,
+        "fleet_grounding": 8.71,
+        "atfm_delay": 1.23,
+        "detour_pct": 12.35,
+        "equity_stress": 41.4,
+        "fx_stress": 21.9,
+        "cancellation_rate": 1.02
+      }
+    },
+    {
+      "week_start": "2025-10-27",
+      "score": 105.7,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 37.04,
+        "fleet_grounding": 9.0,
+        "atfm_delay": 1.15,
+        "detour_pct": 11.91,
+        "equity_stress": 49.9,
+        "fx_stress": 22.8,
+        "cancellation_rate": 0.97
+      }
+    },
+    {
+      "week_start": "2025-11-03",
+      "score": 109.4,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 40.62,
+        "fleet_grounding": 9.06,
+        "atfm_delay": 1.26,
+        "detour_pct": 12.43,
+        "equity_stress": 40.1,
+        "fx_stress": 23.9,
+        "cancellation_rate": 1.03
+      }
+    },
+    {
+      "week_start": "2025-11-10",
+      "score": 112.2,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 41.92,
+        "fleet_grounding": 9.31,
+        "atfm_delay": 1.1,
+        "detour_pct": 12.62,
+        "equity_stress": 41.9,
+        "fx_stress": 21.8,
+        "cancellation_rate": 0.95
+      }
+    },
+    {
+      "week_start": "2025-11-17",
+      "score": 112.8,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 40.61,
+        "fleet_grounding": 9.42,
+        "atfm_delay": 1.29,
+        "detour_pct": 12.56,
+        "equity_stress": 38.8,
+        "fx_stress": 25.8,
+        "cancellation_rate": 1.04
+      }
+    },
+    {
+      "week_start": "2025-11-24",
+      "score": 108.6,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 34.79,
+        "fleet_grounding": 9.53,
+        "atfm_delay": 1.21,
+        "detour_pct": 12.4,
+        "equity_stress": 29.5,
+        "fx_stress": 23.0,
+        "cancellation_rate": 1.0
+      }
+    },
+    {
+      "week_start": "2025-12-01",
+      "score": 103.7,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 35.49,
+        "fleet_grounding": 9.53,
+        "atfm_delay": 1.19,
+        "detour_pct": 12.44,
+        "equity_stress": 20.1,
+        "fx_stress": 21.2,
+        "cancellation_rate": 0.99
+      }
+    },
+    {
+      "week_start": "2025-12-08",
+      "score": 99.6,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 31.2,
+        "fleet_grounding": 9.4,
+        "atfm_delay": 1.07,
+        "detour_pct": 12.72,
+        "equity_stress": 12.2,
+        "fx_stress": 17.6,
+        "cancellation_rate": 0.94
+      }
+    },
+    {
+      "week_start": "2025-12-15",
+      "score": 95.4,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 28.65,
+        "fleet_grounding": 9.61,
+        "atfm_delay": 1.26,
+        "detour_pct": 12.39,
+        "equity_stress": 10.8,
+        "fx_stress": 18.8,
+        "cancellation_rate": 1.03
+      }
+    },
+    {
+      "week_start": "2025-12-22",
+      "score": 94.0,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 27.85,
+        "fleet_grounding": 9.53,
+        "atfm_delay": 1.09,
+        "detour_pct": 12.71,
+        "equity_stress": 17.7,
+        "fx_stress": 16.6,
+        "cancellation_rate": 0.95
+      }
+    },
+    {
+      "week_start": "2025-12-29",
+      "score": 93.9,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 28.08,
+        "fleet_grounding": 9.6,
+        "atfm_delay": 1.17,
+        "detour_pct": 12.64,
+        "equity_stress": 18.7,
+        "fx_stress": 18.2,
+        "cancellation_rate": 0.98
+      }
+    },
+    {
+      "week_start": "2026-01-05",
+      "score": 93.0,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 26.33,
+        "fleet_grounding": 9.49,
+        "atfm_delay": 1.11,
+        "detour_pct": 12.36,
+        "equity_stress": 15.1,
+        "fx_stress": 21.6,
+        "cancellation_rate": 0.96
+      }
+    },
+    {
+      "week_start": "2026-01-12",
+      "score": 94.8,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 29.85,
+        "fleet_grounding": 9.55,
+        "atfm_delay": 1.31,
+        "detour_pct": 12.25,
+        "equity_stress": 20.6,
+        "fx_stress": 22.6,
+        "cancellation_rate": 1.06
+      }
+    },
+    {
+      "week_start": "2026-01-19",
+      "score": 101.3,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 36.12,
+        "fleet_grounding": 9.61,
+        "atfm_delay": 1.25,
+        "detour_pct": 12.26,
+        "equity_stress": 26.6,
+        "fx_stress": 14.7,
+        "cancellation_rate": 1.02
+      }
+    },
+    {
+      "week_start": "2026-01-26",
+      "score": 108.1,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 44.21,
+        "fleet_grounding": 9.3,
+        "atfm_delay": 1.06,
+        "detour_pct": 11.98,
+        "equity_stress": 34.3,
+        "fx_stress": 13.7,
+        "cancellation_rate": 0.93
+      }
+    },
+    {
+      "week_start": "2026-02-02",
+      "score": 104.8,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 33.31,
+        "fleet_grounding": 9.59,
+        "atfm_delay": 1.11,
+        "detour_pct": 12.25,
+        "equity_stress": 10.9,
+        "fx_stress": 15.0,
+        "cancellation_rate": 0.96
+      }
+    },
+    {
+      "week_start": "2026-02-09",
+      "score": 98.0,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 32.54,
+        "fleet_grounding": 9.53,
+        "atfm_delay": 1.12,
+        "detour_pct": 11.81,
+        "equity_stress": 25.8,
+        "fx_stress": 13.1,
+        "cancellation_rate": 0.96
+      }
+    },
+    {
+      "week_start": "2026-02-16",
+      "score": 100.4,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 36.84,
+        "fleet_grounding": 9.73,
+        "atfm_delay": 1.04,
+        "detour_pct": 11.19,
+        "equity_stress": 29.8,
+        "fx_stress": 16.1,
+        "cancellation_rate": 0.92
+      }
+    },
+    {
+      "week_start": "2026-02-23",
+      "score": 105.9,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 39.7,
+        "fleet_grounding": 9.46,
+        "atfm_delay": 1.25,
+        "detour_pct": 11.78,
+        "equity_stress": 38.0,
+        "fx_stress": 15.0,
+        "cancellation_rate": 1.02
+      }
+    },
+    {
+      "week_start": "2026-03-02",
+      "score": 112.9,
+      "level_label": "Normal Baseline",
+      "level_status": "neutral",
+      "raw_values": {
+        "crack_spread": 59.45,
+        "fleet_grounding": 9.65,
+        "atfm_delay": 1.09,
+        "detour_pct": 11.21,
+        "equity_stress": 58.0,
+        "fx_stress": 22.1,
+        "cancellation_rate": 0.95
+      }
+    },
+    {
+      "week_start": "2026-03-09",
+      "score": 118.2,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 65.48,
+        "fleet_grounding": 9.79,
+        "atfm_delay": 1.22,
+        "detour_pct": 11.08,
+        "equity_stress": 63.5,
+        "fx_stress": 27.5,
+        "cancellation_rate": 1.01
+      }
+    },
+    {
+      "week_start": "2026-03-16",
+      "score": 118.8,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 81.36,
+        "fleet_grounding": 9.87,
+        "atfm_delay": 1.23,
+        "detour_pct": 10.84,
+        "equity_stress": 57.3,
+        "fx_stress": 23.1,
+        "cancellation_rate": 1.02
+      }
+    },
+    {
+      "week_start": "2026-03-23",
+      "score": 117.5,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 76.24,
+        "fleet_grounding": 9.99,
+        "atfm_delay": 1.25,
+        "detour_pct": 10.23,
+        "equity_stress": 50.7,
+        "fx_stress": 24.7,
+        "cancellation_rate": 1.02
+      }
+    },
+    {
+      "week_start": "2026-03-30",
+      "score": 118.1,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 74.14,
+        "fleet_grounding": 10.0,
+        "atfm_delay": 1.53,
+        "detour_pct": 10.17,
+        "equity_stress": 48.7,
+        "fx_stress": 25.6,
+        "cancellation_rate": 1.17
+      }
+    },
+    {
+      "week_start": "2026-04-06",
+      "score": 117.6,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 62.79,
+        "fleet_grounding": 10.1,
+        "atfm_delay": 1.32,
+        "detour_pct": 10.03,
+        "equity_stress": 46.2,
+        "fx_stress": 18.3,
+        "cancellation_rate": 1.06
+      }
+    },
+    {
+      "week_start": "2026-04-13",
+      "score": 115.1,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 52.31,
+        "fleet_grounding": 10.29,
+        "atfm_delay": 1.32,
+        "detour_pct": 9.43,
+        "equity_stress": 37.9,
+        "fx_stress": 16.6,
+        "cancellation_rate": 1.06
+      }
+    },
+    {
+      "week_start": "2026-04-20",
+      "score": 116.4,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 57.94,
+        "fleet_grounding": 10.46,
+        "atfm_delay": 1.49,
+        "detour_pct": 9.46,
+        "equity_stress": 53.6,
+        "fx_stress": 18.4,
+        "cancellation_rate": 1.15
+      }
+    },
+    {
+      "week_start": "2026-04-27",
+      "score": 117.9,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 57.58,
+        "fleet_grounding": 10.51,
+        "atfm_delay": 1.43,
+        "detour_pct": 8.98,
+        "equity_stress": 53.2,
+        "fx_stress": 18.3,
+        "cancellation_rate": 1.11
+      }
+    },
+    {
+      "week_start": "2026-05-04",
+      "score": 117.8,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 62.47,
+        "fleet_grounding": 10.3,
+        "atfm_delay": 1.87,
+        "detour_pct": 8.54,
+        "equity_stress": 40.9,
+        "fx_stress": 15.9,
+        "cancellation_rate": 1.33
+      }
+    },
+    {
+      "week_start": "2026-05-11",
+      "score": 119.8,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 60.98,
+        "fleet_grounding": 10.84,
+        "atfm_delay": 1.82,
+        "detour_pct": 8.43,
+        "equity_stress": 53.6,
+        "fx_stress": 22.0,
+        "cancellation_rate": 1.31
+      }
+    },
+    {
+      "week_start": "2026-05-18",
+      "score": 121.2,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 59.75,
+        "fleet_grounding": 11.23,
+        "atfm_delay": 1.93,
+        "detour_pct": 8.33,
+        "equity_stress": 39.4,
+        "fx_stress": 22.5,
+        "cancellation_rate": 1.36
+      }
+    },
+    {
+      "week_start": "2026-05-25",
+      "score": 120.9,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 56.52,
+        "fleet_grounding": 11.15,
+        "atfm_delay": 2.19,
+        "detour_pct": 8.02,
+        "equity_stress": 24.5,
+        "fx_stress": 20.7,
+        "cancellation_rate": 1.5
+      }
+    },
+    {
+      "week_start": "2026-06-01",
+      "score": 122.0,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 57.58,
+        "fleet_grounding": 11.54,
+        "atfm_delay": 2.36,
+        "detour_pct": 7.24,
+        "equity_stress": 30.8,
+        "fx_stress": 25.5,
+        "cancellation_rate": 1.58
+      }
+    },
+    {
+      "week_start": "2026-06-08",
+      "score": 122.5,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 55.65,
+        "fleet_grounding": 11.67,
+        "atfm_delay": 2.37,
+        "detour_pct": 7.02,
+        "equity_stress": 20.1,
+        "fx_stress": 23.7,
+        "cancellation_rate": 1.58
+      }
+    },
+    {
+      "week_start": "2026-06-15",
+      "score": 122.6,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 53.58,
+        "fleet_grounding": 11.74,
+        "atfm_delay": 2.68,
+        "detour_pct": 6.66,
+        "equity_stress": 11.9,
+        "fx_stress": 27.2,
+        "cancellation_rate": 1.74
+      }
+    },
+    {
+      "week_start": "2026-06-22",
+      "score": 123.2,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 62.75,
+        "fleet_grounding": 11.99,
+        "atfm_delay": 2.64,
+        "detour_pct": 6.51,
+        "equity_stress": 5.0,
+        "fx_stress": 30.2,
+        "cancellation_rate": 1.72
+      }
+    },
+    {
+      "week_start": "2026-06-29",
+      "score": 123.5,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 64.65,
+        "fleet_grounding": 12.25,
+        "atfm_delay": 2.79,
+        "detour_pct": 6.17,
+        "equity_stress": 5.0,
+        "fx_stress": 28.4,
+        "cancellation_rate": 1.79
+      }
+    },
+    {
+      "week_start": "2026-07-06",
+      "score": 124.7,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 73.23,
+        "fleet_grounding": 12.39,
+        "atfm_delay": 2.73,
+        "detour_pct": 6.09,
+        "equity_stress": 15.1,
+        "fx_stress": 29.3,
+        "cancellation_rate": 1.77
+      }
+    },
+    {
+      "week_start": "2026-07-13",
+      "score": 125.7,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 82.61,
+        "fleet_grounding": 12.56,
+        "atfm_delay": 2.7,
+        "detour_pct": 5.62,
+        "equity_stress": 26.8,
+        "fx_stress": 28.5,
+        "cancellation_rate": 1.75
+      }
+    },
+    {
+      "week_start": "2026-07-20",
+      "score": 127.2,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 78.81,
+        "fleet_grounding": 12.75,
+        "atfm_delay": 2.81,
+        "detour_pct": 5.52,
+        "equity_stress": 30.8,
+        "fx_stress": 30.8,
+        "cancellation_rate": 1.81
+      }
+    },
+    {
+      "week_start": "2026-07-27",
+      "score": 127.1,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 82.98,
+        "fleet_grounding": 12.9,
+        "atfm_delay": 2.77,
+        "detour_pct": 5.04,
+        "equity_stress": 26.3,
+        "fx_stress": 25.1,
+        "cancellation_rate": 1.79
+      }
+    },
+    {
+      "week_start": "2026-08-03",
+      "score": 125.9,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 80.35,
+        "fleet_grounding": 13.22,
+        "atfm_delay": 2.56,
+        "detour_pct": 5.44,
+        "equity_stress": 29.0,
+        "fx_stress": 24.2,
+        "cancellation_rate": 1.68
+      }
+    },
+    {
+      "week_start": "2026-08-10",
+      "score": 125.5,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 91.36,
+        "fleet_grounding": 13.09,
+        "atfm_delay": 2.51,
+        "detour_pct": 4.82,
+        "equity_stress": 39.3,
+        "fx_stress": 24.0,
+        "cancellation_rate": 1.65
+      }
+    },
+    {
+      "week_start": "2026-08-17",
+      "score": 127.6,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 89.77,
+        "fleet_grounding": 13.54,
+        "atfm_delay": 2.13,
+        "detour_pct": 4.81,
+        "equity_stress": 95.0,
+        "fx_stress": 20.1,
+        "cancellation_rate": 1.46
+      }
+    }
+  ]
+}

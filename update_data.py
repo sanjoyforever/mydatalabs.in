@@ -240,6 +240,39 @@ def update_index(persist: bool) -> int:
     return 0
 
 
+def update_aviation_index(persist: bool) -> int:
+    from app.indices import aviation
+
+    print("=" * 62)
+    print("Airline Pressure Index (API-INDEX)")
+    snapshot = aviation.compute_snapshot(allow_network=True)
+
+    if persist:
+        aviation.append_snapshot(snapshot)
+
+    print(f"  Week of {snapshot.week_start}: {snapshot.score:.1f} ({snapshot.level_label})")
+    print(f"  Storage: {storage.storage_backend()}")
+
+    print("\n  Components:")
+    for cr in snapshot.components:
+        flags = []
+        if cr.stale:
+            flags.append("STALE")
+        if cr.carried_forward:
+            flags.append("carried forward")
+        flag_str = f"  [{', '.join(flags)}]" if flags else ""
+        val_str = f"{cr.current_value:.2f} {cr.component.unit}" if cr.current_value is not None else "—"
+        print(f"    {cr.component.label:<36} {val_str:>16}   stress={cr.stress:>5.1f}  {cr.contribution:>+6.2f}{flag_str}")
+
+    if persist:
+        from app import precomputed
+        print("\n  Precomputing route artifacts:")
+        precomputed.build_all(verbose=True)
+        print(f"\n  Persisted. History now has {len(aviation.get_history())} weekly snapshots.")
+
+    return 0
+
+
 def report_incident_dataset() -> None:
     print("=" * 62)
     print("Vessel incident dataset")

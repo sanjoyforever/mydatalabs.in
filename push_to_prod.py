@@ -73,6 +73,7 @@ PRODUCTION_BRANCH = "main"
 # Paths whose changes are publishable data. Directories are added whole; git
 # ignores the ones that do not exist yet.
 DATA_PATHS = [
+    os.path.join("app", "data", "aviation_history.json"),
     os.path.join("app", "data", "hormuz_history.json"),
     # The hand-entered figures. Publishable data, not source: the index reads
     # component values out of it on every run, so a deploy without it would
@@ -92,6 +93,7 @@ CODE_PATHS = [
     "app",              # routes, templates, static, elections blueprint, precomputed.py
     "api",              # Vercel entrypoint
     "scripts",
+    "tests",
     "app.py",
     "update.py",
     "update_data.py",
@@ -100,6 +102,7 @@ CODE_PATHS = [
     "requirements-pipeline.txt",
     "vercel.json",
     ".vercelignore",
+    ".gitignore",
     "README.md",
     # The design system the stylesheet is built against. Version-controlled
     # because it is a source of truth, .vercelignore'd because no request reads
