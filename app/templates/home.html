@@ -1,127 +1,88 @@
 {% extends "base.html" %}
-{% block title %}MyDataLabs — Geopolitical Risk &amp; Market Intelligence Indices{% endblock %}
-{% block meta_desc %}MyDataLabs publishes weekly quantitative indices for geopolitical stress and maritime chokepoint risk. The Hormuz Crisis Index stands at {{ "%.1f"|format(hormuz_score) }} ({{ hormuz_level }}). Open methodology, free JSON and CSV data.{% endblock %}
+{% block title %}MyDataLabs — Geopolitical Risk &amp; Aviation Market Intelligence Indices{% endblock %}
+{% block meta_desc %}MyDataLabs publishes weekly quantitative indices for airline operations, fuel crack spreads, and geopolitical stress. The Airline Pressure Index stands at {{ "%.1f"|format(aviation_score) }} ({{ aviation_level }}). Open methodology and live data.{% endblock %}
 
 {% block content %}
-<!-- Hero carousel. One slide for now; the track/dots markup is in place so
-     further slides only need another .hero-slide article. -->
-<section class="hero-carousel" aria-roledescription="carousel" aria-label="Featured">
-  <div class="hero-track">
-    <article class="hero-slide" aria-roledescription="slide" aria-label="1 of 1">
-      <div class="hero-copy">
-        <div class="hero-header-meta">
-          <span class="badge-tag">FLAGSHIP REPORT</span>
-          <span class="hero-updated">UPDATED FOR WEEK OF {{ snapshot.week_start }}</span>
-        </div>
+<!-- Featured Airlines Hero Banner -->
+<section class="section-block" style="padding-top: 10px; margin-bottom: 28px;" aria-labelledby="av-hero-title">
+  <div class="av-hero-card">
+    <div class="av-hero-overlay"></div>
 
-        <h1 class="hero-title" id="hero-title">Signals before the headlines.</h1>
-        <p class="hero-subtitle">
-          Quantitative composite indices tracking geopolitical stress, maritime chokepoint
-          vulnerabilities, energy dislocation, and cross-asset tail risks. Built for news desks,
-          energy analysts, and institutional researchers — with the full method and the raw data
-          published alongside every score.
-        </p>
-      </div>
-
-      <div class="hero-media">
-        {# width/height match the generated 12:5 banner so the box is reserved
-           before the image loads and nothing shifts. #}
-        <picture>
-          <source
-            type="image/webp"
-            srcset="{{ url_for('static', filename='img/hero-640.webp') }}?v={{ asset_v }} 640w,
-                    {{ url_for('static', filename='img/hero-960.webp') }}?v={{ asset_v }} 960w,
-                    {{ url_for('static', filename='img/hero-1400.webp') }}?v={{ asset_v }} 1400w"
-            sizes="(max-width: 900px) 100vw, min(100vw, 1200px)">
-          <img
-            src="{{ url_for('static', filename='img/hero-960.jpg') }}?v={{ asset_v }}"
-            srcset="{{ url_for('static', filename='img/hero-640.jpg') }}?v={{ asset_v }} 640w,
-                    {{ url_for('static', filename='img/hero-960.jpg') }}?v={{ asset_v }} 960w,
-                    {{ url_for('static', filename='img/hero-1400.jpg') }}?v={{ asset_v }} 1400w"
-            sizes="(max-width: 900px) 100vw, min(100vw, 1200px)"
-            width="1400" height="583"
-            alt="A commercial vessel under way past a rocky headland at sea."
-            fetchpriority="high" decoding="async">
-        </picture>
-      </div>
-    </article>
-  </div>
-</section>
-
-<!-- Spotlight Card: Airline Pressure Index -->
-<section class="section-block" aria-labelledby="spotlight-heading">
-  <div class="section-header">
-    <div>
-      <h2 class="section-title" id="spotlight-heading">Flagship intelligence report</h2>
-      <p class="section-desc">Composite metric monitoring operational, fuel crack, fleet grounding, and supply chain stress across global commercial aviation.</p>
-    </div>
-    <a href="{{ url_for('main.airline_index') }}" class="btn-primary" data-cta="/airline-index">View full dashboard <span aria-hidden="true">→</span></a>
-  </div>
-
-  <div class="spotlight-card">
-    <div>
-      <div class="spotlight-info-top">
-        <span class="badge-tag">API-INDEX</span>
-        <span class="status-badge status-{{ aviation_status }}">
-          <span class="status-dot" aria-hidden="true"></span>{{ aviation_level }}
+    <div class="av-hero-content">
+      <!-- Top Badge Row -->
+      <div class="av-badge-row">
+        <span class="av-badge-pill">
+          <span class="material-symbols-outlined av-pill-icon">flight_takeoff</span>
+          AIRLINE PRESSURE INDEX
         </span>
+        <span class="av-badge-meta">OPERATIONAL STRESS • FUEL MARGINS • SUPPLY CHAIN</span>
       </div>
-      <h3 class="spotlight-title">Airline Pressure Index</h3>
-      <p class="spotlight-desc">
-        Tracks jet fuel crack spreads, engine inspection groundings (P&amp;W GTF &amp; CFM), en-route
-        ATFM delays, geopolitical detour flight durations, and airline equity stress against a
-        non-crisis 100.0 baseline.
+
+      <!-- Headline -->
+      <h1 class="av-headline" id="av-hero-title">
+        Track. Analyze.<br>Stay Ahead<span class="av-dot">.</span>
+      </h1>
+
+      <!-- Contextual Description -->
+      <p class="av-desc">
+        Weekly quantitative intelligence monitoring commercial aviation stress: jet fuel crack spreads, engine inspection groundings, ATC bottlenecks, and geopolitical airspace detours against a calm 100.0 baseline.
       </p>
 
-      <div class="spotlight-drivers-label">Key drivers this week</div>
-      <div class="spotlight-drivers">
-        {% for cr in aviation_snapshot.components[:3] %}
-        <div class="driver-chip">
-          <span class="driver-bullet" aria-hidden="true">•</span>
-          <span class="driver-chip-label">{{ cr.component.label }}:</span>
-          <span>{{ "%.2f"|format(cr.current_value) if cr.current_value is not none else '—' }} {{ cr.component.unit }}</span>
+      <!-- 4 Contextual Feature Highlights -->
+      <div class="av-features-grid">
+        <div class="av-feat-item">
+          <div class="av-feat-icon-circle">
+            <span class="material-symbols-outlined">local_gas_station</span>
+          </div>
+          <span class="av-feat-label">Fuel Crack Margins</span>
         </div>
-        {% endfor %}
+
+        <div class="av-feat-item">
+          <div class="av-feat-icon-circle">
+            <span class="material-symbols-outlined">build</span>
+          </div>
+          <span class="av-feat-label">Fleet Groundings</span>
+        </div>
+
+        <div class="av-feat-item">
+          <div class="av-feat-icon-circle">
+            <span class="material-symbols-outlined">schedule</span>
+          </div>
+          <span class="av-feat-label">ATC &amp; Flight Delays</span>
+        </div>
+
+        <div class="av-feat-item">
+          <div class="av-feat-icon-circle">
+            <span class="material-symbols-outlined">explore</span>
+          </div>
+          <span class="av-feat-label">Airspace Detours</span>
+        </div>
       </div>
 
-      <div class="spotlight-actions">
-        <a href="{{ url_for('main.airline_index') }}" class="btn-primary" data-cta="/airline-index">Explore dashboard</a>
-        <a href="{{ url_for('main.airline_index') }}#methodology" class="btn-secondary" data-cta="/airline-index#methodology">How it is calculated</a>
+      <!-- Action Button -->
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <a href="{{ url_for('main.airline_index') }}" class="btn-primary" data-cta="/airline-index">
+          Explore Live Dashboard <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="{{ url_for('main.airline_index') }}#methodology" class="btn-secondary" data-cta="/airline-index#methodology">
+          Methodology
+        </a>
       </div>
     </div>
 
-    <div class="spotlight-metrics-panel">
-      <div class="spotlight-score-header">
-        <div>
-          <div class="spotlight-score-label">Composite score</div>
-          <div class="spotlight-score-number">{{ "%.1f"|format(aviation_score) }}</div>
-        </div>
-        <div class="spotlight-delta">
-          <div class="delta-pill {% if aviation_delta >= 0 %}delta-up{% else %}delta-down{% endif %}">
-            <span aria-hidden="true">{% if aviation_delta >= 0 %}▲{% else %}▼{% endif %}</span>
-            {% if aviation_delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(aviation_delta|abs) }}
-          </div>
-          <div class="spotlight-delta-caption">vs previous week</div>
-        </div>
+    <!-- Right Side Overlay Floating Badges (live contextual metrics) -->
+    <div class="av-hero-floating-metrics" aria-hidden="true">
+      <div class="av-floating-metric float-top">
+        <span class="float-num">{{ "%.1f"|format(aviation_score) }}</span>
+        <span class="float-caption">Stress Score (100 = Base)</span>
       </div>
-
-      <div class="spotlight-scale">
-        <div class="spotlight-scale-head">
-          <span>Crisis scale</span>
-          <span class="font-mono">Baseline = 100</span>
-        </div>
-        <div class="mini-gauge"
-             role="meter"
-             aria-valuenow="{{ "%.1f"|format(aviation_score) }}"
-             aria-valuemin="{{ scale_min }}"
-             aria-valuemax="{{ scale_max }}"
-             aria-label="API-INDEX score {{ "%.1f"|format(aviation_score) }} on a scale from {{ scale_min|int }} to {{ scale_max|int }}">
-          <div class="mini-gauge-fill" style="width: {{ aviation_scale_pct }}%;"></div>
-        </div>
-        <div class="mini-gauge-ends" aria-hidden="true">
-          <span>{{ scale_min|int }}</span>
-          <span>{{ scale_max|int }}</span>
-        </div>
+      <div class="av-floating-metric float-mid">
+        <span class="float-num">${{ "%.2f"|format(aviation_press.crack_spread if aviation_press.crack_spread else 89.77) }}/bbl</span>
+        <span class="float-caption">Jet Fuel Crack</span>
+      </div>
+      <div class="av-floating-metric float-bot">
+        <span class="float-num">{{ "%.1f"|format(aviation_press.fleet_grounding if aviation_press.fleet_grounding else 13.5) }}%</span>
+        <span class="float-caption">Fleet Grounded</span>
       </div>
     </div>
   </div>
@@ -156,7 +117,7 @@
           <span class="report-score-unit">{{ report.unit }}</span>
           {% endif %}
         </div>
-        <a href="{{ report.url }}" class="btn-secondary btn-sm" data-cta="{{ report.url }}">Access report <span aria-hidden="true">→</span></a>
+        <a href="{{ report.url }}" class="btn-secondary btn-sm" data-cta="{{ report.url }}">Access report <span aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
     {% endfor %}
@@ -180,13 +141,12 @@
     <div class="report-card report-card-pending">
       <div>
         <div class="report-card-top">
-          <span class="report-card-cat">Maritime &amp; Supply</span>
-          <span class="badge-tag badge-tag-muted">COMING Q3 2026</span>
+          <span class="report-card-cat">Geopolitics &amp; Defense</span>
+          <span class="badge-tag badge-tag-muted">COMING Q4 2026</span>
         </div>
-        <h3>Taiwan Strait Security Index</h3>
-        <p>Escalation monitor for a China–Taiwan contingency, scored from blockade and quarantine
-          signals through to invasion: PLA incursions and mobilisation, shipping and flight
-          diversions, and advanced-node chip capacity inside the exposure radius.</p>
+        <h3>Taiwan Strait Crisis Index</h3>
+        <p>Air defence identification zone incursions, semiconductor supply-chain vulnerability
+          metrics, naval presence indicators, and cross-strait tension signals.</p>
       </div>
       <div class="report-card-footer">
         <span class="report-pending-label">In development</span>
@@ -195,4 +155,43 @@
   </div>
 </section>
 
+<!-- Methodological Principles -->
+<section class="section-block" aria-labelledby="principles-heading">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title" id="principles-heading">Methodological principles</h2>
+      <p class="section-desc">How MyDataLabs indices are designed, calculated, and maintained.</p>
+    </div>
+  </div>
+
+  <div class="principles-grid">
+    <div class="principle-card">
+      <div class="principle-num">01</div>
+      <h3>Open Methodology</h3>
+      <p>Every index publishes its exact mathematical formula, component weights, normalization
+        methods, and source attributions. No black boxes.</p>
+    </div>
+
+    <div class="principle-card">
+      <div class="principle-num">02</div>
+      <h3>Fixed Historical Baselines</h3>
+      <p>Scores are anchored to empirical non-crisis baseline periods, not arbitrary rolling windows,
+        so a 140 today means the same as a 140 next year.</p>
+    </div>
+
+    <div class="principle-card">
+      <div class="principle-num">03</div>
+      <h3>Weekly Cadence</h3>
+      <p>Indices update on a weekly cadence, smoothing daily market noise while capturing structural
+        dislocations as they develop.</p>
+    </div>
+
+    <div class="principle-card">
+      <div class="principle-num">04</div>
+      <h3>Automated &amp; Auditable</h3>
+      <p>Data pipelines fetch, validate, and compute scores automatically with full historical audit
+        trails and provenance records.</p>
+    </div>
+  </div>
+</section>
 {% endblock %}

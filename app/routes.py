@@ -462,6 +462,7 @@ def home():
             aviation_level=av_snapshot.level_label,
             aviation_status=av_snapshot.level_status,
             aviation_delta=av_delta,
+            aviation_press=_build_aviation_press(av_snapshot),
             aviation_scale_pct=scoring.scale_pct(av_snapshot.score),
             snapshot=snapshot,
             hormuz_score=snapshot.score,
@@ -474,6 +475,29 @@ def home():
         ),
     )
     return _cached(Response(html, mimetype="text/html"))
+
+
+def _build_aviation_press(snapshot):
+    comp_map = {cr.component.key: cr for cr in snapshot.components}
+    cs = comp_map.get("crack_spread")
+    fg = comp_map.get("fleet_grounding")
+    ad = comp_map.get("atfm_delay")
+    det = comp_map.get("detour_pct")
+    eq = comp_map.get("equity_stress")
+    fx = comp_map.get("fx_stress")
+    can = comp_map.get("cancellation_rate")
+
+    return {
+        "points_above_baseline": snapshot.score - 100.0,
+        "crack_spread": cs.current_value if cs else None,
+        "crack_spread_stress": cs.stress if cs else 0,
+        "fleet_grounding": fg.current_value if fg else None,
+        "atfm_delay": ad.current_value if ad else None,
+        "detour_pct": det.current_value if det else None,
+        "equity_stress": eq.current_value if eq else None,
+        "fx_stress": fx.current_value if fx else None,
+        "cancellation_rate": can.current_value if can else None,
+    }
 
 
 @bp.route("/airline-index")
@@ -489,82 +513,22 @@ def airline_index():
             snapshot=snapshot,
             history=history,
             score=snapshot.score,
+            prev_score=prev_score,
             level_label=snapshot.level_label,
             level_status=snapshot.level_status,
             delta=delta,
+            press=_build_aviation_press(snapshot),
+            top_driver=aviation.top_driver(snapshot),
+            band_positions=scoring.band_positions(),
             scale_pct=scoring.scale_pct(snapshot.score),
             scale_min=scoring.SCALE_MIN,
             scale_max=scoring.SCALE_MAX,
             components=snapshot.components,
+            license_name=DATA_LICENSE_NAME,
+            license_url=DATA_LICENSE_URL,
         ),
     )
     return _cached(Response(html, mimetype="text/html"))
-
-
-@bp.route("/api/airline-index/data.json")
-def api_airline_data():
-    snapshot = get_aviation_snapshot()
-    history = aviation.get_history()
-    components_payload = [
-        {
-            "key": cr.component.key,
-            "label": cr.component.label,
-            "weight": cr.component.weight,
-            "source": cr.component.source,
-            "unit": cr.component.unit,
-            "baseline": cr.baseline_value,
-            "current_value": cr.current_value,
-            "stress_score": cr.stress,
-            "contribution": cr.contribution,
-            "cap_rationale": cr.component.cap_rationale,
-        }
-        for cr in snapshot.components
-    ]
-
-    payload = {
-        "index": "API-INDEX",
-        "name": "Airline Pressure Index",
-        "description": "Weekly composite index tracking operational, fuel crack, fleet grounding, and macroeconomic stress across commercial aviation.",
-        "baseline": 100.0,
-        "score": snapshot.score,
-        "level_label": snapshot.level_label,
-        "level_status": snapshot.level_status,
-        "week_start": snapshot.week_start,
-        "components": components_payload,
-        "history": history,
-        "license": {"name": DATA_LICENSE_NAME, "url": DATA_LICENSE_URL},
-    }
-    return jsonify(payload)
-
-
-@bp.route("/api/airline-index/data.csv")
-def api_airline_csv():
-    history = aviation.get_history()
-    out = io.StringIO()
-    writer = csv.writer(out)
-    writer.writerow([
-        "week_start", "score", "level_label", "level_status",
-        "crack_spread_usd", "fleet_grounding_pct", "atfm_delay_min",
-        "detour_pct", "equity_stress", "fx_stress", "cancellation_rate_pct"
-    ])
-    for h in history:
-        raw = h.get("raw_values", {})
-        writer.writerow([
-            h.get("week_start"),
-            h.get("score"),
-            h.get("level_label"),
-            h.get("level_status"),
-            raw.get("crack_spread"),
-            raw.get("fleet_grounding"),
-            raw.get("atfm_delay"),
-            raw.get("detour_pct"),
-            raw.get("equity_stress"),
-            raw.get("fx_stress"),
-            raw.get("cancellation_rate"),
-        ])
-    resp = Response(out.getvalue(), mimetype="text/csv")
-    resp.headers["Content-Disposition"] = "attachment; filename=airline-pressure-index-history.csv"
-    return resp
 
 
 @bp.route("/hormuz-index")

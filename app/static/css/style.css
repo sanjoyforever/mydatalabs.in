@@ -1660,9 +1660,334 @@ main:focus { outline: none; }
 .stress-high { background: var(--accent-rose); }
 .stress-value { font-size: 0.8rem; font-weight: 600; }
 
+/* Interactive Trajectory Legend Pills */
+.traj-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.traj-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  user-select: none;
+}
+
+.traj-pill:hover {
+  border-color: var(--border-bright, #94A3B8);
+  color: var(--text-primary);
+  background: var(--surface-2, rgba(255, 255, 255, 0.04));
+  transform: translateY(-1px);
+}
+
+.traj-pill .pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.55;
+}
+
+.traj-pill.active .pill-dot {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Active states per metric brand color */
+.traj-pill[data-metric="API-INDEX Composite"].active {
+  border-color: #38BDF8;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38BDF8;
+}
+.traj-pill[data-metric="Fuel Crack ($/bbl)"].active {
+  border-color: #F59E0B;
+  background: rgba(245, 158, 11, 0.12);
+  color: #F59E0B;
+}
+.traj-pill[data-metric="Fleet Grounding (%)"].active {
+  border-color: #A855F7;
+  background: rgba(168, 85, 247, 0.12);
+  color: #A855F7;
+}
+.traj-pill[data-metric="ATFM Delay (min)"].active {
+  border-color: #EF4444;
+  background: rgba(239, 68, 68, 0.12);
+  color: #EF4444;
+}
+.traj-pill[data-metric="Detour Overhead (%)"].active {
+  border-color: #10B981;
+  background: rgba(16, 185, 129, 0.12);
+  color: #10B981;
+}
+.traj-pill[data-metric="Equity Stress (/100)"].active {
+  border-color: #EC4899;
+  background: rgba(236, 72, 153, 0.12);
+  color: #EC4899;
+}
+
 /* ==========================================================================
    HOME PAGE
    ========================================================================== */
+
+/* Featured Aviation Hero Banner */
+.av-hero-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  background-image: url('/static/img/aviation-banner.webp');
+  background-position: right center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-bottom: 36px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.av-hero-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: var(--accent-blue, #0284C7);
+}
+
+.av-hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.94) 38%,
+    rgba(255, 255, 255, 0.72) 52%,
+    rgba(255, 255, 255, 0.15) 75%,
+    rgba(255, 255, 255, 0.0) 100%
+  );
+  z-index: 1;
+}
+
+[data-theme="dark"] .av-hero-overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.98) 0%,
+    rgba(15, 23, 42, 0.93) 38%,
+    rgba(15, 23, 42, 0.70) 52%,
+    rgba(15, 23, 42, 0.20) 75%,
+    rgba(15, 23, 42, 0.0) 100%
+  );
+}
+
+.av-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+  padding: 44px 48px;
+}
+
+@media (max-width: 768px) {
+  .av-hero-content {
+    padding: 28px 24px;
+    max-width: 100%;
+  }
+}
+
+.av-badge-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.av-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #0284C7;
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="dark"] .av-badge-pill {
+  color: #38BDF8;
+}
+
+.av-pill-icon {
+  font-size: 1rem;
+}
+
+.av-badge-meta {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.av-headline {
+  font-size: clamp(2.2rem, 4.2vw, 3.2rem);
+  font-weight: 850;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  margin: 0 0 16px;
+  color: var(--text-primary);
+}
+
+.av-dot {
+  color: #0284C7;
+}
+
+[data-theme="dark"] .av-dot {
+  color: #38BDF8;
+}
+
+.av-desc {
+  font-size: 0.95rem;
+  line-height: 1.62;
+  color: var(--text-secondary);
+  margin: 0 0 28px;
+  max-width: 500px;
+}
+
+.av-features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 540px) {
+  .av-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 12px;
+  }
+}
+
+.av-feat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.av-feat-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: #0284C7;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+[data-theme="dark"] .av-feat-icon-circle {
+  background: rgba(30, 41, 59, 0.85);
+  color: #38BDF8;
+}
+
+.av-feat-item:hover .av-feat-icon-circle {
+  transform: translateY(-2px);
+  border-color: #38BDF8;
+}
+
+.av-feat-icon-circle .material-symbols-outlined {
+  font-size: 1.25rem;
+}
+
+.av-feat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+.av-hero-floating-metrics {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 55%;
+  pointer-events: none;
+  z-index: 2;
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .av-hero-floating-metrics {
+    display: block;
+  }
+}
+
+.av-floating-metric {
+  position: absolute;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 4px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  font-family: var(--font-sans);
+}
+
+.av-floating-metric.float-top {
+  top: 38px;
+  right: 60px;
+}
+
+.av-floating-metric.float-mid {
+  top: 100px;
+  left: 20px;
+}
+
+.av-floating-metric.float-bot {
+  bottom: 120px;
+  left: 120px;
+}
+
+.av-floating-metric .float-num {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.av-floating-metric .float-caption {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
 
 .hero-updated { font-size: 0.82rem; color: var(--text-sub); font-family: var(--font-mono); }
 .macro-value-blue { color: var(--accent-blue); }

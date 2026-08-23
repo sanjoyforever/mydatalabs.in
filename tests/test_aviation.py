@@ -55,36 +55,20 @@ def test_airline_index_route(client):
     assert "Airline Pressure Index" in html
     assert "API-INDEX" in html
     assert "Jet Fuel Crack Spread" in html
-    assert "What-If Scenario Stress Simulator" in html
+    assert "Stress Test Simulator" in html
 
 
-def test_airline_api_json(client):
-    """GET /api/airline-index/data.json returns valid JSON dataset."""
-    response = client.get("/api/airline-index/data.json")
-    assert response.status_code == 200
-    assert response.is_json
-    data = response.get_json()
-    assert data["index"] == "API-INDEX"
-    assert "score" in data
-    assert "components" in data
-    assert len(data["components"]) == 7
-    assert "history" in data
-
-
-def test_airline_api_csv(client):
-    """GET /api/airline-index/data.csv returns CSV with headers."""
-    response = client.get("/api/airline-index/data.csv")
-    assert response.status_code == 200
-    assert response.mimetype == "text/csv"
-    csv_text = response.get_data(as_text=True)
-    assert "week_start,score,level_label" in csv_text
-    assert len(csv_text.strip().split("\n")) >= 50
+def test_airline_api_disabled(client):
+    """Public dataset download APIs are disabled to protect proprietary access."""
+    assert client.get("/api/airline-index/data.json").status_code == 404
+    assert client.get("/api/airline-index/data.csv").status_code == 404
 
 
 def test_home_page_spotlight(client):
-    """GET / renders Airline Pressure Index in flagship spotlight."""
+    """GET / renders Airline Pressure Index in flagship featured hero."""
     response = client.get("/")
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert "Airline Pressure Index" in html
-    assert "API-INDEX" in html
+    assert "AIRLINE PRESSURE INDEX" in html
+    assert "Track. Analyze." in html
+    assert "Fuel Crack Margins" in html

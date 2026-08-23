@@ -152,6 +152,14 @@ def fetch_live_values(allow_network: bool = True) -> dict[str, Optional[float]]:
     }
 
     if not allow_network:
+        from app import precomputed
+        stored = precomputed.load("airline-index").get("live_values") or {}
+        if any(stored.get(c.key) is not None for c in COMPONENTS):
+            return {c.key: stored.get(c.key) for c in COMPONENTS}
+        history = get_history()
+        if history:
+            latest_raw = history[-1].get("raw_values", {})
+            return {c.key: latest_raw.get(c.key) for c in COMPONENTS}
         return result
 
     try:
@@ -348,3 +356,10 @@ def append_snapshot(snapshot: CompositeResult) -> bool:
 
     history.append(entry)
     return save_history(history)
+
+
+def top_driver(snapshot: CompositeResult):
+    """The component contributing the most points to the composite this week."""
+    if not snapshot.components:
+        return None
+    return max(snapshot.components, key=lambda c: c.contribution)

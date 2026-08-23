@@ -32,22 +32,8 @@
           "@type": "PropertyValue",
           "name": "API-INDEX composite score",
           "value": {{ "%.1f"|format(snapshot.score) }},
-          "minValue": 0.0,
-          "maxValue": 200.0
-        }
-      ],
-      "distribution": [
-        {
-          "@type": "DataDownload",
-          "encodingFormat": "application/json",
-          "contentUrl": "{{ origin }}/api/airline-index/data.json",
-          "name": "API-INDEX current snapshot and weekly history (JSON)"
-        },
-        {
-          "@type": "DataDownload",
-          "encodingFormat": "text/csv",
-          "contentUrl": "{{ origin }}/api/airline-index/data.csv",
-          "name": "API-INDEX weekly history with raw component values (CSV)"
+          "minValue": {{ scale_min }},
+          "maxValue": {{ scale_max }}
         }
       ]
     },
@@ -88,233 +74,441 @@
   </div>
 
   <!-- TAB 1: DASHBOARD -->
-  <div id="tab-dashboard" class="report-tab-panel active" role="tabpanel">
-    <!-- Hero / Headline Score Block -->
-    <div class="report-hero-grid">
-      <div class="dash-card hero-score-card">
-        <div class="card-top-meta">
-          <span class="badge-tag">FLAGSHIP AVIATION INTELLIGENCE</span>
-          <span class="status-badge status-{{ snapshot.level_status }}">
-            <span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label }}
-          </span>
-        </div>
+  <div id="tab-dashboard" class="report-panel active" role="tabpanel">
 
-        <h1 class="dash-hero-title">Airline Pressure Index</h1>
-        <p class="dash-hero-desc">
-          Weekly quantitative index tracking jet fuel crack spreads, engine inspection groundings (P&amp;W GTF &amp; CFM), en-route ATFM delays, and geopolitical detour flight duration against a 100.0 baseline.
-        </p>
+    <!-- Hero Projection Card -->
+    <div class="hero-projection-card" style="margin-bottom: 24px;">
+      <div class="hero-watermark">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGn0mR2CBWIgcQEbs4JvoNLy_NFJZLvtgyjRS2phE_FQWa31HawJSQbWqy9INoXEYbbUBtDKjd_YxYeVFY948BMS4VdclkBxmVpI8PDl0H1uVU6U8x2pGv6ToMjTxiF36gjZJQrLOxlVoZVZK92Yr7pXuQbNfOYR2hGM-ePoqbvl1qbNxtecth6yFtn-tj5OWGdO94ICbSa4yNkKBNn3fpmND3VZBaf53_h8hmpnl86nJwM_NkQQl3bg" alt="" aria-hidden="true">
+      </div>
+      <div class="hero-blur-accent"></div>
 
-        <div class="hero-score-display">
+      <div class="hero-projection-content">
+        <!-- Left: Title & Meta -->
+        <div class="hero-left">
+          <div class="hero-badge-row">
+            <span class="hero-badge-live">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              Live Flagship Index
+            </span>
+            <span class="status-badge status-{{ snapshot.level_status }}">
+              <span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}
+            </span>
+            <span class="hero-survey-date">Week of {{ snapshot.week_start }}</span>
+          </div>
+
           <div>
-            <div class="hero-score-num">{{ "%.1f"|format(snapshot.score) }}</div>
-            <div class="hero-score-sub">COMPOSITE SCORE (BASE: 100.0)</div>
-          </div>
-          <div class="hero-score-delta-box">
-            <div class="delta-pill {% if delta >= 0 %}delta-up{% else %}delta-down{% endif %}">
-              <span aria-hidden="true">{% if delta >= 0 %}▲{% else %}▼{% endif %}</span>
-              {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
+            <h1>Airline Pressure Index</h1>
+            <div class="hero-meta">
+              <span>Commercial Aviation &amp; Supply Chain</span>
+              <span class="meta-dot" aria-hidden="true">•</span>
+              <span>Jet Fuel Margins, Engine Inspections &amp; ATC Delays</span>
             </div>
-            <div class="hero-score-sub" style="margin-top: 4px;">vs previous week</div>
           </div>
         </div>
 
-        <!-- Scale meter -->
-        <div style="margin-top: 24px;">
-          <div class="spotlight-scale-head" style="margin-bottom: 6px;">
-            <span>Crisis scale</span>
-            <span class="font-mono">Week of {{ snapshot.week_start }}</span>
+        <!-- Right: Key Metric -->
+        <div class="hero-right">
+          <div>
+            <div class="hero-metric-label">COMPOSITE SCORE</div>
+            <div class="hero-metric-row">
+              <span class="hero-metric-value font-mono">{{ "%.1f"|format(snapshot.score) }}</span>
+            </div>
+            <div class="hero-trend">
+              <span class="hero-trend-pill {% if delta >= 0 %}trend-critical{% else %}trend-good{% endif %}">
+                <span class="material-symbols-outlined">{% if delta >= 0 %}arrow_upward{% else %}arrow_downward{% endif %}</span>
+                {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
+              </span>
+              <span class="hero-trend-caption">vs last week</span>
+            </div>
           </div>
-          <div class="mini-gauge" role="meter" aria-valuenow="{{ snapshot.score }}" aria-valuemin="0" aria-valuemax="200">
-            <div class="mini-gauge-fill" style="width: {{ scale_pct }}%;"></div>
-          </div>
-          <div class="mini-gauge-ends" aria-hidden="true">
-            <span>0 (Low)</span>
-            <span>100 (Baseline)</span>
-            <span>200 (Critical)</span>
-          </div>
-        </div>
-
-        <div class="dash-actions-row" style="margin-top: 24px;">
-          <a href="/api/airline-index/data.json" class="btn-secondary btn-sm" target="_blank" rel="noopener">
-            <span class="material-symbols-outlined nav-icon" style="font-size: 1rem;">data_object</span>
-            JSON API
-          </a>
-          <a href="/api/airline-index/data.csv" class="btn-secondary btn-sm">
-            <span class="material-symbols-outlined nav-icon" style="font-size: 1rem;">download</span>
-            Download CSV
-          </a>
         </div>
       </div>
+    </div>
 
-      <!-- Key Drivers This Week Card -->
-      <div class="dash-card">
-        <h3 class="section-sub-title" style="margin-bottom: 16px;">Key Drivers &amp; Cost Pressure</h3>
-        <div class="driver-list">
-          {% for cr in snapshot.components %}
-          <div class="driver-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border);">
-            <div>
-              <div style="font-weight: 600; font-size: 0.95rem;">{{ cr.component.label }}</div>
-              <div style="font-size: 0.8rem; color: var(--text-muted);">{{ cr.component.source }} • Weight: {{ (cr.component.weight * 100)|int }}%</div>
+    <!-- Summary Row: Crisis Severity Gauge + Simulator stacked on Left, Key Drivers on Right -->
+    <div class="summary-row">
+
+      <!-- Merged Indices: Operating Pressure Gauge + Simulator stacked -->
+      <div class="merged-indices-col">
+
+        <!-- Crisis / Operating Pressure Gauge -->
+        <section class="gauge-card" aria-labelledby="gauge-heading">
+          <div class="gauge-card-header">
+            <div class="gauge-card-header-left">
+              <h2 id="gauge-heading">Operating Pressure Gauge</h2>
+              <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
+              <span class="card-sub">({{ scale_min|int }} = baseline)</span>
             </div>
-            <div style="text-align: right;">
-              <div style="font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem;">
-                {{ "%.2f"|format(cr.current_value) if cr.current_value is not none else '—' }} {{ cr.component.unit }}
+            <div class="gauge-card-header-right">
+              <div class="gauge-readout-inline">
+                <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
+                <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
               </div>
-              <div style="font-size: 0.8rem; font-weight: 600; color: {% if cr.stress > 60 %}var(--status-serious){% elif cr.stress > 30 %}var(--status-warning){% else %}var(--status-good){% endif %};">
-                Stress: {{ "%.1f"|format(cr.stress) }}/100
-              </div>
+              <dl class="gauge-readout-facts-inline">
+                <div>
+                  <dt>vs baseline</dt>
+                  <dd class="is-above">+{{ "%.1f"|format(press.points_above_baseline) }}</dd>
+                </div>
+                <div>
+                  <dt>vs last week</dt>
+                  <dd class="{{ 'is-above' if delta >= 0 else 'is-below' }}">
+                    {{ '+' if delta >= 0 else '−' }}{{ "%.1f"|format(delta|abs) }}
+                  </dd>
+                </div>
+              </dl>
             </div>
           </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
 
-    <!-- Interactive 52-Week Trajectory Chart -->
-    <div class="dash-card" style="margin-top: 24px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
-        <div>
-          <h2 class="dash-card-title">52-Week Historical Trajectory</h2>
-          <p class="dash-card-subtitle">Composite index and component pressure curves from August 2025 to August 2026.</p>
-        </div>
-      </div>
-      <div id="aviation-chart" style="width: 100%; height: 420px;"></div>
-    </div>
-
-    <!-- What-if Simulator Card -->
-    <div class="dash-card" style="margin-top: 24px; background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
-        <div>
-          <span class="badge-tag">INTERACTIVE ANALYTICS</span>
-          <h3 class="dash-card-title" style="margin-top: 6px;">What-If Scenario Stress Simulator</h3>
-          <p class="dash-card-subtitle">Adjust operational and fuel inputs to observe how the Airline Pressure Index responds in real time.</p>
-        </div>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 16px;">
-        <div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">
-            <span>Jet Fuel Crack Spread ($/bbl)</span>
-            <span id="sim-fuel-val" class="font-mono" style="color: var(--accent);">$31.40</span>
+          <div class="gauge-track-container"
+               role="meter"
+               aria-valuenow="{{ "%.1f"|format(snapshot.score) }}"
+               aria-valuemin="{{ scale_min }}"
+               aria-valuemax="{{ scale_max }}"
+               aria-label="API-INDEX composite score, {{ "%.1f"|format(snapshot.score) }} of {{ scale_max|int }}, classified {{ snapshot.level_label }}">
+            <div class="gauge-fill-bar" style="width: {{ scale_pct }}%;"></div>
+            {% for band in band_positions %}
+            <div class="gauge-tick-mark" style="left: {{ band.pct }}%;" title="{{ band.label }} begins at {{ band.lower|int }}"></div>
+            {% endfor %}
+            <div class="gauge-pointer" style="left: {{ scale_pct }}%;" title="Current score: {{ '%.1f'|format(snapshot.score) }}"></div>
           </div>
-          <input type="range" id="sim-fuel" min="10" max="60" step="1" value="31" oninput="simRecalc()" style="width: 100%;">
-        </div>
-
-        <div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">
-            <span>Fleet Grounding Ratio (%)</span>
-            <span id="sim-fleet-val" class="font-mono" style="color: #A855F7;">12.8%</span>
+          <div class="gauge-labels-row">
+            {% for band in [
+                ('Calm', 'CALM', '&lt;90'),
+                ('Normal', 'NORMAL', '90–115'),
+                ('Elevated', 'ELEVATED', '115–140'),
+                ('Severe', 'SEVERE', '140–170'),
+                ('Critical', 'CRITICAL', '170+')] %}
+            <span class="gauge-label-item {% if snapshot.level_label.startswith(band[0]) %}active{% endif %}">
+              <span class="gauge-band-name">{{ band[1] }}</span>
+              <span class="gauge-band-range">({{ band[2]|safe }})</span>
+            </span>
+            {% endfor %}
           </div>
-          <input type="range" id="sim-fleet" min="4" max="25" step="0.5" value="12.8" oninput="simRecalc()" style="width: 100%;">
-        </div>
+        </section>
 
-        <div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">
-            <span>ATFM En-Route Delay (min/flt)</span>
-            <span id="sim-delay-val" class="font-mono" style="color: var(--status-serious);">2.65 m</span>
-          </div>
-          <input type="range" id="sim-delay" min="0.5" max="5.0" step="0.1" value="2.65" oninput="simRecalc()" style="width: 100%;">
-        </div>
+        <!-- Interactive Scenario Stress Simulator -->
+        <section class="gauge-card ppi-card" aria-labelledby="sim-heading">
+          <div class="ppi-block">
+            <div class="ppi-header">
+              <div class="ppi-header-left">
+                <h3 class="ppi-title" id="sim-heading">Stress Test Simulator</h3>
+                <span id="sim-band-badge" class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
+                <span class="card-sub">(what-if sensitivity test)</span>
+              </div>
+              <div class="ppi-readout">
+                <div class="ppi-figure">
+                  <span class="ppi-value" id="sim-score-readout">{{ "%.1f"|format(snapshot.score) }}</span>
+                </div>
+                <div class="ppi-meta">
+                  <span class="ppi-count">Simulated Index</span>
+                </div>
+              </div>
+            </div>
 
-        <div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">
-            <span>Geopolitical Detour Overhead (%)</span>
-            <span id="sim-detour-val" class="font-mono" style="color: var(--status-good);">13.2%</span>
+            <!-- Compact Sliders Row -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 12px 0 8px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; margin-bottom: 3px;">
+                  <span style="color: var(--text-muted);">Fuel Crack ($)</span>
+                  <span id="sim-fuel-val" class="font-mono" style="color: var(--accent);">${{ "%.0f"|format(press.crack_spread or 31) }}</span>
+                </div>
+                <input type="range" id="sim-fuel" min="10" max="60" step="1" value="{{ press.crack_spread|round|int if press.crack_spread else 31 }}" oninput="simRecalc()" style="width: 100%; height: 5px; accent-color: var(--accent);">
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; margin-bottom: 3px;">
+                  <span style="color: var(--text-muted);">Grounding (%)</span>
+                  <span id="sim-fleet-val" class="font-mono" style="color: #A855F7;">{{ "%.1f"|format(press.fleet_grounding or 13.5) }}%</span>
+                </div>
+                <input type="range" id="sim-fleet" min="4" max="25" step="0.5" value="{{ press.fleet_grounding or 13.5 }}" oninput="simRecalc()" style="width: 100%; height: 5px; accent-color: #A855F7;">
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; margin-bottom: 3px;">
+                  <span style="color: var(--text-muted);">ATC Delay (m)</span>
+                  <span id="sim-delay-val" class="font-mono" style="color: var(--status-serious);">{{ "%.2f"|format(press.atfm_delay or 2.1) }}m</span>
+                </div>
+                <input type="range" id="sim-delay" min="0.5" max="5.0" step="0.1" value="{{ press.atfm_delay or 2.1 }}" oninput="simRecalc()" style="width: 100%; height: 5px; accent-color: #EF4444;">
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; margin-bottom: 3px;">
+                  <span style="color: var(--text-muted);">Detour (%)</span>
+                  <span id="sim-detour-val" class="font-mono" style="color: var(--status-good);">{{ "%.1f"|format(press.detour_pct or 4.8) }}%</span>
+                </div>
+                <input type="range" id="sim-detour" min="2" max="25" step="0.5" value="{{ press.detour_pct or 4.8 }}" oninput="simRecalc()" style="width: 100%; height: 5px; accent-color: #10B981;">
+              </div>
+            </div>
+
+            <div class="ppi-action">
+              <p class="ppi-hint">
+                <span>Adjust operational &amp; fuel levers to model dynamic industry stress.</span>
+              </p>
+              <button type="button" class="ppi-vote-btn" onclick="simReset()" style="padding: 4px 10px; font-size: 0.8rem;">
+                <span>Reset to live</span>
+              </button>
+            </div>
           </div>
-          <input type="range" id="sim-detour" min="2" max="25" step="0.5" value="13.2" oninput="simRecalc()" style="width: 100%;">
+        </section>
+
+      </div><!-- /.merged-indices-col -->
+
+      <!-- Right Column: Key Drivers Card -->
+      <section class="signal-stack" aria-labelledby="briefing-heading">
+        <div class="signal-card">
+          <h2 id="briefing-heading" class="signal-card-title">Key Drivers</h2>
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">⚠️</span> Threat Level</span>
+            <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
+          </div>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">📊</span> Top Driver</span>
+            <span class="signal-value" {% if top_driver %}title="{{ top_driver.component.label }}"{% endif %}>
+              {{ top_driver.component.label if top_driver else '—' }}
+              {%- if top_driver %} <span class="signal-delta">+{{ "%.1f"|format(top_driver.contribution) }} pts</span>{% endif %}
+            </span>
+          </div>
+
+          {% if press.crack_spread is not none %}
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">🛢️</span> Jet Fuel Crack</span>
+            <span class="signal-value signal-value-num">${{ "%.2f"|format(press.crack_spread) }}/bbl
+              <span class="signal-delta">({{ "%.0f"|format(press.crack_spread_stress) }}% stress)</span>
+            </span>
+          </div>
+          {% endif %}
+
+          {% if press.fleet_grounding is not none %}
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">🔧</span> Fleet Grounding</span>
+            <span class="signal-value signal-value-num">{{ "%.1f"|format(press.fleet_grounding) }}% of fleet</span>
+          </div>
+          {% endif %}
+
+          {% if press.atfm_delay is not none %}
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">⏱️</span> ATFM Delay</span>
+            <span class="signal-value signal-value-num">{{ "%.2f"|format(press.atfm_delay) }} min/flt</span>
+          </div>
+          {% endif %}
+
+          {% if press.detour_pct is not none %}
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">🧭</span> Airspace Detours</span>
+            <span class="signal-value signal-value-num">{{ "%.1f"|format(press.detour_pct) }}% overhead</span>
+          </div>
+          {% endif %}
+
+          {% if press.equity_stress is not none %}
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">📉</span> Equity Ratio (JETS)</span>
+            <span class="signal-value signal-value-num">{{ "%.1f"|format(press.equity_stress) }}/100</span>
+          </div>
+          {% endif %}
         </div>
+      </section>
+
+    </div><!-- /.summary-row -->
+
+    <!-- Interactive Weekly Trajectory Chart -->
+    <section class="chart-card" aria-labelledby="trend-heading">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="trend-heading" style="margin: 0; font-size: 1.25rem;">Weekly Score Trajectory</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">52-week composite trajectory vs 100.0 baseline</span>
       </div>
 
-      <div style="margin-top: 20px; padding: 16px; background: rgba(0,0,0,0.25); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Simulated Composite Score</div>
-          <div id="sim-score" class="font-mono" style="font-size: 2.2rem; font-weight: 800; color: var(--accent);">148.4</div>
-        </div>
-        <div id="sim-band" class="status-badge status-serious" style="font-size: 0.95rem; padding: 8px 16px;">
-          <span class="status-dot"></span>Severe Pressure
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 2: METHODOLOGY -->
-  <div id="tab-methodology" class="report-tab-panel" role="tabpanel" style="display: none;">
-    <div class="dash-card">
-      <h2 class="dash-card-title">Mathematical Architecture &amp; Methodology</h2>
-      <p class="dash-card-subtitle" style="margin-bottom: 24px;">
-        The Airline Pressure Index (API-INDEX) measures global commercial aviation stress across operational, energy, supply-chain, and currency dimensions.
-      </p>
-
-      <div style="background: var(--surface-2); padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent); margin-bottom: 24px;">
-        <h4 style="margin-bottom: 8px;">Composite Scoring Formula</h4>
-        <p style="font-family: var(--font-mono); font-size: 0.95rem;">
-          API-INDEX = 100.0 + (∑ [ Weight_i × Stress_i ] − 38.0) × 1.35
-        </p>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
-          Each component stress score is normalized between 0.0 (calm equilibrium) and 100.0 (crisis cap). 100.0 represents the non-crisis operating baseline.
-        </p>
+      <div id="echart-trend-container"
+           class="chart-canvas"
+           style="height: 460px;"
+           role="img"
+           aria-label="Line chart of the API-INDEX composite score for each week from {{ history[0].week_start if history else 'the start of the series' }} to {{ history[-1].week_start if history else 'now' }}.">
+        <p class="chart-fallback">Loading trajectory chart…</p>
       </div>
 
-      <h3 class="section-sub-title" style="margin: 24px 0 12px;">Component Weights &amp; Crisis Caps</h3>
-      <div style="overflow-x: auto;">
-        <table class="data-table" style="width: 100%; border-collapse: collapse;">
+      <details class="chart-data-table">
+        <summary>View trajectory as a data table ({{ history|length }} weeks)</summary>
+        <div class="table-responsive">
+          <table class="components-table">
+            <caption class="sr-only">API-INDEX composite score by week</caption>
+            <thead>
+              <tr>
+                <th scope="col">Week starting</th>
+                <th scope="col">Composite score</th>
+                <th scope="col">Level</th>
+                <th scope="col">Fuel Crack ($/bbl)</th>
+                <th scope="col">Fleet Grounding (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for h in history %}
+              <tr>
+                <th scope="row" class="font-mono">{{ h.week_start }}</th>
+                <td class="font-mono">{{ "%.1f"|format(h.score) }}</td>
+                <td>{{ h.level_label }}</td>
+                <td class="font-mono">{{ "%.2f"|format(h.raw_values.crack_spread) if h.raw_values else '—' }}</td>
+                <td class="font-mono">{{ "%.1f"|format(h.raw_values.fleet_grounding) if h.raw_values else '—' }}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <!-- Component Breakdown Matrix -->
+    <section class="components-card" aria-labelledby="components-heading">
+      <div class="components-card-head">
+        <h2 id="components-heading">Component Breakdown Matrix</h2>
+        <span class="section-desc">
+          Composite = 100 + ∑(weight × stress score). Full derivation on the
+          <a href="#methodology" data-report-tab="methodology">methodology tab</a>.
+        </span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="components-table table-sticky-first">
+          <caption class="sr-only">API-INDEX component breakdown for the week of {{ snapshot.week_start }}</caption>
           <thead>
             <tr>
-              <th style="text-align: left; padding: 12px;">Component</th>
-              <th style="text-align: right; padding: 12px;">Weight</th>
-              <th style="text-align: right; padding: 12px;">Baseline</th>
-              <th style="text-align: right; padding: 12px;">Crisis Cap</th>
-              <th style="text-align: left; padding: 12px;">Source</th>
-              <th style="text-align: left; padding: 12px;">Cap Rationale</th>
+              <th scope="col">Indicator component</th>
+              <th scope="col">Current value</th>
+              <th scope="col">Baseline value</th>
+              <th scope="col">Stress score (0–100)</th>
+              <th scope="col">Weight</th>
+              <th scope="col">Index contribution</th>
+              <th scope="col">Source &amp; freshness</th>
             </tr>
           </thead>
           <tbody>
             {% for cr in snapshot.components %}
-            <tr style="border-bottom: 1px solid var(--border);">
-              <td style="padding: 12px; font-weight: 600;">{{ cr.component.label }}</td>
-              <td style="padding: 12px; text-align: right; font-family: var(--font-mono);">{{ (cr.component.weight * 100)|int }}%</td>
-              <td style="padding: 12px; text-align: right; font-family: var(--font-mono);">{{ "%.2f"|format(cr.baseline_value) }} {{ cr.component.unit }}</td>
-              <td style="padding: 12px; text-align: right; font-family: var(--font-mono);">+{{ cr.component.cap_pct|int }}%</td>
-              <td style="padding: 12px; font-size: 0.85rem; color: var(--text-muted);">{{ cr.component.source }}</td>
-              <td style="padding: 12px; font-size: 0.85rem; color: var(--text-secondary);">{{ cr.component.cap_rationale }}</td>
+            <tr {% if cr.stale %}class="row-stale"{% endif %}>
+              <th scope="row">
+                <div class="comp-name-cell">
+                  <span class="comp-swatch" aria-hidden="true"></span>
+                  {{ cr.component.label }}
+                </div>
+              </th>
+              <td class="font-mono cell-strong">
+                {{ "%.2f"|format(cr.current_value) if cr.current_value is not none else "—" }}
+                <span class="cell-unit">{{ cr.component.unit }}</span>
+                {% if cr.stale %}
+                <span class="stale-badge" title="Could not be refreshed; last known value carried forward">STALE</span>
+                {% endif %}
+              </td>
+              <td class="font-mono cell-sub">
+                {{ "%.2f"|format(cr.baseline_value) }}
+                <span class="cell-unit">{{ cr.component.unit }}</span>
+              </td>
+              <td>
+                <div class="stress-bar-wrapper">
+                  <div class="stress-track">
+                    <div class="stress-fill {% if cr.stress > 60 %}stress-high{% elif cr.stress > 30 %}stress-mid{% else %}stress-low{% endif %}" style="width: {{ cr.stress }}%;"></div>
+                  </div>
+                  <span class="font-mono stress-value">{{ "%.0f"|format(cr.stress) }}</span>
+                </div>
+              </td>
+              <td class="font-mono">{{ (cr.component.weight * 100)|round|int }}%</td>
+              <td class="font-mono cell-contrib">+{{ "%.2f"|format(cr.contribution) }}</td>
+              <td class="cell-source">{{ cr.component.source }} • {{ cr.component.update_cadence }}</td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
-</div>
+    </section>
+
+  </div><!-- /#tab-dashboard -->
+
+  <!-- TAB 2: METHODOLOGY -->
+  <div id="tab-methodology" class="report-panel" role="tabpanel" style="display: none;">
+    <section class="components-card">
+      <div class="components-card-head">
+        <h2>Mathematical Architecture &amp; Methodology</h2>
+        <span class="section-desc">
+          The Airline Pressure Index (API-INDEX) is calibrated against historical operating equilibrium to measure multi-dimensional airline stress.
+        </span>
+      </div>
+
+      <div style="padding: 24px;">
+        <div style="background: var(--surface-2); padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent); margin-bottom: 24px;">
+          <h3 style="margin-bottom: 8px; font-size: 1.1rem;">Composite Scoring Formula</h3>
+          <p style="font-family: var(--font-mono); font-size: 0.95rem;">
+            API-INDEX = 100.0 + (∑ [ Weight_i × Stress_i ] − 38.0) × 1.35
+          </p>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+            Where each component stress score is normalized between 0.0 (calm equilibrium) and 100.0 (crisis cap). 100.0 represents the non-crisis operating baseline.
+          </p>
+        </div>
+
+        <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">Component Weights &amp; Crisis Caps</h3>
+        <div class="table-responsive">
+          <table class="components-table">
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Baseline</th>
+                <th scope="col">Crisis Cap</th>
+                <th scope="col">Source</th>
+                <th scope="col">Cap Rationale</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cr in snapshot.components %}
+              <tr>
+                <th scope="row">{{ cr.component.label }}</th>
+                <td class="font-mono">{{ (cr.component.weight * 100)|int }}%</td>
+                <td class="font-mono">{{ "%.2f"|format(cr.baseline_value) }} {{ cr.component.unit }}</td>
+                <td class="font-mono">+{{ cr.component.cap_pct|int }}%</td>
+                <td class="cell-source">{{ cr.component.source }}</td>
+                <td class="cell-muted" style="font-size: 0.85rem;">{{ cr.component.cap_rationale }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div><!-- /#tab-methodology -->
+
+</div><!-- /.report-dash-canvas -->
 
 <script>
 // Tab Switching
 document.querySelectorAll('[data-report-tab]').forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const tabName = btn.getAttribute('data-report-tab');
     document.querySelectorAll('[data-report-tab]').forEach(b => {
       b.classList.remove('active');
       b.setAttribute('aria-selected', 'false');
     });
-    document.querySelectorAll('.report-tab-panel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.report-panel').forEach(p => p.style.display = 'none');
 
-    btn.classList.add('active');
-    btn.setAttribute('aria-selected', 'true');
-    const target = document.getElementById('tab-' + btn.getAttribute('data-report-tab'));
+    const activeBtn = document.querySelector(`.tab-segmented [data-report-tab="${tabName}"]`);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      activeBtn.setAttribute('aria-selected', 'true');
+    }
+    const target = document.getElementById('tab-' + tabName);
     if (target) target.style.display = 'block';
 
-    if (btn.getAttribute('data-report-tab') === 'dashboard' && window.avChart) {
+    if (tabName === 'dashboard' && window.avChart) {
       window.avChart.resize();
     }
   });
 });
 
-// History Chart Initialisation
+// Trajectory EChart Initialisation
 const historyData = {{ history|tojson }};
-const chartDom = document.getElementById('aviation-chart');
+const chartDom = document.getElementById('echart-trend-container');
 
 if (chartDom && historyData && historyData.length > 0) {
   document.addEventListener('DOMContentLoaded', () => {
     if (typeof echarts !== 'undefined') {
-      const myChart = echarts.init(chartDom, 'dark');
+      const myChart = echarts.init(chartDom);
       window.avChart = myChart;
 
       const dates = historyData.map(h => h.week_start);
@@ -322,43 +516,96 @@ if (chartDom && historyData && historyData.length > 0) {
       const cracks = historyData.map(h => (h.raw_values && h.raw_values.crack_spread) || null);
       const groundings = historyData.map(h => (h.raw_values && h.raw_values.fleet_grounding) || null);
       const delays = historyData.map(h => (h.raw_values && h.raw_values.atfm_delay) || null);
+      const detours = historyData.map(h => (h.raw_values && h.raw_values.detour_pct) || null);
+      const equities = historyData.map(h => (h.raw_values && h.raw_values.equity_stress) || null);
+
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
       const option = {
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
-          backgroundColor: '#1E293B',
-          borderColor: '#334155',
-          textStyle: { color: '#F8FAFC' }
+          axisPointer: { type: 'cross', lineStyle: { color: '#38BDF8', width: 1, type: 'dashed' } },
+          backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
+          borderColor: isDark ? '#334155' : '#CBD5E1',
+          textStyle: { color: isDark ? '#F8FAFC' : '#0F172A' },
+          formatter: function(params) {
+            let res = '<div style="font-weight:700; margin-bottom:4px; font-size:0.85rem;">Week of ' + params[0].axisValue + '</div>';
+            params.forEach(p => {
+              if (p.value !== null && p.value !== undefined) {
+                res += '<div style="display:flex; justify-content:space-between; gap:14px; font-size:0.8rem;">' +
+                       '<span>' + p.marker + ' ' + p.seriesName + ':</span>' +
+                       '<strong style="font-family:var(--font-mono);">' + (typeof p.value === 'number' ? p.value.toFixed(2) : p.value) + '</strong>' +
+                       '</div>';
+              }
+            });
+            return res;
+          }
         },
         legend: {
-          data: ['API-INDEX Composite', 'Fuel Crack Spread ($/bbl)', 'Fleet Grounding (%)', 'ATFM Delay (min)'],
-          textStyle: { color: '#94A3B8' },
-          top: 0
+          show: true,
+          top: 6,
+          left: 'center',
+          icon: 'circle',
+          itemWidth: 10,
+          itemHeight: 10,
+          itemGap: 18,
+          textStyle: {
+            color: isDark ? '#E2E8F0' : '#334155',
+            fontSize: 12,
+            fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+          },
+          selected: {
+            'API-INDEX Composite': true,
+            'Fuel Crack ($/bbl)': true,
+            'Fleet Grounding (%)': true,
+            'ATFM Delay (min)': false,
+            'Detour Overhead (%)': false,
+            'Equity Stress (/100)': false
+          }
         },
-        grid: { left: '3%', right: '4%', bottom: '3%', top: '15%', containLabel: true },
+        grid: { left: '3%', right: '3%', bottom: '12%', top: '11%', containLabel: true },
         xAxis: {
           type: 'category',
           data: dates,
-          axisLine: { lineStyle: { color: '#334155' } },
-          axisLabel: { color: '#94A3B8' }
+          axisLine: { lineStyle: { color: isDark ? '#334155' : '#CBD5E1' } },
+          axisLabel: { color: '#94A3B8', fontSize: 11 }
         },
         yAxis: [
           {
             type: 'value',
-            name: 'Composite (Base 100)',
-            min: 80,
-            max: 180,
-            axisLine: { lineStyle: { color: '#38BDF8' } },
-            splitLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.1)' } },
-            axisLabel: { color: '#38BDF8' }
+            name: 'Composite Score / Stress',
+            scale: true,
+            splitLine: { lineStyle: { color: isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(0,0,0,0.06)' } },
+            axisLabel: { color: '#94A3B8', fontSize: 11 }
           },
           {
             type: 'value',
-            name: 'Raw Metric',
+            name: 'Raw Metric Value',
             position: 'right',
+            scale: true,
             splitLine: { show: false },
-            axisLabel: { color: '#94A3B8' }
+            axisLabel: { color: '#94A3B8', fontSize: 11 }
+          }
+        ],
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 0,
+            end: 100,
+            zoomOnMouseWheel: true,
+            moveOnMouseMove: true
+          },
+          {
+            type: 'slider',
+            show: true,
+            bottom: 4,
+            height: 18,
+            borderColor: 'transparent',
+            backgroundColor: isDark ? 'rgba(30, 41, 59, 0.5)' : 'rgba(241, 245, 249, 0.8)',
+            fillerColor: 'rgba(56, 189, 248, 0.2)',
+            handleStyle: { color: '#38BDF8', borderColor: '#38BDF8' },
+            textStyle: { color: '#94A3B8', fontSize: 10 }
           }
         ],
         series: [
@@ -367,20 +614,25 @@ if (chartDom && historyData && historyData.length > 0) {
             type: 'line',
             data: scores,
             smooth: true,
-            lineStyle: { width: 3.5, color: '#38BDF8' },
+            lineStyle: { width: 3, color: '#38BDF8' },
             itemStyle: { color: '#38BDF8' },
+            markLine: {
+              silent: true,
+              data: [{ yAxis: 100, lineStyle: { type: 'dashed', color: '#94A3B8' }, label: { formatter: 'Baseline 100.0' } }]
+            },
             areaStyle: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: 'rgba(56, 189, 248, 0.25)' },
+                { offset: 0, color: 'rgba(56, 189, 248, 0.18)' },
                 { offset: 1, color: 'rgba(56, 189, 248, 0.0)' }
               ])
             }
           },
           {
-            name: 'Fuel Crack Spread ($/bbl)',
+            name: 'Fuel Crack ($/bbl)',
             type: 'line',
             yAxisIndex: 1,
             data: cracks,
+            smooth: true,
             lineStyle: { width: 2, color: '#F59E0B', type: 'dashed' },
             itemStyle: { color: '#F59E0B' }
           },
@@ -389,6 +641,7 @@ if (chartDom && historyData && historyData.length > 0) {
             type: 'line',
             yAxisIndex: 1,
             data: groundings,
+            smooth: true,
             lineStyle: { width: 2, color: '#A855F7' },
             itemStyle: { color: '#A855F7' }
           },
@@ -397,8 +650,27 @@ if (chartDom && historyData && historyData.length > 0) {
             type: 'line',
             yAxisIndex: 1,
             data: delays,
+            smooth: true,
             lineStyle: { width: 2, color: '#EF4444', type: 'dotted' },
             itemStyle: { color: '#EF4444' }
+          },
+          {
+            name: 'Detour Overhead (%)',
+            type: 'line',
+            yAxisIndex: 1,
+            data: detours,
+            smooth: true,
+            lineStyle: { width: 2, color: '#10B981' },
+            itemStyle: { color: '#10B981' }
+          },
+          {
+            name: 'Equity Stress (/100)',
+            type: 'line',
+            yAxisIndex: 0,
+            data: equities,
+            smooth: true,
+            lineStyle: { width: 2, color: '#EC4899', type: 'dashed' },
+            itemStyle: { color: '#EC4899' }
           }
         ]
       };
@@ -409,15 +681,22 @@ if (chartDom && historyData && historyData.length > 0) {
   });
 }
 
+const liveDefaults = {
+  fuel: {{ press.crack_spread|round|int if press.crack_spread else 31 }},
+  fleet: {{ press.fleet_grounding or 13.5 }},
+  delay: {{ press.atfm_delay or 2.1 }},
+  detour: {{ press.detour_pct or 4.8 }}
+};
+
 function simRecalc() {
   const f = parseFloat(document.getElementById('sim-fuel').value);
   const g = parseFloat(document.getElementById('sim-fleet').value);
   const d = parseFloat(document.getElementById('sim-delay').value);
   const det = parseFloat(document.getElementById('sim-detour').value);
 
-  document.getElementById('sim-fuel-val').innerText = '$' + f.toFixed(2);
+  document.getElementById('sim-fuel-val').innerText = '$' + f.toFixed(0);
   document.getElementById('sim-fleet-val').innerText = g.toFixed(1) + '%';
-  document.getElementById('sim-delay-val').innerText = d.toFixed(2) + ' m';
+  document.getElementById('sim-delay-val').innerText = d.toFixed(2) + 'm';
   document.getElementById('sim-detour-val').innerText = det.toFixed(1) + '%';
 
   const fStress = Math.min(Math.max((f - 15) / 30 * 100, 0), 100);
@@ -428,18 +707,26 @@ function simRecalc() {
   const wStress = 0.25 * fStress + 0.20 * gStress + 0.15 * dStress + 0.15 * detStress + 0.10 * 60 + 0.10 * 55 + 0.05 * 50;
   const simScore = Math.round((100.0 + (wStress - 38.0) * 1.35) * 10) / 10;
 
-  document.getElementById('sim-score').innerText = simScore.toFixed(1);
+  document.getElementById('sim-score-readout').innerText = simScore.toFixed(1);
 
   let bText, bClass;
-  if (simScore < 90) { bText = 'Low Pressure'; bClass = 'status-badge status-good'; }
-  else if (simScore <= 115) { bText = 'Normal Baseline'; bClass = 'status-badge status-neutral'; }
-  else if (simScore <= 140) { bText = 'Elevated Strain'; bClass = 'status-badge status-warning'; }
-  else if (simScore <= 170) { bText = 'Severe Pressure'; bClass = 'status-badge status-serious'; }
-  else { bText = 'Critical Crisis'; bClass = 'status-badge status-critical'; }
+  if (simScore < 90) { bText = 'LOW'; bClass = 'status-badge status-good'; }
+  else if (simScore <= 115) { bText = 'NORMAL'; bClass = 'status-badge status-neutral'; }
+  else if (simScore <= 140) { bText = 'ELEVATED'; bClass = 'status-badge status-warning'; }
+  else if (simScore <= 170) { bText = 'SEVERE'; bClass = 'status-badge status-serious'; }
+  else { bText = 'CRITICAL'; bClass = 'status-badge status-critical'; }
 
-  const bandEl = document.getElementById('sim-band');
-  bandEl.className = bClass;
-  bandEl.innerHTML = '<span class="status-dot"></span>' + bText;
+  const badgeEl = document.getElementById('sim-band-badge');
+  badgeEl.className = bClass;
+  badgeEl.innerText = bText;
+}
+
+function simReset() {
+  document.getElementById('sim-fuel').value = liveDefaults.fuel;
+  document.getElementById('sim-fleet').value = liveDefaults.fleet;
+  document.getElementById('sim-delay').value = liveDefaults.delay;
+  document.getElementById('sim-detour').value = liveDefaults.detour;
+  simRecalc();
 }
 </script>
 {% endblock %}
