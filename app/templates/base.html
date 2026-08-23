@@ -41,7 +41,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ asset_v }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/material-theme.css') }}?v={{ asset_v }}">
 <link rel="alternate" type="application/json" title="HMX-INDEX data" href="{{ origin }}/api/hormuz-index/data.json">
 
 <!-- Global Schema.org JSON-LD -->
@@ -141,10 +140,6 @@
       <a class="nav-link" href="#">
         <span class="material-symbols-outlined nav-icon" aria-hidden="true">public</span>
         <span>Global</span>
-      </a>
-      <a class="nav-link {% if request.path == '/material-design' %}active{% endif %}" href="{{ url_for('main.material_design') }}"{% if request.path == '/material-design' %} aria-current="page"{% endif %}>
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">layers</span>
-        <span>Material UI</span>
       </a>
       <a class="nav-link {% if request.path == '/terms' %}active{% endif %}" href="{{ url_for('main.terms_page') }}"{% if request.path == '/terms' %} aria-current="page"{% endif %}>
         <span class="material-symbols-outlined nav-icon" aria-hidden="true">info</span>

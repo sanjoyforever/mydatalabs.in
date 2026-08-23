@@ -434,18 +434,6 @@ def home():
     return _cached(Response(html, mimetype="text/html"))
 
 
-@bp.route("/material-design")
-def material_design():
-    snapshot = get_snapshot()
-    html = render_template(
-        "material_demo.html",
-        **_common(
-            snapshot=snapshot,
-        ),
-    )
-    return _cached(Response(html, mimetype="text/html"))
-
-
 @bp.route("/hormuz-index")
 def hormuz_index():
     snapshot = get_snapshot()
