@@ -24,16 +24,17 @@ Three things that matter more than any feature in this repo:
    placeholder identifiers (`M/T Vessel-NNN`) rather than IMO-registered names, and the
    per-row `source` field survives on only three rows.
 
-2. **Four of seven components (50% of index weight) are keyed by hand.** Ship traffic, war-risk
-   insurance, tanker freight and Cape reroutes have no free API. They are updated weekly from
-   licensed sources and every one publishes its own `last_updated` date in the UI and the API.
+2. **Three of seven components (35% of index weight) are keyed by hand.** War-risk insurance,
+   tanker freight and Cape reroutes have no free API. Their current figures live in
+   `app/data/hormuz_manual.json`, and each publishes its own `as_of` date, source and confidence
+   in the UI and the API. Ship traffic joined the automatic side in 2026-07 (IMF PortWatch); its
+   hand-entered figure is retained only as a fallback for feed outages.
 
-3. **Two weekly series are reconstructed, not observed.** For ship traffic and war-risk insurance
-   — together 30% of index weight — only the baseline and the latest week are measured values. The
-   weeks between were re-anchored from a previously published series during the 2026-07-26 revision
-   and preserve its shape rather than recording actual weekly readings. Flagged
-   `reconstructed_series` in the API. Replacing them with real weekly series needs new values, not
-   new code.
+3. **Two weekly series are reconstructed, not observed.** For ship traffic and war-risk insurance,
+   the weeks before the 2026-07-26 revision were re-anchored from a previously published series
+   rather than measured. Flagged `reconstructed_series` in the API — now driven by a
+   `history_reconstructed` field in the feeder file, so establishing a real series retires the
+   caveat with a one-field edit instead of a code change.
 
 ---
 
@@ -95,7 +96,8 @@ mydatalabs-in/
 ├── api/index.py               # Vercel serverless WSGI entry point
 ├── app/
 │   ├── data/
-│   │   ├── hormuz_history.json     # Weekly history + manual_overrides + manual_updated
+│   │   ├── hormuz_history.json     # Weekly series + generated provenance (updater writes)
+│   │   ├── hormuz_manual.json      # Current hand-entered figures (humans write)
 │   │   ├── vessel_attacks.json     # dashboard incident log (not an index input)
 │   │   └── elections/              # CVoter trackers, projections, calibration, catalog
 │   ├── elections/             # Lok Sabha Projection Engine
@@ -103,6 +105,7 @@ mydatalabs-in/
 │   │   └── engine/            # Model: scraper, calibration, seat model, ML suite,
 │   │                          #   backtest, insights, events, trend analytics, paths
 │   ├── indices/hormuz.py      # Component definitions, fetchers, snapshot assembly
+│   ├── manual_data.py         # Hand-entered figures: reading, validation, generated notes
 │   ├── static/
 │   │   ├── css/style.css      # Design tokens, dark/light themes, a11y primitives
 │   │   ├── css/elections.css  # Projection dashboard, scoped under .elections-dash
@@ -145,10 +148,28 @@ python -m pytest tests/ -q      # scoring engine tests
 
 ### Weekly data update
 
+Edit the three hand-entered figures in `app/data/hormuz_manual.json`. Only four fields move:
+
+```jsonc
+"war_risk": {
+  "value":  8.2,             // the figure, in this block's "unit"
+  "as_of":  "2026-08-17",    // when it was OBSERVED — not when you typed it
+  "source": "Marsh",         // published as provenance
+  "note":   "low end of the quoted range"
+}
+```
+
+Leave `as_of` alone if the figure has not changed: the component then shows as STALE, which is
+true, rather than being restamped as fresh. History needs no maintenance here — the updater appends
+each week's values to `weeks[]` in `hormuz_history.json` on every run.
+
 ```bash
-# 1. Edit app/data/hormuz_history.json → manual_overrides with this week's figures
-# 2. Recompute, stamping the manual inputs as updated today, commit + push:
-python update_data.py --stamp-manual
+# 1. Check the file before doing anything with it:
+python update_data.py --check-manual
+
+# 2. Recompute, commit + push. Validation runs first; malformed rows abort the
+#    run, overdue ones only warn and publish as STALE:
+python update_data.py
 
 # Recompute and persist locally without touching git:
 python update_data.py --local
@@ -159,6 +180,11 @@ python update_data.py --dry-run
 
 The updater reports which components are stale, whether the snapshot is degraded, and — importantly —
 whether the write actually landed anywhere durable.
+
+The provenance the API serves (`series_source_notes`, `reconstructed_series`) is **generated on every
+run** from the feeder file and the snapshot. Do not hand-edit it in `hormuz_history.json`; it will be
+overwritten. It used to be prose typed in by hand, which meant it asserted a "latest observation"
+from 2026-07-19 on a public API for a month after that stopped being true.
 
 By default (no flag) it also commits `app/data/hormuz_history.json` and `vessel_attacks.json` and
 pushes to `origin/main` — that push is what triggers the Vercel deployment, since Vercel's own

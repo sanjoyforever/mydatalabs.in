@@ -12,12 +12,16 @@ Usage:
     python update_data.py                  # recompute, persist, commit + push
     python update_data.py --local          # recompute and persist; skip git
     python update_data.py --dry-run        # recompute without writing anything
-    python update_data.py --stamp-manual   # mark manual inputs as updated today
+    python update_data.py --check-manual   # validate hand-entered inputs, then exit
 
-Before a weekly run, update the "manual_overrides" block in
-app/data/hormuz_history.json with this week's ship traffic, war-risk
-insurance, tanker freight and reroute figures, and set the matching dates in
-"manual_updated" (or pass --stamp-manual to set them all to today).
+Before a weekly run, set this week's war-risk, tanker-freight and reroute
+figures in app/data/hormuz_manual.json — one 'value' and 'as_of' per component.
+Every run validates that file first: a malformed or implausible figure aborts
+the run, an overdue one only warns and publishes as STALE.
+
+The provenance notes served by the public API are generated from those rows on
+every run. Do not hand-edit series_source_notes or reconstructed_series in
+app/data/hormuz_history.json; they will be overwritten.
 """
 from __future__ import annotations
 
@@ -30,7 +34,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from app import storage  # noqa: E402
+from app import manual_data, storage  # noqa: E402
 from app.indices import hormuz  # noqa: E402
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,13 +42,85 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app", "data")
 
 
-def stamp_manual_dates() -> None:
-    """Mark every manual component as updated today."""
-    history = storage.load_history(hormuz.INDEX_KEY)
-    today = datetime.date.today().isoformat()
-    history["manual_updated"] = {k: today for k in hormuz.MANUAL_KEYS}
-    storage.save_history(hormuz.INDEX_KEY, history)
-    print(f"  Stamped manual components as updated {today}: {sorted(hormuz.MANUAL_KEYS)}")
+def check_manual() -> int:
+    """Report on the hand-entered feeder file. Non-zero only on errors.
+
+    Runs before every update, not just on demand. The failure this exists to
+    stop is silent: a decimal-point slip in a war-risk rate does not crash
+    anything, it publishes a plausible-looking index with one component off by
+    two orders of magnitude.
+
+    An overdue figure is a warning, not an error — see manual_data.validate.
+
+    stamp_manual_dates() used to live here, setting every manual date to today
+    whether or not the figure had been refreshed — which is backwards. The date
+    is now a property of the figure, so there is nothing to stamp.
+    """
+    print("=" * 62)
+    print("Manual inputs")
+    print(f"  File: {manual_data.MANUAL_PATH}")
+
+    expected = {
+        c.key: {"unit": c.unit, "baseline": hormuz.BASELINE_VALUES.get(c.key),
+                "manual": c.manual}
+        for c in hormuz.COMPONENTS
+    }
+    errors, warnings = manual_data.validate(expected)
+
+    for key in manual_data.keys():
+        keyed = manual_data.entry(key)
+        if keyed is None:
+            print(f"    {key:<16} (no usable figure)")
+            continue
+        print(
+            f"    {key:<16} {keyed.value:>10} {keyed.as_of}"
+            f"  ({keyed.age_days}d old, {keyed.role})"
+        )
+
+    if warnings:
+        print(f"\n  {len(warnings)} warning(s) — the run continues; these components"
+              " publish as STALE:")
+        for warning in warnings:
+            print(f"    - {warning}")
+
+    if errors:
+        print(f"\n  {len(errors)} ERROR(s):", file=sys.stderr)
+        for error in errors:
+            print(f"    - {error}", file=sys.stderr)
+        return 1
+
+    if not warnings:
+        print("\n  OK.")
+    return 0
+
+
+_MARKET_LABELS = {
+    hormuz.COMPONENTS_BY_KEY[k].label
+    for k in hormuz.YFINANCE_TICKERS
+    if k in hormuz.COMPONENTS_BY_KEY
+}
+
+
+def failed_live_components(snapshot) -> list[str]:
+    """Automatic components whose live fetch did not land this run.
+
+    A manual component going stale is expected — it is waiting on a human, and
+    the dashboard says so. An automatic one carrying forward is a different
+    animal: yfinance returned nothing, and the score is last week's number
+    wearing this week's date.
+
+    That distinction matters because the failure is invisible. A crash gets
+    noticed; a silently carried-forward price looks exactly like a quiet
+    market. Brent, TTF and VIX sat frozen for a month behind a dashboard that
+    looked fine, because every layer here degrades politely: a missing
+    yfinance returns all-None, a failed fetch returns None per ticker, and
+    compute_snapshot turns None into "keep last week's value".
+    """
+    return [
+        cr.component.label
+        for cr in snapshot.components
+        if not cr.component.manual and cr.carried_forward
+    ]
 
 
 _MARKET_LABELS = {
@@ -187,15 +263,23 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="recompute without writing anything")
     parser.add_argument("--local", "-l", action="store_true",
                         help="persist locally but skip the git commit + push")
-    parser.add_argument("--stamp-manual", action="store_true",
-                        help="mark all manual components as updated today, then run")
+    parser.add_argument("--check-manual", action="store_true",
+                        help="validate app/data/hormuz_manual.json and exit")
     args = parser.parse_args()
+
+    if args.check_manual:
+        return check_manual()
 
     mode = "DRY RUN" if args.dry_run else ("LOCAL (git push skipped)" if args.local else "PRODUCTION / CRON (git push)")
     print(f"MyDataLabs data update — {datetime.datetime.now().isoformat(timespec='seconds')}")
     print(f"Mode: {mode}")
-    if args.stamp_manual:
-        stamp_manual_dates()
+
+    # Gate the run on the hand-entered inputs before anything is computed. A bad
+    # row is cheaper to fix than a bad published score is to retract.
+    if check_manual() != 0:
+        print("\n  Refusing to run: fix the manual inputs above.", file=sys.stderr)
+        return 1
+    print()
 
     code = update_index(persist=not args.dry_run)
     report_incident_dataset()

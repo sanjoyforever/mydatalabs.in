@@ -22,7 +22,8 @@ By default, only the data the site renders from — never a blanket `git add .`.
 A broad add here would sweep up whatever half-finished edit happens to be
 sitting in the working tree when a scheduled run fires:
 
-    app/data/hormuz_history.json        weekly composite + manual overrides
+    app/data/hormuz_history.json        weekly composite + generated provenance
+    app/data/hormuz_manual.json         current hand-entered figures
     app/data/vessel_attacks.json        incident log shown on the dashboard
     app/data/precomputed/*.json         per-route render artifacts
     app/data/elections/*.csv|json       CVoter dataset + derived projections
@@ -73,6 +74,10 @@ PRODUCTION_BRANCH = "main"
 # ignores the ones that do not exist yet.
 DATA_PATHS = [
     os.path.join("app", "data", "hormuz_history.json"),
+    # The hand-entered figures. Publishable data, not source: the index reads
+    # component values out of it on every run, so a deploy without it would
+    # serve a score computed from figures production does not have.
+    os.path.join("app", "data", "hormuz_manual.json"),
     os.path.join("app", "data", "vessel_attacks.json"),
     os.path.join("app", "data", "precomputed"),
     os.path.join("app", "data", "elections"),

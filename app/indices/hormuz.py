@@ -2,14 +2,17 @@
 
 Baseline: January 2026 monthly mean of daily closes ("calm", composite = 100).
 
-Three components (Brent, TTF gas, VIX — 50% of index weight) refresh
-automatically from yfinance. The other four (ship traffic, war-risk insurance,
-tanker freight, Cape reroutes — the remaining 50%) come from paywalled sources
-(Lloyd's List, Reuters/S&P, Baltic Exchange, Vortexa) with no free API, and are
-entered by hand each week in the ``manual_overrides`` block of
-``app/data/hormuz_history.json``. Their fetch functions return None; the values
-are carried forward from the last manual entry and surfaced in the UI with a
-"last updated" date so nobody mistakes a stale reading for a fresh one.
+Brent, TTF gas and VIX (50% of index weight) refresh automatically from
+yfinance; ship traffic comes from IMF PortWatch. War-risk insurance, tanker
+freight and Cape reroutes have no free API — they come from paywalled sources
+(Marsh, the Baltic Exchange, Vortexa) and are entered by hand in
+``app/data/hormuz_manual.json``, one current figure per component. See
+app/manual_data.py.
+
+Every value carries the date it was actually observed, so the UI can tell a
+fresh reading from a stale one, and a component that could be neither fetched
+nor found on file is carried forward from the previous week rather than reset
+to baseline — a value we could not obtain is not a value that is calm.
 
 When a live fetch fails we carry the previous value forward rather than falling
 back to baseline — a value we could not fetch is not a value that is calm.
@@ -22,7 +25,7 @@ import time
 from datetime import date, datetime, timedelta, timezone
 
 from app.scoring import Component, CompositeResult, compute_composite
-from app import storage
+from app import manual_data, storage
 
 INDEX_KEY = "hormuz"
 
@@ -443,12 +446,14 @@ def compute_snapshot(persist: bool = False, allow_network: bool = False) -> Comp
     latest_raw = dict(weeks[-1]["raw_values"]) if weeks else dict(BASELINE_VALUES)
     last_week_start = weeks[-1].get("week_start", "") if weeks else ""
 
-    manual_overrides = history.get("manual_overrides", {})
-    manual_updated = history.get("manual_updated", {})
+    week_start = _current_week_start()
+
+    # The hand-entered figures, one per component — see app/manual_data.py.
+    manual = manual_data.entries()
 
     # Last known value for every key: prior week's raw values, overlaid with
-    # any hand-entered override.
-    carried = {**latest_raw, **manual_overrides}
+    # whatever a human has since keyed in.
+    carried = {**latest_raw, **{k: e.value for k, e in manual.items()}}
 
     live = fetch_live_values(allow_network=allow_network)
     # When allow_network is False the "live" values came off the artifact, so
@@ -485,26 +490,29 @@ def compute_snapshot(persist: bool = False, allow_network: bool = False) -> Comp
                 last_updated[key] = live_iso
             continue
 
-        # No fresh value — carry the last known reading forward.
+        keyed = manual.get(key)
+        if keyed is not None:
+            # A hand-entered figure, dated by when it was observed rather than
+            # by when this ran. Not "carried forward": it is this week's value
+            # because a human said so, which is a different claim from reusing
+            # last week's number for want of anything better.
+            current_values[key] = keyed.value
+            last_updated[key] = keyed.as_of
+            if keyed.overdue:
+                stale_keys.add(key)
+            if not comp.manual:
+                # An automatic component running on its hand-entered fallback is
+                # an outage however fresh that fallback is, and update_data.py
+                # refuses to publish on it — which is the point.
+                stale_keys.add(key)
+                carried_forward.add(key)
+            continue
+
+        # Nothing live and nothing on file — carry the last known reading forward.
         current_values[key] = carried.get(key, BASELINE_VALUES.get(key))
         carried_forward.add(key)
-
-        if comp.manual:
-            updated = manual_updated.get(key) or last_week_start
-            last_updated[key] = updated
-            age = _days_old(updated)
-            # Manual inputs are expected to be up to a week old; only call them
-            # stale once they have missed their own cadence.
-            if age is None or age > 7:
-                stale_keys.add(key)
-        else:
-            # An automatic component we failed to fetch is stale immediately —
-            # this is an outage, not a cadence.
-            updated = last_week_start or BASELINE_WINDOW[:10]
-            last_updated[key] = updated
-            stale_keys.add(key)
-
-    week_start = _current_week_start()
+        last_updated[key] = last_week_start or BASELINE_WINDOW[:10]
+        stale_keys.add(key)
 
     result = compute_composite(
         components=COMPONENTS,
@@ -529,6 +537,17 @@ def compute_snapshot(persist: bool = False, allow_network: bool = False) -> Comp
         weeks = [w for w in weeks if w.get("week_start") != week_start]
         weeks.append(entry)
         history["weeks"] = sorted(weeks, key=lambda w: w["week_start"])
+
+        # Provenance is regenerated here, on every persisting run, from the
+        # snapshot and the observation log. It used to be prose typed into this
+        # file by hand, which meant it described whatever was true on the day
+        # somebody wrote it: the shipped note asserted a "latest observation" of
+        # 105 transits/wk from 2026-07-19 for a month afterwards, on a public
+        # API, while the index itself had moved on. A note about data that is
+        # not derived from that data is a scheduled lie.
+        history["series_source_notes"] = manual_data.build_source_notes(result, BASELINE_WINDOW)
+        history["reconstructed_series"] = manual_data.reconstructed_series()
+
         result.persisted = storage.save_history(INDEX_KEY, history)
 
     return result

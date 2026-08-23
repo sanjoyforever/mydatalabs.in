@@ -9,7 +9,7 @@ from datetime import date, datetime
 
 from flask import Blueprint, Response, abort, jsonify, redirect, render_template, request
 
-from app import db, precomputed, scoring, storage, votes
+from app import db, manual_data, precomputed, scoring, storage, votes
 from app.indices import hormuz
 
 bp = Blueprint("main", __name__)
@@ -297,6 +297,23 @@ def _history_meta() -> dict:
     return storage.load_history(hormuz.INDEX_KEY)
 
 
+def _observation_meta(key: str) -> dict:
+    """Provenance for one component's current hand-entered value, if it has one.
+
+    Returns {} for a component with no observation on file, so an automatic
+    series does not sprout empty "observed_by" fields in the API response.
+    """
+    keyed = manual_data.entry(key)
+    if keyed is None:
+        return {}
+    return {
+        "observed_on": keyed.as_of,
+        "observed_source": keyed.source,
+        "observation_note": keyed.note,
+        "confidence": keyed.confidence,
+    }
+
+
 def component_correlations(history: list[dict]) -> dict:
     """Pearson correlation between every pair of component series in history.
 
@@ -412,6 +429,18 @@ def home():
             scale_pct=scoring.scale_pct(snapshot.score),
             scale_min=scoring.SCALE_MIN,
             scale_max=scoring.SCALE_MAX,
+        ),
+    )
+    return _cached(Response(html, mimetype="text/html"))
+
+
+@bp.route("/material-design")
+def material_design():
+    snapshot = get_snapshot()
+    html = render_template(
+        "material_demo.html",
+        **_common(
+            snapshot=snapshot,
         ),
     )
     return _cached(Response(html, mimetype="text/html"))
@@ -571,9 +600,11 @@ def api_hormuz_json():
             "window": hormuz.BASELINE_WINDOW,
             "values": hormuz.BASELINE_VALUES,
         },
-        # For these series only the baseline and the latest week are observed;
-        # the weeks between are re-anchored from a previously published series.
-        # Consumers should not treat those columns as measured weekly readings.
+        # Series whose weekly history was re-anchored rather than measured. Both
+        # this list and the notes below are generated on every update run from
+        # the feeder file and the current snapshot (app/manual_data.py). They
+        # were hand-written prose until 2026-08, which meant they described
+        # whatever was true the day somebody typed them.
         "reconstructed_series": _history_meta().get("reconstructed_series", []),
         "series_source_notes": _history_meta().get("series_source_notes", {}),
         "scale": {"min": scoring.SCALE_MIN, "max": scoring.SCALE_MAX},
@@ -595,6 +626,11 @@ def api_hormuz_json():
                 "last_updated": c.last_updated,
                 "stale": c.stale,
                 "carried_forward": c.carried_forward,
+                # Per-point provenance for the hand-entered components. The
+                # series-level reconstructed_series flag above cannot say that
+                # this week's war-risk figure is a real broker quote while
+                # earlier weeks were re-anchored; this can.
+                **_observation_meta(c.component.key),
             }
             for c in snapshot.components
         ],

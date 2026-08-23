@@ -1,11 +1,11 @@
 {
-  "started_at": "2026-08-16T21:38:46+00:00",
+  "started_at": "2026-08-23T04:02:59+00:00",
   "forced": false,
   "local_latest_date": "2026-08-02",
   "remote_latest_date": "2026-08-02",
   "status": "up_to_date",
   "reason": "no_new_data",
   "new_rows": 0,
-  "finished_at": "2026-08-16T21:38:48+00:00",
-  "duration_seconds": 1.9
+  "finished_at": "2026-08-23T04:03:01+00:00",
+  "duration_seconds": 1.91
 }

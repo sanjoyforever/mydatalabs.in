@@ -78,7 +78,7 @@ def load_history(index_key: str) -> dict:
                     return json.load(f)
             except (OSError, ValueError):
                 continue
-    return {"weeks": [], "manual_overrides": {}}
+    return {"weeks": []}
 
 
 def save_history(index_key: str, data: dict) -> bool:
@@ -92,7 +92,7 @@ def save_history(index_key: str, data: dict) -> bool:
         return False
     return DURABLE
 
-
-def latest_manual_values(index_key: str) -> dict[str, float]:
-    history = load_history(index_key)
-    return history.get("manual_overrides", {})
+# latest_manual_values() lived here and read the old manual_overrides block. It
+# had no callers, and hand-entered values now come from app/manual_data.py,
+# which resolves them against a date instead of returning whichever single
+# figure happened to be current.
