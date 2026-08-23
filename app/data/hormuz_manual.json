@@ -1,0 +1,108 @@
+{
+  "_readme": [
+    "Hand-entered inputs to the Hormuz Crisis Index. Humans write this file; no script does.",
+    "",
+    "WEEKLY UPDATE: for each component below, set 'value', 'as_of' and 'source'.",
+    "Then run:  python update_data.py",
+    "",
+    "  value   - the figure, in this block's 'unit'. null = nothing to publish.",
+    "  as_of   - ISO date the figure was OBSERVED or QUOTED. Not the date you typed it.",
+    "            Leave it alone if the figure has not changed; the component will",
+    "            correctly show as stale rather than pretending to be fresh.",
+    "  source  - who published it, e.g. 'Marsh (Marcus Baker)'. Shown in the public API.",
+    "  note    - free text: caveats, ranges, anything the number alone does not say.",
+    "            Appended verbatim to the generated provenance note.",
+    "",
+    "This file holds only the CURRENT figure. History accumulates by itself in",
+    "hormuz_history.json weeks[], which the updater appends to on every run.",
+    "",
+    "Read-only fields kept here for context when editing - label, unit, baseline,",
+    "primary_source - are cross-checked against app/indices/hormuz.py on every run.",
+    "Changing one here without changing it there is reported as an error.",
+    "",
+    "  confidence            - 'observed', 'estimate' or 'reconstructed'. How THIS figure",
+    "                          was arrived at.",
+    "  history_reconstructed - true if the weekly series behind this component was",
+    "                          re-anchored during the 2026-07-26 revision rather than",
+    "                          measured week by week. Drives 'reconstructed_series' in",
+    "                          the API. Set false once a real weekly series exists.",
+    "  role                  - 'primary' (this file is the source) or 'fallback' (a live",
+    "                          feed is the source; this is only used when it goes dark).",
+    "  cadence_days          - how old the figure may get before it is reported overdue.",
+    "  plausible_range       - typo guard. A value outside it aborts the update run."
+  ],
+  "components": {
+    "war_risk": {
+      "label": "War-Risk Insurance (per transit)",
+      "unit": "% hull value",
+      "baseline": 0.25,
+      "primary_source": "Marsh / market brokers",
+      "role": "primary",
+      "cadence_days": 7,
+      "plausible_range": [
+        0.05,
+        15.0
+      ],
+      "value": 7.5,
+      "as_of": "2026-07-22",
+      "source": "Marsh (Marcus Baker, global head of marine)",
+      "note": "Low end of the 7.5-10% of hull range quoted for Hormuz transits",
+      "confidence": "observed",
+      "history_reconstructed": true
+    },
+    "tanker_freight": {
+      "label": "Tanker Freight (BDTI)",
+      "unit": "index",
+      "baseline": 900,
+      "primary_source": "Baltic Exchange",
+      "role": "primary",
+      "cadence_days": 7,
+      "plausible_range": [
+        300,
+        6000
+      ],
+      "value": 1360,
+      "as_of": "2026-07-20",
+      "source": "",
+      "note": "",
+      "confidence": "observed",
+      "history_reconstructed": false
+    },
+    "reroutes": {
+      "label": "Cape of Good Hope Reroutes",
+      "unit": "% of traffic",
+      "baseline": 8.0,
+      "primary_source": "AIS / Vortexa",
+      "role": "primary",
+      "cadence_days": 7,
+      "plausible_range": [
+        0.0,
+        100.0
+      ],
+      "value": 24,
+      "as_of": "2026-07-20",
+      "source": "",
+      "note": "",
+      "confidence": "observed",
+      "history_reconstructed": false
+    },
+    "ship_traffic": {
+      "label": "Hormuz Transits (all commercial vessels)",
+      "unit": "transits/wk",
+      "baseline": 616,
+      "primary_source": "IMF PortWatch",
+      "role": "fallback",
+      "cadence_days": 21,
+      "plausible_range": [
+        0,
+        1200
+      ],
+      "value": 105,
+      "as_of": "2026-07-19",
+      "source": "IMF PortWatch",
+      "note": "15 vessels/day x 7, published 2026-07-19. Used only if the PortWatch feed is unreachable",
+      "confidence": "observed",
+      "history_reconstructed": true
+    }
+  }
+}

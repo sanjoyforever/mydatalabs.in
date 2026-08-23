@@ -1,16 +1,4 @@
 {
-  "manual_overrides": {
-    "ship_traffic": 105,
-    "war_risk": 7.5,
-    "tanker_freight": 1360,
-    "reroutes": 24
-  },
-  "manual_updated": {
-    "ship_traffic": "2026-07-19",
-    "war_risk": "2026-07-22",
-    "tanker_freight": "2026-07-20",
-    "reroutes": "2026-07-20"
-  },
   "weeks": [
     {
       "week_start": "2026-01-05",
@@ -494,26 +482,31 @@
     },
     {
       "week_start": "2026-08-17",
-      "score": 169.0,
+      "score": 175.1,
       "level_label": "Severe",
       "level_status": "serious",
       "raw_values": {
-        "brent": 88.70999908447266,
-        "ship_traffic": 31.0,
+        "brent": 94.38999938964844,
+        "ship_traffic": 25.0,
         "war_risk": 7.5,
-        "tanker_freight": 1360,
-        "ttf_gas": 61.42399978637695,
-        "vix": 14.25,
-        "reroutes": 24
+        "tanker_freight": 1360.0,
+        "ttf_gas": 65.86499786376953,
+        "vix": 15.130000114440918,
+        "reroutes": 24.0
       }
     }
   ],
+  "series_source_notes": {
+    "brent": "Baseline 64.77 $/bbl (yfinance (BZ=F), 2026-01-01/2026-01-31). Latest 94.39 $/bbl as of 2026-08-23, +46% vs baseline. Fetched automatically.",
+    "ship_traffic": "Baseline 616 transits/wk (IMF PortWatch, 2026-01-01/2026-01-31). Latest 25 transits/wk as of 2026-08-16, 4% of baseline. 15 vessels/day x 7, published 2026-07-19. Used only if the PortWatch feed is unreachable. Fetched automatically; the hand-entered figure is held only as a fallback for feed outages. Weekly values before the 2026-07-26 revision were re-anchored from a previously published series rather than measured.",
+    "war_risk": "Baseline 0.25 % hull value (Marsh / market brokers, 2026-01-01/2026-01-31). Latest 7.5 % hull value as of 2026-07-22 per Marsh (Marcus Baker, global head of marine), +2900% vs baseline. Low end of the 7.5-10% of hull range quoted for Hormuz transits. Weekly values before the 2026-07-26 revision were re-anchored from a previously published series rather than measured. Currently flagged stale.",
+    "tanker_freight": "Baseline 900 index (Baltic Exchange, 2026-01-01/2026-01-31). Latest 1360 index as of 2026-07-20, +51% vs baseline. Currently flagged stale.",
+    "ttf_gas": "Baseline 34.11 EUR/MWh (yfinance (TTF=F), 2026-01-01/2026-01-31). Latest 65.86 EUR/MWh as of 2026-08-23, +93% vs baseline. Fetched automatically.",
+    "vix": "Baseline 16.05 (yfinance (^VIX), 2026-01-01/2026-01-31). Latest 15.13 as of 2026-08-23, -6% vs baseline. Fetched automatically.",
+    "reroutes": "Baseline 8 % of traffic (AIS / Vortexa, 2026-01-01/2026-01-31). Latest 24 % of traffic as of 2026-07-20, +200% vs baseline. Currently flagged stale."
+  },
   "reconstructed_series": [
     "ship_traffic",
     "war_risk"
-  ],
-  "series_source_notes": {
-    "ship_traffic": "Baseline 616 transits/wk = 88 commercial vessels/day (IMF PortWatch chokepoint dataset, fixed reference window 2025-02-28 to 2026-02-27). Latest observation 105 transits/wk = 15 vessels/day (PortWatch published day 2026-07-19, 17% of baseline). Intermediate weeks are reconstructed, not observed.",
-    "war_risk": "Baseline 0.25% of hull value = pre-war Hormuz rate (The National, 2026-07-17). Latest observation 7.5% of hull, the low end of the 7.5-10% range quoted by Marcus Baker, global head of marine at Marsh, for 2026-07-22. Series anchored on the reported conflict peak of 10% of hull. Intermediate weeks are reconstructed, not observed."
-  }
+  ]
 }

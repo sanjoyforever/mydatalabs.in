@@ -1,12 +1,12 @@
 {
   "live_values": {
-    "brent": 88.70999908447266,
-    "ttf_gas": 61.42399978637695,
-    "vix": 14.25,
-    "ship_traffic": 31.0
+    "brent": 94.38999938964844,
+    "ttf_gas": 65.86499786376953,
+    "vix": 15.130000114440918,
+    "ship_traffic": 25.0
   },
-  "live_values_at": "2026-08-17",
-  "portwatch_week_end": "2026-08-09",
+  "live_values_at": "2026-08-23",
+  "portwatch_week_end": "2026-08-16",
   "sentiment": {
     "available": true,
     "week_start": "2026-08-17",
