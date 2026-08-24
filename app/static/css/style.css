@@ -5,115 +5,10 @@
 /* Fonts are loaded via <link rel="preconnect"> + <link rel="stylesheet"> in
    base.html. An @import here would duplicate that request and serialise it
    behind the stylesheet download. */
-
 :root {
-  color-scheme: dark;
-  
-  /* Palette - Dark (Default) */
-  --page-bg:           #080B11;
-  --surface-header:    #0D121F;
-  --surface-card:      #111726;
-  --surface-card-hover:#172033;
-  --surface-input:     #1B2438;
-  
-  --border-subtle:     rgba(255, 255, 255, 0.08);
-  --border-bright:     rgba(255, 255, 255, 0.16);
-  --border-accent:     rgba(56, 189, 248, 0.30);
-  
-  --text-main:         #F8FAFC;
-  --text-sub:          #94A3B8;
-  /* #64748B measured ~4.0:1 on the card surface — below the 4.5:1 AA minimum
-     for body text. Lightened for dark mode; darkened separately for light. */
-  --text-muted:        #9AA8BC;
-
-  --accent-blue:       #38BDF8;
-  --accent-blue-bg:    rgba(56, 189, 248, 0.12);
-  --accent-emerald:    #10B981;
-  --accent-emerald-bg: rgba(16, 185, 129, 0.12);
-  --accent-amber:      #F59E0B;
-  --accent-amber-bg:   rgba(245, 158, 11, 0.12);
-  --accent-rose:       #F43F5E;
-  --accent-rose-bg:    rgba(244, 63, 94, 0.14);
-  --accent-purple:     #A855F7;
-  
-  /* Status palette */
-  --status-good-bg:    rgba(16, 185, 129, 0.15);
-  --status-good-text:  #34D399;
-  --status-good-dot:   #10B981;
-  
-  --status-warn-bg:    rgba(245, 158, 11, 0.15);
-  --status-warn-text:  #FBBF24;
-  --status-warn-dot:   #F59E0B;
-  
-  --status-serious-bg: rgba(249, 115, 22, 0.15);
-  --status-serious-text:#FB923C;
-  --status-serious-dot: #F97316;
-  
-  --status-critical-bg:rgba(244, 63, 94, 0.18);
-  --status-critical-text:#FB7185;
-  --status-critical-dot:#F43F5E;
-  
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-display: 'Geist', system-ui, sans-serif;
-
-  /* Surface geometry. Two dashboards built at different times had four card
-     paddings (16/20/22/24/28px) and three radii (12/14/16/20px) between them,
-     which is what made the pages feel like different products even where the
-     layout matched. Three values now, and the nesting order is deliberate:
-     the canvas is rounder than the cards inside it, and a panel nested inside
-     a card is rounder than nothing else. */
-  --canvas-radius: 10px;
-  --card-radius: 14px;
-  --panel-radius: 10px;
-  --card-pad: 24px;
-  --card-pad-tight: 18px 20px;
-
-  /* Spacing and type scales, from "MyDataLabs Design System"/tokens/. Not yet
-     used everywhere — the existing rules carry literal px and rem values — but
-     declared here so new work has one ladder to pick from instead of inventing
-     a fifth gap value. Migrate rules to these as they are touched. */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  --space-12: 48px;
-
-  --text-xs:   0.75rem;
-  --text-sm:   0.86rem;
-  --text-base: 0.9rem;
-  --text-md:   1.05rem;
-  --text-lg:   1.35rem;
-  --text-xl:   1.8rem;
-  --text-2xl:  2.5rem;
-  --text-3xl:  3.2rem;
-
-  /* Single source of truth for the site's content column. Set from the
-     projection dashboard's original 1340px: the widest thing on the site is a
-     time-series chart, and 140px of extra canvas is 140px more of readable
-     series. Every full-width container reads this, so the header, the content
-     column and the footer cannot drift apart.
-
-     Prose pages deliberately opt out below (main:has(> .prose-page)) — a
-     paragraph set to 1340px is not more readable, it is less.
-
-     1440, not 1540: a 1536px-wide laptop — the most common Windows width there
-     is, and what this is read on — sits just under 1540, so the cap never
-     engaged and the content ran edge to edge with a 15px margin. The column now
-     actually centres on the screens most people bring to it, and the 100px it
-     gives back is margin, not chart: the widest chart still gets 1410px. */
-  --content-max: 1440px;
-}
-
-:root[data-theme="light"] {
   color-scheme: light;
   
-  /* Palette - Light */
+  /* Palette - Light (Default) */
   --page-bg:           #F8FAFC;
   --surface-header:    #FFFFFF;
   --surface-card:      #FFFFFF;
@@ -153,6 +48,127 @@
   --status-critical-bg:rgba(225, 29, 72, 0.10);
   --status-critical-text:#BE123C;
   --status-critical-dot:#E11D48;
+  
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Geist', system-ui, sans-serif;
+
+  --canvas-radius: 10px;
+  --card-radius: 14px;
+  --panel-radius: 10px;
+  --card-pad: 24px;
+  --card-pad-tight: 18px 20px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --text-xs:   0.75rem;
+  --text-sm:   0.86rem;
+  --text-base: 0.9rem;
+  --text-md:   1.05rem;
+  --text-lg:   1.35rem;
+  --text-xl:   1.8rem;
+  --text-2xl:  2.5rem;
+  --text-3xl:  3.2rem;
+
+  --content-max: 1440px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  
+  --page-bg:           #F8FAFC;
+  --surface-header:    #FFFFFF;
+  --surface-card:      #FFFFFF;
+  --surface-card-hover:#F1F5F9;
+  --surface-input:     #E2E8F0;
+  
+  --border-subtle:     rgba(15, 23, 42, 0.08);
+  --border-bright:     rgba(15, 23, 42, 0.18);
+  --border-accent:     rgba(2, 132, 199, 0.30);
+  
+  --text-main:         #0F172A;
+  --text-sub:          #475569;
+  --text-muted:        #556274;
+
+  --accent-blue:       #0284C7;
+  --accent-blue-bg:    rgba(2, 132, 199, 0.08);
+  --accent-emerald:    #059669;
+  --accent-emerald-bg: rgba(5, 150, 105, 0.08);
+  --accent-amber:      #D97706;
+  --accent-amber-bg:   rgba(217, 119, 6, 0.08);
+  --accent-rose:       #E11D48;
+  --accent-rose-bg:    rgba(225, 29, 72, 0.08);
+  --accent-purple:     #7C3AED;
+  
+  --status-good-bg:    rgba(5, 150, 105, 0.10);
+  --status-good-text:  #047857;
+  --status-good-dot:   #059669;
+  
+  --status-warn-bg:    rgba(217, 119, 6, 0.10);
+  --status-warn-text:  #B45309;
+  --status-warn-dot:   #D97706;
+  
+  --status-serious-bg: rgba(194, 65, 12, 0.10);
+  --status-serious-text:#C2410C;
+  --status-serious-dot: #EA580C;
+  
+  --status-critical-bg:rgba(225, 29, 72, 0.10);
+  --status-critical-text:#BE123C;
+  --status-critical-dot:#E11D48;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  
+  /* Palette - Dark */
+  --page-bg:           #080B11;
+  --surface-header:    #0D121F;
+  --surface-card:      #111726;
+  --surface-card-hover:#172033;
+  --surface-input:     #1B2438;
+  
+  --border-subtle:     rgba(255, 255, 255, 0.08);
+  --border-bright:     rgba(255, 255, 255, 0.16);
+  --border-accent:     rgba(56, 189, 248, 0.30);
+  
+  --text-main:         #F8FAFC;
+  --text-sub:          #94A3B8;
+  --text-muted:        #9AA8BC;
+
+  --accent-blue:       #38BDF8;
+  --accent-blue-bg:    rgba(56, 189, 248, 0.12);
+  --accent-emerald:    #10B981;
+  --accent-emerald-bg: rgba(16, 185, 129, 0.12);
+  --accent-amber:      #F59E0B;
+  --accent-amber-bg:   rgba(245, 158, 11, 0.12);
+  --accent-rose:       #F43F5E;
+  --accent-rose-bg:    rgba(244, 63, 94, 0.14);
+  --accent-purple:     #A855F7;
+  
+  --status-good-bg:    rgba(16, 185, 129, 0.15);
+  --status-good-text:  #34D399;
+  --status-good-dot:   #10B981;
+  
+  --status-warn-bg:    rgba(245, 158, 11, 0.15);
+  --status-warn-text:  #FBBF24;
+  --status-warn-dot:   #F59E0B;
+  
+  --status-serious-bg: rgba(249, 115, 22, 0.15);
+  --status-serious-text:#FB923C;
+  --status-serious-dot: #F97316;
+  
+  --status-critical-bg:rgba(244, 63, 94, 0.18);
+  --status-critical-text:#FB7185;
+  --status-critical-dot:#F43F5E;
 }
 
 /* Base Reset */
@@ -256,32 +272,47 @@ main {
 
 .brand {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
   color: var(--text-main);
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  transition: opacity 0.15s ease;
 }
 
-.brand-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--accent-blue-bg);
-  color: var(--accent-blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.brand:hover {
+  opacity: 0.92;
 }
 
-.brand-icon .material-symbols-outlined {
-  font-size: 20px;
+.brand-logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
+
+.brand-text-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
 }
 
 .brand-name {
+  font-family: var(--font-heading);
+  font-size: 1.22rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
   color: var(--text-main);
+}
+
+.brand-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--text-muted);
+  margin-top: 1px;
 }
 
 .brand-dot { color: var(--accent-blue); }

@@ -74,6 +74,7 @@ PRODUCTION_BRANCH = "main"
 # ignores the ones that do not exist yet.
 DATA_PATHS = [
     os.path.join("app", "data", "aviation_history.json"),
+    os.path.join("app", "data", "aviation_regional_history.json"),
     os.path.join("app", "data", "hormuz_history.json"),
     # The hand-entered figures. Publishable data, not source: the index reads
     # component values out of it on every run, so a deploy without it would

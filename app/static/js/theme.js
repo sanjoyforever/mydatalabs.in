@@ -14,8 +14,7 @@
   }
 
   function currentTheme() {
-    return root.getAttribute("data-theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    return root.getAttribute("data-theme") || "light";
   }
 
   // --- Shared chart palette ------------------------------------------------

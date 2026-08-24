@@ -1,0 +1,342 @@
+{
+  "index": "API-INDEX-REGIONAL",
+  "baseline": 100.0,
+  "regional_contributions": [
+    {
+      "key": "south_asia",
+      "name": "South Asia",
+      "subtext": "India, Pakistan, Bangladesh, Sri Lanka",
+      "total_score": 139.2,
+      "level_label": "Severe Pressure",
+      "level_status": "serious",
+      "primary_bottleneck": "Engine Inspection Groundings (GTF)",
+      "bottleneck_pct": 42,
+      "breakdown": {
+        "fleet_grounding": {
+          "label": "Fleet Groundings (GTF/CFM)",
+          "points": 37.0,
+          "raw": "19.4% grounded",
+          "color": "#A855F7"
+        },
+        "detour_pct": {
+          "label": "Airspace Detours (Pak/ME)",
+          "points": 26.5,
+          "raw": "13.8% detour",
+          "color": "#10B981"
+        },
+        "crack_spread": {
+          "label": "Fuel Crack (Arab Gulf)",
+          "points": 18.5,
+          "raw": ".40/bbl",
+          "color": "#F59E0B"
+        },
+        "fx_equity": {
+          "label": "FX (USD/INR) & Equity",
+          "points": 14.8,
+          "raw": "83.9 USD/INR",
+          "color": "#EC4899"
+        },
+        "atfm_delay": {
+          "label": "ATC & Regional Delays",
+          "points": 11.2,
+          "raw": "1.80 min/flt",
+          "color": "#EF4444"
+        }
+      }
+    },
+    {
+      "key": "middle_east",
+      "name": "Middle East",
+      "subtext": "GCC, Levant, Iraq, Iran",
+      "total_score": 136.5,
+      "level_label": "Severe Pressure",
+      "level_status": "serious",
+      "primary_bottleneck": "Airspace Closures & Warzone Detours",
+      "bottleneck_pct": 48,
+      "breakdown": {
+        "detour_pct": {
+          "label": "Airspace Detours & Warzone Avoidance",
+          "points": 41.8,
+          "raw": "17.5% detour",
+          "color": "#10B981"
+        },
+        "fx_equity": {
+          "label": "War-Risk Insurance & Dislocation",
+          "points": 22.0,
+          "raw": "High war-risk",
+          "color": "#EC4899"
+        },
+        "crack_spread": {
+          "label": "Fuel Crack (Arab Gulf)",
+          "points": 16.2,
+          "raw": ".20/bbl",
+          "color": "#F59E0B"
+        },
+        "fleet_grounding": {
+          "label": "Fleet Groundings",
+          "points": 12.5,
+          "raw": "8.4% grounded",
+          "color": "#A855F7"
+        },
+        "atfm_delay": {
+          "label": "ATC & Hub Holding Delays",
+          "points": 9.8,
+          "raw": "1.60 min/flt",
+          "color": "#EF4444"
+        }
+      }
+    },
+    {
+      "key": "africa",
+      "name": "Africa",
+      "subtext": "North, West, East, South Africa",
+      "total_score": 133.8,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "primary_bottleneck": "Fuel Import Logistics & FX Repatriation",
+      "bottleneck_pct": 52,
+      "breakdown": {
+        "crack_spread": {
+          "label": "Fuel Import Price Premiums",
+          "points": 32.5,
+          "raw": "Import parity spike",
+          "color": "#F59E0B"
+        },
+        "fx_equity": {
+          "label": "FX Liquidity & Blocked Funds",
+          "points": 28.0,
+          "raw": "IATA funds risk",
+          "color": "#EC4899"
+        },
+        "detour_pct": {
+          "label": "Sahel / Red Sea Detours",
+          "points": 15.2,
+          "raw": "8.2% detour",
+          "color": "#10B981"
+        },
+        "fleet_grounding": {
+          "label": "Maintenance Transit Downtime",
+          "points": 14.8,
+          "raw": "9.5% grounded",
+          "color": "#A855F7"
+        },
+        "atfm_delay": {
+          "label": "Regional Infrastructure Limits",
+          "points": 9.5,
+          "raw": "1.50 min/flt",
+          "color": "#EF4444"
+        }
+      }
+    },
+    {
+      "key": "europe",
+      "name": "Europe",
+      "subtext": "EU, UK, Turkey",
+      "total_score": 130.4,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "primary_bottleneck": "Eurocontrol ATC Network Bottlenecks",
+      "bottleneck_pct": 38,
+      "breakdown": {
+        "atfm_delay": {
+          "label": "Eurocontrol ATFM En-Route Delays",
+          "points": 35.2,
+          "raw": "3.10 min/flt",
+          "color": "#EF4444"
+        },
+        "detour_pct": {
+          "label": "Russian Airspace Avoidance",
+          "points": 21.4,
+          "raw": "11.8% detour",
+          "color": "#10B981"
+        },
+        "crack_spread": {
+          "label": "Fuel Crack (CIF Rotterdam)",
+          "points": 19.8,
+          "raw": ".20/bbl",
+          "color": "#F59E0B"
+        },
+        "fleet_grounding": {
+          "label": "Fleet Groundings (Wizz/LHG GTF)",
+          "points": 17.5,
+          "raw": "11.2% grounded",
+          "color": "#A855F7"
+        },
+        "fx_equity": {
+          "label": "FX (EUR/USD) & SAF Mandates",
+          "points": 12.0,
+          "raw": "ReFuelEU premium",
+          "color": "#EC4899"
+        }
+      }
+    },
+    {
+      "key": "south_east_asia",
+      "name": "South East Asia",
+      "subtext": "ASEAN Nations",
+      "total_score": 124.0,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "primary_bottleneck": "LCC Engine Inspection Cycles",
+      "bottleneck_pct": 32,
+      "breakdown": {
+        "fleet_grounding": {
+          "label": "LCC GTF Maintenance Backlog",
+          "points": 22.4,
+          "raw": "12.8% grounded",
+          "color": "#A855F7"
+        },
+        "crack_spread": {
+          "label": "Fuel Crack (FOB Singapore)",
+          "points": 18.5,
+          "raw": ".00/bbl",
+          "color": "#F59E0B"
+        },
+        "fx_equity": {
+          "label": "Transit Passenger Recovery Lag",
+          "points": 15.2,
+          "raw": "Moderate lag",
+          "color": "#EC4899"
+        },
+        "detour_pct": {
+          "label": "Bay of Bengal / SCS Routing",
+          "points": 9.8,
+          "raw": "5.5% detour",
+          "color": "#10B981"
+        },
+        "atfm_delay": {
+          "label": "Regional Hub Delays",
+          "points": 8.5,
+          "raw": "1.40 min/flt",
+          "color": "#EF4444"
+        }
+      }
+    },
+    {
+      "key": "south_west_pacific",
+      "name": "South West Pacific",
+      "subtext": "Australia, New Zealand, Pacific",
+      "total_score": 119.5,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "primary_bottleneck": "Ultra-Long-Haul Fuel Sensitivity",
+      "bottleneck_pct": 45,
+      "breakdown": {
+        "fx_equity": {
+          "label": "AUD/NZD vs USD Currency Drag",
+          "points": 26.8,
+          "raw": "0.65 AUD/USD",
+          "color": "#EC4899"
+        },
+        "crack_spread": {
+          "label": "Fuel Crack (Singapore Parity)",
+          "points": 20.4,
+          "raw": ".50/bbl",
+          "color": "#F59E0B"
+        },
+        "fleet_grounding": {
+          "label": "Fleet Utilization Rate",
+          "points": 9.5,
+          "raw": "6.2% grounded",
+          "color": "#A855F7"
+        },
+        "detour_pct": {
+          "label": "Transpacific Route Detour",
+          "points": 7.2,
+          "raw": "3.8% detour",
+          "color": "#10B981"
+        },
+        "atfm_delay": {
+          "label": "Airspace Delay Severity",
+          "points": 5.4,
+          "raw": "0.90 min/flt",
+          "color": "#EF4444"
+        }
+      }
+    },
+    {
+      "key": "americas",
+      "name": "Americas",
+      "subtext": "North America & Latin America",
+      "total_score": 118.6,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "primary_bottleneck": "USGC Jet Fuel Crack Margins",
+      "bottleneck_pct": 40,
+      "breakdown": {
+        "crack_spread": {
+          "label": "Fuel Crack (USGC Jet 54)",
+          "points": 28.5,
+          "raw": ".50/bbl",
+          "color": "#F59E0B"
+        },
+        "fx_equity": {
+          "label": "Pilot Labor & Delivery Delays",
+          "points": 19.2,
+          "raw": "Boeing MAX pauses",
+          "color": "#EC4899"
+        },
+        "atfm_delay": {
+          "label": "FAA Domestic Flow Delays",
+          "points": 12.4,
+          "raw": "1.90 min/flt",
+          "color": "#EF4444"
+        },
+        "fleet_grounding": {
+          "label": "Fleet Groundings (Spirit GTF)",
+          "points": 11.8,
+          "raw": "7.8% grounded",
+          "color": "#A855F7"
+        },
+        "detour_pct": {
+          "label": "Domestic Detour Overhead",
+          "points": 6.2,
+          "raw": "3.2% detour",
+          "color": "#10B981"
+        }
+      }
+    },
+    {
+      "key": "global",
+      "name": "Global Composite",
+      "subtext": "Volume-Weighted International Average",
+      "total_score": 127.6,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "primary_bottleneck": "Jet Fuel Refining Margins",
+      "bottleneck_pct": 38,
+      "breakdown": {
+        "crack_spread": {
+          "label": "Global Jet Fuel Crack (/bbl)",
+          "points": 10.5,
+          "raw": ".20/bbl",
+          "color": "#F59E0B"
+        },
+        "fleet_grounding": {
+          "label": "Global Fleet Inactivity (13.5%)",
+          "points": 6.8,
+          "raw": "13.5% grounded",
+          "color": "#A855F7"
+        },
+        "atfm_delay": {
+          "label": "Global ATFM Delays (2.1m)",
+          "points": 4.5,
+          "raw": "2.10 min/flt",
+          "color": "#EF4444"
+        },
+        "detour_pct": {
+          "label": "Global Route Detour Rate (4.8%)",
+          "points": 3.2,
+          "raw": "4.8% detour",
+          "color": "#10B981"
+        },
+        "fx_equity": {
+          "label": "Global Airline Equity Stress",
+          "points": 2.6,
+          "raw": "Moderate drag",
+          "color": "#EC4899"
+        }
+      }
+    }
+  ]
+}

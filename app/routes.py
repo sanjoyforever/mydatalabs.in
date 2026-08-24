@@ -506,12 +506,17 @@ def airline_index():
     history = aviation.get_history()
     prev_score = history[-2]["score"] if len(history) >= 2 else None
     delta = (snapshot.score - prev_score) if prev_score is not None else 0.0
+    regional_history = aviation.get_regional_history()
+    regional_contributions = aviation.get_regional_contributions()
 
     html = render_template(
         "aviation.html",
         **_common(
             snapshot=snapshot,
             history=history,
+            regional_history=regional_history,
+            regional_contributions=regional_contributions,
+            regions=aviation.REGIONS,
             score=snapshot.score,
             prev_score=prev_score,
             level_label=snapshot.level_label,
@@ -1006,4 +1011,8 @@ Cite as: MyDataLabs Hormuz Crisis Index (HMX-INDEX), mydatalabs.in.
 
 @bp.route("/favicon.ico")
 def favicon():
-    return redirect("/static/img/favicon.png", code=301)
+    return send_from_directory(
+        os.path.join(current_app.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/x-icon",
+    )

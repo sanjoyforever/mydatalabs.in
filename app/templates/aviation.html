@@ -357,6 +357,79 @@
       </details>
     </section>
 
+    <!-- Regional Stress Contribution Analysis Chart -->
+    <section class="chart-card" aria-labelledby="regional-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="regional-heading" style="margin: 0; font-size: 1.25rem;">Regional Stress Contribution Analysis</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          Distinct localized operational stress contributions and primary bottlenecks (normalized per flight and fleet unit vs 100.0 baseline)
+        </span>
+      </div>
+
+      <div id="echart-regional-container"
+           class="chart-canvas"
+           style="height: 480px;"
+           role="img"
+           aria-label="Stacked contribution bar chart of operational stress components across 7 geographical regions.">
+        <p class="chart-fallback">Loading regional contribution chart…</p>
+      </div>
+
+      <!-- Regional Dominant Bottleneck Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border);">
+        {% for rc in regional_contributions %}
+        <div style="background: {% if rc.key == 'global' %}rgba(56, 189, 248, 0.06){% else %}var(--surface-2, rgba(255, 255, 255, 0.03)){% endif %}; border: 1px solid {% if rc.key == 'global' %}rgba(56, 189, 248, 0.35){% else %}var(--border){% endif %}; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">{{ rc.name }}</span>
+            <span class="status-badge status-{{ rc.level_status }}" style="font-size: 0.72rem; padding: 2px 8px;">{{ "%.1f"|format(rc.total_score) }}</span>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">{{ rc.subtext }}</div>
+          <div style="margin-top: 4px; font-size: 0.78rem; display: flex; align-items: center; gap: 6px;">
+            <span style="color: var(--accent-blue, #38BDF8); font-weight: 600;">#1 Bottleneck:</span>
+            <span style="color: var(--text-primary); font-weight: 500;">{{ rc.primary_bottleneck }}</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-secondary);">
+            Constitutes <strong style="color: var(--text-primary);">{{ rc.bottleneck_pct }}%</strong> of strain.
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <details class="chart-data-table" style="margin-top: 16px;">
+        <summary>View regional component points as a data table</summary>
+        <div class="table-responsive">
+          <table class="components-table">
+            <caption class="sr-only">Regional stress contribution breakdown table</caption>
+            <thead>
+              <tr>
+                <th scope="col">Region</th>
+                <th scope="col">Total Stress</th>
+                <th scope="col">Primary Bottleneck</th>
+                <th scope="col">Fleet Groundings</th>
+                <th scope="col">Airspace Detours</th>
+                <th scope="col">Fuel Crack</th>
+                <th scope="col">ATC Delays</th>
+                <th scope="col">FX &amp; Financial</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rc in regional_contributions %}
+              <tr>
+                <th scope="row" class="font-mono">{{ rc.name }}</th>
+                <td class="font-mono font-bold">{{ "%.1f"|format(rc.total_score) }}</td>
+                <td>{{ rc.primary_bottleneck }}</td>
+                <td class="font-mono">{{ "+%.1f"|format(rc.breakdown.fleet_grounding.points) }} pts</td>
+                <td class="font-mono">{{ "+%.1f"|format(rc.breakdown.detour_pct.points) }} pts</td>
+                <td class="font-mono">{{ "+%.1f"|format(rc.breakdown.crack_spread.points) }} pts</td>
+                <td class="font-mono">{{ "+%.1f"|format(rc.breakdown.atfm_delay.points) }} pts</td>
+                <td class="font-mono">{{ "+%.1f"|format(rc.breakdown.fx_equity.points) }} pts</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
     <!-- Component Breakdown Matrix -->
     <section class="components-card" aria-labelledby="components-heading">
       <div class="components-card-head">
@@ -681,6 +754,145 @@ if (chartDom && historyData && historyData.length > 0) {
   });
 }
 
+// Regional Stress Contribution EChart Initialisation
+const regionalContribs = {{ regional_contributions|tojson if regional_contributions else '[]' }};
+const regChartDom = document.getElementById('echart-regional-container');
+
+if (regChartDom && regionalContribs && regionalContribs.length > 0) {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof echarts !== 'undefined') {
+      const regChart = echarts.init(regChartDom);
+      window.avRegChart = regChart;
+
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+      // Order from bottom to top for horizontal bar presentation (highest at top)
+      const orderedRegions = [...regionalContribs].reverse();
+      const regionNames = orderedRegions.map(r => r.name);
+
+      const fleetData = orderedRegions.map(r => r.breakdown.fleet_grounding.points);
+      const detourData = orderedRegions.map(r => r.breakdown.detour_pct.points);
+      const delayData = orderedRegions.map(r => r.breakdown.atfm_delay.points);
+      const crackData = orderedRegions.map(r => r.breakdown.crack_spread.points);
+      const fxData = orderedRegions.map(r => r.breakdown.fx_equity.points);
+
+      const regOption = {
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { type: 'shadow' },
+          backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
+          borderColor: isDark ? '#334155' : '#CBD5E1',
+          textStyle: { color: isDark ? '#F8FAFC' : '#0F172A' },
+          formatter: function(params) {
+            const rIndex = params[0].dataIndex;
+            const region = orderedRegions[rIndex];
+            let res = '<div style="font-weight:700; margin-bottom:6px; font-size:0.9rem; border-bottom:1px solid ' + (isDark ? '#334155' : '#E2E8F0') + '; padding-bottom:4px;">' +
+                      region.name + ' &mdash; ' +
+                      '<span style="color:' + (region.total_score > 135 ? '#EF4444' : (region.total_score > 115 ? '#F59E0B' : '#10B981')) + ';">Score ' + region.total_score.toFixed(1) + '</span>' +
+                      '</div>';
+            res += '<div style="font-size:0.75rem; color:#94A3B8; margin-bottom:8px;">' + region.subtext + '</div>';
+
+            params.forEach(p => {
+              if (p.value > 0) {
+                res += '<div style="display:flex; justify-content:space-between; gap:16px; font-size:0.8rem; margin-bottom:3px;">' +
+                       '<span>' + p.marker + ' ' + p.seriesName + ':</span>' +
+                       '<strong style="font-family:var(--font-mono);">' + (p.value > 0 ? '+' : '') + p.value.toFixed(1) + ' pts</strong>' +
+                       '</div>';
+              }
+            });
+
+            res += '<div style="margin-top:8px; padding-top:6px; border-top:1px dashed ' + (isDark ? '#334155' : '#E2E8F0') + '; font-size:0.78rem;">' +
+                   '<span style="color:#38BDF8; font-weight:700;">#1 Bottleneck:</span> ' +
+                   '<strong>' + region.primary_bottleneck + '</strong> (' + region.bottleneck_pct + '% of strain)' +
+                   '</div>';
+
+            return res;
+          }
+        },
+        legend: {
+          show: true,
+          top: 6,
+          left: 'center',
+          icon: 'circle',
+          itemWidth: 10,
+          itemHeight: 10,
+          itemGap: 18,
+          textStyle: {
+            color: isDark ? '#E2E8F0' : '#334155',
+            fontSize: 12,
+            fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+          }
+        },
+        grid: { left: '3%', right: '8%', bottom: '8%', top: '12%', containLabel: true },
+        xAxis: {
+          type: 'value',
+          name: 'Strain Points (Above 100 Baseline)',
+          axisLine: { lineStyle: { color: isDark ? '#334155' : '#CBD5E1' } },
+          axisLabel: { color: '#94A3B8', fontSize: 11, formatter: '+{value} pts' },
+          splitLine: { lineStyle: { color: isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(0,0,0,0.06)' } }
+        },
+        yAxis: {
+          type: 'category',
+          data: regionNames,
+          axisLine: { lineStyle: { color: isDark ? '#334155' : '#CBD5E1' } },
+          axisLabel: {
+            color: isDark ? '#E2E8F0' : '#1E293B',
+            fontSize: 12,
+            fontWeight: 600
+          }
+        },
+        series: [
+          {
+            name: 'Fleet Groundings & Maintenance',
+            type: 'bar',
+            stack: 'total',
+            color: '#A855F7',
+            barWidth: 20,
+            data: fleetData
+          },
+          {
+            name: 'Airspace Detours & Geopolitics',
+            type: 'bar',
+            stack: 'total',
+            color: '#10B981',
+            barWidth: 20,
+            data: detourData
+          },
+          {
+            name: 'ATC & Flow Delays',
+            type: 'bar',
+            stack: 'total',
+            color: '#EF4444',
+            barWidth: 20,
+            data: delayData
+          },
+          {
+            name: 'Fuel Crack & Import Premiums',
+            type: 'bar',
+            stack: 'total',
+            color: '#F59E0B',
+            barWidth: 20,
+            data: crackData
+          },
+          {
+            name: 'FX & Financial Dislocation',
+            type: 'bar',
+            stack: 'total',
+            color: '#EC4899',
+            barWidth: 20,
+            itemStyle: { borderRadius: [0, 4, 4, 0] },
+            data: fxData
+          }
+        ]
+      };
+
+      regChart.setOption(regOption);
+      window.addEventListener('resize', () => regChart.resize());
+    }
+  });
+}
+
 const liveDefaults = {
   fuel: {{ press.crack_spread|round|int if press.crack_spread else 31 }},
   fleet: {{ press.fleet_grounding or 13.5 }},
@@ -719,6 +931,20 @@ function simRecalc() {
   const badgeEl = document.getElementById('sim-band-badge');
   badgeEl.className = bClass;
   badgeEl.innerText = bText;
+
+  if (typeof window.trackEvent === 'function') {
+    clearTimeout(window._simDebounceTimer);
+    window._simDebounceTimer = setTimeout(() => {
+      window.trackEvent('simulator_interact', {
+        index_name: 'airline-index',
+        simulated_score: simScore,
+        fuel_crack: f,
+        fleet_grounding: g,
+        atfm_delay: d,
+        detour_pct: det
+      });
+    }, 600);
+  }
 }
 
 function simReset() {
@@ -727,6 +953,9 @@ function simReset() {
   document.getElementById('sim-delay').value = liveDefaults.delay;
   document.getElementById('sim-detour').value = liveDefaults.detour;
   simRecalc();
+  if (typeof window.trackEvent === 'function') {
+    window.trackEvent('simulator_reset', { index_name: 'airline-index' });
+  }
 }
 </script>
 {% endblock %}

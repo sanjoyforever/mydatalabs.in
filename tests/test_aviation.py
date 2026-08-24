@@ -72,3 +72,41 @@ def test_home_page_spotlight(client):
     assert "AIRLINE PRESSURE INDEX" in html
     assert "Track. Analyze." in html
     assert "Fuel Crack Margins" in html
+
+
+def test_aviation_regional_contributions():
+    """Regional contributions return all 7 regions + global with structured breakdowns."""
+    contribs = aviation.get_regional_contributions()
+    assert len(contribs) == 8
+    keys = [c["key"] for c in contribs]
+    assert "south_asia" in keys
+    assert "middle_east" in keys
+    assert "europe" in keys
+    assert "americas" in keys
+    assert "south_east_asia" in keys
+    assert "south_west_pacific" in keys
+    assert "africa" in keys
+    assert "global" in keys
+
+    for c in contribs:
+        assert "name" in c
+        assert "total_score" in c
+        assert "primary_bottleneck" in c
+        assert "breakdown" in c
+        assert "fleet_grounding" in c["breakdown"]
+        assert "detour_pct" in c["breakdown"]
+        assert "crack_spread" in c["breakdown"]
+
+
+def test_airline_index_regional_chart(client):
+    """GET /airline-index renders both the Weekly Trajectory and Regional Contribution charts."""
+    response = client.get("/airline-index")
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert "Weekly Score Trajectory" in html
+    assert "echart-trend-container" in html
+    assert "Regional Stress Contribution Analysis" in html
+    assert "echart-regional-container" in html
+    assert "#1 Bottleneck" in html
+    assert "South Asia" in html
+    assert "Middle East" in html

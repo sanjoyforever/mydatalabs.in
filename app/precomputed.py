@@ -177,6 +177,9 @@ def _build_airline_index() -> dict:
     history = aviation.get_history()
     snapshot = aviation.compute_snapshot(values=live, allow_network=False)
 
+    regional_history = aviation.get_regional_history()
+    regional_contributions = aviation.get_regional_contributions()
+
     return {
         "live_values": live,
         "live_values_at": live_at,
@@ -187,6 +190,9 @@ def _build_airline_index() -> dict:
             "week_start": snapshot.week_start,
         },
         "history": history,
+        "regional_history": regional_history,
+        "regional_contributions": regional_contributions,
+        "regions": aviation.REGIONS,
     }
 
 

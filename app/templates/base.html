@@ -31,6 +31,7 @@
 <meta name="twitter:image" content="{{ origin }}/static/img/og-card.png">
 
 <!-- Favicons & Icons -->
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v={{ asset_v }}">
 <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='img/favicon.png') }}?v={{ asset_v }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}?v={{ asset_v }}">
 
@@ -71,7 +72,7 @@
 <script>
   (function () {
     var saved = localStorage.getItem("theme");
-    if (saved) document.documentElement.setAttribute("data-theme", saved);
+    document.documentElement.setAttribute("data-theme", saved || "light");
   })();
 
   // Global GA4 Event Tracking Helper — resilient against ad-blockers and missing scripts
@@ -115,11 +116,12 @@
 <!-- Header Bar -->
 <header class="site-header">
   <div class="brand-wrapper">
-    <a class="brand" href="{{ url_for('main.home') }}">
-      <div class="brand-icon" aria-hidden="true">
-        <span class="material-symbols-outlined">analytics</span>
+    <a class="brand" href="{{ url_for('main.home') }}" aria-label="MyDataLabs — Quantifying the Unquantifiable">
+      <img src="{{ url_for('static', filename='img/logo-icon.png') }}?v={{ asset_v }}" alt="MyDataLabs" class="brand-logo-img" width="36" height="36">
+      <div class="brand-text-block">
+        <span class="brand-name">MyDataLabs</span>
+        <span class="brand-tagline">Quantifying the Unquantifiable</span>
       </div>
-      <span class="brand-name">MyDataLabs</span>
     </a>
   </div>
 

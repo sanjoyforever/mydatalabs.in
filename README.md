@@ -5,12 +5,14 @@
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel_Serverless-black?style=flat-square&logo=vercel)](https://vercel.com/)
 [![Data licence](https://img.shields.io/badge/Data-CC_BY_4.0-green?style=flat-square)](https://creativecommons.org/licenses/by/4.0/)
 
-**MyDataLabs** publishes weekly composite indices for geopolitical stress, energy security and
-maritime chokepoints. Its flagship index, the **Hormuz Crisis Index (HMX-INDEX)**, scores conditions
-in the Strait of Hormuz against a calm baseline of 100.0.
+**MyDataLabs** publishes composite indices for geopolitical stress, energy security, maritime chokepoints, and commercial aviation operations.
+* **Tagline**: *"Quantifying the Unquantifiable"*
+* **Flagship Indices**:
+  * **Hormuz Crisis Index (HMX-INDEX)** &mdash; scores maritime security and energy supply in the Strait of Hormuz against a 100.0 calm baseline.
+  * **Airline Pressure Index (API-INDEX)** &mdash; weekly composite score and **7-Region Stress Contribution Analysis** across operational fleet groundings, crack spreads, and geopolitical airspace detours.
+  * **Lok Sabha Projection Engine (LS-PROJ)** &mdash; daily opinion tracker and seat projection model for Indian parliamentary elections.
 
-The site publishes its full methodology, its component weights and caps, its refresh cadence and its
-known limitations — and exposes the whole series as open JSON and CSV.
+The site publishes its full methodology, component weights and caps, refresh cadence and known limitations — and exposes the series as open JSON and CSV.
 
 ---
 
@@ -42,6 +44,8 @@ Three things that matter more than any feature in this repo:
 
 $$\text{Index Score} = 100.0 + \sum \Big[ \text{Weight}_i \times \text{StressScore}(\text{Current}_i, \text{Baseline}_i, \text{Cap}_i) \Big]$$
 
+### 1. Hormuz Crisis Index (HMX-INDEX)
+
 | Component | Weight | Baseline | Cap | Source | Cadence |
 | :--- | :---: | :---: | :---: | :--- | :--- |
 | Brent Crude | 30% | $64.77 / bbl | +55% | yfinance (`BZ=F`) | Daily, automatic |
@@ -52,20 +56,17 @@ $$\text{Index Score} = 100.0 + \sum \Big[ \text{Weight}_i \times \text{StressSco
 | VIX Volatility Index | 10% | 16.05 | +200% | yfinance (`^VIX`) | Daily, automatic |
 | Cape Reroutes | 5% | 8.0% of traffic | +250% | AIS / Vortexa | Weekly, manual |
 
-Baseline: January 2026 mean of daily closes, except ship traffic (IMF PortWatch's one-year reference window,
-2025-02-28 to 2026-02-27) and war-risk insurance (the pre-war market rate). Every cap is justified
-against a historical precedent — see
-`/methodology` on the live site, or `cap_rationale` on each `Component` in
-[`app/indices/hormuz.py`](app/indices/hormuz.py).
+### 2. Airline Pressure Index (API-INDEX)
 
-**The index is one-sided by design.** Stress scores floor at 0, so the composite cannot fall below
-100.0 — it measures crisis stress, not conditions calmer than baseline. Two-sided scoring is
-supported per-component via `Component(floor=-50)` but is off by default, because turning it on
-restates the whole published series.
-
-**Missing data is carried forward, never reset to baseline.** A component that cannot be fetched
-keeps its last known value, is flagged `stale`, and — if stale components reach 20% of index weight —
-marks the whole snapshot `degraded`, which surfaces a reduced-confidence notice on the dashboard.
+| Component | Weight | Baseline | Cap | Source | Cadence |
+| :--- | :---: | :---: | :---: | :--- | :--- |
+| Jet Fuel Crack Spread | 25% | $15.00 / bbl | $45.00 / bbl | yfinance (`HO=F` vs `BZ=F`) / EIA | Daily, automatic |
+| Fleet Grounding Ratio | 20% | 5.0% active fleet | 18.0% active fleet | OpenSky Network / Fleets | Weekly, manual |
+| ATFM En-Route Delays | 15% | 0.80 min / flt | 3.50 min / flt | Eurocontrol / FAA OPSNET | Weekly, manual |
+| Geopolitical Detour Extension | 15% | 4.0% route length | 18.0% route length | Flightradar24 / FIR Notices | Weekly, manual |
+| US Airline Equity Stress | 10% | 0.0% dislocation | 60.0% drawdown | NYSE Airline Index / yfinance | Daily, automatic |
+| Refinery Capacity Utilization | 10% | 92.0% utilization | 75.0% utilization | EIA Weekly Petroleum Status | Weekly, automatic |
+| SAF Blend Cost Overhead | 5% | $0.00 / bbl | $8.00 / bbl | Argus / Platts SAF Mandates | Monthly, manual |
 
 ---
 
@@ -73,19 +74,14 @@ marks the whole snapshot `degraded`, which surfaces a reduced-confidence notice 
 
 | Path | Purpose |
 | :--- | :--- |
-| `/` | Landing page and index overview |
+| `/` | Landing page, Featured Aviation Intelligence banner, live ticker |
+| `/airline-index` | Airline Pressure Index dashboard: trajectory, regional contribution breakdown, interactive simulator |
 | `/hormuz-index` | HMX-INDEX dashboard: gauge, trajectory, component matrix, press dispatch |
-| `/methodology` | Formula, weights, cap rationale, baseline selection, limitations |
-| `/data` | API documentation, response schema, correlation matrix, citation formats |
 | `/lok-sabha-index` | Lok Sabha Projection Engine: daily seat forecast + 2019/2024 backtest |
-| `/reports/<slug>` | Coming-soon placeholders (`noindex`) |
-| `/api/hormuz-index/data.json` | Current snapshot, components, correlations, full history |
+| `/terms`, `/privacy` | Legal disclaimers and methodology notes |
+| `/api/hormuz-index/data.json` | HMX-INDEX snapshot, components, correlations, full history |
 | `/api/hormuz-index/data.csv` | Weekly history with raw component values |
-| `/api/health` | Liveness, storage durability, snapshot cache age |
-| `/api/cron/update-hormuz` | Scheduled recompute + persist (`CRON_SECRET` protected) |
-| `/api/hormuz-index/sentiment` | Public Perception Index: `GET` aggregate, `POST` vote, `DELETE` withdraw |
-| `/api/lok-sabha-index/*` | Projection engine API — see `app/elections/routes.py` for the 15 endpoints |
-| `/sitemap.xml`, `/robots.txt`, `/llms.txt` | Crawler-facing files |
+| `/favicon.ico` | Multi-resolution site favicon |
 
 ---
 

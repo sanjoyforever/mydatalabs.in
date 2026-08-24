@@ -25,6 +25,17 @@ from app import storage
 
 INDEX_KEY = "aviation"
 DATA_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "aviation_history.json")
+REGIONAL_DATA_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "aviation_regional_history.json")
+
+REGIONS = [
+    {"key": "south_asia", "name": "South Asia", "color": "#F59E0B", "desc": "India, Pakistan, Bangladesh, Sri Lanka"},
+    {"key": "middle_east", "name": "Middle East", "color": "#EF4444", "desc": "GCC, Levant, Iraq, Iran"},
+    {"key": "europe", "name": "Europe", "color": "#38BDF8", "desc": "EU, UK, Turkey"},
+    {"key": "americas", "name": "Americas", "color": "#10B981", "desc": "North America & Latin America"},
+    {"key": "south_east_asia", "name": "South East Asia", "color": "#A855F7", "desc": "ASEAN Nations"},
+    {"key": "south_west_pacific", "name": "South West Pacific", "color": "#EC4899", "desc": "Australia, New Zealand, Pacific"},
+    {"key": "africa", "name": "Africa", "color": "#F97316", "desc": "North, West, East, South Africa"},
+]
 
 # --- Component definitions -------------------------------------------------
 
@@ -244,6 +255,30 @@ def save_history(history: list[dict]) -> bool:
             "last_updated": date.today().isoformat(),
         }
         return storage.save_history(INDEX_KEY, payload)
+
+
+def get_regional_history() -> list[dict]:
+    """Load weekly historical scores across the 7 geographical regions."""
+    try:
+        if os.path.exists(REGIONAL_DATA_FILE):
+            with open(REGIONAL_DATA_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return data.get("history", [])
+    except Exception:
+        pass
+    return []
+
+
+def get_regional_contributions() -> list[dict]:
+    """Load regional stress contributions and primary bottlenecks across the 7 regions."""
+    try:
+        if os.path.exists(REGIONAL_DATA_FILE):
+            with open(REGIONAL_DATA_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return data.get("regional_contributions", [])
+    except Exception:
+        pass
+    return []
 
 
 # --- Snapshot Computation --------------------------------------------------
