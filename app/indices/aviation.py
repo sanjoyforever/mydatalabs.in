@@ -44,7 +44,7 @@ COMPONENTS: list[Component] = [
         key="crack_spread",
         label="Jet Fuel Crack Spread",
         weight=0.25,
-        source="yfinance (HO=F vs BZ=F) / EIA",
+        source="Yahoo Finance (NYMEX HO vs ICE BZ) / EIA",
         cap_pct=200.0,  # $15 baseline -> $45 crisis (+200%)
         unit="$/bbl",
         cap_rationale=(
@@ -96,7 +96,7 @@ COMPONENTS: list[Component] = [
         key="equity_stress",
         label="Airline Equity Relative Stress",
         weight=0.10,
-        source="yfinance (JETS vs ^GSPC)",
+        source="Yahoo Finance (NYSE JETS vs S&P 500)",
         cap_pct=150.0,
         unit="index",
         cap_rationale=(
@@ -109,7 +109,7 @@ COMPONENTS: list[Component] = [
         key="fx_stress",
         label="FX Purchasing Power Dislocation",
         weight=0.10,
-        source="yfinance (EURUSD=X / DXY)",
+        source="Yahoo Finance (Forex EUR/USD, DXY)",
         cap_pct=100.0,
         unit="index",
         cap_rationale=(

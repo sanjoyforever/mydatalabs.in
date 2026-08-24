@@ -36,7 +36,7 @@ COMPONENTS: list[Component] = [
         key="brent",
         label="Brent Crude",
         weight=0.30,
-        source="yfinance (BZ=F)",
+        source="Yahoo Finance / ICE (BZ=F)",
         cap_pct=55,
         unit="$/bbl",
         cap_rationale=(
@@ -99,7 +99,7 @@ COMPONENTS: list[Component] = [
         key="ttf_gas",
         label="TTF European Gas",
         weight=0.10,
-        source="yfinance (TTF=F)",
+        source="Yahoo Finance / ICE (TTF=F)",
         cap_pct=95,
         unit="EUR/MWh",
         cap_rationale=(
@@ -113,7 +113,7 @@ COMPONENTS: list[Component] = [
         key="vix",
         label="VIX Volatility Index",
         weight=0.10,
-        source="yfinance (^VIX)",
+        source="Yahoo Finance / CBOE (^VIX)",
         cap_pct=200,
         unit="",
         cap_rationale=(

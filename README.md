@@ -48,23 +48,23 @@ $$\text{Index Score} = 100.0 + \sum \Big[ \text{Weight}_i \times \text{StressSco
 
 | Component | Weight | Baseline | Cap | Source | Cadence |
 | :--- | :---: | :---: | :---: | :--- | :--- |
-| Brent Crude | 30% | $64.77 / bbl | +55% | yfinance (`BZ=F`) | Daily, automatic |
+| Brent Crude | 30% | $64.77 / bbl | +55% | Yahoo Finance (`BZ=F`) | Daily, automatic |
 | Hormuz Transits (all commercial vessels) | 15% | 616 transits / wk | −90% (inverted) | IMF PortWatch | Weekly, manual |
 | War-Risk Insurance (per transit) | 15% | 0.25% hull value | +3900% | Marsh / market brokers | Weekly, manual |
 | Tanker Freight (BDTI) | 15% | 900 index points | +75% | Baltic Exchange | Weekly, manual |
-| TTF European Gas | 10% | 34.11 EUR / MWh | +95% | yfinance (`TTF=F`) | Daily, automatic |
-| VIX Volatility Index | 10% | 16.05 | +200% | yfinance (`^VIX`) | Daily, automatic |
+| TTF European Gas | 10% | 34.11 EUR / MWh | +95% | Yahoo Finance (`TTF=F`) | Daily, automatic |
+| VIX Volatility Index | 10% | 16.05 | +200% | Yahoo Finance (`^VIX`) | Daily, automatic |
 | Cape Reroutes | 5% | 8.0% of traffic | +250% | AIS / Vortexa | Weekly, manual |
 
 ### 2. Airline Pressure Index (API-INDEX)
 
 | Component | Weight | Baseline | Cap | Source | Cadence |
 | :--- | :---: | :---: | :---: | :--- | :--- |
-| Jet Fuel Crack Spread | 25% | $15.00 / bbl | $45.00 / bbl | yfinance (`HO=F` vs `BZ=F`) / EIA | Daily, automatic |
+| Jet Fuel Crack Spread | 25% | $15.00 / bbl | $45.00 / bbl | Yahoo Finance (`HO=F` vs `BZ=F`) / EIA | Daily, automatic |
 | Fleet Grounding Ratio | 20% | 5.0% active fleet | 18.0% active fleet | OpenSky Network / Fleets | Weekly, manual |
 | ATFM En-Route Delays | 15% | 0.80 min / flt | 3.50 min / flt | Eurocontrol / FAA OPSNET | Weekly, manual |
 | Geopolitical Detour Extension | 15% | 4.0% route length | 18.0% route length | Flightradar24 / FIR Notices | Weekly, manual |
-| US Airline Equity Stress | 10% | 0.0% dislocation | 60.0% drawdown | NYSE Airline Index / yfinance | Daily, automatic |
+| US Airline Equity Stress | 10% | 0.0% dislocation | 60.0% drawdown | Yahoo Finance (NYSE JETS vs S&P 500) | Daily, automatic |
 | Refinery Capacity Utilization | 10% | 92.0% utilization | 75.0% utilization | EIA Weekly Petroleum Status | Weekly, automatic |
 | SAF Blend Cost Overhead | 5% | $0.00 / bbl | $8.00 / bbl | Argus / Platts SAF Mandates | Monthly, manual |
 
