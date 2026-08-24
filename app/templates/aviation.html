@@ -321,13 +321,36 @@
 
       <div id="echart-trend-container"
            class="chart-canvas"
-           style="height: 460px;"
+           style="height: 480px;"
            role="img"
            aria-label="Line chart of the API-INDEX composite score for each week from {{ history[0].week_start if history else 'the start of the series' }} to {{ history[-1].week_start if history else 'now' }}.">
         <p class="chart-fallback">Loading trajectory chart…</p>
       </div>
 
-      <details class="chart-data-table">
+      <!-- Inflection Events & Trajectory Drivers -->
+      <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+            <span>📍</span> Key Trajectory Inflections &amp; Market Drivers
+          </h3>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">Annotated on timeline</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+          {% for m in milestones %}
+          <div style="background: var(--surface-2, rgba(255, 255, 255, 0.03)); border: 1px solid var(--border); border-left: 3px solid {% if m.type == 'peak' %}#EF4444{% else %}#10B981{% endif %}; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">{{ m.date }}</span>
+              <span class="status-badge status-{{ m.impact_class }}" style="font-size: 0.70rem; padding: 2px 6px;">{{ m.impact }}</span>
+            </div>
+            <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary); margin-top: 2px;">{{ m.title }}</div>
+            <div style="font-size: 0.75rem; color: var(--accent-blue, #38BDF8); font-weight: 600;">Driver: {{ m.driver }}</div>
+            <div style="font-size: 0.73rem; color: var(--text-secondary); line-height: 1.45; margin-top: 2px;">{{ m.description }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <details class="chart-data-table" style="margin-top: 16px;">
         <summary>View trajectory as a data table ({{ history|length }} weeks)</summary>
         <div class="table-responsive">
           <table class="components-table">
@@ -591,6 +614,7 @@ if (chartDom && historyData && historyData.length > 0) {
       const delays = historyData.map(h => (h.raw_values && h.raw_values.atfm_delay) || null);
       const detours = historyData.map(h => (h.raw_values && h.raw_values.detour_pct) || null);
       const equities = historyData.map(h => (h.raw_values && h.raw_values.equity_stress) || null);
+      const milestonesData = {{ milestones|tojson if milestones else '[]' }};
 
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
@@ -603,7 +627,8 @@ if (chartDom && historyData && historyData.length > 0) {
           borderColor: isDark ? '#334155' : '#CBD5E1',
           textStyle: { color: isDark ? '#F8FAFC' : '#0F172A' },
           formatter: function(params) {
-            let res = '<div style="font-weight:700; margin-bottom:4px; font-size:0.85rem;">Week of ' + params[0].axisValue + '</div>';
+            const dateStr = params[0].axisValue;
+            let res = '<div style="font-weight:700; margin-bottom:4px; font-size:0.85rem;">Week of ' + dateStr + '</div>';
             params.forEach(p => {
               if (p.value !== null && p.value !== undefined) {
                 res += '<div style="display:flex; justify-content:space-between; gap:14px; font-size:0.8rem;">' +
@@ -612,6 +637,16 @@ if (chartDom && historyData && historyData.length > 0) {
                        '</div>';
               }
             });
+
+            // If this date is a milestone inflection event
+            const milestone = milestonesData.find(m => m.date === dateStr);
+            if (milestone) {
+              res += '<div style="margin-top:8px; padding-top:6px; border-top:1px dashed ' + (isDark ? '#334155' : '#E2E8F0') + '; font-size:0.78rem;">' +
+                     '<div style="color:' + (milestone.type === 'peak' ? '#EF4444' : '#10B981') + '; font-weight:700;">📍 ' + milestone.title + ' (' + milestone.impact + ')</div>' +
+                     '<div style="color:' + (isDark ? '#94A3B8' : '#475569') + '; font-size:0.72rem; margin-top:2px; line-height:1.35;">' + milestone.description + '</div>' +
+                     '</div>';
+            }
+
             return res;
           }
         },
@@ -689,9 +724,38 @@ if (chartDom && historyData && historyData.length > 0) {
             smooth: true,
             lineStyle: { width: 3, color: '#38BDF8' },
             itemStyle: { color: '#38BDF8' },
+            markPoint: {
+              symbol: 'pin',
+              symbolSize: 32,
+              data: milestonesData.map(m => ({
+                name: m.title,
+                coord: [m.date, m.score],
+                value: m.label,
+                itemStyle: {
+                  color: m.type === 'peak' ? '#EF4444' : '#10B981'
+                }
+              }))
+            },
             markLine: {
-              silent: true,
-              data: [{ yAxis: 100, lineStyle: { type: 'dashed', color: '#94A3B8' }, label: { formatter: 'Baseline 100.0' } }]
+              symbol: ['none', 'none'],
+              data: [
+                { yAxis: 100, lineStyle: { type: 'dashed', color: '#94A3B8' }, label: { formatter: 'Baseline 100.0' } },
+                ...milestonesData.map(m => ({
+                  xAxis: m.date,
+                  lineStyle: {
+                    type: 'dotted',
+                    color: m.type === 'peak' ? 'rgba(239, 68, 68, 0.55)' : 'rgba(16, 185, 129, 0.55)',
+                    width: 1.5
+                  },
+                  label: {
+                    formatter: m.label,
+                    position: 'insideEndTop',
+                    color: m.type === 'peak' ? '#EF4444' : '#10B981',
+                    fontSize: 10,
+                    fontWeight: 600
+                  }
+                }))
+              ]
             },
             areaStyle: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [

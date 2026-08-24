@@ -179,6 +179,7 @@ def _build_airline_index() -> dict:
 
     regional_history = aviation.get_regional_history()
     regional_contributions = aviation.get_regional_contributions()
+    milestones = aviation.get_milestones()
 
     return {
         "live_values": live,
@@ -193,6 +194,7 @@ def _build_airline_index() -> dict:
         "regional_history": regional_history,
         "regional_contributions": regional_contributions,
         "regions": aviation.REGIONS,
+        "milestones": milestones,
     }
 
 

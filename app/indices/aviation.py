@@ -269,6 +269,76 @@ def get_regional_history() -> list[dict]:
     return []
 
 
+AVIATION_MILESTONES = [
+    {
+        "date": "2025-11-17",
+        "score": 112.8,
+        "type": "peak",
+        "label": "GTF Directives",
+        "title": "P&W GTF Inspection Directives",
+        "driver": "Fleet Grounding (+3.5%) & Crack Margins",
+        "impact": "+13.6 pts",
+        "impact_class": "serious",
+        "description": "FAA/EASA expanded powder-metal inspection directives for Pratt & Whitney GTF engines, accelerating grounding of A320neo fleets worldwide while autumn heating oil competition spiked jet crack margins to $36/bbl."
+    },
+    {
+        "date": "2026-01-05",
+        "score": 93.0,
+        "type": "dip",
+        "label": "Winter Trough",
+        "title": "Post-Holiday Distillate Normalization",
+        "driver": "Fuel Crack Margin Relief & Schedule Easing",
+        "impact": "-19.8 pts",
+        "impact_class": "good",
+        "description": "Refinery crack spreads normalized below $18/bbl and post-holiday seasonal flight schedule rationalization eased global airspace holding times to non-crisis baseline."
+    },
+    {
+        "date": "2026-01-26",
+        "score": 108.1,
+        "type": "peak",
+        "label": "Red Sea Detours",
+        "title": "Southern Red Sea Airspace Closures",
+        "driver": "Airspace Detours & Routing Overhead",
+        "impact": "+15.1 pts",
+        "impact_class": "warning",
+        "description": "Civil aviation authorities issued NOTAM warnings avoiding southern Red Sea and Yemen FIRs, forcing commercial airlines onto longer Egyptian and Saudi flight corridors."
+    },
+    {
+        "date": "2026-02-09",
+        "score": 98.0,
+        "type": "dip",
+        "label": "February Reset",
+        "title": "Crude Price Lull & Transit Easing",
+        "driver": "Off-Peak Travel & Stable Jet Pricing",
+        "impact": "-10.1 pts",
+        "impact_class": "good",
+        "description": "Temporary moderation in international crude prices and reduced winter transit demand allowed airlines to briefly recover scheduled turnaround performance."
+    },
+    {
+        "date": "2026-03-16",
+        "score": 118.8,
+        "type": "peak",
+        "label": "Gulf Crisis Shock",
+        "title": "Hormuz Dislocation & War-Risk Reroutes",
+        "driver": "Geopolitical Airspace Closures & Crude Spike",
+        "impact": "+20.8 pts",
+        "impact_class": "serious",
+        "description": "Escalation in the Strait of Hormuz sparked crude surges above $90/bbl, war-risk aviation insurance premiums, and massive rerouting of Europe-Asia traffic around Iranian and Iraqi airspace."
+    },
+    {
+        "date": "2026-08-17",
+        "score": 127.6,
+        "type": "peak",
+        "label": "Summer ATC Peak",
+        "title": "Eurocontrol Bottlenecks & Persistent Groundings",
+        "driver": "ATFM En-Route Delays (3.1m) & Engine Inspections",
+        "impact": "+12.5 pts",
+        "impact_class": "critical",
+        "description": "Peak summer European ATFM en-route delay minutes reached multi-year highs (3.10 min/flt), colliding with persistent engine supply chain groundings (19.4% in South Asia) to push index to 52-week high."
+    }
+]
+
+
 def get_regional_contributions() -> list[dict]:
     """Load regional stress contributions and primary bottlenecks across the 7 regions."""
     try:
@@ -279,6 +349,11 @@ def get_regional_contributions() -> list[dict]:
     except Exception:
         pass
     return []
+
+
+def get_milestones() -> list[dict]:
+    """Return key historical milestone events explaining rises and dips."""
+    return AVIATION_MILESTONES
 
 
 # --- Snapshot Computation --------------------------------------------------

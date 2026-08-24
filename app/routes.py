@@ -508,6 +508,7 @@ def airline_index():
     delta = (snapshot.score - prev_score) if prev_score is not None else 0.0
     regional_history = aviation.get_regional_history()
     regional_contributions = aviation.get_regional_contributions()
+    milestones = aviation.get_milestones()
 
     html = render_template(
         "aviation.html",
@@ -517,6 +518,7 @@ def airline_index():
             regional_history=regional_history,
             regional_contributions=regional_contributions,
             regions=aviation.REGIONS,
+            milestones=milestones,
             score=snapshot.score,
             prev_score=prev_score,
             level_label=snapshot.level_label,
