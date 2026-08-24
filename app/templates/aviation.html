@@ -327,29 +327,6 @@
         <p class="chart-fallback">Loading trajectory chart…</p>
       </div>
 
-      <!-- Inflection Events & Trajectory Drivers -->
-      <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
-            <span>📍</span> Key Trajectory Inflections &amp; Market Drivers
-          </h3>
-          <span style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">Annotated on timeline</span>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
-          {% for m in milestones %}
-          <div style="background: var(--surface-2, rgba(255, 255, 255, 0.03)); border: 1px solid var(--border); border-left: 3px solid {% if m.type == 'peak' %}#EF4444{% else %}#10B981{% endif %}; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">{{ m.date }}</span>
-              <span class="status-badge status-{{ m.impact_class }}" style="font-size: 0.70rem; padding: 2px 6px;">{{ m.impact }}</span>
-            </div>
-            <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary); margin-top: 2px;">{{ m.title }}</div>
-            <div style="font-size: 0.75rem; color: var(--accent-blue, #38BDF8); font-weight: 600;">Driver: {{ m.driver }}</div>
-            <div style="font-size: 0.73rem; color: var(--text-secondary); line-height: 1.45; margin-top: 2px;">{{ m.description }}</div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-
       <details class="chart-data-table" style="margin-top: 16px;">
         <summary>View trajectory as a data table ({{ history|length }} weeks)</summary>
         <div class="table-responsive">
@@ -724,35 +701,33 @@ if (chartDom && historyData && historyData.length > 0) {
             smooth: true,
             lineStyle: { width: 3, color: '#38BDF8' },
             itemStyle: { color: '#38BDF8' },
-            markPoint: {
-              symbol: 'pin',
-              symbolSize: 32,
-              data: milestonesData.map(m => ({
-                name: m.title,
-                coord: [m.date, m.score],
-                value: m.label,
-                itemStyle: {
-                  color: m.type === 'peak' ? '#EF4444' : '#10B981'
-                }
-              }))
-            },
             markLine: {
               symbol: ['none', 'none'],
               data: [
-                { yAxis: 100, lineStyle: { type: 'dashed', color: '#94A3B8' }, label: { formatter: 'Baseline 100.0' } },
+                {
+                  yAxis: 100,
+                  lineStyle: { type: 'dashed', color: '#94A3B8', width: 1.2 },
+                  label: { formatter: 'Baseline 100.0', position: 'insideEndTop', color: '#94A3B8', fontSize: 10 }
+                },
                 ...milestonesData.map(m => ({
                   xAxis: m.date,
                   lineStyle: {
-                    type: 'dotted',
-                    color: m.type === 'peak' ? 'rgba(239, 68, 68, 0.55)' : 'rgba(16, 185, 129, 0.55)',
+                    type: 'dashed',
+                    color: m.type === 'peak' ? 'rgba(239, 68, 68, 0.75)' : 'rgba(16, 185, 129, 0.75)',
                     width: 1.5
                   },
                   label: {
                     formatter: m.label,
-                    position: 'insideEndTop',
-                    color: m.type === 'peak' ? '#EF4444' : '#10B981',
+                    position: 'insideStartTop',
+                    rotate: 90,
+                    distance: [0, 8],
+                    color: m.type === 'peak' ? (isDark ? '#FCA5A5' : '#DC2626') : (isDark ? '#86EFAC' : '#059669'),
                     fontSize: 10,
-                    fontWeight: 600
+                    fontWeight: 600,
+                    fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
+                    padding: [2, 4],
+                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.75)' : 'rgba(255, 255, 255, 0.85)',
+                    borderRadius: 3
                   }
                 }))
               ]

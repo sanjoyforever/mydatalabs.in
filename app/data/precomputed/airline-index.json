@@ -1,11 +1,11 @@
 {
   "live_values": {
-    "crack_spread": 88.0,
+    "crack_spread": 87.94,
     "fleet_grounding": 13.54,
     "atfm_delay": 2.13,
     "detour_pct": 4.81,
     "equity_stress": 95.0,
-    "fx_stress": 19.8,
+    "fx_stress": 19.9,
     "cancellation_rate": 1.46
   },
   "live_values_at": "2026-08-24",

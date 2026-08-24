@@ -112,13 +112,12 @@ def test_aviation_milestones():
 
 
 def test_airline_index_regional_chart(client):
-    """GET /airline-index renders the Weekly Trajectory, Milestones, and Regional Contribution charts."""
+    """GET /airline-index renders the Weekly Trajectory and Regional Contribution charts."""
     response = client.get("/airline-index")
     assert response.status_code == 200
     html = response.get_data(as_text=True)
     assert "Weekly Score Trajectory" in html
     assert "echart-trend-container" in html
-    assert "Key Trajectory Inflections" in html
     assert "Regional Stress Contribution Analysis" in html
     assert "echart-regional-container" in html
     assert "#1 Bottleneck" in html
