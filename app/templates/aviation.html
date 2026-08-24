@@ -603,12 +603,13 @@ if (chartDom && historyData && historyData.length > 0) {
           backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
           borderColor: isDark ? '#334155' : '#CBD5E1',
           textStyle: { color: isDark ? '#F8FAFC' : '#0F172A' },
+          extraCssText: 'max-width: 320px; white-space: normal; word-break: break-word; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border-radius: 8px; z-index: 100;',
           formatter: function(params) {
             const dateStr = params[0].axisValue;
-            let res = '<div style="font-weight:700; margin-bottom:4px; font-size:0.85rem;">Week of ' + dateStr + '</div>';
+            let res = '<div style="font-weight:700; margin-bottom:6px; font-size:0.85rem; border-bottom:1px solid ' + (isDark ? '#334155' : '#E2E8F0') + '; padding-bottom:4px;">Week of ' + dateStr + '</div>';
             params.forEach(p => {
               if (p.value !== null && p.value !== undefined) {
-                res += '<div style="display:flex; justify-content:space-between; gap:14px; font-size:0.8rem;">' +
+                res += '<div style="display:flex; justify-content:space-between; gap:14px; font-size:0.8rem; margin-bottom:2px;">' +
                        '<span>' + p.marker + ' ' + p.seriesName + ':</span>' +
                        '<strong style="font-family:var(--font-mono);">' + (typeof p.value === 'number' ? p.value.toFixed(2) : p.value) + '</strong>' +
                        '</div>';
@@ -618,9 +619,9 @@ if (chartDom && historyData && historyData.length > 0) {
             // If this date is a milestone inflection event
             const milestone = milestonesData.find(m => m.date === dateStr);
             if (milestone) {
-              res += '<div style="margin-top:8px; padding-top:6px; border-top:1px dashed ' + (isDark ? '#334155' : '#E2E8F0') + '; font-size:0.78rem;">' +
-                     '<div style="color:' + (milestone.type === 'peak' ? '#EF4444' : '#10B981') + '; font-weight:700;">📍 ' + milestone.title + ' (' + milestone.impact + ')</div>' +
-                     '<div style="color:' + (isDark ? '#94A3B8' : '#475569') + '; font-size:0.72rem; margin-top:2px; line-height:1.35;">' + milestone.description + '</div>' +
+              res += '<div style="margin-top:8px; padding-top:6px; border-top:1px dashed ' + (isDark ? '#334155' : '#CBD5E1') + '; font-size:0.78rem; line-height:1.45; white-space:normal; word-wrap:break-word;">' +
+                     '<div style="color:' + (milestone.type === 'peak' ? '#EF4444' : '#10B981') + '; font-weight:700; margin-bottom:2px;">📍 ' + milestone.title + ' (' + milestone.impact + ')</div>' +
+                     '<div style="color:' + (isDark ? '#94A3B8' : '#475569') + '; font-size:0.73rem; line-height:1.4; word-break:break-word;">' + milestone.description + '</div>' +
                      '</div>';
             }
 
@@ -823,6 +824,7 @@ if (regChartDom && regionalContribs && regionalContribs.length > 0) {
           backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
           borderColor: isDark ? '#334155' : '#CBD5E1',
           textStyle: { color: isDark ? '#F8FAFC' : '#0F172A' },
+          extraCssText: 'max-width: 360px; white-space: normal; word-break: break-word; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border-radius: 8px; z-index: 100;',
           formatter: function(params) {
             const rIndex = params[0].dataIndex;
             const region = orderedRegions[rIndex];
