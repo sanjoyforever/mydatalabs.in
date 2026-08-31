@@ -80,6 +80,12 @@ DATA_PATHS = [
     # component values out of it on every run, so a deploy without it would
     # serve a score computed from figures production does not have.
     os.path.join("app", "data", "hormuz_manual.json"),
+    # The FRED-derived solvency series. Publishable data, not source:
+    # app/indices/solvency.py reads it on every request, so a deploy without
+    # it serves the solvency page against a history file production has not
+    # got. The precomputed artifact below is not a substitute — it is derived
+    # from this file, and goes stale the moment the series moves.
+    os.path.join("app", "data", "solvency_history.json"),
     os.path.join("app", "data", "vessel_attacks.json"),
     os.path.join("app", "data", "precomputed"),
     os.path.join("app", "data", "elections"),
@@ -142,6 +148,42 @@ def _pending_code_changes() -> list[str]:
             continue
         pending.append(line.rstrip())
     return pending
+
+
+def _fetch(branch: str) -> None:
+    """Refresh origin's state before reasoning about it.
+
+    Everything below compares against origin/<branch>, a local ref that is only
+    as current as the last fetch. Skipping this is how the script came to
+    announce "1 commit has not reached origin" and hand off to a push the
+    remote had already decided to reject: the ref was eleven commits stale and
+    nothing had asked git to look.
+
+    A failed fetch is not fatal — offline should not block a publish — because
+    every caller below already handles a missing or unchanged remote ref.
+    """
+    try:
+        _git("fetch", "origin", branch, capture=True)
+    except subprocess.CalledProcessError:
+        print(f"  NOTE: could not fetch origin/{branch}; "
+              "working from the last known remote state.")
+
+
+def _behind_commits(branch: str) -> list[str]:
+    """Commits origin has that this clone does not, newest first.
+
+    Any of these makes the push a non-fast-forward, which git refuses. Worth
+    naming rather than discovering through a raw `git push` error: the cause is
+    a diverged history, and the fix is a merge this script must not perform on
+    its own behalf.
+    """
+    remote = f"origin/{branch}"
+    try:
+        _git("rev-parse", "--verify", "--quiet", remote, capture=True)
+    except subprocess.CalledProcessError:
+        return []
+    out = _git("log", "--oneline", f"{branch}..{remote}", capture=True).stdout
+    return [line.rstrip() for line in out.splitlines() if line.strip()]
 
 
 def _unpushed_commits(branch: str) -> list[str] | None:
@@ -209,6 +251,24 @@ def push_to_prod(message: str | None = None, dry_run: bool = False, branch: str 
         # the script assumed it was on main is not a recoverable mistake.
         print(f"  ERROR: on branch '{here}', not '{branch}'.", file=sys.stderr)
         print(f"  Switch with `git checkout {branch}`, or pass --branch {here}.", file=sys.stderr)
+        return 1
+
+    _fetch(branch)
+    behind = _behind_commits(branch)
+    if behind:
+        # Refuse early and say why. Left to git, this surfaces as a bare
+        # "failed to push some refs" after the script has already committed,
+        # which reads like the publish broke rather than like the branch needs
+        # reconciling first.
+        print(f"  ERROR: origin/{branch} has {len(behind)} commit(s) this clone does not have.",
+              file=sys.stderr)
+        for line in behind[:10]:
+            print(f"    {line}", file=sys.stderr)
+        if len(behind) > 10:
+            print(f"    ... and {len(behind) - 10} more", file=sys.stderr)
+        print(f"  The push would be rejected as a non-fast-forward. Reconcile first:",
+              file=sys.stderr)
+        print(f"    git merge origin/{branch}", file=sys.stderr)
         return 1
 
     wanted = CODE_PATHS + DATA_PATHS if include_code else DATA_PATHS
