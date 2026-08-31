@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+
+{% block title %}Why we build indices — MyDataLabs{% endblock %}
+{% block meta_desc %}Every important question is argued in adjectives and settled by whoever is loudest. MyDataLabs compresses each one into a single number built by a rule published in advance — here is why, and what a single number cannot do.{% endblock %}
+{% block og_title %}Quantifying the Unquantifiable — MyDataLabs{% endblock %}
+{% block og_desc %}Why we convert a noisy topic into one number: the argument for composite indices, the principles behind every MyDataLabs series, and the limits of a single figure.{% endblock %}
+{% block twitter_title %}Quantifying the Unquantifiable — MyDataLabs{% endblock %}
+{% block twitter_desc %}Why we convert a noisy topic into one number, and what a single figure cannot express.{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": "{{ origin }}/about#about",
+  "url": "{{ origin }}/about",
+  "name": "Why we build indices",
+  "description": "The motivation behind the MyDataLabs composite indices: compressing a noisy, argued topic into one number built by a rule published in advance.",
+  "isPartOf": { "@id": "{{ origin }}/#website" },
+  "publisher": { "@id": "{{ origin }}/#organization" }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="{{ url_for('main.home') }}">Home</a>
+  <span aria-hidden="true">/</span>
+  <span aria-current="page">About</span>
+</nav>
+
+<article class="prose-page">
+  <header class="prose-header">
+    <span class="badge-tag">ABOUT THESE INDICES</span>
+    <h1>Quantifying the unquantifiable</h1>
+    <p class="prose-lede">
+      Every question worth asking — is the Gulf about to close, can Washington keep affording itself,
+      is flying getting worse, who wins the next election — is drowning in opinion and starved of
+      measurement. This site does one thing about that: it compresses each of those topics into a
+      single number, produced by a rule written down before the answer was known.
+    </p>
+  </header>
+
+  <nav class="toc" aria-label="On this page">
+    <h2>On this page</h2>
+    <ol>
+      <li><a href="#noise">The problem: loud, unfalsifiable, unresolvable</a></li>
+      <li><a href="#one-number">What one number actually buys you</a></li>
+      <li><a href="#principles">What every index here has in common</a></li>
+      <li><a href="#limits">What a single number cannot do</a></li>
+      <li><a href="#registry">The indices, today</a></li>
+    </ol>
+  </nav>
+
+  <section id="noise" aria-labelledby="noise-h">
+    <h2 id="noise-h">The problem: loud, unfalsifiable, unresolvable</h2>
+    <p>
+      Pick any consequential subject and look at what is written about it. There is no shortage of
+      material — there is a surplus. Analysts, wire copy, think-tank briefs, threads, television
+      panels. What almost none of it contains is a quantity.
+    </p>
+    <p>
+      Instead it contains adjectives: tensions are <em>escalating</em>, the debt path is
+      <em>unsustainable</em>, the aviation network is <em>strained</em>, the race is <em>tightening</em>.
+      Adjectives have three properties that make them useless for actually knowing anything:
+    </p>
+    <ul>
+      <li>
+        <strong>They do not compare.</strong> "Elevated tension" this week and "elevated tension" last
+        March are the same phrase attached to two different worlds. You cannot subtract one from the
+        other.
+      </li>
+      <li>
+        <strong>They cannot be wrong.</strong> A claim with no number attached can never be checked
+        against what happened next, so the people making them are never scored, and the confident ones
+        win by volume.
+      </li>
+      <li>
+        <strong>They hide the reasoning.</strong> When a verdict is a paragraph, you cannot see which
+        input drove it, or what would have had to change to reverse it.
+      </li>
+    </ul>
+    <p>
+      That is the noise. It is not that these subjects are genuinely unmeasurable — it is that almost
+      nobody commits to a measurement, because committing is the part that can make you look wrong.
+    </p>
+  </section>
+
+  <section id="one-number" aria-labelledby="one-number-h">
+    <h2 id="one-number-h">What one number actually buys you</h2>
+    <p>
+      An index is a promise: <em>here is the rule I will use to turn this mess into a figure, and I am
+      publishing the rule before I see the answer.</em> Everything useful follows from the promise,
+      not from the figure.
+    </p>
+    <p>
+      <strong>It makes the topic comparable across time.</strong> A reading of 128 this week against
+      112 in April is a statement with content. The number carries its own history, so trajectory —
+      usually the thing that actually matters — becomes visible instead of anecdotal.
+    </p>
+    <p>
+      <strong>It makes the reasoning inspectable.</strong> A composite is a sum of parts, and every
+      index here shows its parts. When the score moves you can see which input moved it, and you can
+      then disagree with a weight rather than with a mood.
+    </p>
+    <p>
+      <strong>It makes the author accountable.</strong> A published series cannot be quietly revised
+      after the event. The rule that produced today's reading is the rule that produced the readings
+      which aged badly, and both stay on the page.
+    </p>
+    <p>
+      <strong>It moves the argument somewhere productive.</strong> The interesting disagreement stops
+      being "is this serious" and becomes "is that the right weight for that input". That is an
+      argument that can be settled.
+    </p>
+  </section>
+
+  <section id="principles" aria-labelledby="principles-h">
+    <h2 id="principles-h">What every index here has in common</h2>
+    <p>
+      The subjects have nothing to do with each other. The discipline is identical, and it is the
+      reason a number here should be worth more than an opinion elsewhere.
+    </p>
+
+    <h3>A fixed, absolute definition of normal</h3>
+    <p>
+      Each index is scored against a concrete calm state, chosen once and never recalculated. The
+      convenient alternative — scoring each input against its own rolling average — quietly rewrites
+      history every time a new observation lands, and can only ever say "worse than usual", never
+      "bad".
+    </p>
+
+    <h3>The rule is published before the answer</h3>
+    <p>
+      Inputs, weights and thresholds are decided in advance and written down. Changing one restates the
+      entire series, so it is treated as a documented version change rather than a quiet correction.
+    </p>
+
+    <h3>The number always shows its parts</h3>
+    <p>
+      Nothing is published as a bare figure. The breakdown sits next to the headline, so a reader can
+      rebuild the composite — or reject the composite and keep the components.
+    </p>
+
+    <h3>Degradation is visible, not smoothed over</h3>
+    <p>
+      When an input goes stale or a source fails, the affected component is flagged and the reading is
+      marked degraded. A model that silently carries forward last week's value while presenting itself
+      as current is worse than no model at all.
+    </p>
+
+    <h3>Every figure is free to reuse</h3>
+    <p>
+      Index scores and their history are published under
+      <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_name }}</a>. Cite
+      them, replot them, argue with them.
+    </p>
+
+    <p>
+      What the inputs actually are, what each weight is, where each threshold was set and why — those
+      are specific to one index, so they are documented on that index's own dashboard, beside the
+      number they produce, rather than restated here.
+    </p>
+  </section>
+
+  <section id="limits" aria-labelledby="limits-h">
+    <h2 id="limits-h">What a single number cannot do</h2>
+    <div class="callout warning-callout" style="border-left: 4px solid var(--accent-orange, #f59e0b); padding: 1rem; background: rgba(245, 158, 11, 0.08); border-radius: 4px; margin-bottom: 1.5rem;">
+      Compression is the product, and compression is lossy. An index is a defensible summary of a
+      subject, never a replacement for it.
+    </div>
+    <ul>
+      <li>
+        <strong>The weights are judgement, not physics.</strong> They are argued on each dashboard, and
+        they remain opinions — held constant, published, and open to being wrong.
+      </li>
+      <li>
+        <strong>A composite can hide its own composition.</strong> Two very different weeks can score
+        the same. That is exactly why the breakdown sits beside the headline figure on every page.
+      </li>
+      <li>
+        <strong>The stress indices are one-sided.</strong> They measure stress against a calm baseline
+        and have a hard floor at it, so they cannot express conditions genuinely calmer than normal.
+      </li>
+      <li>
+        <strong>Some inputs are keyed by hand.</strong> Where no free machine-readable source exists,
+        the value is entered manually and refreshes on a slower cadence. Every component states its own
+        source and last-updated date.
+      </li>
+      <li>
+        <strong>None of this tells you what to do about it.</strong> These are measurements, not
+        advice — see the <a href="{{ url_for('main.terms_page') }}">terms and disclaimers</a>.
+      </li>
+    </ul>
+  </section>
+
+  <section id="registry" aria-labelledby="registry-h">
+    <h2 id="registry-h">The indices, today</h2>
+    <p>
+      Each live series is one noisy subject collapsed into one figure. Every dashboard carries its own
+      methodology — the full construction of that index, with the reasoning behind every choice in it.
+    </p>
+    <div class="table-responsive">
+      <table class="components-table table-sticky-first">
+        <caption class="sr-only">Live MyDataLabs indices, what each one measures and how often it updates</caption>
+        <thead>
+          <tr>
+            <th scope="col">Index</th>
+            <th scope="col">What it compresses</th>
+            <th scope="col">Updated</th>
+            <th scope="col">Construction</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for idx in indices %}
+          <tr>
+            <th scope="row">
+              <a href="{{ idx.url }}">{{ idx.title }}</a>
+              <span class="cell-muted font-mono">{{ idx.ticker }}</span>
+            </th>
+            <td class="cell-sub">{{ idx.compresses }}</td>
+            <td class="cell-sub">{{ idx.cadence }}</td>
+            <td><a href="{{ idx.url }}#methodology">Methodology</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="error-links">
+      <a href="{{ url_for('main.home') }}" class="btn-primary">See every index <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</article>
+{% endblock %}

@@ -37,12 +37,17 @@ RELEASE_NOTES_*.md
 # Design system and temp archives
 MyDataLabs Design System/
 MyDataLabs Design System.zip
-backup_*.zip
-.claude/
-airline_pressure_offline_analysis.html
 
 .vercel
 
 
 # npm — only the vercel CLI is a devDependency; the tree is 157 MB.
 node_modules/
+
+# Local working artifacts — never deploy these.
+backup_pre_material_refactor.zip
+*.zip
+insolvency.pdf
+
+# Generated backup of the CVoter master CSV (written by data_updater.py).
+*.csv.bak

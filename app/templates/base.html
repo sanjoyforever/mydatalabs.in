@@ -42,7 +42,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ asset_v }}">
-<link rel="alternate" type="application/json" title="HMX-INDEX data" href="{{ origin }}/api/hormuz-index/data.json">
 
 <!-- Global Schema.org JSON-LD -->
 <script type="application/ld+json">
@@ -126,39 +125,68 @@
   </div>
 
   <div class="header-right">
+    {# Rendered from nav_items (app/routes.py:build_nav) rather than listed
+       here, so the menu cannot drift from the set of indices that exist. #}
     <nav class="header-nav site-nav" aria-label="Primary">
-      <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('main.home') }}"{% if request.path == '/' %} aria-current="page"{% endif %}>
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">home</span>
-        <span>Home</span>
+      {%- for item in nav_items %}
+      {%- if item.kind == 'menu' %}
+      <div class="dropdown">
+        <button type="button" class="nav-link dropdown-toggle {% if item.active %}active{% endif %}"
+                aria-expanded="false" aria-haspopup="true">
+          <span class="material-symbols-outlined nav-icon" aria-hidden="true">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+          <span class="material-symbols-outlined dropdown-caret" aria-hidden="true">expand_more</span>
+        </button>
+        <div class="dropdown-menu" role="menu">
+          {%- for entry in item['items'] %}
+          <a role="menuitem" href="{{ entry.url }}"{% if entry.active %} aria-current="page" class="is-current"{% endif %}>
+            <span class="dropdown-item-label">{{ entry.label }}</span>
+            <span class="dropdown-item-ticker">{{ entry.ticker }}</span>
+          </a>
+          {%- endfor %}
+        </div>
+      </div>
+      {%- else %}
+      <a class="nav-link {% if item.active %}active{% endif %}" href="{{ item.url }}"{% if item.active %} aria-current="page"{% endif %}>
+        <span class="material-symbols-outlined nav-icon" aria-hidden="true">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
       </a>
-      <a class="nav-link {% if request.path == '/airline-index' %}active{% endif %}" href="{{ url_for('main.airline_index') }}"{% if request.path == '/airline-index' %} aria-current="page"{% endif %}>
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">flight_takeoff</span>
-        <span>Aviation</span>
-      </a>
-      <a class="nav-link {% if request.path == '/hormuz-index' %}active{% endif %}" href="{{ url_for('main.hormuz_index') }}"{% if request.path == '/hormuz-index' %} aria-current="page"{% endif %}>
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">monitoring</span>
-        <span>Intelligence</span>
-      </a>
-      <a class="nav-link {% if request.path == '/lok-sabha-index' %}active{% endif %}" href="{{ url_for('elections.lok_sabha_index') }}"{% if request.path == '/lok-sabha-index' %} aria-current="page"{% endif %}>
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">travel_explore</span>
-        <span>India</span>
-      </a>
-      <a class="nav-link" href="#">
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">public</span>
-        <span>Global</span>
-      </a>
-      <a class="nav-link {% if request.path == '/terms' %}active{% endif %}" href="{{ url_for('main.terms_page') }}"{% if request.path == '/terms' %} aria-current="page"{% endif %}>
-        <span class="material-symbols-outlined nav-icon" aria-hidden="true">info</span>
-        <span>About</span>
-      </a>
+      {%- endif %}
+      {%- endfor %}
     </nav>
 
     <div class="header-actions">
       <button type="button" id="theme-toggle" class="header-icon-btn theme-toggle" aria-label="Toggle color theme" aria-pressed="false" title="Toggle color theme">
         <span class="icon-sun" aria-hidden="true">☀</span><span class="icon-moon" aria-hidden="true">☾</span>
       </button>
+      {# Below the nav breakpoint the header carried no navigation at all — the
+         footer was the only way off a page on a phone. #}
+      <button type="button" id="nav-toggle" class="header-icon-btn nav-toggle"
+              aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span class="material-symbols-outlined icon-open" aria-hidden="true">menu</span>
+        <span class="material-symbols-outlined icon-close" aria-hidden="true">close</span>
+      </button>
     </div>
   </div>
+
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Primary (mobile)" hidden>
+    {%- for item in nav_items %}
+    {%- if item.kind == 'menu' %}
+    <p class="mobile-nav-group">{{ item.label }}</p>
+    {%- for entry in item['items'] %}
+    <a class="mobile-nav-link mobile-nav-sub {% if entry.active %}active{% endif %}" href="{{ entry.url }}"{% if entry.active %} aria-current="page"{% endif %}>
+      <span class="mobile-nav-label">{{ entry.label }}</span>
+      <span class="dropdown-item-ticker">{{ entry.ticker }}</span>
+    </a>
+    {%- endfor %}
+    {%- else %}
+    <a class="mobile-nav-link {% if item.active %}active{% endif %}" href="{{ item.url }}"{% if item.active %} aria-current="page"{% endif %}>
+      <span class="material-symbols-outlined nav-icon" aria-hidden="true">{{ item.icon }}</span>
+      <span class="mobile-nav-label">{{ item.label }}</span>
+    </a>
+    {%- endif %}
+    {%- endfor %}
+  </nav>
 </header>
 
 <main id="main-content" tabindex="-1">
@@ -171,9 +199,9 @@
       <a href="{{ license_url|default('https://creativecommons.org/licenses/by/4.0/') }}" rel="license noopener" target="_blank">{{ license_name|default('CC BY 4.0') }}</a>.
     </span>
     <div class="footer-right-links">
+      <a href="{{ url_for('main.about') }}">About</a>
       <a href="{{ url_for('main.terms_page') }}">Disclaimer</a>
       <a href="{{ url_for('main.hormuz_index') }}#methodology">Methodology</a>
-      <a href="/api/hormuz-index/data.json" target="_blank" rel="noopener">API</a>
       <a href="mailto:contact@mydatalabs.in">Contact</a>
       <span class="version-tag">v1.0.0</span>
     </div>

@@ -20,7 +20,7 @@
   <div class="error-links">
     <a href="{{ request.path }}" class="btn-primary">Reload this page</a>
     <a href="{{ url_for('main.home') }}" class="btn-secondary">Go to the homepage</a>
-    <a href="/api/hormuz-index/data.json" class="btn-secondary" target="_blank" rel="noopener">JSON API</a>
+    <a href="{{ url_for('main.hormuz_index') }}" class="btn-secondary">Hormuz Crisis Index</a>
   </div>
 </section>
 {% endblock %}

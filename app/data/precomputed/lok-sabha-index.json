@@ -1,7 +1,7 @@
 {
   "overview": {
-    "as_of_date": "2026-08-02",
-    "total_days_analyzed": 2771,
+    "as_of_date": "2026-08-16",
+    "total_days_analyzed": 2785,
     "metrics_tracked": 41,
     "actual_2024_nda": 293,
     "actual_2024_india": 234,
@@ -9,12 +9,12 @@
     "majority_threshold": 272,
     "latest_forecast": {
       "point_estimate": {
-        "composite_sentiment": -27.774,
-        "governance_score": 36.11,
+        "composite_sentiment": -27.213,
+        "governance_score": 36.39,
         "projected_vote_share": {
-          "NDA": 43.23,
-          "INDIA": 41.98,
-          "OTHERS": 14.8
+          "NDA": 43.25,
+          "INDIA": 41.96,
+          "OTHERS": 14.79
         },
         "predicted_seats": {
           "NDA": 274,
@@ -26,88 +26,88 @@
         "NDA": {
           "p5": 247,
           "p50": 274,
-          "p95": 300
+          "p95": 301
         },
         "INDIA": {
           "p5": 228,
           "p50": 253,
-          "p95": 279
+          "p95": 278
         }
       },
       "majority_probability": {
-        "NDA": 0.5603,
-        "INDIA": 0.11675,
-        "HUNG": 0.32295
+        "NDA": 0.5673,
+        "INDIA": 0.11345,
+        "HUNG": 0.31925
       },
       "n_simulations": 20000
     }
   },
   "trend_analytics": {
-    "as_of_date": "2026-08-02",
+    "as_of_date": "2026-08-16",
     "majority_threshold": 272,
     "series": {
       "NDA_proj_seats": {
         "series": "NDA_proj_seats",
-        "as_of_date": "2026-08-02",
+        "as_of_date": "2026-08-16",
         "current_estimate": 274,
         "previous_estimate": 274,
         "day_change": 0.0,
         "ma_7d": 274.0,
-        "ma_30d": 273.5333,
-        "trend_slope_per_day": 0.0498,
-        "trend_slope_r2": 0.7475,
-        "trend_slope_t_stat": 9.1044,
-        "trend_direction": "rising",
-        "trend_30d_total": 1.495,
+        "ma_30d": 274.0,
+        "trend_slope_per_day": -0.0,
+        "trend_slope_r2": null,
+        "trend_slope_t_stat": -3.9474,
+        "trend_direction": "flat",
+        "trend_30d_total": -0.0,
         "volatility": 0.1826,
-        "momentum": 0.4667,
-        "momentum_z": 0.9197,
+        "momentum": 0.0,
+        "momentum_z": null,
         "roc_14d": 0.0,
         "window_high": 274,
-        "window_low": 273,
-        "history_days": 2771
+        "window_low": 274,
+        "history_days": 2785
       },
       "INDIA_proj_seats": {
         "series": "INDIA_proj_seats",
-        "as_of_date": "2026-08-02",
+        "as_of_date": "2026-08-16",
         "current_estimate": 253,
         "previous_estimate": 253,
         "day_change": 0.0,
         "ma_7d": 253.0,
-        "ma_30d": 253.4667,
-        "trend_slope_per_day": -0.0498,
-        "trend_slope_r2": 0.7475,
-        "trend_slope_t_stat": -9.1044,
-        "trend_direction": "falling",
-        "trend_30d_total": -1.495,
+        "ma_30d": 253.0,
+        "trend_slope_per_day": -0.0,
+        "trend_slope_r2": null,
+        "trend_slope_t_stat": -4.8457,
+        "trend_direction": "flat",
+        "trend_30d_total": -0.0,
         "volatility": 0.1826,
-        "momentum": -0.4667,
-        "momentum_z": -0.9197,
+        "momentum": 0.0,
+        "momentum_z": null,
         "roc_14d": 0.0,
-        "window_high": 254,
+        "window_high": 253,
         "window_low": 253,
-        "history_days": 2771
+        "history_days": 2785
       },
       "composite_sentiment": {
         "series": "composite_sentiment",
-        "as_of_date": "2026-08-02",
-        "current_estimate": -28,
-        "previous_estimate": -28,
-        "day_change": 0.005,
-        "ma_7d": -27.7713,
-        "ma_30d": -28.3963,
-        "trend_slope_per_day": 0.0634,
-        "trend_slope_r2": 0.8391,
-        "trend_slope_t_stat": 12.0821,
+        "as_of_date": "2026-08-16",
+        "current_estimate": -27,
+        "previous_estimate": -27,
+        "day_change": -0.023,
+        "ma_7d": -27.4604,
+        "ma_30d": -27.7561,
+        "trend_slope_per_day": 0.0194,
+        "trend_slope_r2": 0.4905,
+        "trend_slope_t_stat": 5.1924,
         "trend_direction": "rising",
-        "trend_30d_total": 1.9033,
-        "volatility": 0.1535,
-        "momentum": 0.625,
-        "momentum_z": 1.025,
-        "roc_14d": 0.344,
-        "window_high": -28,
-        "window_low": -29,
-        "history_days": 2771
+        "trend_30d_total": 0.5809,
+        "volatility": 0.1412,
+        "momentum": 0.2956,
+        "momentum_z": 1.2147,
+        "roc_14d": 0.561,
+        "window_high": -27,
+        "window_low": -28,
+        "history_days": 2785
       }
     }
   },
@@ -483,47 +483,47 @@
   },
   "insights": {
     "summary": {
-      "as_of_date": "2026-08-02",
+      "as_of_date": "2026-08-16",
       "headlines": [
-        "NDA projects to 274 seats (\u00b126 at 90% confidence), 19 below its 2024 result of 293.",
-        "The most likely outcome is an NDA majority at 56%, with a hung parliament at 32%. The projection has sat above the 272 line for 1700 consecutive days.",
-        "The 30-day trend is rising at +0.050 seats/day (+1.5 seats over the window, R\u00b2 0.75), with the 7-day average above the 30-day by 0.5 seats.",
-        "The composite sentiment index reads -28 on a \u00b1100 scale, against -28.4 on the 30-day average. Daily volatility is 0.18 seats, so moves under roughly 0.4 seats are inside the day-to-day noise.",
-        "The single heaviest drag is \"Current expenses have become difficult to manage\" at 69.5% of respondents, contributing -10.9 index points."
+        "NDA projects to 274 seats (\u00b127 at 90% confidence), 19 below its 2024 result of 293.",
+        "The most likely outcome is an NDA majority at 57%, with a hung parliament at 32%. The projection has sat above the 272 line for 1714 consecutive days.",
+        "The 30-day trend is flat: the -0.000 seats/day slope is not statistically distinguishable from zero (t=-3.9).",
+        "The composite sentiment index reads -27 on a \u00b1100 scale, against -27.8 on the 30-day average. Daily volatility is 0.18 seats, so moves under roughly 0.4 seats are inside the day-to-day noise.",
+        "The single heaviest drag is \"Current expenses have become difficult to manage\" at 69.0% of respondents, contributing -10.8 index points."
       ],
       "drivers": {
         "negative": [
           {
             "metric": "Current expenses have become difficult to manage",
-            "share": 69.5,
-            "contribution": -10.921
+            "share": 69.03,
+            "contribution": -10.848
           },
           {
             "metric": "My life & the country both are in a poor state",
-            "share": 33.52,
-            "contribution": -7.183
+            "share": 33.21,
+            "contribution": -7.116
           },
           {
             "metric": "Will Deteriorate",
-            "share": 30.7,
-            "contribution": -5.701
+            "share": 30.5,
+            "contribution": -5.664
           }
         ],
         "positive": [
           {
             "metric": "Will Improve",
-            "share": 33.88,
-            "contribution": 6.292
+            "share": 34.72,
+            "contribution": 6.448
           },
           {
             "metric": "The country is moving forward and my life too",
-            "share": 35.46,
-            "contribution": 5.699
+            "share": 35.8,
+            "contribution": 5.754
           },
           {
             "metric": "Improved",
-            "share": 26.62,
-            "contribution": 4.237
+            "share": 27.01,
+            "contribution": 4.3
           }
         ]
       },
@@ -540,16 +540,16 @@
         "nda_vs_last_election": -19,
         "nda_ci": [
           247,
-          300
+          301
         ],
-        "prob_nda_majority": 0.5603,
-        "prob_hung": 0.32295,
-        "prob_india_majority": 0.11675,
-        "trend_slope_per_day": 0.0498,
-        "trend_direction": "rising",
+        "prob_nda_majority": 0.5673,
+        "prob_hung": 0.31925,
+        "prob_india_majority": 0.11345,
+        "trend_slope_per_day": -0.0,
+        "trend_direction": "flat",
         "volatility": 0.1826,
-        "momentum": 0.4667,
-        "composite": -28
+        "momentum": 0.0,
+        "composite": -27
       }
     },
     "impacts": {
@@ -647,7 +647,7 @@
           "post_seats": 271.7,
           "impact_seats": -4.0,
           "impact_composite": -7.4,
-          "z": -2.0,
+          "z": -2.01,
           "partial": false,
           "post_days_used": 30,
           "direction": "hurt NDA",
@@ -670,10 +670,10 @@
           "prior_expectation": "negative",
           "description": "Cockroach Janta Party and left student groups occupied Jantar Mantar for 50 days over exam irregularities, demanding Dharmendra Pradhan's resignation. Sonam Wangchuk began a hunger strike on 28 Jun and was hospitalised on 18 Jul.",
           "pre_seats": 276.7,
-          "post_seats": 273.7,
-          "impact_seats": -3.0,
-          "impact_composite": -5.76,
-          "z": -1.5,
+          "post_seats": 273.8,
+          "impact_seats": -2.9,
+          "impact_composite": -5.68,
+          "z": -1.47,
           "partial": true,
           "post_days_used": 30,
           "direction": "hurt NDA",
@@ -686,7 +686,7 @@
           ],
           "window": {
             "pre": "2026-05-07 .. 2026-06-05",
-            "post": "2026-06-06 .. 2026-08-02 (truncated by end of data)"
+            "post": "2026-06-06 .. 2026-08-16 (truncated by end of data)"
           },
           "within_noise": false
         },
@@ -743,11 +743,11 @@
           "within_noise": true
         }
       ],
-      "evaluated": 25,
+      "evaluated": 26,
       "reported": 7,
       "excluded": {
         "elections": 4,
-        "contradicts_nature": 5,
+        "contradicts_nature": 6,
         "below_noise_floor": 8
       },
       "method": {
@@ -25699,91 +25699,217 @@
       "NDA_proj_seats_ma30": 273.53,
       "INDIA_proj_seats_ma7": 253.0,
       "INDIA_proj_seats_ma30": 253.47
+    },
+    {
+      "date": "2026-08-03",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.57,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.43
+    },
+    {
+      "date": "2026-08-04",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.6,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.4
+    },
+    {
+      "date": "2026-08-05",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.63,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.37
+    },
+    {
+      "date": "2026-08-06",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.67,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.33
+    },
+    {
+      "date": "2026-08-07",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.7,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.3
+    },
+    {
+      "date": "2026-08-08",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.73,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.27
+    },
+    {
+      "date": "2026-08-09",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.77,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.23
+    },
+    {
+      "date": "2026-08-10",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.8,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.2
+    },
+    {
+      "date": "2026-08-11",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.83,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.17
+    },
+    {
+      "date": "2026-08-12",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.87,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.13
+    },
+    {
+      "date": "2026-08-13",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.9,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.1
+    },
+    {
+      "date": "2026-08-14",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.93,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.07
+    },
+    {
+      "date": "2026-08-15",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 273.97,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.03
+    },
+    {
+      "date": "2026-08-16",
+      "NDA_proj_seats": 274,
+      "INDIA_proj_seats": 253,
+      "NDA_proj_seats_ma7": 274.0,
+      "NDA_proj_seats_ma30": 274.0,
+      "INDIA_proj_seats_ma7": 253.0,
+      "INDIA_proj_seats_ma30": 253.0
     }
   ],
   "sentiment_breakdown": {
-    "as_of_date": "2026-08-02",
+    "as_of_date": "2026-08-16",
     "contributions": [
       {
         "tracker_id": 4,
         "tracker_name": "Index of Inflation",
         "metric_name": "Current expenses have become difficult to manage",
-        "share": 69.5,
+        "share": 69.03,
         "polarity": -1.0,
         "weight": 1.6,
-        "contribution": -10.921
+        "contribution": -10.848
       },
       {
         "tracker_id": 6,
         "tracker_name": "Self Nation",
         "metric_name": "My life & the country both are in a poor state",
-        "share": 33.52,
+        "share": 33.21,
         "polarity": -1.0,
         "weight": 1.8,
-        "contribution": -7.183
+        "contribution": -7.116
       },
       {
         "tracker_id": 5,
         "tracker_name": "Index of Optimism",
         "metric_name": "Will Improve",
-        "share": 33.88,
+        "share": 34.72,
         "polarity": 1.0,
         "weight": 1.5,
-        "contribution": 6.292
-      },
-      {
-        "tracker_id": 5,
-        "tracker_name": "Index of Optimism",
-        "metric_name": "Will Deteriorate",
-        "share": 30.7,
-        "polarity": -1.0,
-        "weight": 1.5,
-        "contribution": -5.701
+        "contribution": 6.448
       },
       {
         "tracker_id": 6,
         "tracker_name": "Self Nation",
         "metric_name": "The country is moving forward and my life too",
-        "share": 35.46,
+        "share": 35.8,
         "polarity": 1.0,
         "weight": 1.35,
-        "contribution": 5.699
+        "contribution": 5.754
+      },
+      {
+        "tracker_id": 5,
+        "tracker_name": "Index of Optimism",
+        "metric_name": "Will Deteriorate",
+        "share": 30.5,
+        "polarity": -1.0,
+        "weight": 1.5,
+        "contribution": -5.664
       },
       {
         "tracker_id": 3,
         "tracker_name": "Index of Income Expenditure",
         "metric_name": "Income went down while the expenditure went up",
-        "share": 38.54,
+        "share": 38.25,
         "polarity": -1.0,
         "weight": 1.5,
-        "contribution": -5.506
+        "contribution": -5.464
       },
       {
         "tracker_id": 2,
         "tracker_name": "Quality of Life Index",
         "metric_name": "Deteriorated",
-        "share": 31.44,
+        "share": 30.67,
         "polarity": -1.0,
         "weight": 1.4,
-        "contribution": -5.39
+        "contribution": -5.258
       },
       {
         "tracker_id": 2,
         "tracker_name": "Quality of Life Index",
         "metric_name": "Improved",
-        "share": 26.62,
+        "share": 27.01,
         "polarity": 1.0,
         "weight": 1.3,
-        "contribution": 4.237
+        "contribution": 4.3
       },
       {
         "tracker_id": 1,
         "tracker_name": "National Issues",
         "metric_name": "Unemployment",
-        "share": 22.66,
+        "share": 23.57,
         "polarity": -1.0,
         "weight": 1.5,
-        "contribution": -2.913
+        "contribution": -3.03
       },
       {
         "tracker_id": 1,
@@ -25798,109 +25924,109 @@
         "tracker_id": 3,
         "tracker_name": "Index of Income Expenditure",
         "metric_name": "Income remained the same while expenditure went up",
-        "share": 34.57,
+        "share": 34.49,
         "polarity": -0.7,
         "weight": 1.1,
-        "contribution": -2.535
+        "contribution": -2.529
       },
       {
         "tracker_id": 4,
         "tracker_name": "Index of Inflation",
         "metric_name": "Current expenses gone up; but still manageable",
-        "share": 23.73,
+        "share": 24.24,
         "polarity": -0.3,
         "weight": 0.8,
-        "contribution": -0.559
+        "contribution": -0.571
       },
       {
         "tracker_id": 6,
         "tracker_name": "Self Nation",
         "metric_name": "The country is moving forward but not my life",
-        "share": 20.53,
+        "share": 21.02,
         "polarity": 0.25,
         "weight": 0.9,
-        "contribution": 0.55
+        "contribution": 0.563
       },
       {
         "tracker_id": 1,
         "tracker_name": "National Issues",
         "metric_name": "Familiy Income Poverty",
-        "share": 5.16,
+        "share": 4.95,
         "polarity": -1.0,
         "weight": 1.2,
-        "contribution": -0.531
+        "contribution": -0.509
       },
       {
         "tracker_id": 1,
         "tracker_name": "National Issues",
         "metric_name": "Corruption",
-        "share": 5.67,
+        "share": 5.45,
         "polarity": -1.0,
         "weight": 1.0,
-        "contribution": -0.486
+        "contribution": -0.467
       },
       {
         "tracker_id": 4,
         "tracker_name": "Index of Inflation",
         "metric_name": "Current expenses have gone down",
-        "share": 4.38,
+        "share": 4.3,
         "polarity": 1.0,
         "weight": 1.0,
-        "contribution": 0.43
+        "contribution": 0.422
       },
       {
         "tracker_id": 3,
         "tracker_name": "Index of Income Expenditure",
         "metric_name": "Income went down, expenditure remained the same",
-        "share": 4.42,
+        "share": 4.28,
         "polarity": -0.8,
         "weight": 1.1,
-        "contribution": -0.37
+        "contribution": -0.359
       },
       {
         "tracker_id": 1,
         "tracker_name": "National Issues",
         "metric_name": "Electricity Road Water",
-        "share": 4.16,
+        "share": 4.06,
         "polarity": -1.0,
         "weight": 0.8,
-        "contribution": -0.285
+        "contribution": -0.278
       },
       {
         "tracker_id": 3,
         "tracker_name": "Index of Income Expenditure",
         "metric_name": "Income increased and the expenditure went down or remained the same",
-        "share": 1.91,
+        "share": 1.96,
         "polarity": 1.0,
         "weight": 1.2,
-        "contribution": 0.218
+        "contribution": 0.224
       },
       {
         "tracker_id": 6,
         "tracker_name": "Self Nation",
         "metric_name": "My life is improving but the country is in poor state",
-        "share": 6.17,
+        "share": 5.89,
         "polarity": -0.25,
         "weight": 0.9,
-        "contribution": -0.165
+        "contribution": -0.158
       },
       {
         "tracker_id": 3,
         "tracker_name": "Index of Income Expenditure",
         "metric_name": "Income increased but the expenditure went up as well",
-        "share": 12.11,
+        "share": 11.85,
         "polarity": 0.2,
         "weight": 0.6,
-        "contribution": 0.138
+        "contribution": 0.135
       },
       {
         "tracker_id": 1,
         "tracker_name": "National Issues",
         "metric_name": "Terror Attacks",
-        "share": 0.68,
+        "share": 0.5,
         "polarity": 1.0,
         "weight": 0.9,
-        "contribution": 0.052
+        "contribution": 0.039
       },
       {
         "tracker_id": 1,
@@ -25915,7 +26041,7 @@
         "tracker_id": 1,
         "tracker_name": "National Issues",
         "metric_name": "Other Issues",
-        "share": 31.74,
+        "share": 31.83,
         "polarity": 0.0,
         "weight": 0.0,
         "contribution": 0.0
@@ -25924,7 +26050,7 @@
         "tracker_id": 1,
         "tracker_name": "National Issues",
         "metric_name": "Don't Know/Can't Say",
-        "share": 7.78,
+        "share": 7.49,
         "polarity": 0.0,
         "weight": 0.0,
         "contribution": 0.0
@@ -25933,7 +26059,7 @@
         "tracker_id": 2,
         "tracker_name": "Quality of Life Index",
         "metric_name": "Remained the same",
-        "share": 40.48,
+        "share": 40.86,
         "polarity": 0.0,
         "weight": 0.2,
         "contribution": 0.0
@@ -25951,7 +26077,7 @@
         "tracker_id": 3,
         "tracker_name": "Index of Income Expenditure",
         "metric_name": "Income & expenditure both are same",
-        "share": 5.46,
+        "share": 6.09,
         "polarity": 0.0,
         "weight": 0.2,
         "contribution": 0.0
@@ -25960,7 +26086,7 @@
         "tracker_id": 3,
         "tracker_name": "Index of Income Expenditure",
         "metric_name": "Others/Don't Know/Can't Say",
-        "share": 2.99,
+        "share": 3.08,
         "polarity": 0.0,
         "weight": 0.0,
         "contribution": 0.0
@@ -25969,7 +26095,7 @@
         "tracker_id": 4,
         "tracker_name": "Index of Inflation",
         "metric_name": "Others/DK/CS",
-        "share": 2.39,
+        "share": 2.43,
         "polarity": 0.0,
         "weight": 0.0,
         "contribution": 0.0
@@ -25978,7 +26104,7 @@
         "tracker_id": 5,
         "tracker_name": "Index of Optimism",
         "metric_name": "Will remain the same",
-        "share": 12.82,
+        "share": 12.9,
         "polarity": 0.0,
         "weight": 0.2,
         "contribution": 0.0
@@ -25987,7 +26113,7 @@
         "tracker_id": 5,
         "tracker_name": "Index of Optimism",
         "metric_name": "Don't Know/Can't Say",
-        "share": 22.6,
+        "share": 21.88,
         "polarity": 0.0,
         "weight": 0.0,
         "contribution": 0.0
@@ -25996,17 +26122,17 @@
         "tracker_id": 6,
         "tracker_name": "Self Nation",
         "metric_name": "Don't Know/Can't Say",
-        "share": 4.32,
+        "share": 4.08,
         "polarity": 0.0,
         "weight": 0.0,
         "contribution": 0.0
       }
     ],
-    "positive_total": 17.616,
-    "negative_total": -45.39
+    "positive_total": 17.885,
+    "negative_total": -45.096
   },
   "ml_comparison": {
-    "as_of_date": "2026-08-02",
+    "as_of_date": "2026-08-16",
     "models": [
       {
         "NDA": 274,
@@ -26018,8 +26144,8 @@
       },
       {
         "NDA": 268,
-        "INDIA": 244,
-        "OTHERS": 31,
+        "INDIA": 243,
+        "OTHERS": 32,
         "model": "Softmax Swing Transfer (T=13.25)",
         "note": "Temperature fitted across observed elections; softer tail than cube law.",
         "majority_winner": "Hung Parliament"
@@ -26114,8 +26240,8 @@
     ],
     "data_range": {
       "first_date": "2019-01-01",
-      "last_date": "2026-08-02",
-      "rows": 2771
+      "last_date": "2026-08-16",
+      "rows": 2785
     }
   },
   "metrics_catalog": {
@@ -26129,10 +26255,10 @@
         "endpoint": "t160.json",
         "polarity": -1.0,
         "weight": 1.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 5.67
+        "last_date": "2026-08-16",
+        "latest_value": 5.45
       },
       {
         "tracker_id": 1,
@@ -26143,10 +26269,10 @@
         "endpoint": "t161.json",
         "polarity": -1.0,
         "weight": 1.5,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 22.66
+        "last_date": "2026-08-16",
+        "latest_value": 23.57
       },
       {
         "tracker_id": 1,
@@ -26157,10 +26283,10 @@
         "endpoint": "t162.json",
         "polarity": -1.0,
         "weight": 1.2,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 5.16
+        "last_date": "2026-08-16",
+        "latest_value": 4.95
       },
       {
         "tracker_id": 1,
@@ -26171,9 +26297,9 @@
         "endpoint": "t163.json",
         "polarity": -1.0,
         "weight": 1.5,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
+        "last_date": "2026-08-16",
         "latest_value": 22.12
       },
       {
@@ -26185,10 +26311,10 @@
         "endpoint": "t164.json",
         "polarity": -1.0,
         "weight": 0.8,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 4.16
+        "last_date": "2026-08-16",
+        "latest_value": 4.06
       },
       {
         "tracker_id": 1,
@@ -26199,10 +26325,10 @@
         "endpoint": "t165.json",
         "polarity": 1.0,
         "weight": 0.9,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 0.68
+        "last_date": "2026-08-16",
+        "latest_value": 0.5
       },
       {
         "tracker_id": 1,
@@ -26213,9 +26339,9 @@
         "endpoint": "t166.json",
         "polarity": -0.5,
         "weight": 0.6,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
+        "last_date": "2026-08-16",
         "latest_value": 0.03
       },
       {
@@ -26227,10 +26353,10 @@
         "endpoint": "t167.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 31.74
+        "last_date": "2026-08-16",
+        "latest_value": 31.83
       },
       {
         "tracker_id": 1,
@@ -26241,10 +26367,10 @@
         "endpoint": "t168.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 7.78
+        "last_date": "2026-08-16",
+        "latest_value": 7.49
       },
       {
         "tracker_id": 2,
@@ -26255,10 +26381,10 @@
         "endpoint": "t120.json",
         "polarity": 1.0,
         "weight": 1.3,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 26.62
+        "last_date": "2026-08-16",
+        "latest_value": 27.01
       },
       {
         "tracker_id": 2,
@@ -26269,10 +26395,10 @@
         "endpoint": "t121.json",
         "polarity": 0.0,
         "weight": 0.2,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 40.48
+        "last_date": "2026-08-16",
+        "latest_value": 40.86
       },
       {
         "tracker_id": 2,
@@ -26283,10 +26409,10 @@
         "endpoint": "t122.json",
         "polarity": -1.0,
         "weight": 1.4,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 31.44
+        "last_date": "2026-08-16",
+        "latest_value": 30.67
       },
       {
         "tracker_id": 2,
@@ -26297,9 +26423,9 @@
         "endpoint": "t123.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
+        "last_date": "2026-08-16",
         "latest_value": 1.46
       },
       {
@@ -26311,10 +26437,10 @@
         "endpoint": "t260.json",
         "polarity": 0.2,
         "weight": 0.6,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 12.11
+        "last_date": "2026-08-16",
+        "latest_value": 11.85
       },
       {
         "tracker_id": 3,
@@ -26325,10 +26451,10 @@
         "endpoint": "t261.json",
         "polarity": -0.7,
         "weight": 1.1,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 34.57
+        "last_date": "2026-08-16",
+        "latest_value": 34.49
       },
       {
         "tracker_id": 3,
@@ -26339,10 +26465,10 @@
         "endpoint": "t262.json",
         "polarity": -1.0,
         "weight": 1.5,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 38.54
+        "last_date": "2026-08-16",
+        "latest_value": 38.25
       },
       {
         "tracker_id": 3,
@@ -26353,10 +26479,10 @@
         "endpoint": "t263.json",
         "polarity": 1.0,
         "weight": 1.2,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 1.91
+        "last_date": "2026-08-16",
+        "latest_value": 1.96
       },
       {
         "tracker_id": 3,
@@ -26367,10 +26493,10 @@
         "endpoint": "t264.json",
         "polarity": -0.8,
         "weight": 1.1,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 4.42
+        "last_date": "2026-08-16",
+        "latest_value": 4.28
       },
       {
         "tracker_id": 3,
@@ -26381,10 +26507,10 @@
         "endpoint": "t265.json",
         "polarity": 0.0,
         "weight": 0.2,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 5.46
+        "last_date": "2026-08-16",
+        "latest_value": 6.09
       },
       {
         "tracker_id": 3,
@@ -26395,10 +26521,10 @@
         "endpoint": "t266.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 2.99
+        "last_date": "2026-08-16",
+        "latest_value": 3.08
       },
       {
         "tracker_id": 4,
@@ -26409,10 +26535,10 @@
         "endpoint": "t270.json",
         "polarity": -0.3,
         "weight": 0.8,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 23.73
+        "last_date": "2026-08-16",
+        "latest_value": 24.24
       },
       {
         "tracker_id": 4,
@@ -26423,10 +26549,10 @@
         "endpoint": "t271.json",
         "polarity": -1.0,
         "weight": 1.6,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 69.5
+        "last_date": "2026-08-16",
+        "latest_value": 69.03
       },
       {
         "tracker_id": 4,
@@ -26437,10 +26563,10 @@
         "endpoint": "t272.json",
         "polarity": 1.0,
         "weight": 1.0,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 4.38
+        "last_date": "2026-08-16",
+        "latest_value": 4.3
       },
       {
         "tracker_id": 4,
@@ -26451,10 +26577,10 @@
         "endpoint": "t273.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2487,
+        "points": 2501,
         "first_date": "2019-10-12",
-        "last_date": "2026-08-02",
-        "latest_value": 2.39
+        "last_date": "2026-08-16",
+        "latest_value": 2.43
       },
       {
         "tracker_id": 5,
@@ -26465,10 +26591,10 @@
         "endpoint": "t130.json",
         "polarity": 1.0,
         "weight": 1.5,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 33.88
+        "last_date": "2026-08-16",
+        "latest_value": 34.72
       },
       {
         "tracker_id": 5,
@@ -26479,10 +26605,10 @@
         "endpoint": "t131.json",
         "polarity": 0.0,
         "weight": 0.2,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 12.82
+        "last_date": "2026-08-16",
+        "latest_value": 12.9
       },
       {
         "tracker_id": 5,
@@ -26493,10 +26619,10 @@
         "endpoint": "t132.json",
         "polarity": -1.0,
         "weight": 1.5,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 30.7
+        "last_date": "2026-08-16",
+        "latest_value": 30.5
       },
       {
         "tracker_id": 5,
@@ -26507,10 +26633,10 @@
         "endpoint": "t133.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 22.6
+        "last_date": "2026-08-16",
+        "latest_value": 21.88
       },
       {
         "tracker_id": 6,
@@ -26521,10 +26647,10 @@
         "endpoint": "t140.json",
         "polarity": 0.25,
         "weight": 0.9,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 20.53
+        "last_date": "2026-08-16",
+        "latest_value": 21.02
       },
       {
         "tracker_id": 6,
@@ -26535,10 +26661,10 @@
         "endpoint": "t141.json",
         "polarity": 1.0,
         "weight": 1.35,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 35.46
+        "last_date": "2026-08-16",
+        "latest_value": 35.8
       },
       {
         "tracker_id": 6,
@@ -26549,10 +26675,10 @@
         "endpoint": "t142.json",
         "polarity": -0.25,
         "weight": 0.9,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 6.17
+        "last_date": "2026-08-16",
+        "latest_value": 5.89
       },
       {
         "tracker_id": 6,
@@ -26563,10 +26689,10 @@
         "endpoint": "t143.json",
         "polarity": -1.0,
         "weight": 1.8,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 33.52
+        "last_date": "2026-08-16",
+        "latest_value": 33.21
       },
       {
         "tracker_id": 6,
@@ -26577,10 +26703,10 @@
         "endpoint": "t144.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 4.32
+        "last_date": "2026-08-16",
+        "latest_value": 4.08
       },
       {
         "tracker_id": 7,
@@ -26591,10 +26717,10 @@
         "endpoint": "t220.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 23.22
+        "last_date": "2026-08-16",
+        "latest_value": 22.88
       },
       {
         "tracker_id": 7,
@@ -26605,10 +26731,10 @@
         "endpoint": "t221.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 1.47
+        "last_date": "2026-08-16",
+        "latest_value": 1.24
       },
       {
         "tracker_id": 7,
@@ -26619,10 +26745,10 @@
         "endpoint": "t222.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 5.98
+        "last_date": "2026-08-16",
+        "latest_value": 5.28
       },
       {
         "tracker_id": 7,
@@ -26633,10 +26759,10 @@
         "endpoint": "t223.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 0.4
+        "last_date": "2026-08-16",
+        "latest_value": 0.63
       },
       {
         "tracker_id": 7,
@@ -26647,10 +26773,10 @@
         "endpoint": "t224.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 58.79
+        "last_date": "2026-08-16",
+        "latest_value": 59.27
       },
       {
         "tracker_id": 7,
@@ -26661,10 +26787,10 @@
         "endpoint": "t225.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 0.38
+        "last_date": "2026-08-16",
+        "latest_value": 0.45
       },
       {
         "tracker_id": 7,
@@ -26675,10 +26801,10 @@
         "endpoint": "t226.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 4.53
+        "last_date": "2026-08-16",
+        "latest_value": 4.78
       },
       {
         "tracker_id": 7,
@@ -26689,10 +26815,10 @@
         "endpoint": "t227.json",
         "polarity": 0.0,
         "weight": 0.0,
-        "points": 2771,
+        "points": 2785,
         "first_date": "2019-01-01",
-        "last_date": "2026-08-02",
-        "latest_value": 1.97
+        "last_date": "2026-08-16",
+        "latest_value": 2.04
       }
     ]
   },
@@ -26776,14 +26902,14 @@
     }
   },
   "data_status": {
-    "local_latest_date": "2026-08-02",
-    "last_update": "2026-08-23T09:40:54+00:00",
+    "local_latest_date": "2026-08-16",
+    "last_update": "2026-08-31T16:16:23+00:00",
     "master_csv_exists": true
   },
   "majority_threshold": 272,
   "headline": {
     "value": 274,
     "unit": "NDA seats",
-    "as_of": "2026-08-02"
+    "as_of": "2026-08-16"
   }
 }

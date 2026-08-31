@@ -198,12 +198,51 @@ def _build_airline_index() -> dict:
     }
 
 
+def _build_solvency_index() -> dict:
+    """Snapshot and projection band for the U.S. Sovereign Solvency Index.
+
+    Unlike the other indices this one fetches nothing at build time: the annual
+    series is rebuilt from FRED once a year by scripts/build_solvency_history.py
+    and committed. All this does is precompute the derived views so the route
+    is a disk read.
+    """
+    from app.indices import solvency
+
+    snapshot = solvency.compute_snapshot()
+    projections = solvency.projections()
+
+    return {
+        "snapshot": {
+            "score": snapshot.score,
+            "level_label": snapshot.level_label,
+            "level_status": snapshot.level_status,
+            "year": snapshot.week_start,
+        },
+        "latest": solvency.latest_row(),
+        "decades": solvency.decade_averages(),
+        "turning_points": solvency.turning_points_with_scores(),
+        "projections": projections,
+        "horizon": solvency.horizon_summary(projections),
+        "quadrant_points": solvency.quadrant_points(),
+        "quadrant_counts": solvency.quadrant_counts(),
+        "decomposition": solvency.debt_decomposition(),
+        "simulator": solvency.simulator_defaults(),
+        "presidential": solvency.presidential_comparison(),
+        "executive_summary": solvency.executive_summary(),
+        "defence": solvency.defence_burden_summary(),
+        "war_periods": solvency.war_periods_measured(),
+        "debt_by_administration": solvency.debt_by_administration(),
+        "fiscal_items": solvency.fiscal_items_with_impact(),
+    }
+
+
 def _build_home() -> dict:
     """Headline figure for each report card on the landing page."""
-    from app.indices import aviation, hormuz
+    from app.indices import aviation, hormuz, solvency
 
     aviation_snap = aviation.compute_snapshot(allow_network=False)
     snapshot = hormuz.compute_snapshot(persist=False)
+    solvency_snap = solvency.compute_snapshot()
     ls = load("lok-sabha-index").get("headline")
 
     return {
@@ -217,6 +256,11 @@ def _build_home() -> dict:
                 "value": f"{snapshot.score:.1f}",
                 "unit": "score",
                 "status": snapshot.level_status,
+            },
+            "solvency-index": {
+                "value": f"{solvency_snap.score:.1f}",
+                "unit": "score",
+                "status": solvency_snap.level_status,
             },
             "lok-sabha-index": {
                 "value": str(ls["value"]) if ls else None,
@@ -334,6 +378,7 @@ def _build_lok_sabha_index() -> dict:
 
 BUILDERS = {
     "airline-index": _build_airline_index,
+    "solvency-index": _build_solvency_index,
     "hormuz-index": _build_hormuz_index,
     "lok-sabha-index": _build_lok_sabha_index,
     "home": _build_home,

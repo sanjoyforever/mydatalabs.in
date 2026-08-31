@@ -110486,3 +110486,577 @@ date,tracker_id,tracker_name,metric_name,option_index,polarity,weight,value
 2026-08-02,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.38
 2026-08-02,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.53
 2026-08-02,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,1.97
+2026-08-03,1,National Issues,Corruption,0,-1.0,1.0,5.58
+2026-08-03,1,National Issues,Unemployment,1,-1.0,1.5,22.51
+2026-08-03,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,5.19
+2026-08-03,1,National Issues,Rising Prices,3,-1.0,1.5,22.42
+2026-08-03,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.1
+2026-08-03,1,National Issues,Terror Attacks,5,1.0,0.9,0.65
+2026-08-03,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-03,1,National Issues,Other Issues,7,0.0,0.0,31.75
+2026-08-03,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.77
+2026-08-03,2,Quality of Life Index,Improved,0,1.0,1.3,26.7
+2026-08-03,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.24
+2026-08-03,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.6
+2026-08-03,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.46
+2026-08-03,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.24
+2026-08-03,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.3
+2026-08-03,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.54
+2026-08-03,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.93
+2026-08-03,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.59
+2026-08-03,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.44
+2026-08-03,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,2.96
+2026-08-03,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.81
+2026-08-03,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.4
+2026-08-03,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.41
+2026-08-03,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.38
+2026-08-03,5,Index of Optimism,Will Improve,0,1.0,1.5,34.03
+2026-08-03,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.53
+2026-08-03,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.76
+2026-08-03,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.68
+2026-08-03,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.43
+2026-08-03,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.55
+2026-08-03,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,6.18
+2026-08-03,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.55
+2026-08-03,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.29
+2026-08-03,7,Media Usage,TV news channels,0,0.0,0.0,23.11
+2026-08-03,7,Media Usage,Radio,1,0.0,0.0,1.39
+2026-08-03,7,Media Usage,Newspapers,2,0.0,0.0,5.95
+2026-08-03,7,Media Usage,News magazines,3,0.0,0.0,0.48
+2026-08-03,7,Media Usage,Internet / social media,4,0.0,0.0,58.91
+2026-08-03,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.39
+2026-08-03,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.6
+2026-08-03,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,1.98
+2026-08-04,1,National Issues,Corruption,0,-1.0,1.0,5.63
+2026-08-04,1,National Issues,Unemployment,1,-1.0,1.5,22.67
+2026-08-04,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,5.21
+2026-08-04,1,National Issues,Rising Prices,3,-1.0,1.5,21.95
+2026-08-04,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.19
+2026-08-04,1,National Issues,Terror Attacks,5,1.0,0.9,0.66
+2026-08-04,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-04,1,National Issues,Other Issues,7,0.0,0.0,31.88
+2026-08-04,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.78
+2026-08-04,2,Quality of Life Index,Improved,0,1.0,1.3,26.67
+2026-08-04,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.44
+2026-08-04,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.48
+2026-08-04,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.41
+2026-08-04,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.2
+2026-08-04,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.53
+2026-08-04,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.39
+2026-08-04,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.91
+2026-08-04,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.51
+2026-08-04,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.51
+2026-08-04,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,2.95
+2026-08-04,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.98
+2026-08-04,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.31
+2026-08-04,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.36
+2026-08-04,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.35
+2026-08-04,5,Index of Optimism,Will Improve,0,1.0,1.5,33.91
+2026-08-04,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.75
+2026-08-04,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.67
+2026-08-04,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.67
+2026-08-04,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.38
+2026-08-04,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.61
+2026-08-04,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,6.13
+2026-08-04,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.67
+2026-08-04,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.21
+2026-08-04,7,Media Usage,TV news channels,0,0.0,0.0,23.28
+2026-08-04,7,Media Usage,Radio,1,0.0,0.0,1.43
+2026-08-04,7,Media Usage,Newspapers,2,0.0,0.0,5.97
+2026-08-04,7,Media Usage,News magazines,3,0.0,0.0,0.47
+2026-08-04,7,Media Usage,Internet / social media,4,0.0,0.0,58.74
+2026-08-04,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.38
+2026-08-04,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.56
+2026-08-04,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,1.95
+2026-08-05,1,National Issues,Corruption,0,-1.0,1.0,5.58
+2026-08-05,1,National Issues,Unemployment,1,-1.0,1.5,22.55
+2026-08-05,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,5.15
+2026-08-05,1,National Issues,Rising Prices,3,-1.0,1.5,22.08
+2026-08-05,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.23
+2026-08-05,1,National Issues,Terror Attacks,5,1.0,0.9,0.64
+2026-08-05,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-05,1,National Issues,Other Issues,7,0.0,0.0,31.94
+2026-08-05,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.8
+2026-08-05,2,Quality of Life Index,Improved,0,1.0,1.3,26.65
+2026-08-05,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.4
+2026-08-05,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.45
+2026-08-05,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.5
+2026-08-05,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.17
+2026-08-05,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.57
+2026-08-05,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.35
+2026-08-05,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.91
+2026-08-05,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.48
+2026-08-05,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.52
+2026-08-05,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.0
+2026-08-05,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.96
+2026-08-05,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.38
+2026-08-05,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.33
+2026-08-05,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.33
+2026-08-05,5,Index of Optimism,Will Improve,0,1.0,1.5,33.83
+2026-08-05,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.66
+2026-08-05,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.78
+2026-08-05,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.73
+2026-08-05,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.51
+2026-08-05,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.5
+2026-08-05,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,6.24
+2026-08-05,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.57
+2026-08-05,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.18
+2026-08-05,7,Media Usage,TV news channels,0,0.0,0.0,23.3
+2026-08-05,7,Media Usage,Radio,1,0.0,0.0,1.49
+2026-08-05,7,Media Usage,Newspapers,2,0.0,0.0,5.89
+2026-08-05,7,Media Usage,News magazines,3,0.0,0.0,0.48
+2026-08-05,7,Media Usage,Internet / social media,4,0.0,0.0,58.88
+2026-08-05,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.36
+2026-08-05,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.52
+2026-08-05,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,1.93
+2026-08-06,1,National Issues,Corruption,0,-1.0,1.0,5.64
+2026-08-06,1,National Issues,Unemployment,1,-1.0,1.5,22.42
+2026-08-06,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,5.1
+2026-08-06,1,National Issues,Rising Prices,3,-1.0,1.5,22.09
+2026-08-06,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.22
+2026-08-06,1,National Issues,Terror Attacks,5,1.0,0.9,0.62
+2026-08-06,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-06,1,National Issues,Other Issues,7,0.0,0.0,32.02
+2026-08-06,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.86
+2026-08-06,2,Quality of Life Index,Improved,0,1.0,1.3,26.45
+2026-08-06,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.5
+2026-08-06,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.62
+2026-08-06,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.43
+2026-08-06,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.04
+2026-08-06,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.61
+2026-08-06,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.48
+2026-08-06,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.86
+2026-08-06,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.53
+2026-08-06,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.49
+2026-08-06,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,2.99
+2026-08-06,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.7
+2026-08-06,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.62
+2026-08-06,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.33
+2026-08-06,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.35
+2026-08-06,5,Index of Optimism,Will Improve,0,1.0,1.5,33.8
+2026-08-06,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.67
+2026-08-06,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.76
+2026-08-06,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.77
+2026-08-06,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.55
+2026-08-06,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.38
+2026-08-06,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,6.25
+2026-08-06,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.61
+2026-08-06,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.21
+2026-08-06,7,Media Usage,TV news channels,0,0.0,0.0,23.34
+2026-08-06,7,Media Usage,Radio,1,0.0,0.0,1.45
+2026-08-06,7,Media Usage,Newspapers,2,0.0,0.0,5.81
+2026-08-06,7,Media Usage,News magazines,3,0.0,0.0,0.47
+2026-08-06,7,Media Usage,Internet / social media,4,0.0,0.0,58.85
+2026-08-06,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.36
+2026-08-06,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.52
+2026-08-06,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,1.93
+2026-08-07,1,National Issues,Corruption,0,-1.0,1.0,5.71
+2026-08-07,1,National Issues,Unemployment,1,-1.0,1.5,22.44
+2026-08-07,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,5.05
+2026-08-07,1,National Issues,Rising Prices,3,-1.0,1.5,22.33
+2026-08-07,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.16
+2026-08-07,1,National Issues,Terror Attacks,5,1.0,0.9,0.54
+2026-08-07,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-07,1,National Issues,Other Issues,7,0.0,0.0,32.02
+2026-08-07,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.72
+2026-08-07,2,Quality of Life Index,Improved,0,1.0,1.3,26.52
+2026-08-07,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.27
+2026-08-07,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.76
+2026-08-07,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.45
+2026-08-07,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.13
+2026-08-07,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.41
+2026-08-07,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.48
+2026-08-07,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.88
+2026-08-07,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.54
+2026-08-07,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.54
+2026-08-07,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.02
+2026-08-07,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.73
+2026-08-07,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.52
+2026-08-07,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.32
+2026-08-07,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.43
+2026-08-07,5,Index of Optimism,Will Improve,0,1.0,1.5,33.91
+2026-08-07,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.57
+2026-08-07,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.64
+2026-08-07,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.88
+2026-08-07,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.57
+2026-08-07,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.3
+2026-08-07,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,6.29
+2026-08-07,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.63
+2026-08-07,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.21
+2026-08-07,7,Media Usage,TV news channels,0,0.0,0.0,23.2
+2026-08-07,7,Media Usage,Radio,1,0.0,0.0,1.45
+2026-08-07,7,Media Usage,Newspapers,2,0.0,0.0,5.76
+2026-08-07,7,Media Usage,News magazines,3,0.0,0.0,0.48
+2026-08-07,7,Media Usage,Internet / social media,4,0.0,0.0,59.03
+2026-08-07,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.37
+2026-08-07,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.57
+2026-08-07,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,1.93
+2026-08-08,1,National Issues,Corruption,0,-1.0,1.0,5.67
+2026-08-08,1,National Issues,Unemployment,1,-1.0,1.5,22.43
+2026-08-08,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,5.08
+2026-08-08,1,National Issues,Rising Prices,3,-1.0,1.5,22.32
+2026-08-08,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.11
+2026-08-08,1,National Issues,Terror Attacks,5,1.0,0.9,0.54
+2026-08-08,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-08,1,National Issues,Other Issues,7,0.0,0.0,32.06
+2026-08-08,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.76
+2026-08-08,2,Quality of Life Index,Improved,0,1.0,1.3,26.7
+2026-08-08,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.04
+2026-08-08,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.81
+2026-08-08,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.45
+2026-08-08,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.14
+2026-08-08,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.19
+2026-08-08,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.52
+2026-08-08,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.91
+2026-08-08,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.47
+2026-08-08,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.78
+2026-08-08,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,2.99
+2026-08-08,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.67
+2026-08-08,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.55
+2026-08-08,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.4
+2026-08-08,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.38
+2026-08-08,5,Index of Optimism,Will Improve,0,1.0,1.5,33.88
+2026-08-08,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.58
+2026-08-08,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.84
+2026-08-08,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.7
+2026-08-08,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.7
+2026-08-08,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.27
+2026-08-08,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,6.28
+2026-08-08,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.66
+2026-08-08,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.09
+2026-08-08,7,Media Usage,TV news channels,0,0.0,0.0,23.22
+2026-08-08,7,Media Usage,Radio,1,0.0,0.0,1.53
+2026-08-08,7,Media Usage,Newspapers,2,0.0,0.0,5.65
+2026-08-08,7,Media Usage,News magazines,3,0.0,0.0,0.48
+2026-08-08,7,Media Usage,Internet / social media,4,0.0,0.0,58.81
+2026-08-08,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.39
+2026-08-08,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.69
+2026-08-08,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,2.0
+2026-08-09,1,National Issues,Corruption,0,-1.0,1.0,5.71
+2026-08-09,1,National Issues,Unemployment,1,-1.0,1.5,22.52
+2026-08-09,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,5.07
+2026-08-09,1,National Issues,Rising Prices,3,-1.0,1.5,22.34
+2026-08-09,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.11
+2026-08-09,1,National Issues,Terror Attacks,5,1.0,0.9,0.48
+2026-08-09,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-09,1,National Issues,Other Issues,7,0.0,0.0,32.08
+2026-08-09,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.66
+2026-08-09,2,Quality of Life Index,Improved,0,1.0,1.3,26.79
+2026-08-09,2,Quality of Life Index,Remained the same,1,0.0,0.2,39.99
+2026-08-09,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.74
+2026-08-09,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.48
+2026-08-09,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.16
+2026-08-09,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.19
+2026-08-09,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.52
+2026-08-09,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.92
+2026-08-09,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.4
+2026-08-09,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.81
+2026-08-09,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.0
+2026-08-09,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.66
+2026-08-09,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.55
+2026-08-09,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.42
+2026-08-09,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.37
+2026-08-09,5,Index of Optimism,Will Improve,0,1.0,1.5,33.94
+2026-08-09,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.56
+2026-08-09,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.81
+2026-08-09,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.69
+2026-08-09,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.66
+2026-08-09,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.32
+2026-08-09,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,6.29
+2026-08-09,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.64
+2026-08-09,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.09
+2026-08-09,7,Media Usage,TV news channels,0,0.0,0.0,23.17
+2026-08-09,7,Media Usage,Radio,1,0.0,0.0,1.55
+2026-08-09,7,Media Usage,Newspapers,2,0.0,0.0,5.7
+2026-08-09,7,Media Usage,News magazines,3,0.0,0.0,0.48
+2026-08-09,7,Media Usage,Internet / social media,4,0.0,0.0,58.76
+2026-08-09,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.39
+2026-08-09,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.73
+2026-08-09,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,2.0
+2026-08-10,1,National Issues,Corruption,0,-1.0,1.0,5.56
+2026-08-10,1,National Issues,Unemployment,1,-1.0,1.5,22.46
+2026-08-10,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,4.97
+2026-08-10,1,National Issues,Rising Prices,3,-1.0,1.5,22.68
+2026-08-10,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.07
+2026-08-10,1,National Issues,Terror Attacks,5,1.0,0.9,0.46
+2026-08-10,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-10,1,National Issues,Other Issues,7,0.0,0.0,32.07
+2026-08-10,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.7
+2026-08-10,2,Quality of Life Index,Improved,0,1.0,1.3,27.06
+2026-08-10,2,Quality of Life Index,Remained the same,1,0.0,0.2,39.87
+2026-08-10,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.6
+2026-08-10,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.47
+2026-08-10,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.13
+2026-08-10,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.61
+2026-08-10,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.25
+2026-08-10,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.89
+2026-08-10,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.34
+2026-08-10,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.77
+2026-08-10,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.01
+2026-08-10,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.71
+2026-08-10,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.47
+2026-08-10,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.45
+2026-08-10,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.37
+2026-08-10,5,Index of Optimism,Will Improve,0,1.0,1.5,34.31
+2026-08-10,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.5
+2026-08-10,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,31.03
+2026-08-10,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.16
+2026-08-10,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.83
+2026-08-10,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.16
+2026-08-10,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,6.05
+2026-08-10,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.87
+2026-08-10,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.09
+2026-08-10,7,Media Usage,TV news channels,0,0.0,0.0,23.21
+2026-08-10,7,Media Usage,Radio,1,0.0,0.0,1.4
+2026-08-10,7,Media Usage,Newspapers,2,0.0,0.0,5.38
+2026-08-10,7,Media Usage,News magazines,3,0.0,0.0,0.5
+2026-08-10,7,Media Usage,Internet / social media,4,0.0,0.0,58.94
+2026-08-10,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.31
+2026-08-10,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.93
+2026-08-10,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,2.01
+2026-08-11,1,National Issues,Corruption,0,-1.0,1.0,5.71
+2026-08-11,1,National Issues,Unemployment,1,-1.0,1.5,22.72
+2026-08-11,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,4.96
+2026-08-11,1,National Issues,Rising Prices,3,-1.0,1.5,22.45
+2026-08-11,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.25
+2026-08-11,1,National Issues,Terror Attacks,5,1.0,0.9,0.43
+2026-08-11,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-11,1,National Issues,Other Issues,7,0.0,0.0,31.9
+2026-08-11,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.55
+2026-08-11,2,Quality of Life Index,Improved,0,1.0,1.3,27.15
+2026-08-11,2,Quality of Life Index,Remained the same,1,0.0,0.2,39.86
+2026-08-11,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.56
+2026-08-11,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.43
+2026-08-11,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,12.05
+2026-08-11,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.18
+2026-08-11,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.72
+2026-08-11,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.97
+2026-08-11,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.36
+2026-08-11,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,5.68
+2026-08-11,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.04
+2026-08-11,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,23.84
+2026-08-11,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.43
+2026-08-11,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.39
+2026-08-11,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.34
+2026-08-11,5,Index of Optimism,Will Improve,0,1.0,1.5,34.28
+2026-08-11,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.54
+2026-08-11,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,31.13
+2026-08-11,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,22.05
+2026-08-11,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,21.07
+2026-08-11,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.27
+2026-08-11,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,5.95
+2026-08-11,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.74
+2026-08-11,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,3.97
+2026-08-11,7,Media Usage,TV news channels,0,0.0,0.0,22.96
+2026-08-11,7,Media Usage,Radio,1,0.0,0.0,1.29
+2026-08-11,7,Media Usage,Newspapers,2,0.0,0.0,5.22
+2026-08-11,7,Media Usage,News magazines,3,0.0,0.0,0.52
+2026-08-11,7,Media Usage,Internet / social media,4,0.0,0.0,59.16
+2026-08-11,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.35
+2026-08-11,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.88
+2026-08-11,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,2.1
+2026-08-12,1,National Issues,Corruption,0,-1.0,1.0,5.71
+2026-08-12,1,National Issues,Unemployment,1,-1.0,1.5,22.98
+2026-08-12,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,4.92
+2026-08-12,1,National Issues,Rising Prices,3,-1.0,1.5,22.3
+2026-08-12,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.11
+2026-08-12,1,National Issues,Terror Attacks,5,1.0,0.9,0.43
+2026-08-12,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-12,1,National Issues,Other Issues,7,0.0,0.0,31.89
+2026-08-12,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.63
+2026-08-12,2,Quality of Life Index,Improved,0,1.0,1.3,27.13
+2026-08-12,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.04
+2026-08-12,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,31.35
+2026-08-12,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.48
+2026-08-12,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,11.86
+2026-08-12,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.07
+2026-08-12,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.65
+2026-08-12,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,2.01
+2026-08-12,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.34
+2026-08-12,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,6.0
+2026-08-12,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.07
+2026-08-12,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,24.29
+2026-08-12,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,68.92
+2026-08-12,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.33
+2026-08-12,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.46
+2026-08-12,5,Index of Optimism,Will Improve,0,1.0,1.5,34.47
+2026-08-12,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.69
+2026-08-12,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.99
+2026-08-12,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,21.85
+2026-08-12,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,20.86
+2026-08-12,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.58
+2026-08-12,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,5.92
+2026-08-12,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.59
+2026-08-12,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.05
+2026-08-12,7,Media Usage,TV news channels,0,0.0,0.0,23.08
+2026-08-12,7,Media Usage,Radio,1,0.0,0.0,1.32
+2026-08-12,7,Media Usage,Newspapers,2,0.0,0.0,5.29
+2026-08-12,7,Media Usage,News magazines,3,0.0,0.0,0.59
+2026-08-12,7,Media Usage,Internet / social media,4,0.0,0.0,58.94
+2026-08-12,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.44
+2026-08-12,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.76
+2026-08-12,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,2.05
+2026-08-13,1,National Issues,Corruption,0,-1.0,1.0,5.5
+2026-08-13,1,National Issues,Unemployment,1,-1.0,1.5,23.13
+2026-08-13,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,4.93
+2026-08-13,1,National Issues,Rising Prices,3,-1.0,1.5,22.43
+2026-08-13,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.18
+2026-08-13,1,National Issues,Terror Attacks,5,1.0,0.9,0.43
+2026-08-13,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-13,1,National Issues,Other Issues,7,0.0,0.0,31.77
+2026-08-13,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.6
+2026-08-13,2,Quality of Life Index,Improved,0,1.0,1.3,27.04
+2026-08-13,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.7
+2026-08-13,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,30.83
+2026-08-13,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.43
+2026-08-13,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,11.88
+2026-08-13,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.42
+2026-08-13,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.62
+2026-08-13,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.99
+2026-08-13,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,3.96
+2026-08-13,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,6.04
+2026-08-13,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.09
+2026-08-13,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,24.25
+2026-08-13,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.03
+2026-08-13,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.25
+2026-08-13,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.47
+2026-08-13,5,Index of Optimism,Will Improve,0,1.0,1.5,34.52
+2026-08-13,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.93
+2026-08-13,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,31.0
+2026-08-13,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,21.55
+2026-08-13,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,21.13
+2026-08-13,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.47
+2026-08-13,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,5.89
+2026-08-13,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.45
+2026-08-13,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.06
+2026-08-13,7,Media Usage,TV news channels,0,0.0,0.0,22.97
+2026-08-13,7,Media Usage,Radio,1,0.0,0.0,1.26
+2026-08-13,7,Media Usage,Newspapers,2,0.0,0.0,5.26
+2026-08-13,7,Media Usage,News magazines,3,0.0,0.0,0.62
+2026-08-13,7,Media Usage,Internet / social media,4,0.0,0.0,59.25
+2026-08-13,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.43
+2026-08-13,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.78
+2026-08-13,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,1.98
+2026-08-14,1,National Issues,Corruption,0,-1.0,1.0,5.46
+2026-08-14,1,National Issues,Unemployment,1,-1.0,1.5,23.58
+2026-08-14,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,4.95
+2026-08-14,1,National Issues,Rising Prices,3,-1.0,1.5,22.1
+2026-08-14,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.14
+2026-08-14,1,National Issues,Terror Attacks,5,1.0,0.9,0.5
+2026-08-14,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-14,1,National Issues,Other Issues,7,0.0,0.0,31.74
+2026-08-14,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.5
+2026-08-14,2,Quality of Life Index,Improved,0,1.0,1.3,27.15
+2026-08-14,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.91
+2026-08-14,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,30.51
+2026-08-14,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.43
+2026-08-14,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,11.9
+2026-08-14,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.53
+2026-08-14,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.38
+2026-08-14,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.97
+2026-08-14,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.05
+2026-08-14,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,6.08
+2026-08-14,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.09
+2026-08-14,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,24.28
+2026-08-14,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,68.97
+2026-08-14,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.31
+2026-08-14,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.44
+2026-08-14,5,Index of Optimism,Will Improve,0,1.0,1.5,34.77
+2026-08-14,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.89
+2026-08-14,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.66
+2026-08-14,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,21.68
+2026-08-14,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,21.08
+2026-08-14,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.79
+2026-08-14,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,5.94
+2026-08-14,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.18
+2026-08-14,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.01
+2026-08-14,7,Media Usage,TV news channels,0,0.0,0.0,22.93
+2026-08-14,7,Media Usage,Radio,1,0.0,0.0,1.25
+2026-08-14,7,Media Usage,Newspapers,2,0.0,0.0,5.23
+2026-08-14,7,Media Usage,News magazines,3,0.0,0.0,0.63
+2026-08-14,7,Media Usage,Internet / social media,4,0.0,0.0,59.29
+2026-08-14,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.45
+2026-08-14,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.8
+2026-08-14,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,2.04
+2026-08-15,1,National Issues,Corruption,0,-1.0,1.0,5.44
+2026-08-15,1,National Issues,Unemployment,1,-1.0,1.5,23.66
+2026-08-15,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,4.99
+2026-08-15,1,National Issues,Rising Prices,3,-1.0,1.5,22.05
+2026-08-15,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.03
+2026-08-15,1,National Issues,Terror Attacks,5,1.0,0.9,0.5
+2026-08-15,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-15,1,National Issues,Other Issues,7,0.0,0.0,31.78
+2026-08-15,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.52
+2026-08-15,2,Quality of Life Index,Improved,0,1.0,1.3,27.1
+2026-08-15,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.94
+2026-08-15,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,30.53
+2026-08-15,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.43
+2026-08-15,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,11.89
+2026-08-15,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.57
+2026-08-15,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.4
+2026-08-15,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.97
+2026-08-15,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.04
+2026-08-15,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,6.04
+2026-08-15,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.09
+2026-08-15,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,24.25
+2026-08-15,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.01
+2026-08-15,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.31
+2026-08-15,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.43
+2026-08-15,5,Index of Optimism,Will Improve,0,1.0,1.5,34.77
+2026-08-15,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.87
+2026-08-15,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.66
+2026-08-15,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,21.7
+2026-08-15,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,21.1
+2026-08-15,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.79
+2026-08-15,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,5.91
+2026-08-15,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.16
+2026-08-15,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.04
+2026-08-15,7,Media Usage,TV news channels,0,0.0,0.0,22.9
+2026-08-15,7,Media Usage,Radio,1,0.0,0.0,1.24
+2026-08-15,7,Media Usage,Newspapers,2,0.0,0.0,5.27
+2026-08-15,7,Media Usage,News magazines,3,0.0,0.0,0.63
+2026-08-15,7,Media Usage,Internet / social media,4,0.0,0.0,59.23
+2026-08-15,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.45
+2026-08-15,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.81
+2026-08-15,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,2.04
+2026-08-16,1,National Issues,Corruption,0,-1.0,1.0,5.45
+2026-08-16,1,National Issues,Unemployment,1,-1.0,1.5,23.57
+2026-08-16,1,National Issues,Familiy Income Poverty,2,-1.0,1.2,4.95
+2026-08-16,1,National Issues,Rising Prices,3,-1.0,1.5,22.12
+2026-08-16,1,National Issues,Electricity Road Water,4,-1.0,0.8,4.06
+2026-08-16,1,National Issues,Terror Attacks,5,1.0,0.9,0.5
+2026-08-16,1,National Issues,Epidemics such as Corona etc.,6,-0.5,0.6,0.03
+2026-08-16,1,National Issues,Other Issues,7,0.0,0.0,31.83
+2026-08-16,1,National Issues,Don't Know/Can't Say,8,0.0,0.0,7.49
+2026-08-16,2,Quality of Life Index,Improved,0,1.0,1.3,27.01
+2026-08-16,2,Quality of Life Index,Remained the same,1,0.0,0.2,40.86
+2026-08-16,2,Quality of Life Index,Deteriorated,2,-1.0,1.4,30.67
+2026-08-16,2,Quality of Life Index,Don't Know/Can't Say,3,0.0,0.0,1.46
+2026-08-16,3,Index of Income Expenditure,Income increased but the expenditure went up as well,0,0.2,0.6,11.85
+2026-08-16,3,Index of Income Expenditure,Income remained the same while expenditure went up,1,-0.7,1.1,34.49
+2026-08-16,3,Index of Income Expenditure,Income went down while the expenditure went up,2,-1.0,1.5,38.25
+2026-08-16,3,Index of Income Expenditure,Income increased and the expenditure went down or remained the same,3,1.0,1.2,1.96
+2026-08-16,3,Index of Income Expenditure,"Income went down, expenditure remained the same",4,-0.8,1.1,4.28
+2026-08-16,3,Index of Income Expenditure,Income & expenditure both are same,5,0.0,0.2,6.09
+2026-08-16,3,Index of Income Expenditure,Others/Don't Know/Can't Say,6,0.0,0.0,3.08
+2026-08-16,4,Index of Inflation,Current expenses gone up; but still manageable,0,-0.3,0.8,24.24
+2026-08-16,4,Index of Inflation,Current expenses have become difficult to manage,1,-1.0,1.6,69.03
+2026-08-16,4,Index of Inflation,Current expenses have gone down,2,1.0,1.0,4.3
+2026-08-16,4,Index of Inflation,Others/DK/CS,3,0.0,0.0,2.43
+2026-08-16,5,Index of Optimism,Will Improve,0,1.0,1.5,34.72
+2026-08-16,5,Index of Optimism,Will remain the same,1,0.0,0.2,12.9
+2026-08-16,5,Index of Optimism,Will Deteriorate,2,-1.0,1.5,30.5
+2026-08-16,5,Index of Optimism,Don't Know/Can't Say,3,0.0,0.0,21.88
+2026-08-16,6,Self Nation,The country is moving forward but not my life,0,0.25,0.9,21.02
+2026-08-16,6,Self Nation,The country is moving forward and my life too,1,1.0,1.35,35.8
+2026-08-16,6,Self Nation,My life is improving but the country is in poor state,2,-0.25,0.9,5.89
+2026-08-16,6,Self Nation,My life & the country both are in a poor state,3,-1.0,1.8,33.21
+2026-08-16,6,Self Nation,Don't Know/Can't Say,4,0.0,0.0,4.08
+2026-08-16,7,Media Usage,TV news channels,0,0.0,0.0,22.88
+2026-08-16,7,Media Usage,Radio,1,0.0,0.0,1.24
+2026-08-16,7,Media Usage,Newspapers,2,0.0,0.0,5.28
+2026-08-16,7,Media Usage,News magazines,3,0.0,0.0,0.63
+2026-08-16,7,Media Usage,Internet / social media,4,0.0,0.0,59.27
+2026-08-16,7,Media Usage,Political rallies / gatherings,5,0.0,0.0,0.45
+2026-08-16,7,Media Usage,Personal interaction with friends/colleagues,6,0.0,0.0,4.78
+2026-08-16,7,Media Usage,Don't Know/Can't Say,7,0.0,0.0,2.04

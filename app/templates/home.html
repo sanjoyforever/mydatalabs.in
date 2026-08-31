@@ -3,88 +3,290 @@
 {% block meta_desc %}MyDataLabs publishes weekly quantitative indices for airline operations, fuel crack spreads, and geopolitical stress. The Airline Pressure Index stands at {{ "%.1f"|format(aviation_score) }} ({{ aviation_level }}). Open methodology and live data.{% endblock %}
 
 {% block content %}
-<!-- Featured Airlines Hero Banner -->
-<section class="section-block" style="padding-top: 10px; margin-bottom: 28px;" aria-labelledby="av-hero-title">
-  <div class="av-hero-card">
-    <div class="av-hero-overlay"></div>
+<!-- Featured index carousel -->
+<section class="hcar" aria-roledescription="carousel" aria-label="Featured indices" data-autoplay="7000">
+  <div class="hcar-track" id="hcar-track">
 
-    <div class="av-hero-content">
-      <!-- Top Badge Row -->
-      <div class="av-badge-row">
-        <span class="av-badge-pill">
-          <span class="material-symbols-outlined av-pill-icon">flight_takeoff</span>
-          AIRLINE PRESSURE INDEX
-        </span>
-        <span class="av-badge-meta">OPERATIONAL STRESS • FUEL MARGINS • SUPPLY CHAIN</span>
+    <!-- Slide 1 — U.S. Sovereign Solvency Index -->
+    <article class="hcar-slide hcar-solvency" role="group" aria-roledescription="slide"
+             aria-label="1 of 3: U.S. Sovereign Solvency Index" data-slide="solvency-index">
+      <div class="av-hero-card">
+        {% if solvency_spark %}
+        <svg class="hcar-spark" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <polygon class="hcar-spark-fill" points="0,120 {{ solvency_spark }} 600,120"></polygon>
+          <polyline class="hcar-spark-line" points="{{ solvency_spark }}"></polyline>
+        </svg>
+        {% endif %}
+        <div class="av-hero-overlay"></div>
+
+        <div class="av-hero-content">
+          <div class="av-badge-row">
+            <span class="av-badge-pill">
+              <span class="material-symbols-outlined av-pill-icon">account_balance</span>
+              U.S. SOVEREIGN SOLVENCY INDEX
+            </span>
+            <span class="av-badge-meta">MONITOR U.S. FISCAL HEALTH</span>
+          </div>
+
+          <h1 class="av-headline">
+            The Sovereign<br>Solvency Index<span class="av-dot">.</span>
+          </h1>
+
+          <p class="hcar-score-line">
+            FY{{ solvency_hero.year }} composite score:
+            <strong>{{ "%.1f"|format(solvency_snapshot.score) }}</strong>
+            <span class="status-badge status-{{ solvency_snapshot.level_status }}">
+              <span class="status-dot" aria-hidden="true"></span>{{ solvency_snapshot.level_label }}
+            </span>
+          </p>
+
+          <p class="av-desc">
+            A multi-decade, bipartisan accumulation of structural risk. Eighty years of U.S. debt
+            dynamics — debt held by the public, the interest burden on receipts, the primary
+            balance, productivity and r&minus;g — scored against a sustainable 100 baseline.
+          </p>
+
+          <div class="hcar-actions">
+            <a href="{{ url_for('main.solvency_index') }}" class="btn-primary" data-cta="/solvency-index">
+              Explore U.S. Solvency Dashboard <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="{{ url_for('main.solvency_index') }}#methodology" class="btn-secondary" data-cta="/solvency-index#methodology">
+              View Report Methodology
+            </a>
+          </div>
+        </div>
+
+        <div class="hcar-visual" aria-hidden="true">
+          <div class="hcar-window">
+            <div class="hcar-window-bar">
+              <span class="hcar-win-dot hcar-win-dot-r"></span>
+              <span class="hcar-win-dot hcar-win-dot-y"></span>
+              <span class="hcar-win-dot hcar-win-dot-g"></span>
+            </div>
+            <div class="hcar-window-body">
+              <span class="hcar-window-label">FY{{ solvency_hero.year }} status</span>
+              <span class="hcar-window-status status-{{ solvency_snapshot.level_status }}">{{ solvency_snapshot.level_label|upper }}</span>
+              <span class="hcar-window-score">{{ "%.1f"|format(solvency_snapshot.score) }}</span>
+            </div>
+          </div>
+
+          {% if solvency_hero.debt_gdp is not none %}
+          <div class="hcar-bubble hcar-bubble-1">
+            <span class="hcar-bubble-label">Debt/GDP</span>
+            <span class="hcar-bubble-val">{{ "%.1f"|format(solvency_hero.debt_gdp) }}%</span>
+          </div>
+          {% endif %}
+          {% if solvency_hero.interest_burden is not none %}
+          <div class="hcar-bubble hcar-bubble-2">
+            <span class="hcar-bubble-label">Interest / receipts</span>
+            <span class="hcar-bubble-val">{{ "%.1f"|format(solvency_hero.interest_burden) }}%</span>
+          </div>
+          {% endif %}
+          {% if solvency_hero.primary_deficit is not none %}
+          <div class="hcar-bubble hcar-bubble-3">
+            <span class="hcar-bubble-label">Primary deficit</span>
+            <span class="hcar-bubble-val">{{ "%.1f"|format(solvency_hero.primary_deficit) }}%</span>
+          </div>
+          {% endif %}
+        </div>
       </div>
+    </article>
 
-      <!-- Headline -->
-      <h1 class="av-headline" id="av-hero-title">
-        Track. Analyze.<br>Stay Ahead<span class="av-dot">.</span>
-      </h1>
+    <!-- Slide 2 — Airline Pressure Index -->
+    <article class="hcar-slide hcar-aviation" role="group" aria-roledescription="slide"
+             aria-label="2 of 3: Airline Pressure Index" data-slide="airline-index">
+      <div class="av-hero-card">
+        <div class="av-hero-overlay"></div>
 
-      <!-- Contextual Description -->
-      <p class="av-desc">
-        Weekly quantitative intelligence monitoring commercial aviation stress: jet fuel crack spreads, engine inspection groundings, ATC bottlenecks, and geopolitical airspace detours against a calm 100.0 baseline.
-      </p>
-
-      <!-- 4 Contextual Feature Highlights -->
-      <div class="av-features-grid">
-        <div class="av-feat-item">
-          <div class="av-feat-icon-circle">
-            <span class="material-symbols-outlined">local_gas_station</span>
+        <div class="av-hero-content">
+          <!-- Top Badge Row -->
+          <div class="av-badge-row">
+            <span class="av-badge-pill">
+              <span class="material-symbols-outlined av-pill-icon">flight_takeoff</span>
+              AIRLINE PRESSURE INDEX
+            </span>
+            <span class="av-badge-meta">OPERATIONAL STRESS • FUEL MARGINS • SUPPLY CHAIN</span>
           </div>
-          <span class="av-feat-label">Fuel Crack Margins</span>
+
+          <!-- Headline -->
+          <h2 class="av-headline">
+            Track. Analyze.<br>Stay Ahead<span class="av-dot">.</span>
+          </h2>
+
+          <p class="hcar-score-line">
+            Current composite:
+            <strong>{{ "%.1f"|format(aviation_score) }}</strong>
+            <span class="status-badge status-{{ aviation_status }}">
+              <span class="status-dot" aria-hidden="true"></span>{{ aviation_level }}
+            </span>
+          </p>
+
+          <!-- Contextual Description -->
+          <p class="av-desc">
+            Weekly quantitative intelligence monitoring commercial aviation stress: jet fuel crack spreads, engine inspection groundings, ATC bottlenecks, and geopolitical airspace detours against a calm 100.0 baseline.
+          </p>
+
+          <!-- 4 Contextual Feature Highlights -->
+          <div class="av-features-grid">
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">local_gas_station</span>
+              </div>
+              <span class="av-feat-label">Fuel Crack Margins</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">build</span>
+              </div>
+              <span class="av-feat-label">Fleet Groundings</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">schedule</span>
+              </div>
+              <span class="av-feat-label">ATC &amp; Flight Delays</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">explore</span>
+              </div>
+              <span class="av-feat-label">Airspace Detours</span>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="hcar-actions">
+            <a href="{{ url_for('main.airline_index') }}" class="btn-primary" data-cta="/airline-index">
+              Explore Live Dashboard <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="{{ url_for('main.airline_index') }}#methodology" class="btn-secondary" data-cta="/airline-index#methodology">
+              Methodology
+            </a>
+          </div>
         </div>
 
-        <div class="av-feat-item">
-          <div class="av-feat-icon-circle">
-            <span class="material-symbols-outlined">build</span>
+        <!-- Right Side Overlay Floating Badges (live contextual metrics) -->
+        <div class="av-hero-floating-metrics" aria-hidden="true">
+          <div class="av-floating-metric float-top">
+            <span class="float-num">{{ "%.1f"|format(aviation_score) }}</span>
+            <span class="float-caption">Stress Score (100 = Base)</span>
           </div>
-          <span class="av-feat-label">Fleet Groundings</span>
-        </div>
-
-        <div class="av-feat-item">
-          <div class="av-feat-icon-circle">
-            <span class="material-symbols-outlined">schedule</span>
+          <div class="av-floating-metric float-mid">
+            <span class="float-num">${{ "%.2f"|format(aviation_press.crack_spread if aviation_press.crack_spread else 89.77) }}/bbl</span>
+            <span class="float-caption">Jet Fuel Crack</span>
           </div>
-          <span class="av-feat-label">ATC &amp; Flight Delays</span>
-        </div>
-
-        <div class="av-feat-item">
-          <div class="av-feat-icon-circle">
-            <span class="material-symbols-outlined">explore</span>
+          <div class="av-floating-metric float-bot">
+            <span class="float-num">{{ "%.1f"|format(aviation_press.fleet_grounding if aviation_press.fleet_grounding else 13.5) }}%</span>
+            <span class="float-caption">Fleet Grounded</span>
           </div>
-          <span class="av-feat-label">Airspace Detours</span>
         </div>
       </div>
+    </article>
 
-      <!-- Action Button -->
-      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-        <a href="{{ url_for('main.airline_index') }}" class="btn-primary" data-cta="/airline-index">
-          Explore Live Dashboard <span aria-hidden="true">&rarr;</span>
-        </a>
-        <a href="{{ url_for('main.airline_index') }}#methodology" class="btn-secondary" data-cta="/airline-index#methodology">
-          Methodology
-        </a>
+    <!-- Slide 3 — Hormuz Crisis Index -->
+    <article class="hcar-slide hcar-hormuz" role="group" aria-roledescription="slide"
+             aria-label="3 of 3: Hormuz Crisis Index" data-slide="hormuz-index">
+      <div class="av-hero-card">
+        {% if hormuz_spark %}
+        <svg class="hcar-spark" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <polygon class="hcar-spark-fill" points="0,120 {{ hormuz_spark }} 600,120"></polygon>
+          <polyline class="hcar-spark-line" points="{{ hormuz_spark }}"></polyline>
+        </svg>
+        {% endif %}
+        <div class="av-hero-overlay"></div>
+
+        <div class="av-hero-content">
+          <div class="av-badge-row">
+            <span class="av-badge-pill">
+              <span class="material-symbols-outlined av-pill-icon">directions_boat</span>
+              HORMUZ CRISIS INDEX
+            </span>
+            <span class="av-badge-meta">CHOKEPOINT TRANSITS • WAR RISK • CRUDE</span>
+          </div>
+
+          <h2 class="av-headline">
+            The World's<br>Tightest Strait<span class="av-dot">.</span>
+          </h2>
+
+          <p class="hcar-score-line">
+            Week of {{ snapshot.week_start }}:
+            <strong>{{ "%.1f"|format(hormuz_score) }}</strong>
+            <span class="status-badge status-{{ hormuz_status }}">
+              <span class="status-dot" aria-hidden="true"></span>{{ hormuz_level }}
+            </span>
+          </p>
+
+          <p class="av-desc">
+            A weekly composite of the Strait of Hormuz under stress: commercial transits, war-risk
+            insurance quoted per hull, Brent and TTF repricing, tanker freight, and the share of
+            regional traffic rerouting around the Cape — all against a calm 100.0 baseline.
+          </p>
+
+          <div class="hcar-actions">
+            <a href="{{ url_for('main.hormuz_index') }}" class="btn-primary" data-cta="/hormuz-index">
+              Explore Live Dashboard <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="{{ url_for('main.hormuz_index') }}#methodology" class="btn-secondary" data-cta="/hormuz-index#methodology">
+              Methodology
+            </a>
+          </div>
+        </div>
+
+        <div class="hcar-visual" aria-hidden="true">
+          <div class="hcar-window">
+            <div class="hcar-window-bar">
+              <span class="hcar-win-dot hcar-win-dot-r"></span>
+              <span class="hcar-win-dot hcar-win-dot-y"></span>
+              <span class="hcar-win-dot hcar-win-dot-g"></span>
+            </div>
+            <div class="hcar-window-body">
+              <span class="hcar-window-label">Week of {{ snapshot.week_start }}</span>
+              <span class="hcar-window-status status-{{ hormuz_status }}">{{ hormuz_level|upper }}</span>
+              <span class="hcar-window-score">{{ "%.1f"|format(hormuz_score) }}</span>
+            </div>
+          </div>
+
+          {% if hormuz_hero.brent is not none %}
+          <div class="hcar-bubble hcar-bubble-1">
+            <span class="hcar-bubble-label">Brent</span>
+            <span class="hcar-bubble-val">${{ "%.0f"|format(hormuz_hero.brent) }}</span>
+          </div>
+          {% endif %}
+          {% if hormuz_hero.war_risk is not none %}
+          <div class="hcar-bubble hcar-bubble-2">
+            <span class="hcar-bubble-label">War risk</span>
+            <span class="hcar-bubble-val">{{ "%.2f"|format(hormuz_hero.war_risk) }}%</span>
+          </div>
+          {% endif %}
+          {% if hormuz_hero.reroutes is not none %}
+          <div class="hcar-bubble hcar-bubble-3">
+            <span class="hcar-bubble-label">Cape reroutes</span>
+            <span class="hcar-bubble-val">{{ "%.0f"|format(hormuz_hero.reroutes) }}%</span>
+          </div>
+          {% endif %}
+        </div>
       </div>
+    </article>
+
+  </div>
+
+  <div class="hcar-controls">
+    <button type="button" class="hcar-arrow" data-hcar="prev" aria-label="Previous index">
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+    </button>
+
+    <div class="hcar-dots" role="group" aria-label="Choose a featured index">
+      <button type="button" class="hcar-dot" data-hcar-dot="0" aria-label="U.S. Sovereign Solvency Index"></button>
+      <button type="button" class="hcar-dot" data-hcar-dot="1" aria-label="Airline Pressure Index"></button>
+      <button type="button" class="hcar-dot" data-hcar-dot="2" aria-label="Hormuz Crisis Index"></button>
     </div>
 
-    <!-- Right Side Overlay Floating Badges (live contextual metrics) -->
-    <div class="av-hero-floating-metrics" aria-hidden="true">
-      <div class="av-floating-metric float-top">
-        <span class="float-num">{{ "%.1f"|format(aviation_score) }}</span>
-        <span class="float-caption">Stress Score (100 = Base)</span>
-      </div>
-      <div class="av-floating-metric float-mid">
-        <span class="float-num">${{ "%.2f"|format(aviation_press.crack_spread if aviation_press.crack_spread else 89.77) }}/bbl</span>
-        <span class="float-caption">Jet Fuel Crack</span>
-      </div>
-      <div class="av-floating-metric float-bot">
-        <span class="float-num">{{ "%.1f"|format(aviation_press.fleet_grounding if aviation_press.fleet_grounding else 13.5) }}%</span>
-        <span class="float-caption">Fleet Grounded</span>
-      </div>
-    </div>
+    <button type="button" class="hcar-arrow" data-hcar="next" aria-label="Next index">
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+    </button>
   </div>
 </section>
 
@@ -154,44 +356,7 @@
     </div>
   </div>
 </section>
-
-<!-- Methodological Principles -->
-<section class="section-block" aria-labelledby="principles-heading">
-  <div class="section-header">
-    <div>
-      <h2 class="section-title" id="principles-heading">Methodological principles</h2>
-      <p class="section-desc">How MyDataLabs indices are designed, calculated, and maintained.</p>
-    </div>
-  </div>
-
-  <div class="principles-grid">
-    <div class="principle-card">
-      <div class="principle-num">01</div>
-      <h3>Open Methodology</h3>
-      <p>Every index publishes its exact mathematical formula, component weights, normalization
-        methods, and source attributions. No black boxes.</p>
-    </div>
-
-    <div class="principle-card">
-      <div class="principle-num">02</div>
-      <h3>Fixed Historical Baselines</h3>
-      <p>Scores are anchored to empirical non-crisis baseline periods, not arbitrary rolling windows,
-        so a 140 today means the same as a 140 next year.</p>
-    </div>
-
-    <div class="principle-card">
-      <div class="principle-num">03</div>
-      <h3>Weekly Cadence</h3>
-      <p>Indices update on a weekly cadence, smoothing daily market noise while capturing structural
-        dislocations as they develop.</p>
-    </div>
-
-    <div class="principle-card">
-      <div class="principle-num">04</div>
-      <h3>Automated &amp; Auditable</h3>
-      <p>Data pipelines fetch, validate, and compute scores automatically with full historical audit
-        trails and provenance records.</p>
-    </div>
-  </div>
-</section>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/hero-carousel.js') }}?v={{ asset_v }}" defer></script>
 {% endblock %}

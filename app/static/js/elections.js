@@ -4,8 +4,8 @@
    Ported from the standalone india-elections template. Four changes were made
    in the move, all of them forced by the shared site shell:
 
-   * The API base comes from data-api on .elections-dash rather than being
-     hardcoded to "/api", since the endpoints now live under a report prefix.
+   * The dashboard reads its data from an inlined JSON block instead of
+     fetching it. The site publishes no data API, so there is nothing to fetch.
    * Inline onclick attributes became listeners bound here. switchTab used the
      implicit global `event` to find the clicked button, which only works in
      browsers that still set it.
@@ -19,8 +19,6 @@
 
   var root = document.querySelector(".elections-dash");
   if (!root) return;
-
-  var API = root.getAttribute("data-api") || "/api/lok-sabha-index";
 
   var dailyChart = null;
   var globalForecastData = null;
@@ -43,7 +41,7 @@
 
   // Draws the event annotations on top of the chart. Point events become
   // vertical markers with a rotated label; ranged events become shaded bands.
-  // Everything is driven by the events API, so adding an entry to
+  // Everything is driven by the preloaded event list, so adding an entry to
   // engine/events.py is all it takes to put a new marker on the chart.
   var eventOverlayPlugin = {
     id: "eventOverlay",
@@ -217,7 +215,11 @@
   var hiddenSeries = new Set([4, 5]);
   var hiddenCategories = new Set();
 
-  async function initDashboard() {
+  // Everything this dashboard draws arrives in the page, in the
+  // #elections-preloaded block the view serialises. There is no data API to
+  // fall back to, so a missing or malformed block is fatal and says so rather
+  // than leaving a grid of empty cards with a console error nobody reads.
+  function initDashboard() {
     bindControls();
 
     var preloadedEl = $("elections-preloaded");
@@ -230,70 +232,31 @@
       }
     }
 
+    if (!preloadedData) {
+      console.error("Elections dashboard data is missing from the page.");
+      return;
+    }
+
     try {
-      var chartFields = SERIES_SPEC
-        .filter(function (s) { return s.key; })
-        .map(function (s) { return s.key; })
-        .concat(["date"])
-        .join(",");
-
-      var fcPromise = fetch(API + "/daily_forecast?fields=" + chartFields).then(function (r) { return r.json(); });
-
-      var ovData, taData, evData, btData, inData;
-
-      if (preloadedData) {
-        ovData = preloadedData.overview;
-        taData = preloadedData.trend_analytics;
-        evData = preloadedData.events || {};
-        btData = preloadedData.backtest;
-        inData = preloadedData.insights;
-      } else {
-        var primaryResponses = await Promise.all([
-          fetch(API + "/overview"),
-          fetch(API + "/trend_analytics"),
-          fetch(API + "/events")
-        ]);
-        var primaryPayloads = await Promise.all(primaryResponses.map(function (r) { return r.json(); }));
-        ovData = primaryPayloads[0];
-        taData = primaryPayloads[1];
-        evData = primaryPayloads[2];
-      }
+      var evData = preloadedData.events || {};
 
       globalEvents = evData.events || [];
-      globalAnalytics = taData;
+      globalAnalytics = preloadedData.trend_analytics;
 
-      renderKPIs(ovData, taData);
+      renderKPIs(preloadedData.overview, preloadedData.trend_analytics);
       renderSeriesLegend();
       renderEventLegend(evData.categories || []);
 
-      if (btData) renderBacktest(btData);
-      if (inData) renderInsights(inData);
+      if (preloadedData.backtest) renderBacktest(preloadedData.backtest);
+      if (preloadedData.insights) renderInsights(preloadedData.insights);
 
-      var fcData = await fcPromise;
-      globalForecastData = fcData;
-      renderDailyChart(fcData);
+      globalForecastData = preloadedData.daily_forecast || [];
+      renderDailyChart(globalForecastData);
 
-      if (!preloadedData) {
-        Promise.all([
-          fetch(API + "/backtest_results"),
-          fetch(API + "/insights")
-        ]).then(function (secResponses) {
-          return Promise.all(secResponses.map(function (r) { return r.json(); }));
-        }).then(function (secPayloads) {
-          renderBacktest(secPayloads[0]);
-          renderInsights(secPayloads[1]);
-        }).catch(function (err) {
-          console.error("Secondary data error:", err);
-        });
-      }
+      if (preloadedData.data_status) renderFreshness(preloadedData.data_status);
     } catch (err) {
       console.error("Dashboard init error:", err);
     }
-
-    fetch(API + "/data_status?check_remote=0")
-      .then(function (r) { return r.json(); })
-      .then(renderFreshness)
-      .catch(function (err) { console.error("Status check failed:", err); });
   }
 
   // --- Control wiring -----------------------------------------------------

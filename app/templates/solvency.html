@@ -1,0 +1,2761 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+
+{% block title %}U.S. Sovereign Solvency Index (USS-INDEX) — MyDataLabs Intelligence{% endblock %}
+{% block meta_desc %}The U.S. Sovereign Solvency Index stands at {{ "%.1f"|format(snapshot.score) }} ({{ snapshot.level_label }}) for FY{{ snapshot.week_start }}. An 80-year composite of federal debt, interest burden, primary deficit, productivity and r−g, built entirely from published FRED series.{% endblock %}
+{% block og_title %}U.S. Sovereign Solvency Index: {{ "%.1f"|format(snapshot.score) }} ({{ snapshot.level_label }}){% endblock %}
+{% block og_desc %}An 80-year structural risk index for U.S. public finances, scored against a sustainable baseline of 100.0. Debt dynamics projected as a scenario band, not a single doom date. Open methodology, free data.{% endblock %}
+{% block twitter_title %}U.S. Sovereign Solvency Index: {{ "%.1f"|format(snapshot.score) }} ({{ snapshot.level_label }}){% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Dataset",
+      "@id": "{{ origin }}/solvency-index#dataset",
+      "name": "U.S. Sovereign Solvency Index (USS-INDEX)",
+      "description": "Annual composite index (1945-present) measuring structural risk in U.S. federal finances across fiscal, growth and monetary blocks, scored against a sustainable equilibrium of 100.0.",
+      "url": "{{ origin }}/solvency-index",
+      "keywords": ["Sovereign solvency", "US federal debt", "Debt to GDP", "Interest burden", "Debt dynamics", "Primary deficit", "r minus g"],
+      "creator": { "@id": "{{ origin }}/#organization" },
+      "publisher": { "@id": "{{ origin }}/#organization" },
+      "license": "{{ license_url }}",
+      "isAccessibleForFree": true,
+      "temporalCoverage": "{{ history[0].year }}/{{ history[-1].year }}",
+      "dateModified": "{{ history[-1].year }}-09-30",
+      "isBasedOn": "https://fred.stlouisfed.org/",
+      "variableMeasured": [
+        {
+          "@type": "PropertyValue",
+          "name": "USS-INDEX composite score",
+          "value": {{ "%.1f"|format(snapshot.score) }},
+          "minValue": {{ scale_min }},
+          "maxValue": {{ scale_max }}
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ origin }}/" },
+        { "@type": "ListItem", "position": 2, "name": "U.S. Sovereign Solvency Index", "item": "{{ origin }}/solvency-index" }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+  /* Layout helpers local to this dashboard. Colours, radii and spacing all
+     come from the global tokens so the page tracks the theme toggle. */
+  .uss-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .uss-kpi {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-top: 3px solid var(--kpi-accent, var(--accent-blue));
+  }
+  .uss-kpi-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .uss-kpi-value {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--kpi-accent, var(--text-main));
+  }
+  .uss-kpi-value .uss-kpi-unit { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+  .uss-kpi-note { font-size: 0.76rem; color: var(--text-muted); line-height: 1.35; }
+
+  .uss-threshold-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .uss-threshold {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius);
+    padding: var(--space-4);
+    background: var(--surface-card);
+  }
+  .uss-threshold-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 6px;
+  }
+  .uss-threshold-pct { font-family: var(--font-mono); font-size: 1.35rem; font-weight: 700; }
+  .uss-threshold-name { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .uss-threshold-range { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 600; margin: 6px 0; }
+  .uss-threshold-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.45; }
+  .uss-threshold-scen { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 0.74rem; font-family: var(--font-mono); }
+  .uss-threshold-scen span { display: inline-flex; align-items: center; gap: 4px; }
+  .uss-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .uss-scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  .uss-scenario {
+    border: 1px solid var(--border-subtle);
+    border-left: 4px solid var(--scen-color, var(--accent-blue));
+    border-radius: var(--card-radius);
+    padding: var(--space-4);
+    background: var(--surface-card);
+  }
+  .uss-scenario-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; color: var(--scen-color); }
+  .uss-scenario-params { font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-muted); margin-bottom: 8px; }
+  .uss-scenario-text { font-size: 0.82rem; line-height: 1.5; color: var(--text-muted); }
+
+  .uss-note {
+    border-left: 4px solid var(--accent-amber);
+    background: var(--accent-amber-bg);
+    border-radius: 0 var(--card-radius) var(--card-radius) 0;
+    padding: var(--space-4);
+    margin: var(--space-5) 0;
+    font-size: 0.86rem;
+    line-height: 1.6;
+  }
+  .uss-note strong { color: var(--text-main); }
+  .uss-note-title {
+    display: block; font-weight: 700; margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; color: var(--accent-amber);
+  }
+
+  .uss-formula {
+    background: var(--surface-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius);
+    padding: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    text-align: center;
+    overflow-x: auto;
+    margin: var(--space-3) 0;
+  }
+  .uss-block-legend { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 10px; font-size: 0.8rem; }
+  .uss-block-legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* Executive summary — the page's one piece of long-form prose, so it gets a
+     little more air than the data cards.
+
+     Head and body run the full card width, flush with the tables and charts
+     stacked above. They were previously capped at a centred 72ch measure, which
+     read as a narrower card indented inside the stack rather than as the
+     summary of everything above it. */
+  .uss-exec { border-top: 3px solid var(--accent-blue); }
+  .uss-exec-body { padding: var(--space-5) 0 var(--space-4); }
+  .uss-exec-lede {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--text-main);
+    padding: var(--space-4);
+    background: var(--accent-blue-bg);
+    border-left: 4px solid var(--accent-blue);
+    border-radius: 0 var(--card-radius) var(--card-radius) 0;
+    margin-bottom: var(--space-5);
+  }
+  .uss-exec-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+  /* Now that the body is full width, one column would run a 0.88rem paragraph
+     well past 180 characters. Two columns put the measure back in range and
+     actually use the width; the closing block still spans both. */
+  @media (min-width: 1024px) {
+    .uss-exec-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6) var(--space-8);
+    }
+  }
+  .uss-exec-q h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--accent-blue);
+    line-height: 1.4;
+  }
+  /* No per-paragraph max-width: the body above already sets the measure, and
+     capping again here is what left the ragged right edge inside each column. */
+  .uss-exec-q p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin: 0 0 10px;
+  }
+  .uss-exec-q p strong { color: var(--text-main); }
+  /* There is an odd number of question blocks, so the last one would sit in the
+     left column with a dead half beside it. It runs the full width instead. */
+  .uss-exec-wide { grid-column: 1 / -1; }
+  .uss-exec-bottom {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--space-4);
+  }
+  .uss-exec-bottom h3 { color: var(--accent-amber); }
+  .uss-exec-caveat {
+    font-size: 0.8rem !important;
+    font-style: italic;
+    opacity: 0.85;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="report-dash-canvas">
+
+  <!-- Breadcrumbs + Tab Bar -->
+  <div class="elections-topbar">
+    <nav class="breadcrumb-v2" aria-label="Breadcrumb">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <span class="breadcrumb-current" aria-current="page">U.S. Sovereign Solvency Index</span>
+    </nav>
+
+    <div class="tab-segmented" role="tablist" aria-label="Report sections">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true"
+              aria-controls="tab-dashboard" data-report-tab="dashboard">
+        <span class="material-symbols-outlined">dashboard</span>
+        Dashboard
+      </button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false"
+              aria-controls="tab-methodology" data-report-tab="methodology">
+        <span class="material-symbols-outlined">science</span>
+        Methodology
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 1: DASHBOARD -->
+  <div id="tab-dashboard" class="report-panel active" role="tabpanel">
+
+    <!-- Hero -->
+    <div class="hero-projection-card" style="margin-bottom: 24px;">
+      <div class="hero-blur-accent"></div>
+      <div class="hero-projection-content">
+        <div class="hero-left">
+          <div class="hero-badge-row">
+            <span class="hero-badge-live">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              80-Year Structural Index
+            </span>
+            <span class="status-badge status-{{ snapshot.level_status }}">
+              <span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}
+            </span>
+            <span class="hero-survey-date">Fiscal year {{ snapshot.week_start }}</span>
+          </div>
+
+          <div>
+            <h1>U.S. Sovereign Solvency Index</h1>
+            <div class="hero-meta">
+              <span>Federal Debt, Interest Burden &amp; Debt Dynamics</span>
+              <span class="meta-dot" aria-hidden="true">•</span>
+              <span>{{ history[0].year }}–{{ history[-1].year }}, built from published FRED series</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div>
+            <div class="hero-metric-label">COMPOSITE SCORE</div>
+            <div class="hero-metric-row">
+              <span class="hero-metric-value font-mono">{{ "%.1f"|format(snapshot.score) }}</span>
+            </div>
+            <div class="hero-trend">
+              <span class="hero-trend-pill {% if delta >= 0 %}trend-critical{% else %}trend-good{% endif %}">
+                <span class="material-symbols-outlined">{% if delta >= 0 %}arrow_upward{% else %}arrow_downward{% endif %}</span>
+                {% if delta >= 0 %}+{% else %}−{% endif %}{{ "%.1f"|format(delta|abs) }}
+              </span>
+              <span class="hero-trend-caption">vs FY{{ history[-2].year if history|length > 1 else '—' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Headline figures, all measured (not projected) -->
+    <div class="uss-kpi-grid">
+      <div class="uss-kpi" style="--kpi-accent: var(--accent-rose);">
+        <span class="uss-kpi-label">Debt held by public</span>
+        <span class="uss-kpi-value">{{ "%.1f"|format(latest.raw_values.debt_gdp) }}<span class="uss-kpi-unit">% GDP</span></span>
+        <span class="uss-kpi-note">Gross debt {{ "%.0f"|format(latest.context.gross_debt_pct_gdp) }}%. Post-war peak was {{ "%.0f"|format(history[0].raw_values.debt_gdp) }}% in {{ history[0].year }}.</span>
+      </div>
+      <div class="uss-kpi" style="--kpi-accent: var(--accent-amber);">
+        <span class="uss-kpi-label">Net interest / receipts</span>
+        <span class="uss-kpi-value">{{ "%.1f"|format(latest.raw_values.interest_burden) }}<span class="uss-kpi-unit">%</span></span>
+        <span class="uss-kpi-note">${{ "%.0f"|format(latest.context.interest_outlays_bn) }}bn of ${{ "%.0f"|format(latest.context.receipts_bn) }}bn collected.</span>
+      </div>
+      <div class="uss-kpi" style="--kpi-accent: var(--accent-emerald);">
+        <span class="uss-kpi-label">Primary deficit</span>
+        <span class="uss-kpi-value">{{ "%.1f"|format(latest.raw_values.primary_deficit) }}<span class="uss-kpi-unit">% GDP</span></span>
+        <span class="uss-kpi-note">The gap excluding interest — the part current policy sets.</span>
+      </div>
+      <div class="uss-kpi" style="--kpi-accent: var(--accent-blue);">
+        <span class="uss-kpi-label">r − g</span>
+        <span class="uss-kpi-value">{{ "%+.1f"|format(latest.raw_values.r_minus_g) }}<span class="uss-kpi-unit">pp</span></span>
+        <span class="uss-kpi-note">Effective rate {{ "%.2f"|format(latest.context.effective_rate) }}% vs nominal growth {{ "%.2f"|format(latest.context.nominal_gdp_growth) }}%. Below zero, debt ratios fall on their own.</span>
+      </div>
+      <div class="uss-kpi" style="--kpi-accent: var(--accent-purple);">
+        <span class="uss-kpi-label">Decade average</span>
+        <span class="uss-kpi-value">{{ "%.1f"|format(decades[-1].mean) }}</span>
+        <span class="uss-kpi-note">{{ decades[-1].decade }} to date — highest since the {{ decades[0].decade }} ({{ "%.1f"|format(decades[0].mean) }}).</span>
+      </div>
+    </div>
+
+    <!-- Gauge + Key drivers -->
+    <div class="summary-row">
+      <div class="merged-indices-col">
+        <section class="gauge-card" aria-labelledby="gauge-heading">
+          <div class="gauge-card-header">
+            <div class="gauge-card-header-left">
+              <h2 id="gauge-heading">Structural Risk Gauge</h2>
+              <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
+              <span class="card-sub">({{ scale_min|int }} = sustainable equilibrium)</span>
+            </div>
+            <div class="gauge-card-header-right">
+              <div class="gauge-readout-inline">
+                <span class="gauge-readout-value">{{ "%.1f"|format(snapshot.score) }}</span>
+                <span class="gauge-readout-denom">/ {{ scale_max|int }}</span>
+              </div>
+              <dl class="gauge-readout-facts-inline">
+                <div>
+                  <dt>vs baseline</dt>
+                  <dd class="is-above">+{{ "%.1f"|format(snapshot.score - scale_min) }}</dd>
+                </div>
+                <div>
+                  <dt>vs {{ history[-2].year if history|length > 1 else '—' }}</dt>
+                  <dd class="{{ 'is-above' if delta >= 0 else 'is-below' }}">
+                    {{ '+' if delta >= 0 else '−' }}{{ "%.1f"|format(delta|abs) }}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <div class="gauge-track-container"
+               role="meter"
+               aria-valuenow="{{ "%.1f"|format(snapshot.score) }}"
+               aria-valuemin="{{ scale_min }}"
+               aria-valuemax="{{ scale_max }}"
+               aria-label="USS-INDEX composite score, {{ "%.1f"|format(snapshot.score) }} of {{ scale_max|int }}, classified {{ snapshot.level_label }}">
+            <div class="gauge-fill-bar" style="width: {{ scale_pct }}%;"></div>
+            {% for band in band_positions %}
+            <div class="gauge-tick-mark" style="left: {{ band.pct }}%;" title="{{ band.label }} begins at {{ band.lower|int }}"></div>
+            {% endfor %}
+            <div class="gauge-pointer" style="left: {{ scale_pct }}%;" title="Current score: {{ '%.1f'|format(snapshot.score) }}"></div>
+          </div>
+          <div class="gauge-labels-row">
+            {% for label, rng in [
+                ('Sustainable', '&lt;115'),
+                ('Watch', '115–130'),
+                ('Strained', '130–145'),
+                ('Severe', '145+')] %}
+            <span class="gauge-label-item {% if snapshot.level_label == label %}active{% endif %}">
+              <span class="gauge-band-name">{{ label|upper }}</span>
+              <span class="gauge-band-range">({{ rng|safe }})</span>
+            </span>
+            {% endfor %}
+          </div>
+        </section>
+
+        <!-- Block composition -->
+        <section class="gauge-card ppi-card" aria-labelledby="blocks-heading">
+          <div class="ppi-block">
+            <div class="ppi-header">
+              <div class="ppi-header-left">
+                <h3 class="ppi-title" id="blocks-heading">Where the Risk Sits</h3>
+                <span class="card-sub">(points above baseline, FY{{ latest.year }})</span>
+              </div>
+              <div class="ppi-readout">
+                <div class="ppi-figure">
+                  <span class="ppi-value">+{{ "%.1f"|format(snapshot.score - scale_min) }}</span>
+                </div>
+                <div class="ppi-meta"><span class="ppi-count">Total</span></div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+              {% for block in blocks %}
+              {% set contrib = latest.block_contributions[block.key] %}
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">
+                  <span style="color: var(--text-muted);">{{ block.label }}
+                    <span style="font-family: var(--font-mono); font-weight: 500; opacity: 0.75;">({{ (block.weight * 100)|int }}% weight)</span>
+                  </span>
+                  <span class="font-mono" style="color: {{ block.color }};">+{{ "%.1f"|format(contrib) }} pts</span>
+                </div>
+                <div class="stress-track">
+                  <div class="stress-fill" style="width: {{ (contrib / (block.weight * 100) * 100)|round(1) }}%; background: {{ block.color }};"></div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="ppi-action">
+              <p class="ppi-hint">
+                <span>Each bar shows the block's realised stress as a share of the maximum it could contribute.</span>
+              </p>
+            </div>
+          </div>
+        </section>
+      </div><!-- /.merged-indices-col -->
+
+      <section class="signal-stack" aria-labelledby="drivers-heading">
+        <div class="signal-card">
+          <h2 id="drivers-heading" class="signal-card-title">Key Drivers</h2>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">⚠️</span> Risk level</span>
+            <span class="status-badge status-{{ snapshot.level_status }}">{{ snapshot.level_label|upper }}</span>
+          </div>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">📊</span> Top driver</span>
+            <span class="signal-value" {% if top_driver %}title="{{ top_driver.component.label }}"{% endif %}>
+              {{ top_driver.component.label if top_driver else '—' }}
+              {%- if top_driver %} <span class="signal-delta">+{{ "%.1f"|format(top_driver.contribution) }} pts</span>{% endif %}
+            </span>
+          </div>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">🏛️</span> Debt / GDP</span>
+            <span class="signal-value signal-value-num">{{ "%.1f"|format(latest.raw_values.debt_gdp) }}%
+              <span class="signal-delta">({{ "%.0f"|format(latest.stresses.debt_gdp) }}% stress)</span>
+            </span>
+          </div>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">💸</span> Interest burden</span>
+            <span class="signal-value signal-value-num">{{ "%.1f"|format(latest.raw_values.interest_burden) }}%
+              <span class="signal-delta">({{ "%.0f"|format(latest.stresses.interest_burden) }}% stress)</span>
+            </span>
+          </div>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">📈</span> Productivity (10y)</span>
+            <span class="signal-value signal-value-num">{{ "%.2f"|format(latest.raw_values.productivity) }}% CAGR</span>
+          </div>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">🔥</span> CPI inflation</span>
+            <span class="signal-value signal-value-num">{{ "%.2f"|format(latest.raw_values.inflation) }}%</span>
+          </div>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">🕰️</span> Series peak</span>
+            <span class="signal-value signal-value-num">{{ "%.1f"|format(peak.score) }}
+              <span class="signal-delta">({{ peak.year }})</span>
+            </span>
+          </div>
+
+          <div class="signal-row">
+            <span class="signal-label"><span class="signal-icon" aria-hidden="true">🌱</span> Series trough</span>
+            <span class="signal-value signal-value-num">{{ "%.1f"|format(trough.score) }}
+              <span class="signal-delta">({{ trough.year }})</span>
+            </span>
+          </div>
+        </div>
+      </section>
+    </div><!-- /.summary-row -->
+
+    <!-- 80-year trajectory -->
+    <section class="chart-card" aria-labelledby="trend-heading">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="trend-heading" style="margin: 0; font-size: 1.25rem;">{{ history[-1].year - history[0].year }} Years of U.S. Structural Fiscal Risk</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          Composite index and its three blocks, {{ history[0].year }}–{{ history[-1].year }}, against a sustainable baseline of 100.0
+        </span>
+      </div>
+
+      <div id="echart-trend-container"
+           class="chart-canvas"
+           style="height: 480px;"
+           role="img"
+           aria-label="Line chart of the USS-INDEX composite score for every fiscal year from {{ history[0].year }} to {{ history[-1].year }}, with the fiscal, growth and monetary block contributions shown as stacked areas.">
+        <p class="chart-fallback">Loading trajectory chart…</p>
+      </div>
+
+      <div class="uss-block-legend">
+        {% for tp in turning_points %}
+        <span><span class="uss-dot" style="background: var(--accent-amber);"></span>{{ tp.year }} {{ tp.label }}</span>
+        {% endfor %}
+      </div>
+
+      <details class="chart-data-table" style="margin-top: 16px;">
+        <summary>View the full annual series as a data table ({{ history|length }} years)</summary>
+        <div class="table-responsive">
+          <table class="components-table">
+            <caption class="sr-only">USS-INDEX composite score and component inputs by fiscal year</caption>
+            <thead>
+              <tr>
+                <th scope="col">FY</th>
+                <th scope="col">Index</th>
+                <th scope="col">Level</th>
+                <th scope="col">Debt (% GDP)</th>
+                <th scope="col">Interest / receipts</th>
+                <th scope="col">Primary deficit</th>
+                <th scope="col">Productivity 10y</th>
+                <th scope="col">CPI</th>
+                <th scope="col">r − g</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for h in history|reverse %}
+              <tr {% if h.partial %}class="row-stale"{% endif %}>
+                <th scope="row" class="font-mono">{{ h.year }}</th>
+                <td class="font-mono cell-strong">{{ "%.1f"|format(h.score) }}</td>
+                <td>{{ h.level_label }}{% if h.partial %} <span class="stale-badge" title="Growth block not yet published for this year; scored on the remaining weight">PARTIAL</span>{% endif %}</td>
+                <td class="font-mono">{{ "%.1f"|format(h.raw_values.debt_gdp) if h.raw_values.debt_gdp is not none else '—' }}</td>
+                <td class="font-mono">{{ "%.1f"|format(h.raw_values.interest_burden) if h.raw_values.interest_burden is not none else '—' }}</td>
+                <td class="font-mono">{{ "%+.2f"|format(h.raw_values.primary_deficit) if h.raw_values.primary_deficit is not none else '—' }}</td>
+                <td class="font-mono">{{ "%.2f"|format(h.raw_values.productivity) if h.raw_values.productivity is not none else '—' }}</td>
+                <td class="font-mono">{{ "%.2f"|format(h.raw_values.inflation) if h.raw_values.inflation is not none else '—' }}</td>
+                <td class="font-mono">{{ "%+.2f"|format(h.raw_values.r_minus_g) if h.raw_values.r_minus_g is not none else '—' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+
+    <!-- Fiscal dynamics quadrant -->
+    <section class="chart-card" aria-labelledby="quadrant-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="quadrant-heading" style="margin: 0; font-size: 1.25rem;">The Fiscal Dynamics Quadrant</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          Every year {{ history[0].year }}–{{ history[-1].year }} placed by the two terms that drive the debt ratio:
+          r − g horizontally, primary balance vertically. Up and right are the adverse directions.
+        </span>
+      </div>
+
+      <div class="uss-note" style="border-left-color: var(--accent-blue); background: var(--accent-blue-bg);">
+        <span class="uss-note-title" style="color: var(--accent-blue);">Which quadrant this is</span>
+        This plots the <strong>two independently measured terms of the debt-dynamics equation</strong> against each
+        other — the standard sustainability quadrant in IMF and ECB debt-sustainability work. It is not the
+        quadrant the source material used, which plotted inherited index level against a presidential
+        contribution score; because those two are mechanically correlated (R²&nbsp;≈&nbsp;0.51, see the
+        methodology tab), its quadrants largely sorted administrations by where they happened to start. This one
+        sorts years by the mechanism actually moving the debt ratio.
+      </div>
+
+      <div id="echart-quadrant-container"
+           class="chart-canvas"
+           style="height: 540px;"
+           role="img"
+           aria-label="Scatter plot of r minus g against the primary deficit for every fiscal year from {{ history[0].year }} to {{ history[-1].year }}, grouped into six eras and four sustainability quadrants.">
+        <p class="chart-fallback">Loading quadrant chart…</p>
+      </div>
+
+      <div class="uss-scenario-grid">
+        {% for q in quadrant_counts %}
+        <div class="uss-scenario" style="--scen-color: {{ q.color }};">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <div class="uss-scenario-title">{{ q.name }}</div>
+            {% if q.current %}<span class="status-badge status-warning" style="font-size: 0.68rem;">FY{{ latest.year }} IS HERE</span>{% endif %}
+          </div>
+          <div class="uss-scenario-params">
+            {{ q.years }} of {{ quadrant_points|length }} years ({{ "%.0f"|format(q.pct) }}%) &nbsp;·&nbsp; last in {{ q.latest or '—' }}
+          </div>
+          <div class="uss-scenario-text">{{ q.desc }}</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 16px; line-height: 1.6;">
+        The United States has spent more years <em>outgrowing</em> its deficit than in any other configuration, and
+        FY{{ latest.year }} sits there too — r − g is {{ "%+.1f"|format(latest.raw_values.r_minus_g) }}pp, so the
+        existing stock is still eroding faster than the {{ "%.1f"|format(latest.raw_values.primary_deficit) }}%
+        primary deficit adds to it. That is a position which depends entirely on r staying below g: the projection
+        section is about what happens when it does not. Points far from the cluster are wars and crises
+        (1945, 1951, 2009, 2020–21); scroll to zoom.
+      </p>
+    </section>
+
+    <!-- Debt-change decomposition -->
+    <section class="chart-card" aria-labelledby="decomp-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="decomp-heading" style="margin: 0; font-size: 1.25rem;">What Moved the Debt Ratio Each Year</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          d<sub>t</sub> − d<sub>t−1</sub> = d<sub>t−1</sub>·(r−g)/(1+g) &nbsp;+&nbsp; primary deficit &nbsp;+&nbsp; stock-flow adjustment
+        </span>
+      </div>
+
+      <div id="echart-decomp-container"
+           class="chart-canvas"
+           style="height: 420px;"
+           role="img"
+           aria-label="Stacked bar chart decomposing the annual change in debt to GDP into the snowball effect, the primary deficit, and the stock-flow adjustment.">
+        <p class="chart-fallback">Loading decomposition chart…</p>
+      </div>
+
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 16px; line-height: 1.6;">
+        The <strong>snowball</strong> is what the existing debt stock does on its own at the prevailing r − g; the
+        <strong>primary deficit</strong> is what the year's policy adds. The two frequently pull in opposite
+        directions, which is why headline deficit figures alone mislead: in FY2022 a
+        {{ "%.1f"|format(decomposition[-4].primary) }}% primary deficit was more than cancelled by a
+        {{ "%.1f"|format(decomposition[-4].snowball) }}pp snowball as inflation eroded the real stock, and the
+        ratio actually <em>fell</em>. The <strong>stock-flow adjustment</strong> is the residual — borrowing that
+        does not pass through the headline deficit, plus the ~3-month fiscal/calendar offset in these joins. It is
+        plotted rather than absorbed into the other two, because a decomposition whose residual is quietly dropped
+        is one that always appears to close. It averages
+        {{ "%.2f"|format(sfa_mean) }}pp of GDP and is largest in 1946–47 and 2020–21.
+      </p>
+    </section>
+
+    <!-- Debt dynamics projection -->
+    <section class="chart-card" aria-labelledby="proj-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="proj-heading" style="margin: 0; font-size: 1.25rem;">Debt Dynamics: Where the Path Goes</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          d<sub>t</sub> = d<sub>t−1</sub> · (1 + r<sub>t</sub>) / (1 + g<sub>t</sub>) + pb<sub>t</sub>, run forward {{ projection_years }} years under three r − g assumptions
+        </span>
+      </div>
+
+      <div class="uss-note">
+        <span class="uss-note-title">Read the spread, not the line</span>
+        Nearly all of the variation below comes from <strong>r − g</strong>, a quantity nobody can forecast.
+        Under the favourable path the debt ratio stabilises and the interest burden never reaches the distress zone;
+        under the adverse path it passes it in {{ horizon.thresholds[2].scenario_years.adverse }}.
+        <strong>That {{ horizon.thresholds[2].latest - horizon.thresholds[2].earliest }}-year gap — plus a scenario in which it never happens — is the finding.</strong>
+        Any single date quoted for this is one guess about r − g dressed up as a result.
+      </div>
+
+      <div id="echart-projection-container"
+           class="chart-canvas"
+           style="height: 460px;"
+           role="img"
+           aria-label="Projection chart of federal debt held by the public as a percent of GDP under favourable, baseline and adverse scenarios through {{ history[-1].year + projection_years }}.">
+        <p class="chart-fallback">Loading projection chart…</p>
+      </div>
+
+      <div class="uss-scenario-grid">
+        {% for p in projections %}
+        <div class="uss-scenario" style="--scen-color: {{ p.color }};">
+          <div class="uss-scenario-title">{{ p.label }}</div>
+          <div class="uss-scenario-params">
+            r → {{ "%.1f"|format(p.terminal_r) }}% &nbsp;·&nbsp; g = {{ "%.1f"|format(p.nominal_growth) }}% &nbsp;·&nbsp;
+            r−g = {{ "%+.1f"|format(p.r_minus_g) }}pp &nbsp;·&nbsp; primary deficit → {{ "%.1f"|format(p.terminal_pb) }}% GDP
+          </div>
+          <div class="uss-scenario-text">{{ p.narrative }}</div>
+          <div style="margin-top: 10px; font-family: var(--font-mono); font-size: 0.8rem;">
+            <strong style="color: {{ p.color }};">{{ history[-1].year + projection_years }}:</strong>
+            debt {{ "%.0f"|format(p.end_debt_gdp) }}% of GDP, interest {{ "%.0f"|format(p.end_interest_receipts) }}% of receipts
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="uss-threshold-grid">
+        {% for t in horizon.thresholds %}
+        <div class="uss-threshold">
+          <div class="uss-threshold-head">
+            <span class="uss-threshold-pct">{{ t.pct|int }}%</span>
+            <span class="uss-threshold-name">{{ t.label }}</span>
+          </div>
+          <div class="uss-threshold-range">
+            {% if t.earliest and t.never_count == 0 %}
+              {{ t.earliest }}–{{ t.latest }}
+            {% elif t.earliest %}
+              {{ t.earliest }}–{{ t.latest }} <span style="font-size: 0.8rem; color: var(--text-muted);">or never</span>
+            {% else %}
+              Not reached
+            {% endif %}
+          </div>
+          <div class="uss-threshold-desc">{{ t.desc }}</div>
+          <div class="uss-threshold-scen">
+            {% for p in projections %}
+            <span>
+              <span class="uss-dot" style="background: {{ p.color }};"></span>
+              {{ t.scenario_years[p.key] or 'never' }}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 16px; line-height: 1.6;">
+        These are fiscal-stress thresholds, not default thresholds. A government that borrows in a currency it
+        issues does not become insolvent at a ratio; what these levels mark is the point at which debt service
+        crowds the discretionary budget out and the remaining options are austerity, inflation, or financial
+        repression. The 35% level is a stated convention here, not an established constant — it is shown
+        because it is the level the original framing used, so the two can be compared.
+      </p>
+    </section>
+
+
+    <!-- Reserve-currency displacement simulator -->
+    <section class="chart-card" aria-labelledby="sim-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="sim-heading" style="margin: 0; font-size: 1.25rem;">Reserve-Currency Displacement Simulator</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          What if the world moves reserves out of the dollar? Move the sliders — the debt-dynamics recursion re-runs live.
+        </span>
+      </div>
+
+      <div class="uss-note">
+        <span class="uss-note-title">What is and is not being modelled</span>
+        The channel here is the one that is actually quantified in the literature: foreign demand for dollar safe
+        assets compresses Treasury yields, and losing it widens them. The default pass-through — <strong>{{ "%.1f"|format(sim.passthrough_bp) }}bp
+        of extra borrowing cost per percentage point of reserve share lost</strong> — comes from taking ~{{ sim.full_displacement_bp|int }}bp
+        as the cost of losing the privilege entirely (Warnock &amp; Warnock 2009: ~80bp; Krishnamurthy &amp;
+        Vissing-Jorgensen 2012: ~73bp convenience yield) spread across today's {{ "%.1f"|format(sim.usd_reserve_share) }}pp
+        of allocated reserves. <strong>That number is an assumption, not a measurement</strong>, so it is a slider too — and
+        the true relationship is very unlikely to be linear, since the marginal effect should grow as the buffer thins.
+        <br><br>
+        <strong>Not modelled:</strong> dollar depreciation feeding import prices and inflation, lost seigniorage, and any
+        disorderly repricing. Each would make the outcome worse, so this is a conservative reading of the scenario.
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin: var(--space-5) 0;">
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 600; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">Reserve share shifted off USD</span>
+            <span id="sim-shift-val" class="font-mono" style="color: var(--accent-rose);">0 pp</span>
+          </div>
+          <input type="range" id="sim-shift" min="0" max="40" step="1" value="0"
+                 style="width: 100%; height: 5px; accent-color: #EF4444;"
+                 aria-label="Percentage points of global allocated reserves shifted away from the US dollar">
+          <div id="sim-shares" class="font-mono" style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;"></div>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 600; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">Rate pass-through</span>
+            <span id="sim-pass-val" class="font-mono" style="color: var(--accent-amber);">{{ "%.1f"|format(sim.passthrough_bp) }} bp/pp</span>
+          </div>
+          <input type="range" id="sim-pass" min="0.5" max="6" step="0.1" value="{{ sim.passthrough_bp }}"
+                 style="width: 100%; height: 5px; accent-color: #F59E0B;"
+                 aria-label="Basis points added to the effective borrowing rate per percentage point of reserve share lost">
+          <div class="font-mono" style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">The key assumption. Drag it.</div>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 600; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">Nominal GDP growth (g)</span>
+            <span id="sim-growth-val" class="font-mono" style="color: var(--accent-emerald);">{{ "%.1f"|format(sim.nominal_growth) }}%</span>
+          </div>
+          <input type="range" id="sim-growth" min="2" max="6" step="0.1" value="{{ sim.nominal_growth }}"
+                 style="width: 100%; height: 5px; accent-color: #10B981;"
+                 aria-label="Terminal nominal GDP growth rate">
+          <div class="font-mono" style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Baseline {{ "%.1f"|format(sim.nominal_growth) }}%</div>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 600; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">Primary deficit (pb)</span>
+            <span id="sim-pb-val" class="font-mono" style="color: var(--accent-blue);">{{ "%.1f"|format(sim.terminal_pb) }}% GDP</span>
+          </div>
+          <input type="range" id="sim-pb" min="-2" max="8" step="0.1" value="{{ sim.terminal_pb }}"
+                 style="width: 100%; height: 5px; accent-color: #38BDF8;"
+                 aria-label="Terminal primary deficit as a percent of GDP">
+          <div class="font-mono" style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Compare this lever against the reserve one</div>
+        </div>
+      </div>
+
+      <div class="uss-kpi-grid" style="margin-bottom: var(--space-5);">
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-rose);">
+          <span class="uss-kpi-label">Added borrowing cost</span>
+          <span class="uss-kpi-value" id="sim-premium">+0<span class="uss-kpi-unit">bp</span></span>
+          <span class="uss-kpi-note">Effective rate <span id="sim-rate" class="font-mono">{{ "%.2f"|format(sim.terminal_r) }}%</span> at full rollover</span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-amber);">
+          <span class="uss-kpi-label">r − g</span>
+          <span class="uss-kpi-value" id="sim-rmg">+0.3<span class="uss-kpi-unit">pp</span></span>
+          <span class="uss-kpi-note" id="sim-rmg-note">Above zero, the debt ratio compounds on its own.</span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-blue);">
+          <span class="uss-kpi-label">Debt / GDP in {{ latest.year + projection_years }}</span>
+          <span class="uss-kpi-value" id="sim-debt">194<span class="uss-kpi-unit">%</span></span>
+          <span class="uss-kpi-note">From {{ "%.0f"|format(latest.raw_values.debt_gdp) }}% today</span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-emerald);">
+          <span class="uss-kpi-label">Interest / receipts</span>
+          <span class="uss-kpi-value" id="sim-interest">48<span class="uss-kpi-unit">%</span></span>
+          <span class="uss-kpi-note">In {{ latest.year + projection_years }}, from {{ "%.0f"|format(latest.raw_values.interest_burden) }}% today</span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-purple);">
+          <span class="uss-kpi-label">35% threshold reached</span>
+          <span class="uss-kpi-value" id="sim-cross">2041</span>
+          <span class="uss-kpi-note">Fiscal dominance — debt service crowds out the discretionary budget</span>
+        </div>
+      </div>
+
+      <div id="echart-sim-container"
+           class="chart-canvas"
+           style="height: 420px;"
+           role="img"
+           aria-label="Projected debt to GDP under the simulated scenario compared with the unmodified baseline.">
+        <p class="chart-fallback">Loading simulator chart…</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px;">
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0; line-height: 1.6; flex: 1 1 320px;">
+          Index in {{ latest.year + sim.index_horizon_years }} under these settings:
+          <strong id="sim-index" class="font-mono" style="font-size: 1rem;">—</strong>
+          <span id="sim-index-badge" class="status-badge status-good" style="margin-left: 6px;">—</span>
+          <br>
+          <span style="font-size: 0.76rem;">
+            Debt, interest burden, primary deficit and r − g are moved by the simulation; productivity and
+            inflation are held at today's values because this model does not project them. Reported at
+            {{ sim.index_horizon_years }} years rather than {{ projection_years }} because by the late 2040s every
+            path pushes debt past the 150%-of-GDP cap on the debt component and the index saturates.
+          </span>
+        </p>
+        <button type="button" class="ppi-vote-btn" onclick="ussSimReset()" style="padding: 6px 14px; font-size: 0.85rem;">
+          <span>Reset to baseline</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Decade averages -->
+    <section class="components-card" aria-labelledby="decade-heading" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2 id="decade-heading">The Trend, by Decade</h2>
+        <span class="section-desc">
+          Mean index level per decade. This is the "structural degradation" claim stated plainly — and it is
+          not monotonic: the 1990s and 2000s both improved on the decade before them.
+        </span>
+      </div>
+      <div class="table-responsive">
+        <table class="components-table">
+          <caption class="sr-only">Mean USS-INDEX level by decade</caption>
+          <thead>
+            <tr>
+              <th scope="col">Decade</th>
+              <th scope="col">Mean index</th>
+              <th scope="col">Level</th>
+              <th scope="col">Years</th>
+              <th scope="col">Relative position</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in decades %}
+            <tr>
+              <th scope="row" class="font-mono">{{ d.decade }}</th>
+              <td class="font-mono cell-strong">{{ "%.1f"|format(d.mean) }}</td>
+              <td><span class="status-badge status-{{ d.status }}">{{ d.level|upper }}</span></td>
+              <td class="font-mono cell-sub">{{ d.years }}</td>
+              <td>
+                <div class="stress-bar-wrapper">
+                  <div class="stress-track">
+                    <div class="stress-fill {% if d.mean > 130 %}stress-high{% elif d.mean > 115 %}stress-mid{% else %}stress-low{% endif %}"
+                         style="width: {{ ((d.mean - 100) / 50 * 100)|round(1) }}%;"></div>
+                  </div>
+                  <span class="font-mono stress-value">+{{ "%.0f"|format(d.mean - 100) }}</span>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Component matrix -->
+    <section class="components-card" aria-labelledby="components-heading" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2 id="components-heading">Component Breakdown Matrix</h2>
+        <span class="section-desc">
+          Composite = 100 + ∑(weight × stress score) for FY{{ latest.year }}. Full derivation on the
+          <a href="#methodology" data-report-tab="methodology">methodology tab</a>.
+        </span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="components-table table-sticky-first">
+          <caption class="sr-only">USS-INDEX component breakdown for fiscal year {{ latest.year }}</caption>
+          <thead>
+            <tr>
+              <th scope="col">Indicator component</th>
+              <th scope="col">Block</th>
+              <th scope="col">FY{{ latest.year }} value</th>
+              <th scope="col">Baseline</th>
+              <th scope="col">Crisis threshold</th>
+              <th scope="col">Stress score (0–100)</th>
+              <th scope="col">Weight</th>
+              <th scope="col">Index contribution</th>
+              <th scope="col">Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cr in snapshot.components %}
+            <tr {% if cr.stale %}class="row-stale"{% endif %}>
+              <th scope="row">
+                <div class="comp-name-cell">
+                  <span class="comp-swatch" aria-hidden="true" style="background: {{ block_colors[cr.component.key] }};"></span>
+                  {{ cr.component.label }}
+                </div>
+              </th>
+              <td class="cell-sub">{{ block_labels[cr.component.key] }}</td>
+              <td class="font-mono cell-strong">
+                {{ "%.2f"|format(cr.current_value) if cr.current_value is not none else "—" }}
+                <span class="cell-unit">{{ cr.component.unit }}</span>
+                {% if cr.stale %}
+                <span class="stale-badge" title="Series does not cover this year; index scored on the remaining weight">N/A</span>
+                {% endif %}
+              </td>
+              <td class="font-mono cell-sub">{{ "%.2f"|format(cr.baseline_value) }}</td>
+              <td class="font-mono cell-sub">{{ "%.2f"|format(crisis_values[cr.component.key]) }}</td>
+              <td>
+                <div class="stress-bar-wrapper">
+                  <div class="stress-track">
+                    <div class="stress-fill {% if cr.stress > 60 %}stress-high{% elif cr.stress > 30 %}stress-mid{% else %}stress-low{% endif %}" style="width: {{ cr.stress }}%;"></div>
+                  </div>
+                  <span class="font-mono stress-value">{{ "%.0f"|format(cr.stress) }}</span>
+                </div>
+              </td>
+              <td class="font-mono">{{ (cr.component.weight * 100)|round|int }}%</td>
+              <td class="font-mono cell-contrib">+{{ "%.2f"|format(cr.contribution) }}</td>
+              <td class="cell-source">{{ cr.component.source }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Turning points -->
+    <section class="components-card" aria-labelledby="turning-heading" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2 id="turning-heading">Statutory Turning Points</h2>
+        <span class="section-desc">
+          Dated to the legislation, and described by what the law did. These annotate the series — they are
+          not scored, ranked, or attributed to an administration. See the methodology tab for why.
+        </span>
+      </div>
+      <div style="padding: var(--space-4); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-3);">
+        {% for tp in turning_points %}
+        <div style="border: 1px solid var(--border-subtle); border-radius: var(--card-radius); padding: var(--space-4); background: var(--surface-card);">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 6px;">
+            <span style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-amber);">{{ tp.year }}</span>
+            <span class="font-mono" style="font-size: 0.8rem; color: var(--text-muted);">index {{ "%.1f"|format(tp.score) }}</span>
+          </div>
+          <div style="font-weight: 700; font-size: 0.92rem; margin-bottom: 6px;">{{ tp.title }}</div>
+          <div style="font-size: 0.81rem; line-height: 1.55; color: var(--text-muted);">{{ tp.description }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+
+    <!-- Presidential structural contribution -->
+    <section class="chart-card" aria-labelledby="pres-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="pres-heading" style="margin: 0; font-size: 1.25rem;">Presidential Structural Contribution</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          Each term's change in the index, after removing the business cycle and the arithmetic of where it started
+        </span>
+      </div>
+
+      <div class="uss-note">
+        <span class="uss-note-title">Read the error bar before the ranking</span>
+        <p style="margin: 0 0 10px;">
+          The residual standard deviation across the fourteen terms is
+          <strong>±{{ "%.1f"|format(pres.residual_sd) }} points</strong> — a quarter of the entire range of scores.
+          <strong>{{ pres.indistinguishable_count }} of {{ pres.rows|length }} administrations fall inside that band</strong>,
+          which means their scores are not distinguishable from each other or from zero. Only
+          {% for d in pres.distinguishable %}{{ d.name }} ({{ "%+.1f"|format(d.residual) }}){% if not loop.last %}, {% endif %}{% endfor %}
+          separate from the noise.
+        </p>
+        <p style="margin: 0;">
+          Mean residual by party is <strong>{{ "%+.1f"|format(pres.party_means.D) }}</strong> for Democratic terms and
+          <strong>{{ "%+.1f"|format(pres.party_means.R) }}</strong> for Republican — a gap of
+          {{ "%.1f"|format(pres.party_gap) }} points against an error bar of {{ "%.1f"|format(pres.residual_sd) }}.
+          <strong>There is no party signal in this data.</strong> The bipartisan reading is the one the numbers support:
+          both parties appear at both ends.
+        </p>
+      </div>
+
+      <div id="echart-pres-container"
+           class="chart-canvas"
+           style="height: 520px;"
+           role="img"
+           aria-label="Diverging bar chart of each administration's structural residual, with error bars of plus or minus {{ '%.1f'|format(pres.residual_sd) }} points.">
+        <p class="chart-fallback">Loading contribution chart…</p>
+      </div>
+
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin: 12px 0 0; line-height: 1.6; text-align: center;">
+        Positive = added structural risk. Bars are coloured by party — <span style="color:#EF4444; font-weight:600;">Republican</span>
+        and <span style="color:#38BDF8; font-weight:600;">Democratic</span> — and note that both colours appear at both
+        ends. The shaded band is ±1 residual standard deviation ({{ "%.1f"|format(pres.residual_sd) }} points); bars
+        drawn hollow fall inside it and are indistinguishable from zero.
+      </p>
+    </section>
+
+    <!-- Inherited vs created -->
+    <section class="chart-card" aria-labelledby="inherited-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="inherited-heading" style="margin: 0; font-size: 1.25rem;">Inherited vs. Created</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          The same fourteen terms, before and after the mean-reversion correction — toggle the series in the legend
+        </span>
+      </div>
+
+      <div class="uss-note" style="border-left-color: var(--accent-blue); background: var(--accent-blue-bg);">
+        <span class="uss-note-title" style="color: var(--accent-blue);">Why the correction matters</span>
+        Plot each term's <em>raw</em> index change against the level it inherited and you get a strong downward
+        slope: R²&nbsp;=&nbsp;<strong>{{ "%.3f"|format(pres.correlations.raw_vs_inherited) }}</strong>. Inherit a high
+        number and you are near-guaranteed a "good" score; inherit a low one and you are near-guaranteed a bad one.
+        That slope is regression to the mean, not policy. Removing the cycle and then residualising on the inherited
+        level takes the remaining dependence down to R²&nbsp;=&nbsp;<strong>{{ "%.3f"|format(pres.correlations.adjusted_vs_inherited) }}</strong>.
+        The corrected points below are flat against the x-axis by construction — <em>that is the fix working</em>, and
+        it reorders the table substantially: Eisenhower and Nixon each fall
+        {{ 8 }} places against the raw ranking, Obama rises nine.
+      </div>
+
+      <div id="echart-inherited-container"
+           class="chart-canvas"
+           style="height: 500px;"
+           role="img"
+           aria-label="Scatter plot of inherited index level against raw change and against the corrected structural residual for each administration.">
+        <p class="chart-fallback">Loading inherited-versus-created chart…</p>
+      </div>
+    </section>
+
+    <!-- Scorecard table -->
+    <section class="components-card" aria-labelledby="scorecard-heading" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2 id="scorecard-heading">Full Decomposition</h2>
+        <span class="section-desc">
+          Ranked by structural residual. Rank range is the span across four weighting schemes — the ordering is
+          reasonably stable to weighting (widest swing {{ pres.max_rank_spread }} places), but that is a much weaker
+          claim than the ordering being <em>significant</em>, which mostly it is not.
+        </span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="components-table table-sticky-first">
+          <caption class="sr-only">Presidential structural contribution decomposition</caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">President</th>
+              <th scope="col">Party</th>
+              <th scope="col">Budget FYs</th>
+              <th scope="col">Inherited</th>
+              <th scope="col">Ending</th>
+              <th scope="col">Raw change</th>
+              <th scope="col">Cyclical</th>
+              <th scope="col">Mean-reversion expected</th>
+              <th scope="col">Structural residual</th>
+              <th scope="col">Per year</th>
+              <th scope="col">In recession</th>
+              <th scope="col">Rank range</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in pres.rows %}
+            <tr {% if r.residual|abs <= pres.residual_sd %}class="row-stale"{% endif %}>
+              <th scope="row" class="font-mono">{{ r.rank }}</th>
+              <td><strong>{{ r.name }}</strong></td>
+              <td class="cell-sub">{{ r.party_label }}</td>
+              <td class="font-mono cell-sub">{{ r.first }}–{{ r.last }}</td>
+              <td class="font-mono cell-sub">{{ "%.1f"|format(r.inherited) }}</td>
+              <td class="font-mono cell-sub">{{ "%.1f"|format(r.ending) }}</td>
+              <td class="font-mono">{{ "%+.1f"|format(r.raw_change) }}</td>
+              <td class="font-mono cell-sub">
+                {% if r.cyclical is not none %}{{ "%+.1f"|format(r.cyclical) }}{% else %}<span title="CBO potential GDP begins in 1949, so no cyclical estimate exists for the inherited year">n/a</span>{% endif %}
+              </td>
+              <td class="font-mono cell-sub">{{ "%+.1f"|format(r.expected) }}</td>
+              <td class="font-mono cell-contrib"><strong>{{ "%+.1f"|format(r.residual) }}</strong></td>
+              <td class="font-mono cell-sub">{{ "%+.2f"|format(r.residual_per_year) }}</td>
+              <td class="font-mono cell-sub">{{ "%.0f"|format((r.recession_share or 0) * 100) }}%</td>
+              <td class="font-mono cell-sub">
+                {% if r.rank_min == r.rank_max %}{{ r.rank_min }}{% else %}{{ r.rank_min }}–{{ r.rank_max }}{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="padding: var(--space-4); font-size: 0.78rem; color: var(--text-muted); line-height: 1.65;">
+        <p style="margin: 0 0 8px;">
+          Greyed rows are the {{ pres.indistinguishable_count }} administrations whose residual is inside
+          ±{{ "%.1f"|format(pres.residual_sd) }} points, i.e. indistinguishable from zero.
+        </p>
+        <p style="margin: 0 0 8px;">
+          <strong>Terms follow the budget-responsibility convention:</strong> a president owns the fiscal years whose
+          budgets they submitted. FY2009 — which began in October 2008 and carries TARP — is therefore George W.
+          Bush's, and Barack Obama's first year is FY2010. The alternative convention (crediting the year of
+          inauguration) moves several rankings, which is exactly why the choice is stated rather than assumed.
+        </p>
+        <p style="margin: 0;">
+          <strong>No exogenous-shock adjustment is subtracted.</strong> There is no estimator for one: whether a given
+          emergency package counts as exogenous or structural is a judgement, and it swings the ordering by more than
+          the ordering's own spread. The "in recession" column reports the share of each term's months in an
+          NBER-dated recession so the reader can weigh it directly rather than have a preference encoded for them.
+          This is the main reason these ranks differ from versions that strip pandemic and crisis spending by hand.
+        </p>
+      </div>
+    </section>
+
+    <!-- Model diagnostics -->
+    <section class="components-card" aria-labelledby="diag-heading" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2 id="diag-heading">What Was Estimated, and How Well</h2>
+        <span class="section-desc">
+          Both corrections are regressions on this series, not chosen constants. Their fit statistics are published
+          so the corrections can be judged rather than trusted.
+        </span>
+      </div>
+      <div style="padding: var(--space-4); display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-4);">
+        <div class="uss-scenario" style="--scen-color: var(--accent-blue);">
+          <div class="uss-scenario-title">1. Cyclical correction</div>
+          <div class="uss-formula" style="font-size: 0.82rem; text-align: left; margin: 8px 0;">
+            Δindex = {{ "%.2f"|format(pres.cyclical_model.alpha) }} {{ "%+.3f"|format(pres.cyclical_model.beta) }} × Δ(output gap)
+          </div>
+          <div class="uss-scenario-params">
+            n = {{ pres.cyclical_model.n }} years &nbsp;·&nbsp; R² = {{ "%.3f"|format(pres.cyclical_model.r2) }}
+            &nbsp;·&nbsp; se(β) = {{ "%.3f"|format(pres.cyclical_model.se_beta) }}
+            &nbsp;·&nbsp; t = {{ "%.2f"|format(pres.cyclical_model.t) }}
+          </div>
+          <div class="uss-scenario-text">
+            A 1pp widening of the CBO output gap moves the index
+            {{ "%+.2f"|format(-pres.cyclical_model.beta) }} points. Strongly determined (|t| &gt; 8), so the cyclical
+            share of a term's change is a measured quantity rather than an assumed one.
+          </div>
+        </div>
+
+        <div class="uss-scenario" style="--scen-color: var(--accent-amber);">
+          <div class="uss-scenario-title">2. Mean-reversion correction</div>
+          <div class="uss-formula" style="font-size: 0.82rem; text-align: left; margin: 8px 0;">
+            Δadjusted = {{ "%.2f"|format(pres.reversion_model.alpha) }} {{ "%+.3f"|format(pres.reversion_model.beta) }} × inherited level
+          </div>
+          <div class="uss-scenario-params">
+            n = {{ pres.reversion_model.n }} terms &nbsp;·&nbsp; R² = {{ "%.3f"|format(pres.reversion_model.r2) }}
+            &nbsp;·&nbsp; se(β) = {{ "%.3f"|format(pres.reversion_model.se_beta) }}
+            &nbsp;·&nbsp; t = {{ "%.2f"|format(pres.reversion_model.t) }}
+          </div>
+          <div class="uss-scenario-text">
+            Every point of inherited index level predicts {{ "%.2f"|format(-pres.reversion_model.beta) }} points of
+            subsequent "improvement" for free. Only fourteen observations, so this correction is itself uncertain —
+            which is precisely why the residual carries a ±{{ "%.1f"|format(pres.residual_sd) }} band.
+          </div>
+        </div>
+
+        <div class="uss-scenario" style="--scen-color: var(--accent-rose);">
+          <div class="uss-scenario-title">3. What is <em>not</em> estimated</div>
+          <div class="uss-scenario-text" style="margin-top: 8px;">
+            No exogenous-shock term and no inherited-baseline-momentum term. Both are counterfactuals with no
+            estimator on this data. Constructions that include them do so as per-president constants, which makes
+            the resulting ranking an input to the model rather than an output of it. Omitting them is why the
+            pandemic years weigh on the terms that contain them here.
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive" style="padding: 0 var(--space-4) var(--space-4);">
+        <table class="components-table">
+          <caption class="sr-only">Structural residual under each weighting scheme</caption>
+          <thead>
+            <tr>
+              <th scope="col">President</th>
+              {% for s in pres.schemes %}<th scope="col" title="{{ s.desc }}">{{ s.label }}</th>{% endfor %}
+              <th scope="col">Rank range</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in pres.rows %}
+            <tr>
+              <th scope="row">{{ r.name }}</th>
+              {% for s in pres.schemes %}
+              <td class="font-mono">{{ "%+.1f"|format(r.residual_by_scheme[s.key]) }}
+                <span class="cell-unit">#{{ r.ranks_by_scheme[s.key] }}</span>
+              </td>
+              {% endfor %}
+              <td class="font-mono cell-sub">
+                {% if r.rank_min == r.rank_max %}{{ r.rank_min }}{% else %}{{ r.rank_min }}–{{ r.rank_max }}{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+
+    <!-- Not yet in the data -->
+    <section class="chart-card" aria-labelledby="pending-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="pending-heading" style="margin: 0; font-size: 1.25rem;">Enacted Since the Data Ends</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          The index runs through FY{{ latest.year }}. These are real, scored, and in none of the charts above.
+        </span>
+      </div>
+
+      <div class="uss-note">
+        <span class="uss-note-title">Why these are listed rather than added in</span>
+        Every chart above is <em>measured</em>: it contains only closed fiscal years from published series. The
+        items below are <strong>projections and in-year estimates</strong>. Folding a CBO ten-year score into an
+        eighty-year historical series would make that series no longer a measurement — the exact failure mode this
+        dashboard was built to avoid. They are quantified here, translated into the units the projection uses, and
+        left out of the index until the fiscal years actually close.
+      </div>
+
+      <div class="uss-kpi-grid" style="margin: var(--space-5) 0;">
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-rose);">
+          <span class="uss-kpi-label">OBBBA, primary deficit</span>
+          <span class="uss-kpi-value">${{ "%.1f"|format(pending.entries[0].primary_tn) }}<span class="uss-kpi-unit">tn</span></span>
+          <span class="uss-kpi-note">FY2025–34. ${{ "%.1f"|format(pending.entries[0].with_interest_tn) }}tn including the debt service it generates.</span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-amber);">
+          <span class="uss-kpi-label">As an annual burden</span>
+          <span class="uss-kpi-value">{{ "%.2f"|format(pending.entries[0].pct_gdp_per_year) }}<span class="uss-kpi-unit">% GDP/yr</span></span>
+          <span class="uss-kpi-note">Rising to {{ "%.2f"|format(pending.entries[0].pct_gdp_per_year_extended) }}% if the temporary provisions are made permanent.</span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-blue);">
+          <span class="uss-kpi-label">Iran conflict, to date</span>
+          <span class="uss-kpi-value">${{ "%.0f"|format(pending.entries[1].cost_low_bn) }}–{{ "%.0f"|format(pending.entries[1].cost_high_bn) }}<span class="uss-kpi-unit">bn</span></span>
+          <span class="uss-kpi-note">{{ "%.2f"|format(pending.iran_pct_gdp) }}% of GDP. ${{ "%.1f"|format(pending.entries[1].requested_bn) }}bn supplemental requested, ~a third of it war-related.</span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-purple);">
+          <span class="uss-kpi-label">Threshold moves</span>
+          <span class="uss-kpi-value">{{ pending.baseline_crossing }}→{{ pending.obbba_crossing }}</span>
+          <span class="uss-kpi-note">Adding OBBBA to the baseline primary deficit costs {{ pending.years_lost }} years, and takes 2055 debt from {{ "%.0f"|format(pending.baseline_end_debt) }}% to {{ "%.0f"|format(pending.obbba_end_debt) }}% of GDP.</span>
+        </div>
+      </div>
+
+      <div class="uss-note" style="border-left-color: var(--accent-rose); background: var(--accent-rose-bg);">
+        <span class="uss-note-title" style="color: var(--accent-rose);">The scale comparison most coverage gets backwards</span>
+        In cumulative fiscal terms the tax bill is <strong>roughly {{ pending.obbba_vs_iran_ratio }} times</strong>
+        the war. OBBBA adds about {{ "%.1f"|format(pending.obbba_cumulative_pct_gdp) }}% of GDP to borrowing across
+        its ten-year window; the Iran conflict, at the upper estimate, is {{ "%.2f"|format(pending.iran_pct_gdp) }}%
+        of GDP once. Wars are politically enormous and, at this point in history, fiscally small — the panel below
+        shows why that was not always true.
+      </div>
+
+      <div class="table-responsive">
+        <table class="components-table">
+          <caption class="sr-only">Fiscal items enacted after the end of the measured series</caption>
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Enacted</th>
+              <th scope="col">Scale</th>
+              <th scope="col">What it is</th>
+              <th scope="col">Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in pending.entries %}
+            <tr>
+              <th scope="row">{{ i.name }}</th>
+              <td class="font-mono cell-sub">{{ i.enacted }}</td>
+              <td class="font-mono">
+                {% if i.kind == 'legislation' %}${{ "%.1f"|format(i.primary_tn) }}tn primary<br>
+                  <span class="cell-unit">${{ "%.1f"|format(i.with_interest_tn) }}tn with interest · ${{ "%.1f"|format(i.if_extended_tn) }}tn if extended</span>
+                {% elif i.kind == 'conflict' %}${{ "%.0f"|format(i.cost_low_bn) }}–{{ "%.0f"|format(i.cost_high_bn) }}bn<br>
+                  <span class="cell-unit">${{ "%.1f"|format(i.requested_bn) }}bn supplemental requested</span>
+                {% else %}${{ "%.1f"|format(i.level_tn) }}tn<br>
+                  <span class="cell-unit">${{ "%.1f"|format(i.requested_next_tn) }}tn requested for FY2027</span>
+                {% endif %}
+              </td>
+              <td class="cell-muted" style="font-size: 0.82rem;">{{ i.note }}</td>
+              <td class="cell-source"><a href="{{ i.source_url }}" target="_blank" rel="noopener">{{ i.source }}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- War and the defence burden -->
+    <section class="chart-card" aria-labelledby="war-heading" style="margin-top: 24px;">
+      <div class="chart-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin-bottom: 6px;">
+        <h2 id="war-heading" style="margin: 0; font-size: 1.25rem;">Wars and the Defence Burden</h2>
+        <span class="section-desc" style="font-style: italic; font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          National defence as a share of GDP, {{ history[0].year }}–{{ history[-1].year }}, against the solvency index
+        </span>
+      </div>
+
+      <div class="uss-note" style="border-left-color: var(--accent-blue); background: var(--accent-blue-bg);">
+        <span class="uss-note-title" style="color: var(--accent-blue);">Wars enter this index through the debt they leave</span>
+        There is no war component, and no attempt to back a "cost of the war" out of aggregate outlays. Trying the
+        standard method — defence spending above its own three-years-prior baseline — gives sensible answers for
+        Korea and the post-9/11 wars and nonsense for two others: <strong>Vietnam scores 0.2pp of GDP</strong>
+        because 1962–64 defence was already 10.9% of GDP and the war was absorbed inside a standing Cold War
+        establishment, and <strong>the Gulf War scores zero</strong> because it was fought during the post-Cold-War
+        drawdown. Both are arithmetically correct and analytically useless, which is the same
+        unidentified-counterfactual problem the presidential panel refuses to pretend it has solved. So this panel
+        reports what is measured — the burden, and the debt across each period — and cites CRS for constant-dollar
+        operation costs rather than deriving a rival estimate.
+      </div>
+
+      <div id="echart-war-container"
+           class="chart-canvas"
+           style="height: 460px;"
+           role="img"
+           aria-label="National defence spending as a percent of GDP from {{ history[0].year }} to {{ history[-1].year }}, with major war periods shaded, plotted against the solvency index.">
+        <p class="chart-fallback">Loading defence burden chart…</p>
+      </div>
+
+      <div class="uss-kpi-grid" style="margin-top: var(--space-5);">
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-emerald);">
+          <span class="uss-kpi-label">Defence today</span>
+          <span class="uss-kpi-value">{{ "%.1f"|format(defence.defence) }}<span class="uss-kpi-unit">% GDP</span></span>
+          <span class="uss-kpi-note">
+            {% if defence.is_near_record_low %}The {{ defence.rank_from_bottom }}{% if defence.rank_from_bottom == 1 %}st{% elif defence.rank_from_bottom == 2 %}nd{% elif defence.rank_from_bottom == 3 %}rd{% else %}th{% endif %}-lowest of {{ defence.total }} years{% else %}Mid-range for the series{% endif %},
+            even with a budget above $1tn.
+          </span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-rose);">
+          <span class="uss-kpi-label">Post-war peak</span>
+          <span class="uss-kpi-value">{{ "%.1f"|format(defence.highest.defence) }}<span class="uss-kpi-unit">% GDP</span></span>
+          <span class="uss-kpi-note">{{ defence.highest.year }} — ten times today's share. WWII cost $4.1tn in FY2011 dollars.</span>
+        </div>
+        <div class="uss-kpi" style="--kpi-accent: var(--accent-blue);">
+          <span class="uss-kpi-label">Record low</span>
+          <span class="uss-kpi-value">{{ "%.1f"|format(defence.lowest.defence) }}<span class="uss-kpi-unit">% GDP</span></span>
+          <span class="uss-kpi-note">{{ defence.lowest.year }}. The burden has fallen for eighty years while the debt ratio rose.</span>
+        </div>
+      </div>
+
+      <details class="chart-data-table" style="margin-top: 18px;">
+        <summary>Measured: what the data shows across each period</summary>
+        <div class="table-responsive">
+          <table class="components-table">
+            <caption class="sr-only">Defence burden and debt change across each conflict period</caption>
+            <thead>
+              <tr>
+                <th scope="col">Period</th>
+                <th scope="col">Years</th>
+                <th scope="col">Peak defence</th>
+                <th scope="col">Mean defence</th>
+                <th scope="col">Change in debt/GDP</th>
+                <th scope="col">Change in index</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for w in war_periods %}
+              <tr {% if w.partial %}class="row-stale"{% endif %}>
+                <th scope="row">{{ w.label }}{% if w.partial %} <span class="stale-badge" title="The series begins in this conflict's final year">PARTIAL</span>{% endif %}</th>
+                <td class="font-mono cell-sub">{{ w.start }}–{{ w.end }}</td>
+                <td class="font-mono">{{ "%.1f"|format(w.peak_defence) }}%</td>
+                <td class="font-mono cell-sub">{{ "%.2f"|format(w.mean_defence) }}%</td>
+                <td class="font-mono cell-contrib">{{ "%+.1f"|format(w.debt_gdp_change) }} pp</td>
+                <td class="font-mono">{{ "%+.1f"|format(w.index_change) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-muted); padding: 12px 4px 0; line-height: 1.6;">
+          Korea and Vietnam both saw debt/GDP <em>fall</em> — Korea was financed with tax increases, and Vietnam's
+          ratio was outrun by nominal growth and inflation even as the index rose {{ "%+.1f"|format(war_periods[2].index_change) }}
+          points on that inflation. The post-9/11 wars are the outlier: debt/GDP rose
+          {{ "%+.1f"|format(war_periods[5].debt_gdp_change) }}pp, though most of that is the 2008 crisis and its
+          response rather than the wars themselves — which is exactly why no causal split is attempted here.
+        </p>
+      </details>
+
+      <details class="chart-data-table" style="margin-top: 12px;">
+        <summary>Cited: CRS constant-dollar costs of major U.S. wars</summary>
+        <div class="table-responsive">
+          <table class="components-table">
+            <caption class="sr-only">Congressional Research Service estimates of the cost of major U.S. wars</caption>
+            <thead>
+              <tr>
+                <th scope="col">War</th>
+                <th scope="col">Years</th>
+                <th scope="col">Peak year</th>
+                <th scope="col">Cost, then-year $</th>
+                <th scope="col">Cost, constant FY2011 $</th>
+                <th scope="col">War cost, % GDP at peak</th>
+                <th scope="col">Total defence, % GDP at peak</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for w in crs_wars %}
+              <tr>
+                <th scope="row">{{ w.war }}</th>
+                <td class="font-mono cell-sub">{{ w.years }}</td>
+                <td class="font-mono cell-sub">{{ w.peak_year }}</td>
+                <td class="font-mono">${{ "{:,}".format(w.current_bn) }}bn</td>
+                <td class="font-mono cell-strong">${{ "{:,}".format(w.constant2011_bn) }}bn</td>
+                <td class="font-mono">{{ "%.1f"|format(w.war_pct_gdp_peak) }}%</td>
+                <td class="font-mono cell-sub">{{ "%.1f"|format(w.defence_pct_gdp_peak) }}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-muted); padding: 12px 4px 0; line-height: 1.6;">
+          Source: Congressional Research Service, <em>Costs of Major U.S. Wars</em> (RS22926, 29 June 2010), Table 1.
+          <strong>Military operations only</strong> — these figures exclude veterans' benefits, interest on war
+          borrowing, and aid to allies, which is why the post-9/11 total here ($1.1tn through 2010) is a fraction of
+          Brown University's Costs of War estimate of roughly <strong>$8tn</strong> through FY2022 once future
+          veterans' care (~$2.2–2.5tn to 2050) and interest (over $1tn already paid) are included. Two defensible
+          numbers measuring different things; neither is wrong.
+        </p>
+      </details>
+    </section>
+
+    <!-- Debt added by administration -->
+    <section class="components-card" aria-labelledby="debtadmin-heading" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2 id="debtadmin-heading">Debt Added, by Administration</h2>
+        <span class="section-desc">
+          Three measures of the same eighty years. They disagree about who tops the list, and the disagreement is
+          the reason to show all three.
+        </span>
+      </div>
+
+      <div style="padding: 0 var(--space-4);">
+        <div class="uss-note">
+          <span class="uss-note-title">Nominal dollars are the misleading one</span>
+          Prices are about {{ "%.0f"|format(latest.context.cpi_index / history[0].context.cpi_index) }} times their
+          {{ history[0].year }} level and the economy is
+          {{ "%.0f"|format(latest.context.gdp_bn / history[0].context.gdp_bn) }} times larger, so a nominal ranking
+          sorts presidents mostly by <em>when they served</em>. On that measure
+          <strong>{{ debt_admin.top_nominal.name }}</strong> tops the list at
+          ${{ "{:,.0f}".format(debt_admin.top_nominal.nominal_added_bn) }}bn; in constant
+          {{ debt_admin.base_year }} dollars it is <strong>{{ debt_admin.top_real.name }}</strong>; as a share of
+          GDP — the only measure comparable across the whole period, and the one the index uses — it is
+          <strong>{{ debt_admin.top_share.name }}</strong> at
+          {{ "%+.1f"|format(debt_admin.top_share.debt_gdp_change) }} points.
+          <br><br>
+          This table is <strong>raw</strong>: no cyclical correction and no mean-reversion correction. It answers
+          "how much debt accumulated on whose watch", which is a different and much weaker question than "who
+          added structural risk" — that one is answered, with error bars, in the panel above.
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="components-table table-sticky-first">
+          <caption class="sr-only">Debt added by administration on three measures</caption>
+          <thead>
+            <tr>
+              <th scope="col">President</th>
+              <th scope="col">Party</th>
+              <th scope="col">Budget FYs</th>
+              <th scope="col">Debt at start</th>
+              <th scope="col">Debt at end</th>
+              <th scope="col">Added, nominal</th>
+              <th scope="col">Added, {{ debt_admin.base_year }} $</th>
+              <th scope="col">Per year, {{ debt_admin.base_year }} $</th>
+              <th scope="col">Change in debt/GDP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in debt_admin.rows %}
+            <tr>
+              <th scope="row"><strong>{{ r.name }}</strong></th>
+              <td class="cell-sub">{{ r.party_label }}</td>
+              <td class="font-mono cell-sub">{{ r.first }}–{{ r.last }}</td>
+              <td class="font-mono cell-sub">${{ "{:,.0f}".format(r.debt_start_bn) }}bn</td>
+              <td class="font-mono cell-sub">${{ "{:,.0f}".format(r.debt_end_bn) }}bn</td>
+              <td class="font-mono">${{ "{:,.0f}".format(r.nominal_added_bn) }}bn</td>
+              <td class="font-mono">{% if r.real_added_bn is not none %}${{ "{:,.0f}".format(r.real_added_bn) }}bn{% else %}—{% endif %}</td>
+              <td class="font-mono cell-sub">{% if r.real_per_year_bn is not none %}${{ "{:,.0f}".format(r.real_per_year_bn) }}bn{% else %}—{% endif %}</td>
+              <td class="font-mono cell-contrib"><strong>{{ "%+.1f"|format(r.debt_gdp_change) }} pp</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="padding: var(--space-4); font-size: 0.8rem; color: var(--text-muted); line-height: 1.65;">
+        Sorted by change in debt/GDP, largest first. Over the eighty years, the
+        {{ debt_admin.party_totals.D.terms }} Democratic terms
+        ({{ debt_admin.party_totals.D.years }} years) coincided with a
+        <strong>{{ "%+.1f"|format(debt_admin.party_totals.D.debt_gdp_change) }}pp</strong> change in debt/GDP and the
+        {{ debt_admin.party_totals.R.terms }} Republican terms
+        ({{ debt_admin.party_totals.R.years }} years) with
+        <strong>{{ "%+.1f"|format(debt_admin.party_totals.R.debt_gdp_change) }}pp</strong> — but almost all of the
+        Democratic figure is Truman's {{ "%+.1f"|format(debt_admin.bottom_share.debt_gdp_change) }}pp post-war
+        demobilisation, which no later administration could repeat and which the mean-reversion correction exists to
+        discount. Read this row as arithmetic, not as a verdict.
+      </div>
+    </section>
+
+    <!-- Executive summary -->
+    <section class="components-card uss-exec" aria-labelledby="exec-heading" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2 id="exec-heading">
+          <span class="material-symbols-outlined" aria-hidden="true" style="vertical-align: -4px; margin-right: 6px;">summarize</span>
+          Executive Summary
+        </h2>
+        <span class="section-desc">
+          What every number on this page adds up to, in plain language. Every figure below is read from the
+          series at render time, so this text cannot drift away from the data underneath it.
+        </span>
+      </div>
+
+      <div class="uss-exec-body">
+
+        <!-- The state of things -->
+        <div class="uss-exec-lede">
+          U.S. federal finances score <strong>{{ "%.1f"|format(summary.score) }}</strong> for FY{{ summary.year }} —
+          <span class="status-badge status-{{ summary.status }}">{{ summary.level|upper }}</span> —
+          which is {{ "%.1f"|format(summary.points_above_baseline) }} points above the sustainable equilibrium of 100,
+          and roughly two-thirds of the way from that equilibrium to the {{ summary.peak.year }} wartime peak of
+          {{ "%.1f"|format(summary.peak.score) }}. The {{ summary.current_decade.decade }} average of
+          {{ "%.1f"|format(summary.current_decade.mean) }} is the highest of any decade since the
+          {{ summary.decade_is_worst_since }}.
+        </div>
+
+        <div class="uss-exec-grid">
+
+          <!-- Q1 -->
+          <div class="uss-exec-q">
+            <h3>Which president was best or worst for U.S. solvency?</h3>
+            <p>
+              <strong>Only four of {{ summary.term_count }} can be answered for.</strong>
+              {% for r in summary.reducers %}<strong>{{ r.name }}</strong> ({{ "%+.1f"|format(r.residual) }}){% if not loop.last %} and {% endif %}{% endfor %}
+              reduced structural risk by more than the margin of error;
+              {% for a in summary.adders %}<strong>{{ a.name }}</strong> ({{ "%+.1f"|format(a.residual) }}){% if not loop.last %} and {% endif %}{% endfor %}
+              added to it by more than that margin. The other {{ summary.indistinguishable_count }} administrations
+              land inside a ±{{ "%.1f"|format(summary.residual_sd) }}-point band and are
+              <strong>not distinguishable from one another, or from having done nothing at all</strong>.
+            </p>
+            <p>
+              Anyone quoting a clean fourteen-place league table of presidents is reporting noise as signal. The
+              spread between, say, 6th and 11th place here is a fraction of the error bar on any single one of them.
+            </p>
+          </div>
+
+          <!-- Q2 -->
+          <div class="uss-exec-q">
+            <h3>Which party is better for the public finances?</h3>
+            <p>
+              <strong>On this evidence, neither.</strong> The mean structural residual is
+              {{ "%+.1f"|format(summary.party_means.D) }} for Democratic terms and
+              {{ "%+.1f"|format(summary.party_means.R) }} for Republican ones. That gap of
+              {{ "%.1f"|format(summary.party_gap) }} points is {{ "%.0f"|format(summary.party_gap_ratio * 100) }}% of the
+              ±{{ "%.1f"|format(summary.residual_sd) }} error bar — far too small to call a difference.
+              Both parties appear at both ends of the ranking.
+            </p>
+            <p>
+              What differs is <em>mechanism</em>, not net effect. The record shows Democratic administrations
+              expanding mandatory entitlement commitments without matching revenue, and Republican ones enacting
+              permanent tax reductions without matching spending cuts. Two routes to the same arithmetic. The
+              structural deficit is a bipartisan construction, and the data will not support blaming either side
+              for it.
+            </p>
+          </div>
+
+          <!-- Q3 -->
+          <div class="uss-exec-q">
+            <h3>How did the U.S. get here?</h3>
+            <p>
+              Not through any single decision. The post-war low was FY{{ summary.trough.year }}
+              ({{ "%.1f"|format(summary.trough.score) }}) and the index has risen in steps ever since, with each step
+              tied to a statute rather than an administration: entitlement programmes created without dedicated
+              funding, tax cuts enacted without offsets, and the lapse of the PAYGO rules that briefly forced the
+              two to be reconciled.
+            </p>
+            <p>
+              The single largest change in the series is recent and mechanical. Net interest now consumes
+              <strong>{{ "%.1f"|format(summary.interest_burden) }}% of federal receipts —
+              {% if summary.interest_burden_is_series_high %}the highest in the entire {{ summary.year - 1945 }}-year
+              record{% else %}near the {{ summary.worst_burden_year }} high of {{ "%.1f"|format(summary.worst_burden) }}%{% endif %}</strong>,
+              having roughly doubled since 2021 as near-zero-coupon debt from the 2010s rolled over into a
+              higher-rate world.
+            </p>
+          </div>
+
+          <!-- Q4 -->
+          <div class="uss-exec-q">
+            <h3>What does it mean for the rest of the world?</h3>
+            <p>
+              U.S. Treasuries are the global risk-free asset and the dollar is
+              {{ "%.1f"|format(summary.usd_reserve_share) }}% of allocated foreign exchange reserves. The rate the
+              U.S. Treasury pays therefore sets a floor under sovereign and corporate borrowing costs almost
+              everywhere, so a sustained rise in the U.S. term premium is exported rather than contained.
+            </p>
+            <p>
+              The important detail is that <strong>the world currently subsidises this position</strong>. r − g is
+              {{ "%+.1f"|format(summary.r_minus_g) }}pp, meaning the debt stock erodes faster than it accrues and the
+              ratio would fall on its own even with a
+              {{ "%.1f"|format(summary.primary_deficit) }}%-of-GDP primary deficit. The last five years make the point
+              starkly: inflation's erosion removed {{ "%.1f"|format(summary.snowball_5y|abs) }} points of debt/GDP
+              while policy added {{ "%.1f"|format(summary.primary_5y) }}. Almost the entire fiscal gap was paid for
+              by inflation rather than by taxation or restraint.
+            </p>
+            <p>
+              That is a borrowed condition, not a permanent one. The United States currently sits in the
+              <strong>&ldquo;{{ summary.quadrant.name }}&rdquo;</strong> quadrant, which holds only while r stays
+              below g.
+            </p>
+          </div>
+
+          <!-- Q5 -->
+          <div class="uss-exec-q uss-exec-wide">
+            <h3>How much time is there, and what actually changes it?</h3>
+            <p>
+              Net interest reaches 35% of receipts — the level at which debt service crowds out the discretionary
+              budget — somewhere between <strong>{{ summary.fiscal_dominance.earliest }} and
+              {{ summary.fiscal_dominance.latest }}</strong>{% if summary.fiscal_dominance.never_count %}, or never
+              under the favourable path{% endif %}. That range, not any single date, is the finding: it is almost
+              entirely a function of r − g, which nobody can forecast.
+            </p>
+            <p>
+              The two levers are comparable in size, and one of them is not the one usually discussed.
+              Shifting 30 percentage points of global reserves out of the dollar pulls the date forward to
+              <strong>{{ summary.sim_full_shift }}</strong>. Letting the primary deficit widen to 6% of GDP pulls it to
+              <strong>{{ summary.sim_loose_pb }}</strong>. Halving it to 1.5% pushes it out to
+              <strong>{{ summary.sim_tight_pb }}</strong> — a bigger move than de-dollarisation, and the only one
+              entirely within domestic control.
+            </p>
+          </div>
+
+          <!-- Bottom line -->
+          <div class="uss-exec-q uss-exec-bottom">
+            <h3>Bottom line</h3>
+            <p>
+              The U.S. fiscal position is <strong>strained but not critical</strong>, and it is deteriorating
+              slowly rather than approaching a cliff. Its current stability rests on a favourable r − g that is
+              neither guaranteed nor domestically controlled, while the interest burden has already reached a
+              post-war high. The problem is a multi-decade, bipartisan accumulation; the arithmetic that resolves
+              it is the primary deficit, which is the one term in the equation that policy sets directly.
+            </p>
+            <p class="uss-exec-caveat">
+              This is an index of structural risk, not a forecast and not investment advice. A government that
+              borrows in a currency it issues does not default at a ratio — what these thresholds mark is the
+              point at which the remaining options narrow to austerity, inflation, or financial repression.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /#tab-dashboard -->
+
+  <!-- TAB 2: METHODOLOGY -->
+  <div id="tab-methodology" class="report-panel" role="tabpanel" style="display: none;">
+    <section class="components-card">
+      <div class="components-card-head">
+        <h2>Mathematical Architecture &amp; Methodology</h2>
+        <span class="section-desc">
+          Every figure on this page is derived from published Federal Reserve Economic Data series by
+          <code>scripts/build_solvency_history.py</code>. Nothing is hand-keyed, interpolated or estimated.
+        </span>
+      </div>
+
+      <div style="padding: 24px;">
+
+        <h3 style="margin-bottom: 8px; font-size: 1.1rem;">1. Composite scoring</h3>
+        <div class="uss-formula">
+          USS-INDEX<sub>t</sub> = 100 + ∑<sub>k</sub> w<sub>k</sub> · S<sub>k,t</sub>
+          &nbsp;&nbsp;where&nbsp;&nbsp;
+          S<sub>k,t</sub> = clamp( (X<sub>k,t</sub> − b<sub>k</sub>) / (c<sub>k</sub> − b<sub>k</sub>) × 100, 0, 100 )
+        </div>
+        <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.6;">
+          Each indicator is scored linearly from its baseline <em>b<sub>k</sub></em> (0 stress) to a fixed crisis
+          threshold <em>c<sub>k</sub></em> (100 stress). Where <em>c<sub>k</sub> &lt; b<sub>k</sub></em> — productivity
+          and per-capita growth — the same expression handles the inversion without a special case.
+        </p>
+
+        <div class="uss-note" style="border-left-color: var(--accent-blue); background: var(--accent-blue-bg);">
+          <span class="uss-note-title" style="color: var(--accent-blue);">Why not z-scores and a normal CDF</span>
+          The conventional construction normalises each indicator against its own full-sample mean and standard
+          deviation and pushes it through Φ(·). That has two defects. It is computed <strong>in-sample</strong>, so
+          every historical value silently restates when a new year arrives, and the index is centred on ~50 by
+          construction — it can say "worse than the post-war average" but never "bad in absolute terms". And a CDF
+          <strong>saturates</strong>: once an indicator sits two standard deviations out the transform is flat, so the
+          index becomes least sensitive exactly where risk is accelerating. Fixed, argued thresholds keep the scale
+          absolute, keep history immutable, and keep the response linear right up to the cap.
+        </div>
+
+        <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">2. Calibration</h3>
+        <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+          Baselines are anchored on the measured 1960–2000 United States, not chosen by eye. The two exceptions are
+          marked: the inflation baseline is the FOMC's stated 2% target (a normative anchor, since the 1960–2000 mean
+          of 4.5% includes the Great Inflation), and the primary-deficit baseline is primary balance by definition.
+          As a check on the calibration, FY1965 — the post-war low — scores {{ "%.1f"|format(baseline_check) }}.
+        </p>
+        <div class="table-responsive">
+          <table class="components-table">
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">Block</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Baseline (0 stress)</th>
+                <th scope="col">Crisis (100 stress)</th>
+                <th scope="col">Baseline anchor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cr in snapshot.components %}
+              <tr>
+                <th scope="row">{{ cr.component.label }}</th>
+                <td class="cell-sub">{{ block_labels[cr.component.key] }}</td>
+                <td class="font-mono">{{ (cr.component.weight * 100)|round|int }}%</td>
+                <td class="font-mono">{{ "%.2f"|format(cr.baseline_value) }} {{ cr.component.unit }}</td>
+                <td class="font-mono">{{ "%.2f"|format(crisis_values[cr.component.key]) }} {{ cr.component.unit }}</td>
+                <td class="cell-muted" style="font-size: 0.82rem;">{{ baseline_anchors[cr.component.key] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">3. Crisis-threshold rationale</h3>
+        <div class="table-responsive">
+          <table class="components-table">
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">Why this threshold</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cr in snapshot.components %}
+              <tr>
+                <th scope="row" style="white-space: nowrap;">{{ cr.component.label }}</th>
+                <td class="cell-muted" style="font-size: 0.85rem; line-height: 1.55;">{{ cr.component.cap_rationale }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">4. Debt dynamics</h3>
+        <div class="uss-formula">
+          d<sub>t</sub> = d<sub>t−1</sub> · (1 + r<sub>t</sub>) / (1 + g<sub>t</sub>) + pb<sub>t</sub>
+        </div>
+        <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.6;">
+          <em>d</em> is debt held by the public as a share of GDP, <em>r</em> the effective nominal rate actually paid
+          on the stock (interest outlays over last year's debt, not a market quote), <em>g</em> nominal GDP growth,
+          and <em>pb</em> the primary deficit share. The effective rate converges on each scenario's terminal rate at
+          {{ (repricing_speed * 100)|round|int }}% per year, reflecting the ~6-year average maturity of marketable
+          Treasury debt; the primary deficit converges linearly over ten years. Interest as a share of receipts is
+          then <em>r · d<sub>t−1</sub></em> divided by receipts/GDP, held at the current
+          {{ "%.1f"|format(latest.context.receipts_pct_gdp) }}%.
+        </p>
+
+        <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">5. Missing data</h3>
+        <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.6;">
+          The productivity and real-per-capita series begin in 1947, and both are measured as 10-year compound rates,
+          so the growth block is empty for {{ history[0].year }}–1956. Those years are scored on the fiscal and
+          monetary blocks with the weights renormalised to sum to one, and are flagged <span class="stale-badge">PARTIAL</span>
+          in the data table. They are not zero-filled: treating a missing growth block as healthy would put an
+          artificial trough at the start of the series, exactly where the post-war debt reduction happened.
+        </p>
+
+        <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">6. What this index deliberately does not do</h3>
+        <div class="uss-note">
+          <span class="uss-note-title">No presidential attribution</span>
+          <p style="margin: 0 0 10px;">
+            A natural extension is to difference the index across presidential terms, subtract adjustments for
+            cyclical and emergency effects, and rank administrations by what remains. That was tested against this
+            series and is not published here, for four reasons.
+          </p>
+          <p style="margin: 0 0 8px;">
+            <strong>It mostly measures mean reversion.</strong> Regressing such a score on the index level each
+            administration inherited gives R² ≈ 0.51 with a slope of −0.75 — half the variance is explained by nothing
+            but the starting point. Residualising on inherited level reorders the ranking substantially, which means
+            the ranking is not a finding.
+          </p>
+          <p style="margin: 0 0 8px;">
+            <strong>The adjustment terms are not identified.</strong> The cyclical, exogenous and inherited-baseline
+            corrections are counterfactuals with no estimator. Whether a given emergency package counts as
+            "exogenous" or "structural" is a judgement call that swings the ranking by more than the ranking's own
+            spread — and there is no rule that settles it.
+          </p>
+          <p style="margin: 0 0 8px;">
+            <strong>The accounting bases do not match.</strong> This index is contemporaneous: it records what a
+            year's data looked like. Claims of the form "this administration created the entitlement problem"
+            require present-value-of-enacted-commitments accounting, under which the 1965 Medicare statute is
+            enormous while the contemporaneous 1965 data barely moves. Those are different models; blending them
+            produces a table whose numbers contradict its own narrative.
+          </p>
+          <p style="margin: 0;">
+            <strong>n = 14.</strong> With fourteen administrations, four-to-eight-year terms and a heavily
+            autocorrelated annual series, differences of a point or two carry no information — and reporting them to
+            one decimal with a "high confidence" label implies precision that does not exist.
+          </p>
+        </div>
+
+        <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">7. Sources</h3>
+        <div class="table-responsive">
+          <table class="components-table">
+            <thead>
+              <tr>
+                <th scope="col">FRED series</th>
+                <th scope="col">Description</th>
+                <th scope="col">Used for</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in source_series %}
+              <tr>
+                <th scope="row" class="font-mono">
+                  <a href="https://fred.stlouisfed.org/series/{{ s.id }}" target="_blank" rel="noopener">{{ s.id }}</a>
+                </th>
+                <td>{{ s.desc }}</td>
+                <td class="cell-muted" style="font-size: 0.85rem;">{{ s.used }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; line-height: 1.6;">
+          Fiscal-year series are keyed on the year in their observation date; monthly and quarterly series are
+          averaged to the calendar year and joined on the year, which is standard for annual fiscal ratios and is
+          accurate to the ~3-month fiscal/calendar offset. The series was last rebuilt on
+          {{ generated_at[:10] if generated_at else '—' }}.
+        </p>
+
+      </div>
+    </section>
+  </div><!-- /#tab-methodology -->
+
+</div><!-- /.report-dash-canvas -->
+
+<script>
+// --- Tab switching ---------------------------------------------------------
+document.querySelectorAll('[data-report-tab]').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const tabName = btn.getAttribute('data-report-tab');
+    document.querySelectorAll('[data-report-tab]').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.report-panel').forEach(p => p.style.display = 'none');
+
+    const activeBtn = document.querySelector(`.tab-segmented [data-report-tab="${tabName}"]`);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      activeBtn.setAttribute('aria-selected', 'true');
+    }
+    const target = document.getElementById('tab-' + tabName);
+    if (target) target.style.display = 'block';
+
+    if (tabName === 'dashboard') {
+      ['ussTrendChart', 'ussProjChart', 'ussQuadChart', 'ussDecompChart', 'ussSimChart', 'ussPresChart', 'ussInhChart', 'ussWarChart']
+        .forEach(k => { if (window[k]) window[k].resize(); });
+    }
+  });
+});
+
+// --- Chart data ------------------------------------------------------------
+const ussHistory      = {{ history|tojson }};
+const ussTurningPts   = {{ turning_points|tojson }};
+const ussProjections  = {{ projections|tojson }};
+const ussBlocks       = {{ blocks|tojson }};
+const ussQuadrant     = {{ quadrant_points|tojson }};
+const ussQuadrantMeta = {{ quadrants|tojson }};
+const ussEras         = {{ eras|tojson }};
+const ussDecomp       = {{ decomposition|tojson }};
+const ussSim          = {{ sim|tojson }};
+const ussPres         = {{ pres|tojson }};
+const ussDefence      = {{ defence_series|tojson }};
+const ussWarPeriods   = {{ war_periods|tojson }};
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof echarts === 'undefined') return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const axisColor = isDark ? '#334155' : '#CBD5E1';
+  const labelColor = '#94A3B8';
+  const splitColor = isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(0,0,0,0.06)';
+
+  const tooltipBase = {
+    backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
+    borderColor: isDark ? '#334155' : '#CBD5E1',
+    textStyle: { color: isDark ? '#F8FAFC' : '#0F172A' },
+    extraCssText: 'max-width: 340px; white-space: normal; word-break: break-word; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border-radius: 8px; z-index: 100;'
+  };
+
+  // --- 1. Eighty-year trajectory -------------------------------------------
+  const trendDom = document.getElementById('echart-trend-container');
+  if (trendDom && ussHistory.length) {
+    const chart = echarts.init(trendDom);
+    window.ussTrendChart = chart;
+
+    const years = ussHistory.map(h => String(h.year));
+    const scores = ussHistory.map(h => h.score);
+    const tpByYear = {};
+    ussTurningPts.forEach(t => { tpByYear[String(t.year)] = t; });
+
+    // The blocks are contributions *above* the baseline (they sum to score −
+    // 100), so they have to be stacked off a floor of 100 rather than off zero
+    // — otherwise they sit at 0-50 while the axis starts at 95 and are clipped
+    // out of the plot entirely. An invisible constant-100 series carries the
+    // stack, which also makes the stack top land exactly on the index line.
+    const stackBase = {
+      name: '__base',
+      type: 'line',
+      stack: 'blocks',
+      symbol: 'none',
+      silent: true,
+      legendHoverLink: false,
+      lineStyle: { width: 0, opacity: 0 },
+      areaStyle: { opacity: 0 },
+      tooltip: { show: false },
+      data: ussHistory.map(() => 100)
+    };
+
+    const blockSeries = ussBlocks.map(b => ({
+      name: b.label,
+      type: 'line',
+      stack: 'blocks',
+      smooth: true,
+      symbol: 'none',
+      lineStyle: { width: 0 },
+      itemStyle: { color: b.color },
+      areaStyle: { opacity: 0.30, color: b.color },
+      emphasis: { focus: 'series' },
+      // Tooltip should report the block's own contribution, not its stacked
+      // running total, which is what `value` would otherwise show.
+      data: ussHistory.map(h => (h.block_contributions || {})[b.key])
+    }));
+
+    chart.setOption({
+      backgroundColor: 'transparent',
+      tooltip: Object.assign({
+        trigger: 'axis',
+        axisPointer: { type: 'cross', lineStyle: { color: '#38BDF8', width: 1, type: 'dashed' } },
+        formatter: function (params) {
+          const year = params[0].axisValue;
+          let res = '<div style="font-weight:700; margin-bottom:6px; font-size:0.85rem; border-bottom:1px solid ' +
+                    (isDark ? '#334155' : '#E2E8F0') + '; padding-bottom:4px;">Fiscal year ' + year + '</div>';
+          params.forEach(p => {
+            if (p.seriesName === '__base') return;
+            if (p.value === null || p.value === undefined) return;
+            res += '<div style="display:flex; justify-content:space-between; gap:14px; font-size:0.8rem; margin-bottom:2px;">' +
+                   '<span>' + p.marker + ' ' + p.seriesName + ':</span>' +
+                   '<strong style="font-family:var(--font-mono);">' + p.value.toFixed(1) + '</strong></div>';
+          });
+          const tp = tpByYear[year];
+          if (tp) {
+            res += '<div style="margin-top:8px; padding-top:6px; border-top:1px dashed ' + (isDark ? '#334155' : '#CBD5E1') + ';">' +
+                   '<div style="color:#F59E0B; font-weight:700; margin-bottom:2px; font-size:0.78rem;">📍 ' + tp.title + '</div>' +
+                   '<div style="color:' + (isDark ? '#94A3B8' : '#475569') + '; font-size:0.73rem; line-height:1.45;">' + tp.description + '</div></div>';
+          }
+          return res;
+        }
+      }, tooltipBase),
+      legend: {
+        show: true, top: 6, left: 'center', icon: 'circle',
+        itemWidth: 10, itemHeight: 10, itemGap: 16,
+        data: ['USS-INDEX'].concat(ussBlocks.map(b => b.label)),
+        textStyle: { color: isDark ? '#E2E8F0' : '#334155', fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif' }
+      },
+      grid: { left: '4%', right: '4%', bottom: '12%', top: '16%', containLabel: true },
+      xAxis: {
+        type: 'category', data: years, boundaryGap: false,
+        axisLine: { lineStyle: { color: axisColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      yAxis: {
+        type: 'value', name: 'Index (100 = sustainable)', min: 95, scale: true,
+        nameLocation: 'end', nameGap: 14,
+        nameTextStyle: { color: labelColor, fontSize: 11, align: 'left' },
+        splitLine: { lineStyle: { color: splitColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      dataZoom: [
+        { type: 'inside', start: 0, end: 100 },
+        {
+          type: 'slider', show: true, bottom: 4, height: 18, borderColor: 'transparent',
+          backgroundColor: isDark ? 'rgba(30, 41, 59, 0.5)' : 'rgba(241, 245, 249, 0.8)',
+          fillerColor: 'rgba(56, 189, 248, 0.2)',
+          handleStyle: { color: '#38BDF8', borderColor: '#38BDF8' },
+          textStyle: { color: labelColor, fontSize: 10 }
+        }
+      ],
+      series: [
+        {
+          name: 'USS-INDEX',
+          type: 'line',
+          data: scores,
+          smooth: true,
+          symbol: 'none',
+          z: 10,
+          lineStyle: { width: 3, color: '#38BDF8' },
+          itemStyle: { color: '#38BDF8' },
+          markLine: {
+            symbol: ['none', 'none'],
+            data: [
+              {
+                yAxis: 100,
+                lineStyle: { type: 'dashed', color: '#94A3B8', width: 1.2 },
+                label: { formatter: 'Sustainable baseline 100.0', position: 'insideEndTop', color: '#94A3B8', fontSize: 10 }
+              }
+            ].concat(ussTurningPts.map(t => ({
+              xAxis: String(t.year),
+              lineStyle: { type: 'dashed', color: 'rgba(245, 158, 11, 0.7)', width: 1.4 },
+              label: {
+                formatter: t.label, position: 'insideStartTop', rotate: 90, distance: [0, 8],
+                color: isDark ? '#FCD34D' : '#B45309', fontSize: 10, fontWeight: 600,
+                fontFamily: 'Inter, system-ui, sans-serif', padding: [2, 4],
+                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.78)' : 'rgba(255, 255, 255, 0.88)', borderRadius: 3
+              }
+            })))
+          }
+        }
+      ].concat([stackBase]).concat(blockSeries)
+    });
+  }
+
+  // --- 2. Debt dynamics projection -----------------------------------------
+  const projDom = document.getElementById('echart-projection-container');
+  if (projDom && ussProjections.length) {
+    const chart = echarts.init(projDom);
+    window.ussProjChart = chart;
+
+    // Stitch the measured history onto the front of every projected path so
+    // the chart shows one continuous line, not a forecast floating in space.
+    const histYears = ussHistory.map(h => h.year);
+    const allYears = histYears.concat(ussProjections[0].path.map(p => p.year));
+    const histDebt = ussHistory.map(h => h.raw_values.debt_gdp);
+    const lastYear = histYears[histYears.length - 1];
+
+    const series = [{
+      name: 'Measured (' + ussHistory[0].year + '–' + lastYear + ')',
+      type: 'line',
+      data: histDebt.concat(new Array(ussProjections[0].path.length).fill(null)),
+      smooth: true, symbol: 'none', z: 10,
+      lineStyle: { width: 3, color: '#94A3B8' },
+      itemStyle: { color: '#94A3B8' },
+      areaStyle: { color: isDark ? 'rgba(148,163,184,0.14)' : 'rgba(148,163,184,0.18)' }
+    }].concat(ussProjections.map(p => ({
+      name: p.label + ' (r−g ' + (p.r_minus_g >= 0 ? '+' : '') + p.r_minus_g.toFixed(1) + 'pp)',
+      type: 'line',
+      // Repeat the final measured point so each projected line joins the history.
+      data: new Array(histDebt.length - 1).fill(null)
+              .concat([histDebt[histDebt.length - 1]])
+              .concat(p.path.map(q => q.debt_gdp)),
+      smooth: true, symbol: 'none',
+      lineStyle: { width: 2.4, color: p.color, type: 'dashed' },
+      itemStyle: { color: p.color }
+    })));
+
+    chart.setOption({
+      backgroundColor: 'transparent',
+      tooltip: Object.assign({
+        trigger: 'axis',
+        axisPointer: { type: 'cross', lineStyle: { color: '#38BDF8', width: 1, type: 'dashed' } },
+        valueFormatter: v => (v === null || v === undefined) ? '—' : v.toFixed(1) + '% of GDP'
+      }, tooltipBase),
+      legend: {
+        show: true, top: 6, left: 'center', icon: 'circle',
+        itemWidth: 10, itemHeight: 10, itemGap: 16,
+        data: series.map(s => s.name),
+        textStyle: { color: isDark ? '#E2E8F0' : '#334155', fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif' }
+      },
+      grid: { left: '4%', right: '4%', bottom: '8%', top: '18%', containLabel: true },
+      xAxis: {
+        type: 'category', data: allYears.map(String), boundaryGap: false,
+        axisLine: { lineStyle: { color: axisColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      yAxis: {
+        type: 'value', name: 'Debt held by public (% of GDP)',
+        nameLocation: 'end', nameGap: 14,
+        nameTextStyle: { color: labelColor, fontSize: 11, align: 'left' },
+        splitLine: { lineStyle: { color: splitColor } },
+        axisLabel: { color: labelColor, fontSize: 11, formatter: '{value}%' }
+      },
+      series: series.concat([{
+        // Marker for "today", so the measured/projected boundary is explicit.
+        name: 'today', type: 'line', data: [], silent: true, legendHoverLink: false,
+        markLine: {
+          symbol: ['none', 'none'], silent: true,
+          data: [{
+            xAxis: String(lastYear),
+            lineStyle: { color: '#64748B', width: 1.5, type: 'solid' },
+            label: {
+              formatter: 'FY' + lastYear + ' — projection begins', position: 'insideEndTop',
+              color: labelColor, fontSize: 10, rotate: 90, distance: [0, 8]
+            }
+          }]
+        }
+      }])
+    });
+  }
+
+
+  // --- 3. Fiscal dynamics quadrant -----------------------------------------
+  const quadDom = document.getElementById('echart-quadrant-container');
+  if (quadDom && ussQuadrant.length) {
+    const chart = echarts.init(quadDom);
+    window.ussQuadChart = chart;
+
+    // Axis bounds are pinned so the quadrant tints can fill the plot exactly.
+    const QUAD_X = [-15, 10];
+    const QUAD_Y = [-10, 22];
+
+    const tint = (hex, a) => {
+      const n = parseInt(hex.slice(1), 16);
+      return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+    };
+
+    // One scatter series per era so the legend can filter by period.
+    const eraSeries = ussEras.map((era, i) => ({
+      name: era.label,
+      type: 'scatter',
+      symbolSize: 9,
+      itemStyle: { color: era.color, opacity: 0.85, borderColor: isDark ? '#0B1220' : '#FFFFFF', borderWidth: 1 },
+      emphasis: { scale: 1.8, itemStyle: { opacity: 1 } },
+      data: ussQuadrant.filter(p => p.era === era.key).map(p => [p.x, p.y, p.year, p.debt_gdp, p.score]),
+      // The quadrant tinting and the zero axes hang off the first series only,
+      // otherwise they are drawn six times on top of each other.
+      markArea: i !== 0 ? undefined : {
+        silent: true,
+        data: ussQuadrantMeta.map(q => ([
+          {
+            xAxis: q.x === 'pos' ? 0 : QUAD_X[0],
+            yAxis: q.y === 'pos' ? 0 : QUAD_Y[0],
+            itemStyle: { color: tint(q.color, isDark ? 0.07 : 0.06) },
+            label: {
+              show: true, formatter: q.name, position: [
+                q.x === 'pos' ? '68%' : '4%',
+                q.y === 'pos' ? '6%' : '90%'
+              ],
+              color: q.color, fontSize: 11, fontWeight: 700,
+              fontFamily: 'Inter, system-ui, sans-serif'
+            }
+          },
+          { xAxis: q.x === 'pos' ? QUAD_X[1] : 0, yAxis: q.y === 'pos' ? QUAD_Y[1] : 0 }
+        ]))
+      },
+      markLine: i !== 0 ? undefined : {
+        silent: true, symbol: ['none', 'none'],
+        lineStyle: { color: isDark ? '#64748B' : '#94A3B8', width: 1.4, type: 'solid' },
+        label: { show: false },
+        data: [{ xAxis: 0 }, { yAxis: 0 }]
+      }
+    }));
+
+    // Mark the latest year so "where are we now" is answerable at a glance.
+    const now = ussQuadrant[ussQuadrant.length - 1];
+    eraSeries.push({
+      name: 'FY' + now.year,
+      type: 'scatter',
+      symbolSize: 18,
+      symbol: 'circle',
+      itemStyle: { color: 'transparent', borderColor: '#FACC15', borderWidth: 2.5 },
+      data: [[now.x, now.y, now.year, now.debt_gdp, now.score]],
+      z: 20,
+      label: {
+        show: true, formatter: 'FY' + now.year, position: 'right', distance: 8,
+        color: '#FACC15', fontSize: 11, fontWeight: 700
+      }
+    });
+
+    chart.setOption({
+      backgroundColor: 'transparent',
+      tooltip: Object.assign({
+        trigger: 'item',
+        formatter: p => {
+          const [x, y, year, debt, score] = p.value;
+          return '<div style="font-weight:700; margin-bottom:4px;">Fiscal year ' + year + '</div>' +
+            '<div style="font-size:0.8rem; line-height:1.6;">' +
+            'r − g: <strong style="font-family:var(--font-mono);">' + (x >= 0 ? '+' : '') + x.toFixed(2) + 'pp</strong><br>' +
+            'Primary deficit: <strong style="font-family:var(--font-mono);">' + (y >= 0 ? '+' : '') + y.toFixed(2) + '% GDP</strong><br>' +
+            'Debt/GDP: <strong style="font-family:var(--font-mono);">' + debt.toFixed(1) + '%</strong><br>' +
+            'Index: <strong style="font-family:var(--font-mono);">' + score.toFixed(1) + '</strong></div>';
+        }
+      }, tooltipBase),
+      legend: {
+        show: true, top: 6, left: 'center', icon: 'circle',
+        itemWidth: 10, itemHeight: 10, itemGap: 14,
+        data: ussEras.map(e => e.label),
+        textStyle: { color: isDark ? '#E2E8F0' : '#334155', fontSize: 11, fontFamily: 'Inter, system-ui, sans-serif' }
+      },
+      grid: { left: '5%', right: '5%', bottom: '10%', top: '17%', containLabel: true },
+      xAxis: {
+        type: 'value', name: 'r − g  (pp) →  debt compounds',
+        min: QUAD_X[0], max: QUAD_X[1],
+        nameLocation: 'middle', nameGap: 30,
+        nameTextStyle: { color: labelColor, fontSize: 11 },
+        axisLine: { lineStyle: { color: axisColor } },
+        splitLine: { lineStyle: { color: splitColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      yAxis: {
+        type: 'value', name: 'Primary deficit (% GDP) →  policy adds',
+        min: QUAD_Y[0], max: QUAD_Y[1],
+        nameLocation: 'middle', nameGap: 38,
+        nameTextStyle: { color: labelColor, fontSize: 11 },
+        axisLine: { lineStyle: { color: axisColor } },
+        splitLine: { lineStyle: { color: splitColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      dataZoom: [
+        { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
+        { type: 'inside', yAxisIndex: 0, filterMode: 'none' }
+      ],
+      series: eraSeries
+    });
+  }
+
+  // --- 4. Debt-change decomposition ----------------------------------------
+  const decompDom = document.getElementById('echart-decomp-container');
+  if (decompDom && ussDecomp.length) {
+    const chart = echarts.init(decompDom);
+    window.ussDecompChart = chart;
+
+    const years = ussDecomp.map(d => String(d.year));
+    const bar = (name, key, color) => ({
+      name, type: 'bar', stack: 'decomp',
+      itemStyle: { color },
+      emphasis: { focus: 'series' },
+      data: ussDecomp.map(d => d[key])
+    });
+
+    chart.setOption({
+      backgroundColor: 'transparent',
+      tooltip: Object.assign({
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        formatter: params => {
+          const year = params[0].axisValue;
+          const row = ussDecomp.find(d => String(d.year) === year);
+          let res = '<div style="font-weight:700; margin-bottom:6px; font-size:0.85rem;">Fiscal year ' + year + '</div>';
+          params.forEach(p => {
+            res += '<div style="display:flex; justify-content:space-between; gap:14px; font-size:0.8rem;">' +
+              '<span>' + p.marker + ' ' + p.seriesName + ':</span>' +
+              '<strong style="font-family:var(--font-mono);">' + (p.value >= 0 ? '+' : '') + p.value.toFixed(2) + 'pp</strong></div>';
+          });
+          if (row) {
+            res += '<div style="margin-top:6px; padding-top:5px; border-top:1px dashed ' + (isDark ? '#334155' : '#CBD5E1') +
+              '; display:flex; justify-content:space-between; gap:14px; font-size:0.8rem;">' +
+              '<span>Actual change in debt/GDP:</span><strong style="font-family:var(--font-mono);">' +
+              (row.change >= 0 ? '+' : '') + row.change.toFixed(2) + 'pp</strong></div>';
+          }
+          return res;
+        }
+      }, tooltipBase),
+      legend: {
+        show: true, top: 6, left: 'center', icon: 'circle',
+        itemWidth: 10, itemHeight: 10, itemGap: 16,
+        textStyle: { color: isDark ? '#E2E8F0' : '#334155', fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif' }
+      },
+      grid: { left: '4%', right: '4%', bottom: '12%', top: '16%', containLabel: true },
+      xAxis: {
+        type: 'category', data: years,
+        axisLine: { lineStyle: { color: axisColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      yAxis: {
+        type: 'value', name: 'Contribution to Δ debt/GDP (pp)',
+        nameLocation: 'end', nameGap: 14,
+        nameTextStyle: { color: labelColor, fontSize: 11, align: 'left' },
+        splitLine: { lineStyle: { color: splitColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      dataZoom: [
+        { type: 'inside', start: 0, end: 100 },
+        {
+          type: 'slider', show: true, bottom: 4, height: 18, borderColor: 'transparent',
+          backgroundColor: isDark ? 'rgba(30, 41, 59, 0.5)' : 'rgba(241, 245, 249, 0.8)',
+          fillerColor: 'rgba(56, 189, 248, 0.2)',
+          handleStyle: { color: '#38BDF8', borderColor: '#38BDF8' },
+          textStyle: { color: labelColor, fontSize: 10 }
+        }
+      ],
+      series: [
+        bar('Snowball (r − g on the stock)', 'snowball', '#A855F7'),
+        bar('Primary deficit (policy)', 'primary', '#EF4444'),
+        bar('Stock-flow adjustment', 'sfa', '#64748B')
+      ]
+    });
+  }
+
+  // --- 5. Reserve-currency simulator ---------------------------------------
+  //
+  // Re-implements project() from app/indices/solvency.py in the browser so the
+  // sliders respond without a round trip. A test asserts this produces the
+  // same numbers as the Python for the default inputs; if you change one side,
+  // change the other.
+  const S = ussSim;
+
+  function ussProject(terminalR, growth, terminalPb) {
+    let d = S.debt_gdp / 100;
+    let r = S.effective_rate / 100;
+    const pbNow = S.primary_deficit / 100;
+    const receiptsGdp = S.receipts_pct_gdp / 100;
+    const rT = terminalR / 100, g = growth / 100, pbT = terminalPb / 100;
+
+    const path = [];
+    const crossings = {};
+    S.thresholds.forEach(t => { crossings[t] = null; });
+
+    for (let step = 1; step <= S.projection_years; step++) {
+      const year = S.start_year + step;
+      r = r + (rT - r) * S.repricing_speed;
+      const blend = Math.min(1, step / 10);
+      const pb = pbNow + (pbT - pbNow) * blend;
+      const interestGdp = r * d;
+      d = d * (1 + r) / (1 + g) + pb;
+      const interestReceipts = interestGdp / receiptsGdp * 100;
+      S.thresholds.forEach(t => {
+        if (crossings[t] === null && interestReceipts >= t) crossings[t] = year;
+      });
+      path.push({
+        year,
+        debt_gdp: Math.round(d * 1000) / 10,
+        primary_deficit: Math.round(pb * 10000) / 100,
+        interest_pct_receipts: Math.round(interestReceipts * 10) / 10
+      });
+    }
+    return { path, crossings };
+  }
+
+  // Mirrors score_row(): linear stress between fixed bands, weights
+  // renormalised over whatever components have a value.
+  function ussScore(raw) {
+    let total = 0, available = 0;
+    const stresses = {};
+    Object.keys(S.weights).forEach(key => {
+      const v = raw[key];
+      if (v === null || v === undefined) return;
+      const [base, crisis] = S.bands[key];
+      let s = crisis === base ? 0 : (v - base) / (crisis - base) * 100;
+      s = Math.max(0, Math.min(100, s));
+      stresses[key] = s;
+      available += S.weights[key];
+    });
+    if (available <= 0) return { score: S.scale_min, label: '—', status: 'good' };
+    Object.keys(stresses).forEach(key => { total += (S.weights[key] / available) * stresses[key]; });
+    const score = S.scale_min + total;
+    let label = S.level_bands[0][1], status = S.level_bands[0][2];
+    S.level_bands.forEach(([lower, lbl, st]) => { if (score >= lower) { label = lbl; status = st; } });
+    return { score, label, status };
+  }
+
+  const simDom = document.getElementById('echart-sim-container');
+  let simChart = null;
+  if (simDom) {
+    simChart = echarts.init(simDom);
+    window.ussSimChart = simChart;
+  }
+
+  const el = id => document.getElementById(id);
+
+  function ussSimRecalc() {
+    const shift = parseFloat(el('sim-shift').value);
+    const pass = parseFloat(el('sim-pass').value);
+    const growth = parseFloat(el('sim-growth').value);
+    const pb = parseFloat(el('sim-pb').value);
+
+    const premiumBp = shift * pass;
+    const terminalR = S.terminal_r + premiumBp / 100;
+    const rmg = terminalR - growth;
+
+    const sim = ussProject(terminalR, growth, pb);
+    const base = ussProject(S.terminal_r, S.nominal_growth, S.terminal_pb);
+    const end = sim.path[sim.path.length - 1];
+    const mark = sim.path[Math.min(S.index_horizon_years, sim.path.length) - 1];
+
+    const scored = ussScore({
+      debt_gdp: mark.debt_gdp,
+      interest_burden: mark.interest_pct_receipts,
+      primary_deficit: mark.primary_deficit,
+      r_minus_g: rmg,
+      productivity: S.productivity,
+      real_gdp_pc: S.real_gdp_pc,
+      inflation: S.inflation
+    });
+
+    el('sim-shift-val').textContent = shift.toFixed(0) + ' pp';
+    el('sim-pass-val').textContent = pass.toFixed(1) + ' bp/pp';
+    el('sim-growth-val').textContent = growth.toFixed(1) + '%';
+    el('sim-pb-val').textContent = pb.toFixed(1) + '% GDP';
+    el('sim-shares').textContent =
+      'USD ' + (S.usd_reserve_share - shift).toFixed(1) + '%  ·  CNY ' + (S.cny_reserve_share + shift).toFixed(1) + '%';
+
+    el('sim-premium').innerHTML = '+' + premiumBp.toFixed(0) + '<span class="uss-kpi-unit">bp</span>';
+    el('sim-rate').textContent = terminalR.toFixed(2) + '%';
+    el('sim-rmg').innerHTML = (rmg >= 0 ? '+' : '') + rmg.toFixed(1) + '<span class="uss-kpi-unit">pp</span>';
+    el('sim-rmg-note').textContent = rmg >= 0
+      ? 'Above zero, the debt ratio compounds on its own.'
+      : 'Below zero, the existing stock erodes without any policy action.';
+    el('sim-debt').innerHTML = end.debt_gdp.toFixed(0) + '<span class="uss-kpi-unit">%</span>';
+    el('sim-interest').innerHTML = end.interest_pct_receipts.toFixed(0) + '<span class="uss-kpi-unit">%</span>';
+    el('sim-cross').textContent = sim.crossings[35] || 'never';
+
+    el('sim-index').textContent = scored.score.toFixed(1);
+    const badge = el('sim-index-badge');
+    badge.textContent = scored.label.toUpperCase();
+    badge.className = 'status-badge status-' + scored.status;
+
+    if (simChart) {
+      const years = sim.path.map(p => String(p.year));
+      simChart.setOption({
+        backgroundColor: 'transparent',
+        tooltip: Object.assign({
+          trigger: 'axis',
+          valueFormatter: v => (v === null || v === undefined) ? '—' : v.toFixed(1) + '% of GDP'
+        }, tooltipBase),
+        legend: {
+          show: true, top: 6, left: 'center', icon: 'circle',
+          itemWidth: 10, itemHeight: 10, itemGap: 16,
+          textStyle: { color: isDark ? '#E2E8F0' : '#334155', fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif' }
+        },
+        grid: { left: '4%', right: '4%', bottom: '10%', top: '18%', containLabel: true },
+        xAxis: {
+          type: 'category', data: years, boundaryGap: false,
+          axisLine: { lineStyle: { color: axisColor } },
+          axisLabel: { color: labelColor, fontSize: 11 }
+        },
+        yAxis: {
+          type: 'value', name: 'Debt held by public (% of GDP)',
+          nameLocation: 'end', nameGap: 14,
+          nameTextStyle: { color: labelColor, fontSize: 11, align: 'left' },
+          splitLine: { lineStyle: { color: splitColor } },
+          axisLabel: { color: labelColor, fontSize: 11, formatter: '{value}%' }
+        },
+        series: [
+          {
+            name: 'Baseline (no displacement)',
+            type: 'line', smooth: true, symbol: 'none',
+            data: base.path.map(p => p.debt_gdp),
+            lineStyle: { width: 2, color: '#64748B', type: 'dashed' },
+            itemStyle: { color: '#64748B' }
+          },
+          {
+            name: 'Simulated',
+            type: 'line', smooth: true, symbol: 'none',
+            data: sim.path.map(p => p.debt_gdp),
+            lineStyle: { width: 3, color: '#A855F7' },
+            itemStyle: { color: '#A855F7' },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: 'rgba(168, 85, 247, 0.22)' },
+                { offset: 1, color: 'rgba(168, 85, 247, 0.0)' }
+              ])
+            }
+          }
+        ]
+      });
+    }
+  }
+
+  window.ussSimReset = function () {
+    el('sim-shift').value = 0;
+    el('sim-pass').value = S.passthrough_bp;
+    el('sim-growth').value = S.nominal_growth;
+    el('sim-pb').value = S.terminal_pb;
+    ussSimRecalc();
+  };
+
+  ['sim-shift', 'sim-pass', 'sim-growth', 'sim-pb'].forEach(id => {
+    const input = el(id);
+    if (input) input.addEventListener('input', ussSimRecalc);
+  });
+  if (el('sim-shift')) ussSimRecalc();
+
+
+  // --- 6. Presidential structural contribution -----------------------------
+  const presDom = document.getElementById('echart-pres-container');
+  if (presDom && ussPres.rows && ussPres.rows.length) {
+    const chart = echarts.init(presDom);
+    window.ussPresChart = chart;
+
+    // Ascending so the largest risk-adder ends up at the top of a horizontal bar.
+    const rows = ussPres.rows.slice().sort((a, b) => a.residual - b.residual);
+    const sd = ussPres.residual_sd;
+    const PARTY = { D: '#38BDF8', R: '#EF4444' };
+
+    chart.setOption({
+      backgroundColor: 'transparent',
+      tooltip: Object.assign({
+        trigger: 'item',
+        formatter: p => {
+          const r = rows[p.dataIndex];
+          const sig = Math.abs(r.residual) <= sd
+            ? '<span style="color:#F59E0B;">inside the ±' + sd.toFixed(1) + ' band — not distinguishable from zero</span>'
+            : '<span style="color:#10B981;">clears the ±' + sd.toFixed(1) + ' band</span>';
+          return '<div style="font-weight:700; margin-bottom:4px;">' + r.name + '</div>' +
+            '<div style="font-size:0.8rem; line-height:1.65;">' +
+            r.party_label + ' &nbsp;·&nbsp; budget FY' + r.first + '–' + r.last + '<br>' +
+            'Inherited: <strong style="font-family:var(--font-mono);">' + r.inherited.toFixed(1) + '</strong> → ' +
+            'Ending: <strong style="font-family:var(--font-mono);">' + r.ending.toFixed(1) + '</strong><br>' +
+            'Raw change: <strong style="font-family:var(--font-mono);">' + (r.raw_change >= 0 ? '+' : '') + r.raw_change.toFixed(1) + '</strong><br>' +
+            'less cyclical: <strong style="font-family:var(--font-mono);">' + (r.cyclical === null ? 'n/a' : (r.cyclical >= 0 ? '+' : '') + r.cyclical.toFixed(1)) + '</strong><br>' +
+            'less mean reversion: <strong style="font-family:var(--font-mono);">' + (r.expected >= 0 ? '+' : '') + r.expected.toFixed(1) + '</strong><br>' +
+            '<strong>Structural residual: <span style="font-family:var(--font-mono);">' + (r.residual >= 0 ? '+' : '') + r.residual.toFixed(1) + '</span></strong><br>' +
+            'Rank range across weightings: ' + r.rank_min + '–' + r.rank_max + '<br>' + sig + '</div>';
+        }
+      }, tooltipBase),
+      grid: { left: '4%', right: '8%', bottom: '8%', top: '6%', containLabel: true },
+      xAxis: {
+        type: 'value', name: 'Structural residual (index points) →  added risk',
+        nameLocation: 'middle', nameGap: 30,
+        nameTextStyle: { color: labelColor, fontSize: 11 },
+        axisLine: { lineStyle: { color: axisColor } },
+        splitLine: { lineStyle: { color: splitColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      yAxis: {
+        type: 'category',
+        data: rows.map(r => r.name),
+        axisLine: { lineStyle: { color: axisColor } },
+        axisTick: { show: false },
+        axisLabel: { color: isDark ? '#E2E8F0' : '#334155', fontSize: 11 }
+      },
+      series: [
+        {
+          name: 'Structural residual',
+          type: 'bar',
+          barWidth: '58%',
+          data: rows.map(r => ({
+            value: r.residual,
+            itemStyle: {
+              color: PARTY[r.party],
+              // Bars inside the noise band are drawn hollow, so significance is
+              // visible without reading the table.
+              opacity: Math.abs(r.residual) <= sd ? 0.28 : 0.92,
+              borderColor: PARTY[r.party],
+              borderWidth: Math.abs(r.residual) <= sd ? 1.5 : 0
+            }
+          })),
+          markArea: {
+            silent: true,
+            data: [[
+              { xAxis: -sd, itemStyle: { color: isDark ? 'rgba(148,163,184,0.13)' : 'rgba(148,163,184,0.18)' },
+                label: { show: true, formatter: '±' + sd.toFixed(1),
+                         position: 'insideTopLeft', distance: 5,
+                         color: labelColor, fontSize: 10 } },
+              { xAxis: sd }
+            ]]
+          },
+          markLine: {
+            silent: true, symbol: ['none', 'none'],
+            lineStyle: { color: isDark ? '#64748B' : '#94A3B8', width: 1.4 },
+            label: { show: false },
+            data: [{ xAxis: 0 }]
+          }
+        }
+      ]
+    });
+  }
+
+  // --- 7. Inherited vs created ---------------------------------------------
+  const inhDom = document.getElementById('echart-inherited-container');
+  if (inhDom && ussPres.rows && ussPres.rows.length) {
+    const chart = echarts.init(inhDom);
+    window.ussInhChart = chart;
+
+    const rows = ussPres.rows;
+    // Least-squares line for whichever series is being shown, so the flattening
+    // of the slope after correction is visible rather than asserted.
+    const fit = (pts) => {
+      const n = pts.length;
+      const mx = pts.reduce((a, p) => a + p[0], 0) / n;
+      const my = pts.reduce((a, p) => a + p[1], 0) / n;
+      const sxx = pts.reduce((a, p) => a + (p[0] - mx) ** 2, 0);
+      const sxy = pts.reduce((a, p) => a + (p[0] - mx) * (p[1] - my), 0);
+      const b = sxx ? sxy / sxx : 0;
+      const a0 = my - b * mx;
+      const xs = pts.map(p => p[0]);
+      const lo = Math.min(...xs), hi = Math.max(...xs);
+      return [[lo, a0 + b * lo], [hi, a0 + b * hi]];
+    };
+
+    const rawPts = rows.map(r => [r.inherited, r.raw_change]);
+    const resPts = rows.map(r => [r.inherited, r.residual]);
+
+    const scatter = (name, pts, color, symbol) => ({
+      name, type: 'scatter', symbol, symbolSize: 13,
+      itemStyle: { color, opacity: 0.9, borderColor: isDark ? '#0B1220' : '#FFFFFF', borderWidth: 1 },
+      data: pts.map((p, i) => ({ value: p, name: rows[i].name })),
+      label: {
+        show: true, formatter: p => p.data.name.split(' ').slice(-1)[0],
+        position: 'right', distance: 6, color: labelColor, fontSize: 10
+      }
+    });
+
+    chart.setOption({
+      backgroundColor: 'transparent',
+      tooltip: Object.assign({
+        trigger: 'item',
+        formatter: p => p.data.name
+          ? '<div style="font-weight:700;">' + p.data.name + '</div><div style="font-size:0.8rem;">Inherited ' +
+            p.value[0].toFixed(1) + ' → ' + p.seriesName + ' ' + (p.value[1] >= 0 ? '+' : '') + p.value[1].toFixed(1) + '</div>'
+          : p.seriesName
+      }, tooltipBase),
+      legend: {
+        show: true, top: 6, left: 'center', icon: 'circle',
+        itemWidth: 10, itemHeight: 10, itemGap: 16,
+        data: ['Raw change (uncorrected)', 'Structural residual (corrected)'],
+        textStyle: { color: isDark ? '#E2E8F0' : '#334155', fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif' }
+      },
+      grid: { left: '5%', right: '6%', bottom: '10%', top: '15%', containLabel: true },
+      xAxis: {
+        type: 'value', name: 'Index level inherited',
+        nameLocation: 'middle', nameGap: 30, scale: true,
+        nameTextStyle: { color: labelColor, fontSize: 11 },
+        axisLine: { lineStyle: { color: axisColor } },
+        splitLine: { lineStyle: { color: splitColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      yAxis: {
+        type: 'value', name: 'Change in index over the term',
+        nameLocation: 'middle', nameGap: 40,
+        nameTextStyle: { color: labelColor, fontSize: 11 },
+        axisLine: { lineStyle: { color: axisColor } },
+        splitLine: { lineStyle: { color: splitColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      series: [
+        scatter('Raw change (uncorrected)', rawPts, '#F59E0B', 'circle'),
+        scatter('Structural residual (corrected)', resPts, '#10B981', 'diamond'),
+        {
+          name: 'Raw change (uncorrected)', type: 'line', data: fit(rawPts),
+          symbol: 'none', silent: true, lineStyle: { color: '#F59E0B', width: 2, type: 'dashed' },
+          tooltip: { show: false }
+        },
+        {
+          name: 'Structural residual (corrected)', type: 'line', data: fit(resPts),
+          symbol: 'none', silent: true, lineStyle: { color: '#10B981', width: 2, type: 'dashed' },
+          tooltip: { show: false }
+        },
+        {
+          name: 'zero', type: 'line', data: [], silent: true,
+          markLine: {
+            silent: true, symbol: ['none', 'none'],
+            lineStyle: { color: isDark ? '#64748B' : '#94A3B8', width: 1.2 },
+            label: { show: false }, data: [{ yAxis: 0 }]
+          }
+        }
+      ]
+    });
+  }
+
+
+  // --- 8. Defence burden vs the index --------------------------------------
+  const warDom = document.getElementById('echart-war-container');
+  if (warDom && ussDefence.length) {
+    const chart = echarts.init(warDom);
+    window.ussWarChart = chart;
+
+    const years = ussDefence.map(d => String(d.year));
+    const tintOf = (hex, a) => {
+      const n = parseInt(hex.slice(1), 16);
+      return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+    };
+
+    chart.setOption({
+      backgroundColor: 'transparent',
+      tooltip: Object.assign({
+        trigger: 'axis',
+        axisPointer: { type: 'cross', lineStyle: { color: '#38BDF8', width: 1, type: 'dashed' } },
+        formatter: params => {
+          const year = params[0].axisValue;
+          let res = '<div style="font-weight:700; margin-bottom:6px; font-size:0.85rem;">Fiscal year ' + year + '</div>';
+          params.forEach(p => {
+            if (p.value === null || p.value === undefined) return;
+            const unit = p.seriesName.indexOf('Defence') === 0 ? '% of GDP' : '';
+            res += '<div style="display:flex; justify-content:space-between; gap:14px; font-size:0.8rem;">' +
+              '<span>' + p.marker + ' ' + p.seriesName + ':</span>' +
+              '<strong style="font-family:var(--font-mono);">' + p.value.toFixed(1) + unit + '</strong></div>';
+          });
+          const w = ussWarPeriods.find(x => +year >= x.start && +year <= x.end);
+          if (w) {
+            res += '<div style="margin-top:6px; padding-top:5px; border-top:1px dashed ' +
+              (isDark ? '#334155' : '#CBD5E1') + '; font-size:0.78rem; color:' + w.color + '; font-weight:700;">' +
+              w.label + ' (' + w.start + '-' + w.end + ')</div>';
+          }
+          return res;
+        }
+      }, tooltipBase),
+      legend: {
+        show: true, top: 6, left: 'center', icon: 'circle',
+        itemWidth: 10, itemHeight: 10, itemGap: 16,
+        data: ['Defence spending', 'USS-INDEX'],
+        textStyle: { color: isDark ? '#E2E8F0' : '#334155', fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif' }
+      },
+      grid: { left: '4%', right: '4%', bottom: '10%', top: '16%', containLabel: true },
+      xAxis: {
+        type: 'category', data: years, boundaryGap: false,
+        axisLine: { lineStyle: { color: axisColor } },
+        axisLabel: { color: labelColor, fontSize: 11 }
+      },
+      yAxis: [
+        {
+          type: 'value', name: 'Defence, % of GDP',
+          nameLocation: 'end', nameGap: 14,
+          nameTextStyle: { color: labelColor, fontSize: 11, align: 'left' },
+          splitLine: { lineStyle: { color: splitColor } },
+          axisLabel: { color: labelColor, fontSize: 11, formatter: '{value}%' }
+        },
+        {
+          type: 'value', name: 'USS-INDEX', position: 'right', min: 95, scale: true,
+          nameTextStyle: { color: labelColor, fontSize: 11 },
+          splitLine: { show: false },
+          axisLabel: { color: labelColor, fontSize: 11 }
+        }
+      ],
+      series: [
+        {
+          name: 'Defence spending',
+          type: 'line', smooth: true, symbol: 'none',
+          data: ussDefence.map(d => d.defence),
+          lineStyle: { width: 3, color: '#EF4444' },
+          itemStyle: { color: '#EF4444' },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: 'rgba(239, 68, 68, 0.28)' },
+              { offset: 1, color: 'rgba(239, 68, 68, 0.0)' }
+            ])
+          },
+          // War periods shade the plot behind the burden line.
+          markArea: {
+            silent: true,
+            data: ussWarPeriods.filter(w => !w.partial).map(w => ([
+              {
+                xAxis: String(w.start),
+                itemStyle: { color: tintOf(w.color, isDark ? 0.13 : 0.11) },
+                label: {
+                  show: true, formatter: w.short || w.label, position: 'insideTop',
+                  rotate: 90, distance: 8, align: 'left',
+                  color: w.color, fontSize: 10, fontWeight: 600
+                }
+              },
+              { xAxis: String(w.end) }
+            ]))
+          }
+        },
+        {
+          name: 'USS-INDEX',
+          type: 'line', smooth: true, symbol: 'none', yAxisIndex: 1,
+          data: ussHistory.map(h => h.score),
+          lineStyle: { width: 2, color: '#38BDF8', type: 'dashed' },
+          itemStyle: { color: '#38BDF8' }
+        }
+      ]
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    ['ussTrendChart', 'ussProjChart', 'ussQuadChart', 'ussDecompChart', 'ussSimChart', 'ussPresChart', 'ussInhChart', 'ussWarChart']
+      .forEach(k => { if (window[k]) window[k].resize(); });
+  });
+});
+</script>
+{% endblock %}

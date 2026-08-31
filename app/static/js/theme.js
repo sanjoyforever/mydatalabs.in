@@ -73,7 +73,7 @@
 
   // --- Navigation Clicks ---------------------------------------------------
   document.addEventListener("click", function (e) {
-    var navLink = e.target.closest ? e.target.closest(".site-nav a, .footer-links a, .brand") : null;
+    var navLink = e.target.closest ? e.target.closest(".site-nav a, .mobile-nav a, .footer-links a, .brand") : null;
     if (!navLink || !navLink.href) return;
     var isFooter = !!navLink.closest(".site-footer");
     var isHeader = !!navLink.closest(".site-header");
@@ -101,7 +101,53 @@
     }
   });
 
-  // --- Categories dropdown -------------------------------------------------
+  // --- Mobile navigation drawer --------------------------------------------
+  // Below 900px the header has no room for the nav, and until now nothing
+  // replaced it: the footer was the only way off a page on a phone.
+  var navToggle = document.getElementById("nav-toggle");
+  var mobileNav = document.getElementById("mobile-nav");
+
+  if (navToggle && mobileNav) {
+    var setDrawer = function (open) {
+      mobileNav.hidden = !open;
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      navToggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
+    };
+
+    navToggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = mobileNav.hidden;
+      setDrawer(open);
+      if (open) track("nav_drawer_open", { page_path: location.pathname });
+    });
+
+    // Clicking a link navigates, but same-page hash targets do not — those
+    // would otherwise leave the drawer covering what they scrolled to.
+    mobileNav.addEventListener("click", function (e) {
+      if (e.target.closest("a")) setDrawer(false);
+    });
+
+    document.addEventListener("click", function (e) {
+      if (mobileNav.hidden) return;
+      if (mobileNav.contains(e.target) || navToggle.contains(e.target)) return;
+      setDrawer(false);
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !mobileNav.hidden) {
+        setDrawer(false);
+        navToggle.focus();
+      }
+    });
+
+    // Rotating into the desktop layout with the drawer open leaves a panel
+    // hanging off a header that now shows the full nav anyway.
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900 && !mobileNav.hidden) setDrawer(false);
+    });
+  }
+
+  // --- Indices dropdown -----------------------------------------------------
   // Previously CSS :hover / :focus-within only, which left keyboard users
   // unable to open it: the button had no handler, so Enter and Space did
   // nothing and Escape could not close it.

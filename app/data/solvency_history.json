@@ -1,0 +1,4352 @@
+{
+  "index": "USS-INDEX",
+  "name": "U.S. Sovereign Solvency Index",
+  "baseline": 100.0,
+  "frequency": "annual",
+  "source": "Federal Reserve Economic Data (FRED), St. Louis Fed",
+  "source_series": [
+    "FYGFDPUB",
+    "FYGFD",
+    "FYPUGDA188S",
+    "FYFR",
+    "FYOINT",
+    "FYFSD",
+    "GDPA",
+    "CPIAUCNS",
+    "OPHNFB",
+    "A939RX0Q048SBEA",
+    "GDPPOT",
+    "GDPC1",
+    "USREC",
+    "A824RE1A156NBEA"
+  ],
+  "generated_at": "2026-08-28T14:54:20.711961+00:00",
+  "history": [
+    {
+      "year": 1945,
+      "raw_values": {
+        "debt_gdp": 103.15,
+        "interest_burden": 6.89,
+        "primary_deficit": 19.49,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 2.27,
+        "r_minus_g": 0.1
+      },
+      "context": {
+        "output_gap": null,
+        "recession_share": 0.667,
+        "defense_pct_gdp": 37.2,
+        "gdp_bn": 228.0,
+        "cpi_index": 17.992,
+        "gross_debt_pct_gdp": 0.11,
+        "receipts_pct_gdp": 19.81,
+        "effective_rate": 1.68,
+        "nominal_gdp_growth": 1.59,
+        "interest_outlays_bn": 3.1,
+        "receipts_bn": 45.2,
+        "debt_public_bn": 235.2
+      },
+      "score": 141.1,
+      "level_label": "Strained",
+      "level_status": "serious",
+      "stresses": {
+        "debt_gdp": 59.3,
+        "interest_burden": 0.0,
+        "primary_deficit": 100.0,
+        "inflation": 3.4,
+        "r_minus_g": 27.5
+      },
+      "contributions": {
+        "debt_gdp": 15.25,
+        "interest_burden": 0.0,
+        "primary_deficit": 21.43,
+        "inflation": 0.49,
+        "r_minus_g": 3.93
+      },
+      "block_contributions": {
+        "fiscal": 36.68,
+        "growth": 0.0,
+        "monetary": 4.42
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1946,
+      "raw_values": {
+        "debt_gdp": 106.31,
+        "interest_burden": 10.46,
+        "primary_deficit": 5.2,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 8.48,
+        "r_minus_g": 1.95
+      },
+      "context": {
+        "output_gap": null,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 12.3,
+        "gdp_bn": 227.5,
+        "cpi_index": 19.517,
+        "gross_debt_pct_gdp": 0.12,
+        "receipts_pct_gdp": 17.27,
+        "effective_rate": 1.75,
+        "nominal_gdp_growth": -0.21,
+        "interest_outlays_bn": 4.1,
+        "receipts_bn": 39.3,
+        "debt_public_bn": 241.9
+      },
+      "score": 154.7,
+      "level_label": "Severe",
+      "level_status": "critical",
+      "stresses": {
+        "debt_gdp": 62.0,
+        "interest_burden": 11.2,
+        "primary_deficit": 65.0,
+        "inflation": 81.0,
+        "r_minus_g": 73.8
+      },
+      "contributions": {
+        "debt_gdp": 15.94,
+        "interest_burden": 2.72,
+        "primary_deficit": 13.93,
+        "inflation": 11.57,
+        "r_minus_g": 10.54
+      },
+      "block_contributions": {
+        "fiscal": 32.59,
+        "growth": 0.0,
+        "monetary": 22.11
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1947,
+      "raw_values": {
+        "debt_gdp": 89.86,
+        "interest_burden": 10.92,
+        "primary_deficit": -3.29,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 14.39,
+        "r_minus_g": -7.97
+      },
+      "context": {
+        "output_gap": null,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 8.4,
+        "gdp_bn": 249.6,
+        "cpi_index": 22.325,
+        "gross_debt_pct_gdp": 0.1,
+        "receipts_pct_gdp": 15.43,
+        "effective_rate": 1.74,
+        "nominal_gdp_growth": 9.7,
+        "interest_outlays_bn": 4.2,
+        "receipts_bn": 38.5,
+        "debt_public_bn": 224.3
+      },
+      "score": 129.8,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 47.7,
+        "interest_burden": 13.3,
+        "primary_deficit": 0.0,
+        "inflation": 100.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 12.27,
+        "interest_burden": 3.23,
+        "primary_deficit": 0.0,
+        "inflation": 14.29,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 15.5,
+        "growth": 0.0,
+        "monetary": 14.29
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1948,
+      "raw_values": {
+        "debt_gdp": 78.81,
+        "interest_burden": 10.45,
+        "primary_deficit": -5.88,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 7.69,
+        "r_minus_g": -8.02
+      },
+      "context": {
+        "output_gap": null,
+        "recession_share": 0.083,
+        "defense_pct_gdp": 7.6,
+        "gdp_bn": 274.5,
+        "cpi_index": 24.042,
+        "gross_debt_pct_gdp": 0.09,
+        "receipts_pct_gdp": 15.14,
+        "effective_rate": 1.94,
+        "nominal_gdp_growth": 9.96,
+        "interest_outlays_bn": 4.3,
+        "receipts_bn": 41.6,
+        "debt_public_bn": 216.3
+      },
+      "score": 122.7,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 38.1,
+        "interest_burden": 11.1,
+        "primary_deficit": 0.0,
+        "inflation": 71.1,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 9.8,
+        "interest_burden": 2.7,
+        "primary_deficit": 0.0,
+        "inflation": 10.16,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 12.5,
+        "growth": 0.0,
+        "monetary": 10.16
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1949,
+      "raw_values": {
+        "debt_gdp": 78.65,
+        "interest_burden": 11.48,
+        "primary_deficit": -1.87,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": -0.97,
+        "r_minus_g": 2.82
+      },
+      "context": {
+        "output_gap": -1.33,
+        "recession_share": 0.833,
+        "defense_pct_gdp": 8.2,
+        "gdp_bn": 272.5,
+        "cpi_index": 23.808,
+        "gross_debt_pct_gdp": 0.09,
+        "receipts_pct_gdp": 14.47,
+        "effective_rate": 2.09,
+        "nominal_gdp_growth": -0.73,
+        "interest_outlays_bn": 4.5,
+        "receipts_bn": 39.4,
+        "debt_public_bn": 214.3
+      },
+      "score": 127.3,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 38.0,
+        "interest_burden": 15.8,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 95.5
+      },
+      "contributions": {
+        "debt_gdp": 9.77,
+        "interest_burden": 3.84,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 13.64
+      },
+      "block_contributions": {
+        "fiscal": 13.61,
+        "growth": 0.0,
+        "monetary": 13.64
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1950,
+      "raw_values": {
+        "debt_gdp": 73.04,
+        "interest_burden": 12.2,
+        "primary_deficit": -0.56,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 1.09,
+        "r_minus_g": -7.79
+      },
+      "context": {
+        "output_gap": 1.52,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 7.6,
+        "gdp_bn": 299.8,
+        "cpi_index": 24.067,
+        "gross_debt_pct_gdp": 0.09,
+        "receipts_pct_gdp": 13.16,
+        "effective_rate": 2.25,
+        "nominal_gdp_growth": 10.04,
+        "interest_outlays_bn": 4.8,
+        "receipts_bn": 39.4,
+        "debt_public_bn": 219.0
+      },
+      "score": 113.2,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 33.1,
+        "interest_burden": 19.1,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 8.51,
+        "interest_burden": 4.64,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 13.15,
+        "growth": 0.0,
+        "monetary": 0.0
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1951,
+      "raw_values": {
+        "debt_gdp": 61.77,
+        "interest_burden": 9.04,
+        "primary_deficit": -3.1,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 7.86,
+        "r_minus_g": -13.57
+      },
+      "context": {
+        "output_gap": 4.08,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 12.6,
+        "gdp_bn": 346.9,
+        "cpi_index": 25.958,
+        "gross_debt_pct_gdp": 0.07,
+        "receipts_pct_gdp": 14.88,
+        "effective_rate": 2.13,
+        "nominal_gdp_growth": 15.7,
+        "interest_outlays_bn": 4.7,
+        "receipts_bn": 51.6,
+        "debt_public_bn": 214.3
+      },
+      "score": 117.6,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 23.3,
+        "interest_burden": 4.7,
+        "primary_deficit": 0.0,
+        "inflation": 73.2,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 5.99,
+        "interest_burden": 1.14,
+        "primary_deficit": 0.0,
+        "inflation": 10.46,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 7.13,
+        "growth": 0.0,
+        "monetary": 10.46
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1952,
+      "raw_values": {
+        "debt_gdp": 58.47,
+        "interest_burden": 7.1,
+        "primary_deficit": -0.87,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 2.28,
+        "r_minus_g": -3.69
+      },
+      "context": {
+        "output_gap": 2.57,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 15.6,
+        "gdp_bn": 367.3,
+        "cpi_index": 26.55,
+        "gross_debt_pct_gdp": 0.07,
+        "receipts_pct_gdp": 18.01,
+        "effective_rate": 2.19,
+        "nominal_gdp_growth": 5.89,
+        "interest_outlays_bn": 4.7,
+        "receipts_bn": 66.2,
+        "debt_public_bn": 214.8
+      },
+      "score": 105.7,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 20.4,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "inflation": 3.5,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 5.25,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "inflation": 0.5,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 5.25,
+        "growth": 0.0,
+        "monetary": 0.5
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1953,
+      "raw_values": {
+        "debt_gdp": 56.11,
+        "interest_burden": 7.41,
+        "primary_deficit": 0.34,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 0.82,
+        "r_minus_g": -3.56
+      },
+      "context": {
+        "output_gap": 2.72,
+        "recession_share": 0.417,
+        "defense_pct_gdp": 15.7,
+        "gdp_bn": 389.2,
+        "cpi_index": 26.767,
+        "gross_debt_pct_gdp": 0.07,
+        "receipts_pct_gdp": 17.88,
+        "effective_rate": 2.4,
+        "nominal_gdp_growth": 5.96,
+        "interest_outlays_bn": 5.2,
+        "receipts_bn": 69.6,
+        "debt_public_bn": 218.4
+      },
+      "score": 105.6,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 18.4,
+        "interest_burden": 0.0,
+        "primary_deficit": 4.2,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 4.73,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.9,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 5.63,
+        "growth": 0.0,
+        "monetary": 0.0
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1954,
+      "raw_values": {
+        "debt_gdp": 57.48,
+        "interest_burden": 6.9,
+        "primary_deficit": -0.94,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 0.31,
+        "r_minus_g": 1.86
+      },
+      "context": {
+        "output_gap": -0.9,
+        "recession_share": 0.417,
+        "defense_pct_gdp": 13.9,
+        "gdp_bn": 390.5,
+        "cpi_index": 26.85,
+        "gross_debt_pct_gdp": 0.07,
+        "receipts_pct_gdp": 17.85,
+        "effective_rate": 2.2,
+        "nominal_gdp_growth": 0.34,
+        "interest_outlays_bn": 4.8,
+        "receipts_bn": 69.7,
+        "debt_public_bn": 224.5
+      },
+      "score": 115.2,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 19.5,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 71.5
+      },
+      "contributions": {
+        "debt_gdp": 5.01,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 10.21
+      },
+      "block_contributions": {
+        "fiscal": 5.01,
+        "growth": 0.0,
+        "monetary": 10.21
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1955,
+      "raw_values": {
+        "debt_gdp": 53.26,
+        "interest_burden": 7.41,
+        "primary_deficit": -0.44,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": -0.28,
+        "r_minus_g": -6.78
+      },
+      "context": {
+        "output_gap": 3.47,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 12.3,
+        "gdp_bn": 425.5,
+        "cpi_index": 26.775,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 15.38,
+        "effective_rate": 2.16,
+        "nominal_gdp_growth": 8.94,
+        "interest_outlays_bn": 4.8,
+        "receipts_bn": 65.5,
+        "debt_public_bn": 226.6
+      },
+      "score": 104.1,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 15.9,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 4.09,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 4.09,
+        "growth": 0.0,
+        "monetary": 0.0
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1956,
+      "raw_values": {
+        "debt_gdp": 49.45,
+        "interest_burden": 6.81,
+        "primary_deficit": -2.01,
+        "productivity": null,
+        "real_gdp_pc": null,
+        "inflation": 1.53,
+        "r_minus_g": -3.37
+      },
+      "context": {
+        "output_gap": 2.9,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 12.2,
+        "gdp_bn": 449.4,
+        "cpi_index": 27.183,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 16.6,
+        "effective_rate": 2.24,
+        "nominal_gdp_growth": 5.61,
+        "interest_outlays_bn": 5.1,
+        "receipts_bn": 74.6,
+        "debt_public_bn": 222.2
+      },
+      "score": 103.2,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 12.6,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 3.24,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 3.24,
+        "growth": 0.0,
+        "monetary": 0.0
+      },
+      "partial": true,
+      "covered_weight": 0.7
+    },
+    {
+      "year": 1957,
+      "raw_values": {
+        "debt_gdp": 46.26,
+        "interest_burden": 6.69,
+        "primary_deficit": -1.85,
+        "productivity": 2.74,
+        "real_gdp_pc": 2.16,
+        "inflation": 3.34,
+        "r_minus_g": -3.08
+      },
+      "context": {
+        "output_gap": 1.91,
+        "recession_share": 0.333,
+        "defense_pct_gdp": 12.6,
+        "gdp_bn": 474.0,
+        "cpi_index": 28.092,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 16.87,
+        "effective_rate": 2.41,
+        "nominal_gdp_growth": 5.49,
+        "interest_outlays_bn": 5.4,
+        "receipts_bn": 80.0,
+        "debt_public_bn": 219.3
+      },
+      "score": 103.7,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 9.8,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 1.8,
+        "inflation": 16.8,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 1.76,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.27,
+        "inflation": 1.68,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 1.76,
+        "growth": 0.27,
+        "monetary": 1.68
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1958,
+      "raw_values": {
+        "debt_gdp": 47.03,
+        "interest_burden": 7.04,
+        "primary_deficit": -0.59,
+        "productivity": 2.72,
+        "real_gdp_pc": 1.68,
+        "inflation": 2.73,
+        "r_minus_g": 1.04
+      },
+      "context": {
+        "output_gap": -2.33,
+        "recession_share": 0.333,
+        "defense_pct_gdp": 12.9,
+        "gdp_bn": 481.2,
+        "cpi_index": 28.858,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 16.55,
+        "effective_rate": 2.56,
+        "nominal_gdp_growth": 1.52,
+        "interest_outlays_bn": 5.6,
+        "receipts_bn": 79.6,
+        "debt_public_bn": 226.3
+      },
+      "score": 111.4,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 10.5,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 23.6,
+        "inflation": 9.1,
+        "r_minus_g": 51.0
+      },
+      "contributions": {
+        "debt_gdp": 1.89,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 3.54,
+        "inflation": 0.91,
+        "r_minus_g": 5.1
+      },
+      "block_contributions": {
+        "fiscal": 1.89,
+        "growth": 3.54,
+        "monetary": 6.01
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1959,
+      "raw_values": {
+        "debt_gdp": 44.99,
+        "interest_burden": 7.27,
+        "primary_deficit": 1.36,
+        "productivity": 2.75,
+        "real_gdp_pc": 2.42,
+        "inflation": 1.01,
+        "r_minus_g": -5.85
+      },
+      "context": {
+        "output_gap": 0.53,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 11.7,
+        "gdp_bn": 521.7,
+        "cpi_index": 29.15,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 15.19,
+        "effective_rate": 2.55,
+        "nominal_gdp_growth": 8.4,
+        "interest_outlays_bn": 5.8,
+        "receipts_bn": 79.2,
+        "debt_public_bn": 234.7
+      },
+      "score": 104.1,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 8.7,
+        "interest_burden": 0.0,
+        "primary_deficit": 17.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 1.57,
+        "interest_burden": 0.0,
+        "primary_deficit": 2.55,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 4.12,
+        "growth": 0.0,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1960,
+      "raw_values": {
+        "debt_gdp": 43.66,
+        "interest_burden": 7.51,
+        "primary_deficit": -1.34,
+        "productivity": 2.21,
+        "real_gdp_pc": 1.8,
+        "inflation": 1.46,
+        "r_minus_g": -1.01
+      },
+      "context": {
+        "output_gap": -1.0,
+        "recession_share": 0.667,
+        "defense_pct_gdp": 11.2,
+        "gdp_bn": 542.4,
+        "cpi_index": 29.575,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 17.05,
+        "effective_rate": 2.96,
+        "nominal_gdp_growth": 3.97,
+        "interest_outlays_bn": 6.9,
+        "receipts_bn": 92.5,
+        "debt_public_bn": 236.8
+      },
+      "score": 104.1,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 7.5,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 18.2,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 1.35,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 2.73,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 1.35,
+        "growth": 2.73,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1961,
+      "raw_values": {
+        "debt_gdp": 42.4,
+        "interest_burden": 7.12,
+        "primary_deficit": -0.6,
+        "productivity": 2.28,
+        "real_gdp_pc": 1.27,
+        "inflation": 1.07,
+        "r_minus_g": -0.82
+      },
+      "context": {
+        "output_gap": -2.29,
+        "recession_share": 0.167,
+        "defense_pct_gdp": 11.5,
+        "gdp_bn": 562.2,
+        "cpi_index": 29.892,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 16.79,
+        "effective_rate": 2.84,
+        "nominal_gdp_growth": 3.66,
+        "interest_outlays_bn": 6.7,
+        "receipts_bn": 94.4,
+        "debt_public_bn": 238.4
+      },
+      "score": 107.9,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 6.4,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 42.3,
+        "inflation": 0.0,
+        "r_minus_g": 4.5
+      },
+      "contributions": {
+        "debt_gdp": 1.15,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 6.34,
+        "inflation": 0.0,
+        "r_minus_g": 0.45
+      },
+      "block_contributions": {
+        "fiscal": 1.15,
+        "growth": 6.34,
+        "monetary": 0.45
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1962,
+      "raw_values": {
+        "debt_gdp": 41.06,
+        "interest_burden": 6.91,
+        "primary_deficit": 0.04,
+        "productivity": 2.54,
+        "real_gdp_pc": 1.49,
+        "inflation": 1.2,
+        "r_minus_g": -4.53
+      },
+      "context": {
+        "output_gap": -0.24,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 11.5,
+        "gdp_bn": 603.9,
+        "cpi_index": 30.25,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 16.5,
+        "effective_rate": 2.89,
+        "nominal_gdp_growth": 7.42,
+        "interest_outlays_bn": 6.9,
+        "receipts_bn": 99.7,
+        "debt_public_bn": 248.0
+      },
+      "score": 105.9,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 5.3,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.5,
+        "productivity": 0.0,
+        "real_gdp_pc": 32.3,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.95,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.07,
+        "productivity": 0.0,
+        "real_gdp_pc": 4.84,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 1.02,
+        "growth": 4.84,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1963,
+      "raw_values": {
+        "debt_gdp": 39.85,
+        "interest_burden": 7.26,
+        "primary_deficit": -0.47,
+        "productivity": 2.63,
+        "real_gdp_pc": 1.48,
+        "inflation": 1.24,
+        "r_minus_g": -2.43
+      },
+      "context": {
+        "output_gap": -0.19,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 11.0,
+        "gdp_bn": 637.5,
+        "cpi_index": 30.625,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 16.72,
+        "effective_rate": 3.12,
+        "nominal_gdp_growth": 5.55,
+        "interest_outlays_bn": 7.7,
+        "receipts_bn": 106.6,
+        "debt_public_bn": 254.0
+      },
+      "score": 105.7,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 4.2,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 32.7,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.76,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 4.91,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.76,
+        "growth": 4.91,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1964,
+      "raw_values": {
+        "debt_gdp": 37.52,
+        "interest_burden": 7.28,
+        "primary_deficit": -0.33,
+        "productivity": 2.71,
+        "real_gdp_pc": 2.15,
+        "inflation": 1.28,
+        "r_minus_g": -4.15
+      },
+      "context": {
+        "output_gap": 1.12,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 10.2,
+        "gdp_bn": 684.5,
+        "cpi_index": 31.017,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 16.45,
+        "effective_rate": 3.23,
+        "nominal_gdp_growth": 7.37,
+        "interest_outlays_bn": 8.2,
+        "receipts_bn": 112.6,
+        "debt_public_bn": 256.8
+      },
+      "score": 100.7,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 2.2,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 2.3,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.4,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.34,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.4,
+        "growth": 0.34,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1965,
+      "raw_values": {
+        "debt_gdp": 35.13,
+        "interest_burden": 7.35,
+        "primary_deficit": -0.97,
+        "productivity": 2.6,
+        "real_gdp_pc": 2.14,
+        "inflation": 1.59,
+        "r_minus_g": -5.1
+      },
+      "context": {
+        "output_gap": 3.16,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 9.5,
+        "gdp_bn": 742.3,
+        "cpi_index": 31.508,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 15.74,
+        "effective_rate": 3.35,
+        "nominal_gdp_growth": 8.45,
+        "interest_outlays_bn": 8.6,
+        "receipts_bn": 116.8,
+        "debt_public_bn": 260.8
+      },
+      "score": 100.4,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.1,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 2.7,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.02,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.41,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.02,
+        "growth": 0.41,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1966,
+      "raw_values": {
+        "debt_gdp": 32.42,
+        "interest_burden": 7.17,
+        "primary_deficit": -0.7,
+        "productivity": 3.02,
+        "real_gdp_pc": 2.64,
+        "inflation": 3.02,
+        "r_minus_g": -5.98
+      },
+      "context": {
+        "output_gap": 5.31,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 10.1,
+        "gdp_bn": 813.4,
+        "cpi_index": 32.458,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 16.08,
+        "effective_rate": 3.6,
+        "nominal_gdp_growth": 9.58,
+        "interest_outlays_bn": 9.4,
+        "receipts_bn": 130.8,
+        "debt_public_bn": 263.7
+      },
+      "score": 101.3,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 12.8,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 1.28,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.0,
+        "growth": 0.0,
+        "monetary": 1.28
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1967,
+      "raw_values": {
+        "debt_gdp": 31.0,
+        "interest_burden": 6.9,
+        "primary_deficit": -0.19,
+        "productivity": 2.95,
+        "real_gdp_pc": 2.77,
+        "inflation": 2.77,
+        "r_minus_g": -1.83
+      },
+      "context": {
+        "output_gap": 3.55,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 11.1,
+        "gdp_bn": 860.0,
+        "cpi_index": 33.358,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 17.31,
+        "effective_rate": 3.89,
+        "nominal_gdp_growth": 5.72,
+        "interest_outlays_bn": 10.3,
+        "receipts_bn": 148.8,
+        "debt_public_bn": 266.6
+      },
+      "score": 101.0,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 9.6,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 0.96,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.0,
+        "growth": 0.0,
+        "monetary": 0.96
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1968,
+      "raw_values": {
+        "debt_gdp": 30.78,
+        "interest_burden": 7.25,
+        "primary_deficit": 1.5,
+        "productivity": 3.07,
+        "real_gdp_pc": 3.41,
+        "inflation": 4.27,
+        "r_minus_g": -5.22
+      },
+      "context": {
+        "output_gap": 3.93,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 10.8,
+        "gdp_bn": 940.7,
+        "cpi_index": 34.783,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 16.26,
+        "effective_rate": 4.16,
+        "nominal_gdp_growth": 9.38,
+        "interest_outlays_bn": 11.1,
+        "receipts_bn": 153.0,
+        "debt_public_bn": 289.5
+      },
+      "score": 105.7,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 18.8,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 28.4,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 2.82,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 2.84,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 2.82,
+        "growth": 0.0,
+        "monetary": 2.84
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1969,
+      "raw_values": {
+        "debt_gdp": 27.33,
+        "interest_burden": 6.8,
+        "primary_deficit": -1.57,
+        "productivity": 2.73,
+        "real_gdp_pc": 3.11,
+        "inflation": 5.46,
+        "r_minus_g": -3.8
+      },
+      "context": {
+        "output_gap": 2.75,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 10.0,
+        "gdp_bn": 1017.6,
+        "cpi_index": 36.683,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 18.36,
+        "effective_rate": 4.39,
+        "nominal_gdp_growth": 8.18,
+        "interest_outlays_bn": 12.7,
+        "receipts_bn": 186.9,
+        "debt_public_bn": 278.1
+      },
+      "score": 104.3,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 43.2,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 4.32,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.0,
+        "growth": 0.0,
+        "monetary": 4.32
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1970,
+      "raw_values": {
+        "debt_gdp": 26.39,
+        "interest_burden": 7.46,
+        "primary_deficit": -1.07,
+        "productivity": 2.76,
+        "real_gdp_pc": 2.96,
+        "inflation": 5.84,
+        "r_minus_g": -0.3
+      },
+      "context": {
+        "output_gap": -0.75,
+        "recession_share": 0.917,
+        "defense_pct_gdp": 9.4,
+        "gdp_bn": 1073.3,
+        "cpi_index": 38.825,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 17.96,
+        "effective_rate": 5.17,
+        "nominal_gdp_growth": 5.47,
+        "interest_outlays_bn": 14.4,
+        "receipts_bn": 192.8,
+        "debt_public_bn": 283.2
+      },
+      "score": 106.5,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 48.0,
+        "r_minus_g": 17.5
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 4.8,
+        "r_minus_g": 1.75
+      },
+      "block_contributions": {
+        "fiscal": 0.0,
+        "growth": 0.0,
+        "monetary": 6.55
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1971,
+      "raw_values": {
+        "debt_gdp": 26.01,
+        "interest_burden": 7.93,
+        "primary_deficit": 0.7,
+        "productivity": 2.82,
+        "real_gdp_pc": 3.07,
+        "inflation": 4.29,
+        "r_minus_g": -3.29
+      },
+      "context": {
+        "output_gap": -0.74,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 8.4,
+        "gdp_bn": 1164.8,
+        "cpi_index": 40.492,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 16.07,
+        "effective_rate": 5.24,
+        "nominal_gdp_growth": 8.53,
+        "interest_outlays_bn": 14.8,
+        "receipts_bn": 187.1,
+        "debt_public_bn": 303.0
+      },
+      "score": 104.2,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 8.8,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 28.6,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 1.32,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 2.86,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 1.32,
+        "growth": 0.0,
+        "monetary": 2.86
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1972,
+      "raw_values": {
+        "debt_gdp": 25.21,
+        "interest_burden": 7.47,
+        "primary_deficit": 0.62,
+        "productivity": 2.71,
+        "real_gdp_pc": 3.03,
+        "inflation": 3.27,
+        "r_minus_g": -4.7
+      },
+      "context": {
+        "output_gap": 1.18,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 7.9,
+        "gdp_bn": 1279.1,
+        "cpi_index": 41.817,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 16.21,
+        "effective_rate": 5.11,
+        "nominal_gdp_growth": 9.81,
+        "interest_outlays_bn": 15.5,
+        "receipts_bn": 207.3,
+        "debt_public_bn": 322.4
+      },
+      "score": 102.8,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 7.8,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 15.9,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 1.17,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 1.59,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 1.17,
+        "growth": 0.0,
+        "monetary": 1.59
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1973,
+      "raw_values": {
+        "debt_gdp": 23.92,
+        "interest_burden": 7.52,
+        "primary_deficit": -0.17,
+        "productivity": 2.68,
+        "real_gdp_pc": 3.21,
+        "inflation": 6.18,
+        "r_minus_g": -6.05
+      },
+      "context": {
+        "output_gap": 3.38,
+        "recession_share": 0.083,
+        "defense_pct_gdp": 7.2,
+        "gdp_bn": 1425.4,
+        "cpi_index": 44.4,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 16.19,
+        "effective_rate": 5.38,
+        "nominal_gdp_growth": 11.43,
+        "interest_outlays_bn": 17.3,
+        "receipts_bn": 230.8,
+        "debt_public_bn": 340.9
+      },
+      "score": 105.2,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 52.2,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.0,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 5.22,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.0,
+        "growth": 0.0,
+        "monetary": 5.22
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1974,
+      "raw_values": {
+        "debt_gdp": 22.24,
+        "interest_burden": 8.15,
+        "primary_deficit": -0.99,
+        "productivity": 2.24,
+        "real_gdp_pc": 2.63,
+        "inflation": 11.05,
+        "r_minus_g": -2.12
+      },
+      "context": {
+        "output_gap": -0.7,
+        "recession_share": 1.0,
+        "defense_pct_gdp": 7.1,
+        "gdp_bn": 1545.2,
+        "cpi_index": 49.308,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 17.03,
+        "effective_rate": 6.29,
+        "nominal_gdp_growth": 8.41,
+        "interest_outlays_bn": 21.4,
+        "receipts_bn": 263.2,
+        "debt_public_bn": 343.7
+      },
+      "score": 110.1,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.7,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 100.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.12,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 10.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.12,
+        "growth": 0.0,
+        "monetary": 10.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1975,
+      "raw_values": {
+        "debt_gdp": 23.43,
+        "interest_burden": 8.33,
+        "primary_deficit": 1.78,
+        "productivity": 2.19,
+        "real_gdp_pc": 1.99,
+        "inflation": 9.14,
+        "r_minus_g": -2.28
+      },
+      "context": {
+        "output_gap": -4.12,
+        "recession_share": 0.25,
+        "defense_pct_gdp": 7.0,
+        "gdp_bn": 1684.9,
+        "cpi_index": 53.817,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 16.56,
+        "effective_rate": 6.76,
+        "nominal_gdp_growth": 9.04,
+        "interest_outlays_bn": 23.2,
+        "receipts_bn": 279.1,
+        "debt_public_bn": 394.7
+      },
+      "score": 113.9,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 1.5,
+        "primary_deficit": 22.2,
+        "productivity": 0.0,
+        "real_gdp_pc": 9.5,
+        "inflation": 89.2,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.26,
+        "primary_deficit": 3.33,
+        "productivity": 0.0,
+        "real_gdp_pc": 1.43,
+        "inflation": 8.92,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 3.59,
+        "growth": 1.43,
+        "monetary": 8.92
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1976,
+      "raw_values": {
+        "debt_gdp": 25.48,
+        "interest_burden": 8.97,
+        "primary_deficit": 2.51,
+        "productivity": 2.17,
+        "real_gdp_pc": 1.89,
+        "inflation": 5.74,
+        "r_minus_g": -4.42
+      },
+      "context": {
+        "output_gap": -2.03,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 6.7,
+        "gdp_bn": 1873.4,
+        "cpi_index": 56.908,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 15.91,
+        "effective_rate": 6.77,
+        "nominal_gdp_growth": 11.19,
+        "interest_outlays_bn": 26.7,
+        "receipts_bn": 298.1,
+        "debt_public_bn": 477.4
+      },
+      "score": 112.3,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 4.4,
+        "primary_deficit": 31.4,
+        "productivity": 0.0,
+        "real_gdp_pc": 14.1,
+        "inflation": 46.8,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.75,
+        "primary_deficit": 4.71,
+        "productivity": 0.0,
+        "real_gdp_pc": 2.11,
+        "inflation": 4.68,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 5.46,
+        "growth": 2.11,
+        "monetary": 4.68
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1977,
+      "raw_values": {
+        "debt_gdp": 26.38,
+        "interest_burden": 8.41,
+        "primary_deficit": 1.14,
+        "productivity": 2.16,
+        "real_gdp_pc": 2.09,
+        "inflation": 6.5,
+        "r_minus_g": -4.86
+      },
+      "context": {
+        "output_gap": -0.74,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 6.5,
+        "gdp_bn": 2081.8,
+        "cpi_index": 60.608,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 17.08,
+        "effective_rate": 6.26,
+        "nominal_gdp_growth": 11.12,
+        "interest_outlays_bn": 29.9,
+        "receipts_bn": 355.6,
+        "debt_public_bn": 549.1
+      },
+      "score": 108.8,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 1.9,
+        "primary_deficit": 14.2,
+        "productivity": 0.0,
+        "real_gdp_pc": 5.0,
+        "inflation": 56.2,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.32,
+        "primary_deficit": 2.13,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.75,
+        "inflation": 5.62,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 2.45,
+        "growth": 0.75,
+        "monetary": 5.62
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1978,
+      "raw_values": {
+        "debt_gdp": 25.82,
+        "interest_burden": 8.87,
+        "primary_deficit": 1.01,
+        "productivity": 1.95,
+        "real_gdp_pc": 2.14,
+        "inflation": 7.63,
+        "r_minus_g": -6.5
+      },
+      "context": {
+        "output_gap": 1.24,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 6.2,
+        "gdp_bn": 2351.6,
+        "cpi_index": 65.233,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 16.99,
+        "effective_rate": 6.46,
+        "nominal_gdp_growth": 12.96,
+        "interest_outlays_bn": 35.5,
+        "receipts_bn": 399.6,
+        "debt_public_bn": 607.1
+      },
+      "score": 111.1,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 4.0,
+        "primary_deficit": 12.6,
+        "productivity": 7.1,
+        "real_gdp_pc": 2.7,
+        "inflation": 70.4,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.68,
+        "primary_deficit": 1.89,
+        "productivity": 1.06,
+        "real_gdp_pc": 0.41,
+        "inflation": 7.04,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 2.57,
+        "growth": 1.47,
+        "monetary": 7.04
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1979,
+      "raw_values": {
+        "debt_gdp": 24.37,
+        "interest_burden": 9.2,
+        "primary_deficit": -0.07,
+        "productivity": 1.92,
+        "real_gdp_pc": 2.13,
+        "inflation": 11.25,
+        "r_minus_g": -4.7
+      },
+      "context": {
+        "output_gap": 0.88,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 6.1,
+        "gdp_bn": 2627.3,
+        "cpi_index": 72.575,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 17.63,
+        "effective_rate": 7.02,
+        "nominal_gdp_growth": 11.73,
+        "interest_outlays_bn": 42.6,
+        "receipts_bn": 463.3,
+        "debt_public_bn": 640.3
+      },
+      "score": 112.7,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 5.5,
+        "primary_deficit": 0.0,
+        "productivity": 8.6,
+        "real_gdp_pc": 3.2,
+        "inflation": 100.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.94,
+        "primary_deficit": 0.0,
+        "productivity": 1.29,
+        "real_gdp_pc": 0.48,
+        "inflation": 10.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 0.94,
+        "growth": 1.77,
+        "monetary": 10.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1980,
+      "raw_values": {
+        "debt_gdp": 24.92,
+        "interest_burden": 10.16,
+        "primary_deficit": 0.75,
+        "productivity": 1.77,
+        "real_gdp_pc": 2.09,
+        "inflation": 13.55,
+        "r_minus_g": -0.55
+      },
+      "context": {
+        "output_gap": -2.02,
+        "recession_share": 0.5,
+        "defense_pct_gdp": 6.4,
+        "gdp_bn": 2857.3,
+        "cpi_index": 82.408,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 18.1,
+        "effective_rate": 8.2,
+        "nominal_gdp_growth": 8.75,
+        "interest_outlays_bn": 52.5,
+        "receipts_bn": 517.1,
+        "debt_public_bn": 711.9
+      },
+      "score": 117.3,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 9.8,
+        "primary_deficit": 9.4,
+        "productivity": 15.7,
+        "real_gdp_pc": 5.0,
+        "inflation": 100.0,
+        "r_minus_g": 11.2
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 1.67,
+        "primary_deficit": 1.41,
+        "productivity": 2.35,
+        "real_gdp_pc": 0.75,
+        "inflation": 10.0,
+        "r_minus_g": 1.12
+      },
+      "block_contributions": {
+        "fiscal": 3.08,
+        "growth": 3.1,
+        "monetary": 11.12
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1981,
+      "raw_values": {
+        "debt_gdp": 24.61,
+        "interest_burden": 11.47,
+        "primary_deficit": 0.32,
+        "productivity": 1.53,
+        "real_gdp_pc": 2.04,
+        "inflation": 10.33,
+        "r_minus_g": -2.58
+      },
+      "context": {
+        "output_gap": -1.82,
+        "recession_share": 0.417,
+        "defense_pct_gdp": 6.7,
+        "gdp_bn": 3207.0,
+        "cpi_index": 90.925,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 18.69,
+        "effective_rate": 9.66,
+        "nominal_gdp_growth": 12.24,
+        "interest_outlays_bn": 68.8,
+        "receipts_bn": 599.3,
+        "debt_public_bn": 789.4
+      },
+      "score": 118.4,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 15.8,
+        "primary_deficit": 4.0,
+        "productivity": 27.1,
+        "real_gdp_pc": 7.3,
+        "inflation": 100.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 2.69,
+        "primary_deficit": 0.6,
+        "productivity": 4.07,
+        "real_gdp_pc": 1.09,
+        "inflation": 10.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 3.29,
+        "growth": 5.16,
+        "monetary": 10.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1982,
+      "raw_values": {
+        "debt_gdp": 27.65,
+        "interest_burden": 13.76,
+        "primary_deficit": 1.28,
+        "productivity": 1.1,
+        "real_gdp_pc": 1.34,
+        "inflation": 6.13,
+        "r_minus_g": 6.51
+      },
+      "context": {
+        "output_gap": -6.23,
+        "recession_share": 0.917,
+        "defense_pct_gdp": 7.3,
+        "gdp_bn": 3343.8,
+        "cpi_index": 96.5,
+        "gross_debt_pct_gdp": 0.03,
+        "receipts_pct_gdp": 18.48,
+        "effective_rate": 10.77,
+        "nominal_gdp_growth": 4.26,
+        "interest_outlays_bn": 85.0,
+        "receipts_bn": 617.8,
+        "debt_public_bn": 924.6
+      },
+      "score": 135.0,
+      "level_label": "Strained",
+      "level_status": "serious",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 26.2,
+        "primary_deficit": 16.0,
+        "productivity": 47.6,
+        "real_gdp_pc": 39.1,
+        "inflation": 51.6,
+        "r_minus_g": 100.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 4.45,
+        "primary_deficit": 2.4,
+        "productivity": 7.14,
+        "real_gdp_pc": 5.87,
+        "inflation": 5.16,
+        "r_minus_g": 10.0
+      },
+      "block_contributions": {
+        "fiscal": 6.85,
+        "growth": 13.01,
+        "monetary": 15.16
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1983,
+      "raw_values": {
+        "debt_gdp": 31.3,
+        "interest_burden": 14.95,
+        "primary_deficit": 3.25,
+        "productivity": 1.2,
+        "real_gdp_pc": 1.25,
+        "inflation": 3.21,
+        "r_minus_g": 1.03
+      },
+      "context": {
+        "output_gap": -4.78,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 7.5,
+        "gdp_bn": 3634.0,
+        "cpi_index": 99.6,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 16.53,
+        "effective_rate": 9.71,
+        "nominal_gdp_growth": 8.68,
+        "interest_outlays_bn": 89.8,
+        "receipts_bn": 600.6,
+        "debt_public_bn": 1137.3
+      },
+      "score": 131.0,
+      "level_label": "Strained",
+      "level_status": "serious",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 31.6,
+        "primary_deficit": 40.6,
+        "productivity": 42.9,
+        "real_gdp_pc": 43.2,
+        "inflation": 15.1,
+        "r_minus_g": 50.8
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 5.37,
+        "primary_deficit": 6.09,
+        "productivity": 6.43,
+        "real_gdp_pc": 6.48,
+        "inflation": 1.51,
+        "r_minus_g": 5.08
+      },
+      "block_contributions": {
+        "fiscal": 11.46,
+        "growth": 12.91,
+        "monetary": 6.59
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1984,
+      "raw_values": {
+        "debt_gdp": 32.37,
+        "interest_burden": 16.67,
+        "primary_deficit": 1.84,
+        "productivity": 1.59,
+        "real_gdp_pc": 2.02,
+        "inflation": 4.3,
+        "r_minus_g": -1.34
+      },
+      "context": {
+        "output_gap": -1.12,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 7.4,
+        "gdp_bn": 4037.6,
+        "cpi_index": 103.883,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 16.51,
+        "effective_rate": 9.77,
+        "nominal_gdp_growth": 11.11,
+        "interest_outlays_bn": 111.1,
+        "receipts_bn": 666.4,
+        "debt_public_bn": 1307.0
+      },
+      "score": 117.9,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 39.4,
+        "primary_deficit": 23.0,
+        "productivity": 24.3,
+        "real_gdp_pc": 8.2,
+        "inflation": 28.7,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 6.7,
+        "primary_deficit": 3.45,
+        "productivity": 3.65,
+        "real_gdp_pc": 1.23,
+        "inflation": 2.87,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 10.15,
+        "growth": 4.88,
+        "monetary": 2.87
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1985,
+      "raw_values": {
+        "debt_gdp": 34.74,
+        "interest_burden": 17.64,
+        "primary_deficit": 1.91,
+        "productivity": 1.5,
+        "real_gdp_pc": 2.46,
+        "inflation": 3.55,
+        "r_minus_g": 2.44
+      },
+      "context": {
+        "output_gap": -0.45,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 7.6,
+        "gdp_bn": 4339.0,
+        "cpi_index": 107.567,
+        "gross_debt_pct_gdp": 0.04,
+        "receipts_pct_gdp": 16.92,
+        "effective_rate": 9.91,
+        "nominal_gdp_growth": 7.46,
+        "interest_outlays_bn": 129.5,
+        "receipts_bn": 734.0,
+        "debt_public_bn": 1507.3
+      },
+      "score": 125.9,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 43.8,
+        "primary_deficit": 23.9,
+        "productivity": 28.6,
+        "real_gdp_pc": 0.0,
+        "inflation": 19.4,
+        "r_minus_g": 86.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 7.45,
+        "primary_deficit": 3.58,
+        "productivity": 4.29,
+        "real_gdp_pc": 0.0,
+        "inflation": 1.94,
+        "r_minus_g": 8.6
+      },
+      "block_contributions": {
+        "fiscal": 11.03,
+        "growth": 4.29,
+        "monetary": 10.54
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1986,
+      "raw_values": {
+        "debt_gdp": 38.01,
+        "interest_burden": 17.68,
+        "primary_deficit": 1.86,
+        "productivity": 1.45,
+        "real_gdp_pc": 2.28,
+        "inflation": 1.9,
+        "r_minus_g": 3.48
+      },
+      "context": {
+        "output_gap": -0.39,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 7.7,
+        "gdp_bn": 4579.6,
+        "cpi_index": 109.608,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 16.8,
+        "effective_rate": 9.02,
+        "nominal_gdp_growth": 5.55,
+        "interest_outlays_bn": 136.0,
+        "receipts_bn": 769.2,
+        "debt_public_bn": 1740.6
+      },
+      "score": 126.1,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 2.6,
+        "interest_burden": 44.0,
+        "primary_deficit": 23.2,
+        "productivity": 31.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 100.0
+      },
+      "contributions": {
+        "debt_gdp": 0.47,
+        "interest_burden": 7.48,
+        "primary_deficit": 3.48,
+        "productivity": 4.65,
+        "real_gdp_pc": 0.0,
+        "inflation": 0.0,
+        "r_minus_g": 10.0
+      },
+      "block_contributions": {
+        "fiscal": 11.43,
+        "growth": 4.65,
+        "monetary": 10.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1987,
+      "raw_values": {
+        "debt_gdp": 38.92,
+        "interest_burden": 16.23,
+        "primary_deficit": 0.23,
+        "productivity": 1.33,
+        "real_gdp_pc": 2.18,
+        "inflation": 3.66,
+        "r_minus_g": 1.95
+      },
+      "context": {
+        "output_gap": -0.2,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 7.7,
+        "gdp_bn": 4855.2,
+        "cpi_index": 113.625,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 17.6,
+        "effective_rate": 7.96,
+        "nominal_gdp_growth": 6.02,
+        "interest_outlays_bn": 138.6,
+        "receipts_bn": 854.3,
+        "debt_public_bn": 1889.8
+      },
+      "score": 122.5,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 3.4,
+        "interest_burden": 37.4,
+        "primary_deficit": 2.9,
+        "productivity": 36.7,
+        "real_gdp_pc": 0.9,
+        "inflation": 20.8,
+        "r_minus_g": 73.8
+      },
+      "contributions": {
+        "debt_gdp": 0.61,
+        "interest_burden": 6.36,
+        "primary_deficit": 0.43,
+        "productivity": 5.5,
+        "real_gdp_pc": 0.14,
+        "inflation": 2.08,
+        "r_minus_g": 7.38
+      },
+      "block_contributions": {
+        "fiscal": 7.4,
+        "growth": 5.64,
+        "monetary": 9.46
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1988,
+      "raw_values": {
+        "debt_gdp": 39.18,
+        "interest_burden": 16.7,
+        "primary_deficit": 0.06,
+        "productivity": 1.36,
+        "real_gdp_pc": 2.06,
+        "inflation": 4.08,
+        "r_minus_g": 0.18
+      },
+      "context": {
+        "output_gap": 0.87,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 7.3,
+        "gdp_bn": 5236.4,
+        "cpi_index": 118.258,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 17.36,
+        "effective_rate": 8.03,
+        "nominal_gdp_growth": 7.85,
+        "interest_outlays_bn": 151.8,
+        "receipts_bn": 909.2,
+        "debt_public_bn": 2051.6
+      },
+      "score": 119.3,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 3.6,
+        "interest_burden": 39.5,
+        "primary_deficit": 0.8,
+        "productivity": 35.2,
+        "real_gdp_pc": 6.4,
+        "inflation": 26.0,
+        "r_minus_g": 29.5
+      },
+      "contributions": {
+        "debt_gdp": 0.65,
+        "interest_burden": 6.72,
+        "primary_deficit": 0.12,
+        "productivity": 5.28,
+        "real_gdp_pc": 0.96,
+        "inflation": 2.6,
+        "r_minus_g": 2.95
+      },
+      "block_contributions": {
+        "fiscal": 7.49,
+        "growth": 6.24,
+        "monetary": 5.55
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1989,
+      "raw_values": {
+        "debt_gdp": 38.83,
+        "interest_burden": 17.05,
+        "primary_deficit": -0.29,
+        "productivity": 1.46,
+        "real_gdp_pc": 2.13,
+        "inflation": 4.83,
+        "r_minus_g": 0.5
+      },
+      "context": {
+        "output_gap": 1.6,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 6.9,
+        "gdp_bn": 5641.6,
+        "cpi_index": 123.967,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 17.57,
+        "effective_rate": 8.24,
+        "nominal_gdp_growth": 7.74,
+        "interest_outlays_bn": 169.0,
+        "receipts_bn": 991.1,
+        "debt_public_bn": 2190.7
+      },
+      "score": 119.9,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 3.3,
+        "interest_burden": 41.1,
+        "primary_deficit": 0.0,
+        "productivity": 30.5,
+        "real_gdp_pc": 3.2,
+        "inflation": 35.4,
+        "r_minus_g": 37.5
+      },
+      "contributions": {
+        "debt_gdp": 0.59,
+        "interest_burden": 6.99,
+        "primary_deficit": 0.0,
+        "productivity": 4.58,
+        "real_gdp_pc": 0.48,
+        "inflation": 3.54,
+        "r_minus_g": 3.75
+      },
+      "block_contributions": {
+        "fiscal": 7.58,
+        "growth": 5.06,
+        "monetary": 7.29
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1990,
+      "raw_values": {
+        "debt_gdp": 40.44,
+        "interest_burden": 17.86,
+        "primary_deficit": 0.62,
+        "productivity": 1.63,
+        "real_gdp_pc": 2.35,
+        "inflation": 5.4,
+        "r_minus_g": 2.72
+      },
+      "context": {
+        "output_gap": 0.69,
+        "recession_share": 0.417,
+        "defense_pct_gdp": 6.8,
+        "gdp_bn": 5963.1,
+        "cpi_index": 130.658,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 17.31,
+        "effective_rate": 8.41,
+        "nominal_gdp_growth": 5.7,
+        "interest_outlays_bn": 184.3,
+        "receipts_bn": 1032.0,
+        "debt_public_bn": 2411.6
+      },
+      "score": 126.5,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 4.7,
+        "interest_burden": 44.8,
+        "primary_deficit": 7.8,
+        "productivity": 22.4,
+        "real_gdp_pc": 0.0,
+        "inflation": 42.5,
+        "r_minus_g": 93.0
+      },
+      "contributions": {
+        "debt_gdp": 0.85,
+        "interest_burden": 7.62,
+        "primary_deficit": 1.17,
+        "productivity": 3.36,
+        "real_gdp_pc": 0.0,
+        "inflation": 4.25,
+        "r_minus_g": 9.3
+      },
+      "block_contributions": {
+        "fiscal": 9.64,
+        "growth": 3.36,
+        "monetary": 13.55
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1991,
+      "raw_values": {
+        "debt_gdp": 43.67,
+        "interest_burden": 18.43,
+        "primary_deficit": 1.21,
+        "productivity": 1.65,
+        "real_gdp_pc": 2.05,
+        "inflation": 4.23,
+        "r_minus_g": 4.79
+      },
+      "context": {
+        "output_gap": -2.0,
+        "recession_share": 0.25,
+        "defense_pct_gdp": 6.7,
+        "gdp_bn": 6158.1,
+        "cpi_index": 136.192,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 17.13,
+        "effective_rate": 8.06,
+        "nominal_gdp_growth": 3.27,
+        "interest_outlays_bn": 194.4,
+        "receipts_bn": 1055.0,
+        "debt_public_bn": 2689.0
+      },
+      "score": 128.7,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 7.5,
+        "interest_burden": 47.4,
+        "primary_deficit": 15.1,
+        "productivity": 21.4,
+        "real_gdp_pc": 6.8,
+        "inflation": 27.9,
+        "r_minus_g": 100.0
+      },
+      "contributions": {
+        "debt_gdp": 1.35,
+        "interest_burden": 8.06,
+        "primary_deficit": 2.26,
+        "productivity": 3.21,
+        "real_gdp_pc": 1.02,
+        "inflation": 2.79,
+        "r_minus_g": 10.0
+      },
+      "block_contributions": {
+        "fiscal": 11.67,
+        "growth": 4.23,
+        "monetary": 12.79
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1992,
+      "raw_values": {
+        "debt_gdp": 46.01,
+        "interest_burden": 18.27,
+        "primary_deficit": 1.4,
+        "productivity": 2.18,
+        "real_gdp_pc": 2.55,
+        "inflation": 3.03,
+        "r_minus_g": 1.53
+      },
+      "context": {
+        "output_gap": -1.14,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 6.2,
+        "gdp_bn": 6520.3,
+        "cpi_index": 140.317,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 16.74,
+        "effective_rate": 7.41,
+        "nominal_gdp_growth": 5.88,
+        "interest_outlays_bn": 199.3,
+        "receipts_bn": 1091.2,
+        "debt_public_bn": 2999.7
+      },
+      "score": 119.9,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 9.6,
+        "interest_burden": 46.7,
+        "primary_deficit": 17.5,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 12.9,
+        "r_minus_g": 63.3
+      },
+      "contributions": {
+        "debt_gdp": 1.73,
+        "interest_burden": 7.94,
+        "primary_deficit": 2.62,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 1.29,
+        "r_minus_g": 6.33
+      },
+      "block_contributions": {
+        "fiscal": 12.29,
+        "growth": 0.0,
+        "monetary": 7.62
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1993,
+      "raw_values": {
+        "debt_gdp": 47.36,
+        "interest_burden": 17.21,
+        "primary_deficit": 0.82,
+        "productivity": 1.78,
+        "real_gdp_pc": 2.33,
+        "inflation": 2.95,
+        "r_minus_g": 1.44
+      },
+      "context": {
+        "output_gap": -1.14,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 5.7,
+        "gdp_bn": 6858.6,
+        "cpi_index": 144.458,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 16.83,
+        "effective_rate": 6.62,
+        "nominal_gdp_growth": 5.19,
+        "interest_outlays_bn": 198.7,
+        "receipts_bn": 1154.3,
+        "debt_public_bn": 3248.4
+      },
+      "score": 120.1,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 10.7,
+        "interest_burden": 41.9,
+        "primary_deficit": 10.2,
+        "productivity": 15.2,
+        "real_gdp_pc": 0.0,
+        "inflation": 11.9,
+        "r_minus_g": 61.0
+      },
+      "contributions": {
+        "debt_gdp": 1.93,
+        "interest_burden": 7.12,
+        "primary_deficit": 1.53,
+        "productivity": 2.28,
+        "real_gdp_pc": 0.0,
+        "inflation": 1.19,
+        "r_minus_g": 6.1
+      },
+      "block_contributions": {
+        "fiscal": 10.58,
+        "growth": 2.28,
+        "monetary": 7.29
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1994,
+      "raw_values": {
+        "debt_gdp": 47.11,
+        "interest_burden": 16.12,
+        "primary_deficit": 0.0,
+        "productivity": 1.63,
+        "real_gdp_pc": 1.98,
+        "inflation": 2.61,
+        "r_minus_g": -0.0
+      },
+      "context": {
+        "output_gap": -0.02,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 5.2,
+        "gdp_bn": 7287.2,
+        "cpi_index": 148.225,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 17.27,
+        "effective_rate": 6.25,
+        "nominal_gdp_growth": 6.25,
+        "interest_outlays_bn": 202.9,
+        "receipts_bn": 1258.6,
+        "debt_public_bn": 3433.1
+      },
+      "score": 116.3,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 10.5,
+        "interest_burden": 36.9,
+        "primary_deficit": 0.0,
+        "productivity": 22.4,
+        "real_gdp_pc": 10.0,
+        "inflation": 7.6,
+        "r_minus_g": 25.0
+      },
+      "contributions": {
+        "debt_gdp": 1.89,
+        "interest_burden": 6.27,
+        "primary_deficit": 0.0,
+        "productivity": 3.36,
+        "real_gdp_pc": 1.5,
+        "inflation": 0.76,
+        "r_minus_g": 2.5
+      },
+      "block_contributions": {
+        "fiscal": 8.16,
+        "growth": 4.86,
+        "monetary": 3.26
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1995,
+      "raw_values": {
+        "debt_gdp": 47.18,
+        "interest_burden": 17.17,
+        "primary_deficit": -0.89,
+        "productivity": 1.56,
+        "real_gdp_pc": 1.81,
+        "inflation": 2.81,
+        "r_minus_g": 1.92
+      },
+      "context": {
+        "output_gap": -0.27,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.9,
+        "gdp_bn": 7639.7,
+        "cpi_index": 152.383,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 17.69,
+        "effective_rate": 6.76,
+        "nominal_gdp_growth": 4.84,
+        "interest_outlays_bn": 232.1,
+        "receipts_bn": 1351.8,
+        "debt_public_bn": 3604.4
+      },
+      "score": 123.8,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 10.6,
+        "interest_burden": 41.7,
+        "primary_deficit": 0.0,
+        "productivity": 25.7,
+        "real_gdp_pc": 17.7,
+        "inflation": 10.1,
+        "r_minus_g": 73.0
+      },
+      "contributions": {
+        "debt_gdp": 1.91,
+        "interest_burden": 7.09,
+        "primary_deficit": 0.0,
+        "productivity": 3.85,
+        "real_gdp_pc": 2.65,
+        "inflation": 1.01,
+        "r_minus_g": 7.3
+      },
+      "block_contributions": {
+        "fiscal": 9.0,
+        "growth": 6.5,
+        "monetary": 8.31
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1996,
+      "raw_values": {
+        "debt_gdp": 46.25,
+        "interest_burden": 16.59,
+        "primary_deficit": -1.66,
+        "productivity": 1.48,
+        "real_gdp_pc": 1.81,
+        "inflation": 2.93,
+        "r_minus_g": 1.02
+      },
+      "context": {
+        "output_gap": 0.34,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.7,
+        "gdp_bn": 8073.1,
+        "cpi_index": 156.85,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 18.0,
+        "effective_rate": 6.69,
+        "nominal_gdp_growth": 5.67,
+        "interest_outlays_bn": 241.1,
+        "receipts_bn": 1453.1,
+        "debt_public_bn": 3734.1
+      },
+      "score": 121.7,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 9.8,
+        "interest_burden": 39.0,
+        "primary_deficit": 0.0,
+        "productivity": 29.5,
+        "real_gdp_pc": 17.7,
+        "inflation": 11.6,
+        "r_minus_g": 50.5
+      },
+      "contributions": {
+        "debt_gdp": 1.76,
+        "interest_burden": 6.63,
+        "primary_deficit": 0.0,
+        "productivity": 4.42,
+        "real_gdp_pc": 2.65,
+        "inflation": 1.16,
+        "r_minus_g": 5.05
+      },
+      "block_contributions": {
+        "fiscal": 8.39,
+        "growth": 7.07,
+        "monetary": 6.21
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1997,
+      "raw_values": {
+        "debt_gdp": 43.98,
+        "interest_burden": 15.45,
+        "primary_deficit": -2.59,
+        "productivity": 1.62,
+        "real_gdp_pc": 1.88,
+        "inflation": 2.34,
+        "r_minus_g": 0.29
+      },
+      "context": {
+        "output_gap": 1.06,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.3,
+        "gdp_bn": 8577.6,
+        "cpi_index": 160.517,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 18.41,
+        "effective_rate": 6.53,
+        "nominal_gdp_growth": 6.25,
+        "interest_outlays_bn": 244.0,
+        "receipts_bn": 1579.2,
+        "debt_public_bn": 3772.3
+      },
+      "score": 116.4,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 7.8,
+        "interest_burden": 33.9,
+        "primary_deficit": 0.0,
+        "productivity": 22.9,
+        "real_gdp_pc": 14.5,
+        "inflation": 4.2,
+        "r_minus_g": 32.2
+      },
+      "contributions": {
+        "debt_gdp": 1.4,
+        "interest_burden": 5.76,
+        "primary_deficit": 0.0,
+        "productivity": 3.43,
+        "real_gdp_pc": 2.17,
+        "inflation": 0.42,
+        "r_minus_g": 3.22
+      },
+      "block_contributions": {
+        "fiscal": 7.16,
+        "growth": 5.6,
+        "monetary": 3.64
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1998,
+      "raw_values": {
+        "debt_gdp": 41.06,
+        "interest_burden": 14.0,
+        "primary_deficit": -3.42,
+        "productivity": 1.78,
+        "real_gdp_pc": 1.88,
+        "inflation": 1.55,
+        "r_minus_g": 0.73
+      },
+      "context": {
+        "output_gap": 1.41,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.1,
+        "gdp_bn": 9062.8,
+        "cpi_index": 163.008,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 19.0,
+        "effective_rate": 6.39,
+        "nominal_gdp_growth": 5.66,
+        "interest_outlays_bn": 241.1,
+        "receipts_bn": 1721.7,
+        "debt_public_bn": 3721.1
+      },
+      "score": 114.4,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 5.3,
+        "interest_burden": 27.3,
+        "primary_deficit": 0.0,
+        "productivity": 15.2,
+        "real_gdp_pc": 14.5,
+        "inflation": 0.0,
+        "r_minus_g": 43.2
+      },
+      "contributions": {
+        "debt_gdp": 0.95,
+        "interest_burden": 4.64,
+        "primary_deficit": 0.0,
+        "productivity": 2.28,
+        "real_gdp_pc": 2.17,
+        "inflation": 0.0,
+        "r_minus_g": 4.32
+      },
+      "block_contributions": {
+        "fiscal": 5.59,
+        "growth": 4.45,
+        "monetary": 4.32
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 1999,
+      "raw_values": {
+        "debt_gdp": 37.72,
+        "interest_burden": 12.57,
+        "primary_deficit": -3.69,
+        "productivity": 2.09,
+        "real_gdp_pc": 1.97,
+        "inflation": 2.19,
+        "r_minus_g": -0.1
+      },
+      "context": {
+        "output_gap": 1.88,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.0,
+        "gdp_bn": 9631.2,
+        "cpi_index": 166.575,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 18.97,
+        "effective_rate": 6.17,
+        "nominal_gdp_growth": 6.27,
+        "interest_outlays_bn": 229.8,
+        "receipts_bn": 1827.5,
+        "debt_public_bn": 3632.4
+      },
+      "score": 108.1,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 2.4,
+        "interest_burden": 20.8,
+        "primary_deficit": 0.0,
+        "productivity": 0.5,
+        "real_gdp_pc": 10.5,
+        "inflation": 2.4,
+        "r_minus_g": 22.5
+      },
+      "contributions": {
+        "debt_gdp": 0.43,
+        "interest_burden": 3.54,
+        "primary_deficit": 0.0,
+        "productivity": 0.07,
+        "real_gdp_pc": 1.57,
+        "inflation": 0.24,
+        "r_minus_g": 2.25
+      },
+      "block_contributions": {
+        "fiscal": 3.97,
+        "growth": 1.64,
+        "monetary": 2.49
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2000,
+      "raw_values": {
+        "debt_gdp": 33.26,
+        "interest_burden": 11.01,
+        "primary_deficit": -4.48,
+        "productivity": 2.22,
+        "real_gdp_pc": 2.19,
+        "inflation": 3.38,
+        "r_minus_g": -0.3
+      },
+      "context": {
+        "output_gap": 1.75,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.8,
+        "gdp_bn": 10251.0,
+        "cpi_index": 172.2,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 19.76,
+        "effective_rate": 6.14,
+        "nominal_gdp_growth": 6.44,
+        "interest_outlays_bn": 222.9,
+        "receipts_bn": 2025.2,
+        "debt_public_bn": 3409.8
+      },
+      "score": 105.9,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 13.7,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.5,
+        "inflation": 17.2,
+        "r_minus_g": 17.5
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 2.33,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.07,
+        "inflation": 1.72,
+        "r_minus_g": 1.75
+      },
+      "block_contributions": {
+        "fiscal": 2.33,
+        "growth": 0.07,
+        "monetary": 3.47
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2001,
+      "raw_values": {
+        "debt_gdp": 31.37,
+        "interest_burden": 10.35,
+        "primary_deficit": -3.16,
+        "productivity": 2.31,
+        "real_gdp_pc": 2.33,
+        "inflation": 2.83,
+        "r_minus_g": 2.82
+      },
+      "context": {
+        "output_gap": -0.79,
+        "recession_share": 0.667,
+        "defense_pct_gdp": 3.9,
+        "gdp_bn": 10581.9,
+        "cpi_index": 177.067,
+        "gross_debt_pct_gdp": 0.05,
+        "receipts_pct_gdp": 18.82,
+        "effective_rate": 6.05,
+        "nominal_gdp_growth": 3.23,
+        "interest_outlays_bn": 206.2,
+        "receipts_bn": 1991.1,
+        "debt_public_bn": 3319.6
+      },
+      "score": 112.4,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 10.7,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 10.4,
+        "r_minus_g": 95.5
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 1.82,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 1.04,
+        "r_minus_g": 9.55
+      },
+      "block_contributions": {
+        "fiscal": 1.82,
+        "growth": 0.0,
+        "monetary": 10.59
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2002,
+      "raw_values": {
+        "debt_gdp": 32.39,
+        "interest_burden": 9.22,
+        "primary_deficit": -0.12,
+        "productivity": 2.29,
+        "real_gdp_pc": 2.19,
+        "inflation": 1.59,
+        "r_minus_g": 1.87
+      },
+      "context": {
+        "output_gap": -1.75,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.2,
+        "gdp_bn": 10929.1,
+        "cpi_index": 179.875,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 16.96,
+        "effective_rate": 5.15,
+        "nominal_gdp_growth": 3.28,
+        "interest_outlays_bn": 170.9,
+        "receipts_bn": 1853.1,
+        "debt_public_bn": 3540.4
+      },
+      "score": 108.2,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 5.5,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.5,
+        "inflation": 0.0,
+        "r_minus_g": 71.8
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.94,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.07,
+        "inflation": 0.0,
+        "r_minus_g": 7.18
+      },
+      "block_contributions": {
+        "fiscal": 0.94,
+        "growth": 0.07,
+        "monetary": 7.18
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2003,
+      "raw_values": {
+        "debt_gdp": 34.16,
+        "interest_burden": 8.59,
+        "primary_deficit": 1.96,
+        "productivity": 2.65,
+        "real_gdp_pc": 2.23,
+        "inflation": 2.27,
+        "r_minus_g": -0.5
+      },
+      "context": {
+        "output_gap": -1.35,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.5,
+        "gdp_bn": 11456.5,
+        "cpi_index": 183.958,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 15.56,
+        "effective_rate": 4.32,
+        "nominal_gdp_growth": 4.83,
+        "interest_outlays_bn": 153.1,
+        "receipts_bn": 1782.3,
+        "debt_public_bn": 3913.4
+      },
+      "score": 105.7,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 2.7,
+        "primary_deficit": 24.5,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 3.4,
+        "r_minus_g": 12.5
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.46,
+        "primary_deficit": 3.67,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 0.34,
+        "r_minus_g": 1.25
+      },
+      "block_contributions": {
+        "fiscal": 4.13,
+        "growth": 0.0,
+        "monetary": 1.59
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2004,
+      "raw_values": {
+        "debt_gdp": 35.16,
+        "interest_burden": 8.52,
+        "primary_deficit": 2.07,
+        "productivity": 2.88,
+        "real_gdp_pc": 2.25,
+        "inflation": 2.68,
+        "r_minus_g": -2.55
+      },
+      "context": {
+        "output_gap": -0.05,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.7,
+        "gdp_bn": 12217.2,
+        "cpi_index": 188.883,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 15.39,
+        "effective_rate": 4.09,
+        "nominal_gdp_growth": 6.64,
+        "interest_outlays_bn": 160.2,
+        "receipts_bn": 1880.1,
+        "debt_public_bn": 4295.5
+      },
+      "score": 105.2,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.1,
+        "interest_burden": 2.4,
+        "primary_deficit": 25.9,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 8.5,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.02,
+        "interest_burden": 0.41,
+        "primary_deficit": 3.88,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 0.85,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 4.31,
+        "growth": 0.0,
+        "monetary": 0.85
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2005,
+      "raw_values": {
+        "debt_gdp": 35.22,
+        "interest_burden": 8.54,
+        "primary_deficit": 1.03,
+        "productivity": 3.0,
+        "real_gdp_pc": 2.35,
+        "inflation": 3.39,
+        "r_minus_g": -2.45
+      },
+      "context": {
+        "output_gap": 0.85,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.7,
+        "gdp_bn": 13039.2,
+        "cpi_index": 195.292,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 16.52,
+        "effective_rate": 4.28,
+        "nominal_gdp_growth": 6.73,
+        "interest_outlays_bn": 184.0,
+        "receipts_bn": 2153.6,
+        "debt_public_bn": 4592.2
+      },
+      "score": 104.1,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.2,
+        "interest_burden": 2.5,
+        "primary_deficit": 12.9,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 17.4,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.04,
+        "interest_burden": 0.43,
+        "primary_deficit": 1.94,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 1.74,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 2.41,
+        "growth": 0.0,
+        "monetary": 1.74
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2006,
+      "raw_values": {
+        "debt_gdp": 34.95,
+        "interest_burden": 9.41,
+        "primary_deficit": 0.16,
+        "productivity": 2.88,
+        "real_gdp_pc": 2.28,
+        "inflation": 3.23,
+        "r_minus_g": -1.02
+      },
+      "context": {
+        "output_gap": 1.28,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.6,
+        "gdp_bn": 13815.6,
+        "cpi_index": 201.592,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 17.42,
+        "effective_rate": 4.93,
+        "nominal_gdp_growth": 5.95,
+        "interest_outlays_bn": 226.6,
+        "receipts_bn": 2406.9,
+        "debt_public_bn": 4829.0
+      },
+      "score": 102.9,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 6.4,
+        "primary_deficit": 2.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 15.4,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 1.09,
+        "primary_deficit": 0.3,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.0,
+        "inflation": 1.54,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 1.39,
+        "growth": 0.0,
+        "monetary": 1.54
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2007,
+      "raw_values": {
+        "debt_gdp": 34.79,
+        "interest_burden": 9.23,
+        "primary_deficit": -0.53,
+        "productivity": 2.85,
+        "real_gdp_pc": 2.06,
+        "inflation": 2.85,
+        "r_minus_g": 0.14
+      },
+      "context": {
+        "output_gap": 1.19,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.7,
+        "gdp_bn": 14474.2,
+        "cpi_index": 207.342,
+        "gross_debt_pct_gdp": 0.06,
+        "receipts_pct_gdp": 17.74,
+        "effective_rate": 4.91,
+        "nominal_gdp_growth": 4.77,
+        "interest_outlays_bn": 237.1,
+        "receipts_bn": 2568.0,
+        "debt_public_bn": 5035.1
+      },
+      "score": 105.8,
+      "level_label": "Sustainable",
+      "level_status": "good",
+      "stresses": {
+        "debt_gdp": 0.0,
+        "interest_burden": 5.6,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 6.4,
+        "inflation": 10.6,
+        "r_minus_g": 28.5
+      },
+      "contributions": {
+        "debt_gdp": 0.0,
+        "interest_burden": 0.95,
+        "primary_deficit": 0.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 0.96,
+        "inflation": 1.06,
+        "r_minus_g": 2.85
+      },
+      "block_contributions": {
+        "fiscal": 0.95,
+        "growth": 0.96,
+        "monetary": 3.91
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2008,
+      "raw_values": {
+        "debt_gdp": 39.29,
+        "interest_burden": 10.01,
+        "primary_deficit": 1.39,
+        "productivity": 2.65,
+        "real_gdp_pc": 1.65,
+        "inflation": 3.84,
+        "r_minus_g": 2.98
+      },
+      "context": {
+        "output_gap": -0.64,
+        "recession_share": 1.0,
+        "defense_pct_gdp": 5.1,
+        "gdp_bn": 14769.9,
+        "cpi_index": 215.303,
+        "gross_debt_pct_gdp": 0.07,
+        "receipts_pct_gdp": 17.09,
+        "effective_rate": 5.02,
+        "nominal_gdp_growth": 2.04,
+        "interest_outlays_bn": 252.8,
+        "receipts_bn": 2524.0,
+        "debt_public_bn": 5803.1
+      },
+      "score": 120.8,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 3.7,
+        "interest_burden": 9.1,
+        "primary_deficit": 17.4,
+        "productivity": 0.0,
+        "real_gdp_pc": 25.0,
+        "inflation": 23.0,
+        "r_minus_g": 99.5
+      },
+      "contributions": {
+        "debt_gdp": 0.67,
+        "interest_burden": 1.55,
+        "primary_deficit": 2.61,
+        "productivity": 0.0,
+        "real_gdp_pc": 3.75,
+        "inflation": 2.3,
+        "r_minus_g": 9.95
+      },
+      "block_contributions": {
+        "fiscal": 4.83,
+        "growth": 3.75,
+        "monetary": 12.25
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2009,
+      "raw_values": {
+        "debt_gdp": 52.11,
+        "interest_burden": 8.88,
+        "primary_deficit": 8.47,
+        "productivity": 2.66,
+        "real_gdp_pc": 0.93,
+        "inflation": -0.36,
+        "r_minus_g": 5.2
+      },
+      "context": {
+        "output_gap": -4.66,
+        "recession_share": 0.5,
+        "defense_pct_gdp": 5.4,
+        "gdp_bn": 14478.1,
+        "cpi_index": 214.537,
+        "gross_debt_pct_gdp": 0.08,
+        "receipts_pct_gdp": 14.54,
+        "effective_rate": 3.22,
+        "nominal_gdp_growth": -1.98,
+        "interest_outlays_bn": 186.9,
+        "receipts_bn": 2105.0,
+        "debt_public_bn": 7544.7
+      },
+      "score": 137.0,
+      "level_label": "Strained",
+      "level_status": "serious",
+      "stresses": {
+        "debt_gdp": 14.9,
+        "interest_burden": 4.0,
+        "primary_deficit": 100.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 57.7,
+        "inflation": 0.0,
+        "r_minus_g": 100.0
+      },
+      "contributions": {
+        "debt_gdp": 2.68,
+        "interest_burden": 0.68,
+        "primary_deficit": 15.0,
+        "productivity": 0.0,
+        "real_gdp_pc": 8.65,
+        "inflation": 0.0,
+        "r_minus_g": 10.0
+      },
+      "block_contributions": {
+        "fiscal": 18.36,
+        "growth": 8.65,
+        "monetary": 10.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2010,
+      "raw_values": {
+        "debt_gdp": 59.93,
+        "interest_burden": 9.07,
+        "primary_deficit": 7.3,
+        "productivity": 2.68,
+        "real_gdp_pc": 0.82,
+        "inflation": 1.64,
+        "r_minus_g": -1.34
+      },
+      "context": {
+        "output_gap": -3.34,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 5.5,
+        "gdp_bn": 15049.0,
+        "cpi_index": 218.056,
+        "gross_debt_pct_gdp": 0.09,
+        "receipts_pct_gdp": 14.37,
+        "effective_rate": 2.6,
+        "nominal_gdp_growth": 3.94,
+        "interest_outlays_bn": 196.2,
+        "receipts_bn": 2162.7,
+        "debt_public_bn": 9018.9
+      },
+      "score": 127.8,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 21.7,
+        "interest_burden": 4.9,
+        "primary_deficit": 91.2,
+        "productivity": 0.0,
+        "real_gdp_pc": 62.7,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 3.91,
+        "interest_burden": 0.83,
+        "primary_deficit": 13.68,
+        "productivity": 0.0,
+        "real_gdp_pc": 9.4,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 18.42,
+        "growth": 9.4,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2011,
+      "raw_values": {
+        "debt_gdp": 64.93,
+        "interest_burden": 9.98,
+        "primary_deficit": 6.86,
+        "productivity": 2.41,
+        "real_gdp_pc": 0.91,
+        "inflation": 3.16,
+        "r_minus_g": -1.11
+      },
+      "context": {
+        "output_gap": -3.25,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 5.3,
+        "gdp_bn": 15599.7,
+        "cpi_index": 224.939,
+        "gross_debt_pct_gdp": 0.09,
+        "receipts_pct_gdp": 14.77,
+        "effective_rate": 2.55,
+        "nominal_gdp_growth": 3.66,
+        "interest_outlays_bn": 230.0,
+        "receipts_bn": 2303.5,
+        "debt_public_bn": 10128.2
+      },
+      "score": 129.3,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 26.0,
+        "interest_burden": 9.0,
+        "primary_deficit": 85.8,
+        "productivity": 0.0,
+        "real_gdp_pc": 58.6,
+        "inflation": 14.5,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 4.68,
+        "interest_burden": 1.53,
+        "primary_deficit": 12.87,
+        "productivity": 0.0,
+        "real_gdp_pc": 8.79,
+        "inflation": 1.45,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 19.08,
+        "growth": 8.79,
+        "monetary": 1.45
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2012,
+      "raw_values": {
+        "debt_gdp": 69.41,
+        "interest_burden": 9.0,
+        "primary_deficit": 5.27,
+        "productivity": 2.08,
+        "real_gdp_pc": 0.98,
+        "inflation": 2.07,
+        "r_minus_g": -2.02
+      },
+      "context": {
+        "output_gap": -2.64,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 5.0,
+        "gdp_bn": 16254.0,
+        "cpi_index": 229.594,
+        "gross_debt_pct_gdp": 0.1,
+        "receipts_pct_gdp": 15.07,
+        "effective_rate": 2.18,
+        "nominal_gdp_growth": 4.19,
+        "interest_outlays_bn": 220.4,
+        "receipts_bn": 2450.0,
+        "debt_public_bn": 11281.1
+      },
+      "score": 124.6,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 29.9,
+        "interest_burden": 4.5,
+        "primary_deficit": 65.9,
+        "productivity": 1.0,
+        "real_gdp_pc": 55.5,
+        "inflation": 0.9,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 5.38,
+        "interest_burden": 0.77,
+        "primary_deficit": 9.88,
+        "productivity": 0.15,
+        "real_gdp_pc": 8.32,
+        "inflation": 0.09,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 16.03,
+        "growth": 8.47,
+        "monetary": 0.09
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2013,
+      "raw_values": {
+        "debt_gdp": 70.98,
+        "interest_burden": 7.96,
+        "primary_deficit": 2.72,
+        "productivity": 1.77,
+        "real_gdp_pc": 0.93,
+        "inflation": 1.46,
+        "r_minus_g": -1.9
+      },
+      "context": {
+        "output_gap": -2.33,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.5,
+        "gdp_bn": 16880.7,
+        "cpi_index": 232.957,
+        "gross_debt_pct_gdp": 0.1,
+        "receipts_pct_gdp": 16.44,
+        "effective_rate": 1.96,
+        "nominal_gdp_growth": 3.86,
+        "interest_outlays_bn": 220.9,
+        "receipts_bn": 2775.1,
+        "debt_public_bn": 11982.7
+      },
+      "score": 121.7,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 31.3,
+        "interest_burden": 0.0,
+        "primary_deficit": 34.0,
+        "productivity": 15.7,
+        "real_gdp_pc": 57.7,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 5.63,
+        "interest_burden": 0.0,
+        "primary_deficit": 5.1,
+        "productivity": 2.35,
+        "real_gdp_pc": 8.65,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 10.73,
+        "growth": 11.0,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2014,
+      "raw_values": {
+        "debt_gdp": 72.58,
+        "interest_burden": 7.58,
+        "primary_deficit": 1.45,
+        "productivity": 1.58,
+        "real_gdp_pc": 0.82,
+        "inflation": 1.62,
+        "r_minus_g": -2.4
+      },
+      "context": {
+        "output_gap": -1.72,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.2,
+        "gdp_bn": 17608.1,
+        "cpi_index": 236.736,
+        "gross_debt_pct_gdp": 0.1,
+        "receipts_pct_gdp": 17.16,
+        "effective_rate": 1.91,
+        "nominal_gdp_growth": 4.31,
+        "interest_outlays_bn": 229.0,
+        "receipts_bn": 3021.5,
+        "debt_public_bn": 12779.9
+      },
+      "score": 121.7,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 32.7,
+        "interest_burden": 0.0,
+        "primary_deficit": 18.1,
+        "productivity": 24.8,
+        "real_gdp_pc": 62.7,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 5.89,
+        "interest_burden": 0.0,
+        "primary_deficit": 2.72,
+        "productivity": 3.72,
+        "real_gdp_pc": 9.4,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 8.61,
+        "growth": 13.12,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2015,
+      "raw_values": {
+        "debt_gdp": 71.7,
+        "interest_burden": 6.87,
+        "primary_deficit": 1.2,
+        "productivity": 1.48,
+        "real_gdp_pc": 0.78,
+        "inflation": 0.12,
+        "r_minus_g": -2.15
+      },
+      "context": {
+        "output_gap": -0.82,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 4.0,
+        "gdp_bn": 18295.0,
+        "cpi_index": 237.017,
+        "gross_debt_pct_gdp": 0.1,
+        "receipts_pct_gdp": 17.76,
+        "effective_rate": 1.75,
+        "nominal_gdp_growth": 3.9,
+        "interest_outlays_bn": 223.2,
+        "receipts_bn": 3249.9,
+        "debt_public_bn": 13116.7
+      },
+      "score": 122.1,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 31.9,
+        "interest_burden": 0.0,
+        "primary_deficit": 15.0,
+        "productivity": 29.5,
+        "real_gdp_pc": 64.5,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 5.74,
+        "interest_burden": 0.0,
+        "primary_deficit": 2.25,
+        "productivity": 4.42,
+        "real_gdp_pc": 9.67,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 7.99,
+        "growth": 14.09,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2016,
+      "raw_values": {
+        "debt_gdp": 75.34,
+        "interest_burden": 7.35,
+        "primary_deficit": 1.83,
+        "productivity": 1.45,
+        "real_gdp_pc": 0.7,
+        "inflation": 1.26,
+        "r_minus_g": -0.96
+      },
+      "context": {
+        "output_gap": -1.05,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.9,
+        "gdp_bn": 18804.9,
+        "cpi_index": 240.007,
+        "gross_debt_pct_gdp": 0.1,
+        "receipts_pct_gdp": 17.38,
+        "effective_rate": 1.83,
+        "nominal_gdp_growth": 2.79,
+        "interest_outlays_bn": 240.0,
+        "receipts_bn": 3268.0,
+        "debt_public_bn": 14167.6
+      },
+      "score": 124.7,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 35.1,
+        "interest_burden": 0.0,
+        "primary_deficit": 22.9,
+        "productivity": 31.0,
+        "real_gdp_pc": 68.2,
+        "inflation": 0.0,
+        "r_minus_g": 1.0
+      },
+      "contributions": {
+        "debt_gdp": 6.32,
+        "interest_burden": 0.0,
+        "primary_deficit": 3.43,
+        "productivity": 4.65,
+        "real_gdp_pc": 10.23,
+        "inflation": 0.0,
+        "r_minus_g": 0.1
+      },
+      "block_contributions": {
+        "fiscal": 9.75,
+        "growth": 14.88,
+        "monetary": 0.1
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2017,
+      "raw_values": {
+        "debt_gdp": 74.78,
+        "interest_burden": 7.92,
+        "primary_deficit": 2.05,
+        "productivity": 1.44,
+        "real_gdp_pc": 0.77,
+        "inflation": 2.13,
+        "r_minus_g": -2.44
+      },
+      "context": {
+        "output_gap": -0.62,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.8,
+        "gdp_bn": 19612.1,
+        "cpi_index": 245.12,
+        "gross_debt_pct_gdp": 0.1,
+        "receipts_pct_gdp": 16.91,
+        "effective_rate": 1.85,
+        "nominal_gdp_growth": 4.29,
+        "interest_outlays_bn": 262.6,
+        "receipts_bn": 3316.2,
+        "debt_public_bn": 14665.4
+      },
+      "score": 124.7,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 34.6,
+        "interest_burden": 0.0,
+        "primary_deficit": 25.6,
+        "productivity": 31.4,
+        "real_gdp_pc": 65.0,
+        "inflation": 1.6,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 6.23,
+        "interest_burden": 0.0,
+        "primary_deficit": 3.84,
+        "productivity": 4.71,
+        "real_gdp_pc": 9.75,
+        "inflation": 0.16,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 10.07,
+        "growth": 14.46,
+        "monetary": 0.16
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2018,
+      "raw_values": {
+        "debt_gdp": 76.25,
+        "interest_burden": 9.76,
+        "primary_deficit": 2.2,
+        "productivity": 1.45,
+        "real_gdp_pc": 1.09,
+        "inflation": 2.44,
+        "r_minus_g": -3.11
+      },
+      "context": {
+        "output_gap": 0.28,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.8,
+        "gdp_bn": 20656.5,
+        "cpi_index": 251.107,
+        "gross_debt_pct_gdp": 0.1,
+        "receipts_pct_gdp": 16.12,
+        "effective_rate": 2.22,
+        "nominal_gdp_growth": 5.33,
+        "interest_outlays_bn": 325.0,
+        "receipts_bn": 3329.9,
+        "debt_public_bn": 15749.6
+      },
+      "score": 124.7,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 35.9,
+        "interest_burden": 8.0,
+        "primary_deficit": 27.5,
+        "productivity": 31.0,
+        "real_gdp_pc": 50.5,
+        "inflation": 5.5,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 6.46,
+        "interest_burden": 1.36,
+        "primary_deficit": 4.12,
+        "productivity": 4.65,
+        "real_gdp_pc": 7.57,
+        "inflation": 0.55,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 11.94,
+        "growth": 12.22,
+        "monetary": 0.55
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2019,
+      "raw_values": {
+        "debt_gdp": 78.0,
+        "interest_burden": 10.83,
+        "primary_deficit": 2.82,
+        "productivity": 1.26,
+        "real_gdp_pc": 1.65,
+        "inflation": 1.81,
+        "r_minus_g": -1.89
+      },
+      "context": {
+        "output_gap": 0.74,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.9,
+        "gdp_bn": 21540.0,
+        "cpi_index": 255.657,
+        "gross_debt_pct_gdp": 0.11,
+        "receipts_pct_gdp": 16.08,
+        "effective_rate": 2.38,
+        "nominal_gdp_growth": 4.28,
+        "interest_outlays_bn": 375.2,
+        "receipts_bn": 3463.4,
+        "debt_public_bn": 16800.7
+      },
+      "score": 124.0,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 37.4,
+        "interest_burden": 12.9,
+        "primary_deficit": 35.2,
+        "productivity": 40.0,
+        "real_gdp_pc": 25.0,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 6.73,
+        "interest_burden": 2.19,
+        "primary_deficit": 5.28,
+        "productivity": 6.0,
+        "real_gdp_pc": 3.75,
+        "inflation": 0.0,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 14.2,
+        "growth": 9.75,
+        "monetary": 0.0
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2020,
+      "raw_values": {
+        "debt_gdp": 98.32,
+        "interest_burden": 10.1,
+        "primary_deficit": 12.87,
+        "productivity": 1.47,
+        "real_gdp_pc": 1.21,
+        "inflation": 1.23,
+        "r_minus_g": 2.82
+      },
+      "context": {
+        "output_gap": -3.28,
+        "recession_share": 0.167,
+        "defense_pct_gdp": 4.1,
+        "gdp_bn": 21375.3,
+        "cpi_index": 258.811,
+        "gross_debt_pct_gdp": 0.13,
+        "receipts_pct_gdp": 16.01,
+        "effective_rate": 2.06,
+        "nominal_gdp_growth": -0.76,
+        "interest_outlays_bn": 345.5,
+        "receipts_bn": 3421.2,
+        "debt_public_bn": 21016.7
+      },
+      "score": 147.3,
+      "level_label": "Severe",
+      "level_status": "critical",
+      "stresses": {
+        "debt_gdp": 55.1,
+        "interest_burden": 9.5,
+        "primary_deficit": 100.0,
+        "productivity": 30.0,
+        "real_gdp_pc": 45.0,
+        "inflation": 0.0,
+        "r_minus_g": 95.5
+      },
+      "contributions": {
+        "debt_gdp": 9.92,
+        "interest_burden": 1.62,
+        "primary_deficit": 15.0,
+        "productivity": 4.5,
+        "real_gdp_pc": 6.75,
+        "inflation": 0.0,
+        "r_minus_g": 9.55
+      },
+      "block_contributions": {
+        "fiscal": 26.54,
+        "growth": 11.25,
+        "monetary": 9.55
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2021,
+      "raw_values": {
+        "debt_gdp": 93.92,
+        "interest_burden": 8.71,
+        "primary_deficit": 10.21,
+        "productivity": 1.68,
+        "real_gdp_pc": 1.72,
+        "inflation": 4.7,
+        "r_minus_g": -9.32
+      },
+      "context": {
+        "output_gap": 0.7,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.8,
+        "gdp_bn": 23725.6,
+        "cpi_index": 270.97,
+        "gross_debt_pct_gdp": 0.12,
+        "receipts_pct_gdp": 17.06,
+        "effective_rate": 1.68,
+        "nominal_gdp_growth": 11.0,
+        "interest_outlays_bn": 352.3,
+        "receipts_bn": 4047.1,
+        "debt_public_bn": 22284.0
+      },
+      "score": 134.4,
+      "level_label": "Strained",
+      "level_status": "serious",
+      "stresses": {
+        "debt_gdp": 51.2,
+        "interest_burden": 3.2,
+        "primary_deficit": 100.0,
+        "productivity": 20.0,
+        "real_gdp_pc": 21.8,
+        "inflation": 33.8,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 9.22,
+        "interest_burden": 0.54,
+        "primary_deficit": 15.0,
+        "productivity": 3.0,
+        "real_gdp_pc": 3.27,
+        "inflation": 3.38,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 24.76,
+        "growth": 6.27,
+        "monetary": 3.38
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2022,
+      "raw_values": {
+        "debt_gdp": 93.09,
+        "interest_burden": 9.72,
+        "primary_deficit": 3.45,
+        "productivity": 1.43,
+        "real_gdp_pc": 1.77,
+        "inflation": 8.0,
+        "r_minus_g": -7.68
+      },
+      "context": {
+        "output_gap": 0.9,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.6,
+        "gdp_bn": 26054.6,
+        "cpi_index": 292.655,
+        "gross_debt_pct_gdp": 0.12,
+        "receipts_pct_gdp": 18.8,
+        "effective_rate": 2.14,
+        "nominal_gdp_growth": 9.82,
+        "interest_outlays_bn": 475.9,
+        "receipts_bn": 4897.3,
+        "debt_public_bn": 24253.4
+      },
+      "score": 132.1,
+      "level_label": "Strained",
+      "level_status": "serious",
+      "stresses": {
+        "debt_gdp": 50.5,
+        "interest_burden": 7.8,
+        "primary_deficit": 43.1,
+        "productivity": 31.9,
+        "real_gdp_pc": 19.5,
+        "inflation": 75.0,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 9.09,
+        "interest_burden": 1.33,
+        "primary_deficit": 6.46,
+        "productivity": 4.78,
+        "real_gdp_pc": 2.92,
+        "inflation": 7.5,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 16.88,
+        "growth": 7.7,
+        "monetary": 7.5
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2023,
+      "raw_values": {
+        "debt_gdp": 94.33,
+        "interest_burden": 14.82,
+        "primary_deficit": 3.7,
+        "productivity": 1.58,
+        "real_gdp_pc": 1.84,
+        "inflation": 4.12,
+        "r_minus_g": -4.03
+      },
+      "context": {
+        "output_gap": 1.2,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.6,
+        "gdp_bn": 27811.5,
+        "cpi_index": 304.702,
+        "gross_debt_pct_gdp": 0.12,
+        "receipts_pct_gdp": 15.97,
+        "effective_rate": 2.71,
+        "nominal_gdp_growth": 6.74,
+        "interest_outlays_bn": 658.3,
+        "receipts_bn": 4440.9,
+        "debt_public_bn": 26235.6
+      },
+      "score": 130.3,
+      "level_label": "Strained",
+      "level_status": "serious",
+      "stresses": {
+        "debt_gdp": 51.6,
+        "interest_burden": 31.0,
+        "primary_deficit": 46.2,
+        "productivity": 24.8,
+        "real_gdp_pc": 16.4,
+        "inflation": 26.5,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 9.29,
+        "interest_burden": 5.27,
+        "primary_deficit": 6.93,
+        "productivity": 3.72,
+        "real_gdp_pc": 2.46,
+        "inflation": 2.65,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 21.49,
+        "growth": 6.18,
+        "monetary": 2.65
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2024,
+      "raw_values": {
+        "debt_gdp": 96.23,
+        "interest_burden": 17.88,
+        "primary_deficit": 3.19,
+        "productivity": 1.77,
+        "real_gdp_pc": 1.86,
+        "inflation": 2.95,
+        "r_minus_g": -1.99
+      },
+      "context": {
+        "output_gap": 1.33,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.7,
+        "gdp_bn": 29298.0,
+        "cpi_index": 313.689,
+        "gross_debt_pct_gdp": 0.12,
+        "receipts_pct_gdp": 16.79,
+        "effective_rate": 3.35,
+        "nominal_gdp_growth": 5.34,
+        "interest_outlays_bn": 879.9,
+        "receipts_bn": 4919.9,
+        "debt_public_bn": 28193.9
+      },
+      "score": 129.1,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 53.2,
+        "interest_burden": 44.9,
+        "primary_deficit": 39.9,
+        "productivity": 15.7,
+        "real_gdp_pc": 15.5,
+        "inflation": 11.9,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 9.58,
+        "interest_burden": 7.63,
+        "primary_deficit": 5.98,
+        "productivity": 2.35,
+        "real_gdp_pc": 2.32,
+        "inflation": 1.19,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 23.19,
+        "growth": 4.67,
+        "monetary": 1.19
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    },
+    {
+      "year": 2025,
+      "raw_values": {
+        "debt_gdp": 98.07,
+        "interest_burden": 18.53,
+        "primary_deficit": 2.62,
+        "productivity": 1.87,
+        "real_gdp_pc": 1.8,
+        "inflation": 2.63,
+        "r_minus_g": -1.56
+      },
+      "context": {
+        "output_gap": 1.0,
+        "recession_share": 0.0,
+        "defense_pct_gdp": 3.7,
+        "gdp_bn": 30762.1,
+        "cpi_index": 321.943,
+        "gross_debt_pct_gdp": 0.12,
+        "receipts_pct_gdp": 17.02,
+        "effective_rate": 3.44,
+        "nominal_gdp_growth": 5.0,
+        "interest_outlays_bn": 970.1,
+        "receipts_bn": 5236.4,
+        "debt_public_bn": 30167.2
+      },
+      "score": 128.1,
+      "level_label": "Watch",
+      "level_status": "warning",
+      "stresses": {
+        "debt_gdp": 54.8,
+        "interest_burden": 47.9,
+        "primary_deficit": 32.8,
+        "productivity": 11.0,
+        "real_gdp_pc": 18.2,
+        "inflation": 7.9,
+        "r_minus_g": 0.0
+      },
+      "contributions": {
+        "debt_gdp": 9.86,
+        "interest_burden": 8.14,
+        "primary_deficit": 4.92,
+        "productivity": 1.65,
+        "real_gdp_pc": 2.73,
+        "inflation": 0.79,
+        "r_minus_g": 0.0
+      },
+      "block_contributions": {
+        "fiscal": 22.92,
+        "growth": 4.38,
+        "monetary": 0.79
+      },
+      "partial": false,
+      "covered_weight": 1.0
+    }
+  ]
+}

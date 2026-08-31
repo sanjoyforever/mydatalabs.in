@@ -1,11 +1,11 @@
 """
-Lok Sabha Projection Engine — page and API.
+Lok Sabha Projection Engine — dashboard page.
 
 Ported from the standalone india-elections Flask app.
 
 Where the numbers come from
 ---------------------------
-Every GET below answers out of `app/data/precomputed/lok-sabha-index.json`,
+Everything below answers out of `app/data/precomputed/lok-sabha-index.json`,
 written by `python update.py` on a machine that has pandas, numpy, scipy and
 scikit-learn. The deployment has none of them, and does not ship a single CSV:
 the raw dataset is ~10 MB and the scientific stack is most of a serverless
@@ -14,28 +14,19 @@ bundle, spent on work whose answer is identical for every visitor.
 So the heavy code paths below are a **local fallback**, not the normal route.
 They run when the artifact is missing and the CSVs are present — a developer
 who has just pulled the dataset and not yet run the updater. On the deployment
-neither condition holds, `_heavy_stack_available()` is False, and the endpoint
+neither condition holds, `_heavy_stack_available()` is False, and the page
 answers 503 rather than raising ImportError on `import pandas`.
 
-Read endpoints are memoised on the artifact's mtime, so a refresh invalidates
+Sections are memoised on the artifact's mtime, so a refresh invalidates
 everything at once.
+
+There is deliberately no read API. Every figure the dashboard draws is
+serialised once into the page's `elections-preloaded` block and rendered from
+there; the site does not publish a machine-readable feed of this dataset.
 
 Endpoints
 ---------
 GET  /lok-sabha-index                             dashboard page
-GET  /api/lok-sabha-index/overview                latest forecast + intervals
-GET  /api/lok-sabha-index/daily_forecast          full daily series
-GET  /api/lok-sabha-index/trend_analytics         trend/volatility/momentum
-GET  /api/lok-sabha-index/events                  annotated chart events
-GET  /api/lok-sabha-index/metrics_catalog         41 labelled metrics
-GET  /api/lok-sabha-index/sentiment_breakdown     per-option contributions
-GET  /api/lok-sabha-index/calibration             fitted constants
-GET  /api/lok-sabha-index/ml_comparison           seat models side by side
-GET  /api/lok-sabha-index/backtest_results        2019 + 2024 backtest
-GET  /api/lok-sabha-index/state_projections       baseline state table
-GET  /api/lok-sabha-index/insights                summary + top impacts
-GET  /api/lok-sabha-index/data_status             dataset freshness
-POST /api/lok-sabha-index/simulate_permutation    what-if with custom params
 POST /api/lok-sabha-index/refresh_data            operator refresh (off by default)
 """
 
@@ -47,7 +38,6 @@ from flask import Blueprint, Response, jsonify, render_template, request
 
 from app.elections.engine.paths import (
     CALIBRATION_JSON,
-    CATALOG_JSON,
     DATA_DIR,
     MASTER_CSV,
     PROJECTIONS_CSV,
@@ -101,15 +91,6 @@ def _heavy_stack_available():
     except ImportError:
         return False
     return True
-
-
-def _unavailable(what):
-    return jsonify({
-        "error": f"{what} is not available on this deployment.",
-        "reason": "The published site serves precomputed results only; the source "
-                  "dataset and the scientific stack live on the update machine.",
-        "remedy": "Run `python update.py` locally, then `python push_to_prod.py --code`.",
-    }), 503
 
 
 def _data_version():
@@ -174,13 +155,6 @@ def load_projections():
         return pd.read_csv(PROJECTIONS_CSV)
 
     return cached("projections", build)
-
-
-def _missing_data_response():
-    return jsonify({
-        "error": "Dataset not found. Run `python update.py --elections` to fetch and build it.",
-        "expected_path": MASTER_CSV,
-    }), 404
 
 
 def _no_store(resp):
@@ -392,18 +366,22 @@ def lok_sabha_index():
             mimetype="text/html",
         )
 
+    # Everything the dashboard JS needs, in one block. daily_forecast is the
+    # bulk of it (~2,800 rows); it used to be a second request to a public
+    # endpoint, and is inlined here now that no such endpoint exists.
     preloaded = {
         "overview": overview,
         "trend_analytics": trend_analytics,
         "events": events,
         "backtest": backtest,
         "insights": insights,
+        "daily_forecast": _daily_forecast_rows() or [],
+        "data_status": _data_status(),
     }
 
     html = render_template(
         "elections.html",
         **_common(
-            api_prefix=API_PREFIX,
             overview=overview,
             trend_analytics=trend_analytics,
             events=events,
@@ -425,43 +403,6 @@ def lok_sabha_index():
     return _cached(Response(html, mimetype="text/html"))
 
 
-# --- Forecast --------------------------------------------------------------
-
-
-@bp.route(f"{API_PREFIX}/overview")
-def api_overview():
-    data = _get_overview_data()
-    return jsonify(data) if data is not None else _unavailable("Overview")
-
-
-@bp.route(f"{API_PREFIX}/daily_forecast")
-def api_daily_forecast():
-    """
-    Full daily series. `?fields=` trims the payload to named columns (date is
-    always included); `?from=` and `?to=` clip the date range.
-
-    Filtering is a list comprehension over the precomputed rows rather than a
-    DataFrame slice. Same answer, and it holds for a deployment with no pandas.
-    """
-    rows = _daily_forecast_rows()
-    if rows is None:
-        return _unavailable("Daily forecast")
-
-    start, end = request.args.get("from"), request.args.get("to")
-    if start:
-        rows = [r for r in rows if str(r.get("date", "")) >= start]
-    if end:
-        rows = [r for r in rows if str(r.get("date", "")) <= end]
-
-    fields = request.args.get("fields")
-    if fields:
-        available = set(rows[0]) if rows else set()
-        wanted = ["date"] + [f for f in fields.split(",") if f in available and f != "date"]
-        rows = [{k: r.get(k) for k in wanted} for r in rows]
-
-    return Response(json.dumps(rows), mimetype="application/json")
-
-
 def _daily_forecast_rows():
     def build():
         import json as _json
@@ -472,215 +413,18 @@ def _daily_forecast_rows():
     return _section("daily_forecast", build)
 
 
-@bp.route(f"{API_PREFIX}/trend_analytics")
-def api_trend_analytics():
-    """Headline trend block: current estimate, MAs, slope, volatility, momentum."""
-    data = _get_trend_analytics_data()
-    return jsonify(data) if data is not None else _unavailable("Trend analytics")
+def _data_status():
+    """How current the published dataset is, settled at build time.
 
-
-# --- Context: events, metric catalog, sentiment breakdown, calibration ------
-
-
-@bp.route(f"{API_PREFIX}/events")
-def api_events():
+    Never checks upstream: this is read while rendering a page, and a page
+    render must not make an outbound HTTP call.
     """
-    The annotated timeline. `?from=`, `?to=` and `?categories=` filter it.
-
-    Filtering runs here rather than off the artifact because events.py is a
-    plain module with no pandas dependency — it is the one heavy-looking import
-    on this blueprint that is safe everywhere.
-    """
-    raw_categories = request.args.get("categories", "")
-    if raw_categories or request.args.get("from") or request.args.get("to"):
-        from app.elections.engine.events import categories as event_categories
-        from app.elections.engine.events import get_events
-
-        return jsonify({
-            "events": get_events(
-                start_date=request.args.get("from"),
-                end_date=request.args.get("to"),
-                categories=raw_categories.split(",") if raw_categories else None,
-            ),
-            "categories": event_categories(),
-        })
-
-    data = _get_events_data()
-    return jsonify(data) if data is not None else _unavailable("Events")
-
-
-@bp.route(f"{API_PREFIX}/metrics_catalog")
-def api_metrics_catalog():
-    """Every labelled metric with its polarity, weight and coverage."""
-    def build():
-        with open(CATALOG_JSON, encoding="utf-8") as fh:
-            return {"metrics": json.load(fh)}
-
-    data = _section("metrics_catalog", build if os.path.exists(CATALOG_JSON) else None)
-    return jsonify(data) if data is not None else _unavailable("Metrics catalog")
-
-
-@bp.route(f"{API_PREFIX}/sentiment_breakdown")
-def api_sentiment_breakdown():
-    """Which answer options are driving the index, on the latest day."""
-    def build():
-        from app.elections.engine.sentiment_index import option_contributions
-
-        df = load_master()
-        latest = df.iloc[-1]
-        contributions = option_contributions(latest)
-        return {
-            "as_of_date": str(latest["date"]),
-            "contributions": contributions,
-            "positive_total": round(
-                sum(c["contribution"] for c in contributions if c["contribution"] > 0), 3
-            ),
-            "negative_total": round(
-                sum(c["contribution"] for c in contributions if c["contribution"] < 0), 3
-            ),
-        }
-
-    data = _section("sentiment_breakdown", build)
-    return jsonify(data) if data is not None else _unavailable("Sentiment breakdown")
-
-
-@bp.route(f"{API_PREFIX}/calibration")
-def api_calibration():
-    def build():
-        from app.elections.engine.calibration import load_calibration
-
-        return load_calibration(data_dir=DATA_DIR)
-
-    data = _section("calibration", build)
-    return jsonify(data) if data is not None else _unavailable("Calibration")
-
-
-# --- Model comparison and backtest -----------------------------------------
-
-
-@bp.route(f"{API_PREFIX}/ml_comparison")
-def api_ml_comparison():
-    def build():
-        from app.elections.engine.ml_models import MLSeatPredictorSuite
-
-        df = load_master()
-        latest = df.iloc[-1]
-        suite = MLSeatPredictorSuite(baseline_year=2024, data_dir=DATA_DIR)
-        return {"as_of_date": str(latest["date"]), "models": suite.compare_all_models(latest)}
-
-    data = _section("ml_comparison", build)
-    return jsonify(data) if data is not None else _unavailable("Model comparison")
-
-
-@bp.route(f"{API_PREFIX}/backtest_results")
-def api_backtest_results():
-    data = _get_backtest_data()
-    return jsonify(data) if data is not None else _unavailable("Backtest results")
-
-
-@bp.route(f"{API_PREFIX}/state_projections")
-def api_state_projections():
-    def build():
-        from app.elections.engine.election_data import HISTORICAL_ELECTION_RESULTS
-
-        return HISTORICAL_ELECTION_RESULTS[2024]["state_baselines"]
-
-    # A static table, but election_data.py imports pandas at module scope, so
-    # it is served from the artifact like everything else.
-    data = _section("state_projections", build)
-    return jsonify(data) if data is not None else _unavailable("State projections")
-
-
-@bp.route(f"{API_PREFIX}/insights")
-def api_insights():
-    """Executive summary plus the highest-impact events in each direction."""
-    data = _get_insights_data()
-    return jsonify(data) if data is not None else _unavailable("Insights")
-
-
-@bp.route(f"{API_PREFIX}/simulate_permutation", methods=["POST"])
-def api_simulate_permutation():
-    """What-if: run one model with custom parameters against the latest day.
-
-    The only endpoint that cannot be precomputed — the answer depends on
-    parameters the caller chooses — so it is also the only one that needs the
-    dataset and scikit-learn at request time. It answers 503 on the deployment.
-    Nothing in the dashboard UI calls it; it exists for API users.
-    """
-    if not _heavy_stack_available():
-        return _unavailable("Permutation simulation")
-
-    from app.elections.engine.ml_models import MLSeatPredictorSuite
-
-    payload = request.get_json(silent=True) or {}
-    model_type = payload.get("ml_model", "cube_law")
-    try:
-        swing_multiplier = float(payload.get("swing_multiplier", 1.0))
-    except (TypeError, ValueError):
-        return jsonify({"error": "swing_multiplier must be a number."}), 400
-    cube_exponent = payload.get("cube_exponent")
-
-    df = load_master()
-    latest = df.iloc[-1]
-    suite = MLSeatPredictorSuite(baseline_year=2024, data_dir=DATA_DIR)
-
-    if model_type == "logistic_softmax":
-        result = suite.predict_logistic_softmax(latest)
-    elif model_type == "ridge_regression":
-        result = suite.predict_ridge_regression(latest)
-    elif model_type == "random_forest":
-        result = suite.predict_random_forest(latest)
-    elif model_type == "regional_swing":
-        result = suite.predict_regional_swing(latest)
-    else:
-        try:
-            k = float(cube_exponent) if cube_exponent is not None else None
-        except (TypeError, ValueError):
-            return jsonify({"error": "cube_exponent must be a number."}), 400
-        result = suite.predict_cube_law(latest, k=k, swing_mult=swing_multiplier)
-
-    result["majority_winner"] = (
-        "NDA" if result["NDA"] >= MAJORITY
-        else "INDIA" if result["INDIA"] >= MAJORITY
-        else "Hung Parliament"
-    )
-
-    return jsonify({
-        "model_selected": result["model"],
-        "note": result.get("note"),
-        "predicted_seats": {k: result[k] for k in ("NDA", "INDIA", "OTHERS")},
-        "majority_winner": result["majority_winner"],
-        "majority_threshold": MAJORITY,
-    })
-
-
-# --- Data freshness --------------------------------------------------------
-
-
-@bp.route(f"{API_PREFIX}/data_status")
-def api_data_status():
-    """How current the published dataset is.
-
-    `?check_remote=1` asks cvoterindia.com how current it *could* be, which
-    needs the source dataset to compare against and so only works locally. The
-    dashboard calls this with check_remote=0 and gets the answer settled at
-    build time — a page render must not make an outbound HTTP call.
-    """
-    if request.args.get("check_remote", "0") != "0":
-        if not _heavy_stack_available():
-            return _unavailable("Remote freshness check")
-        from app.elections.engine.data_updater import data_status
-
-        return _no_store(jsonify(data_status(data_dir=DATA_DIR, check_remote=True)))
-
     status = _artifact().get("data_status")
-    if status is None:
-        if not _heavy_stack_available():
-            return _unavailable("Data status")
+    if status is None and _heavy_stack_available():
         from app.elections.engine.data_updater import data_status
 
         status = data_status(data_dir=DATA_DIR, check_remote=False)
-    return _no_store(jsonify(status))
+    return status
 
 
 @bp.route(f"{API_PREFIX}/refresh_data", methods=["POST"])

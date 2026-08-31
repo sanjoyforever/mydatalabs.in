@@ -1,46 +1,46 @@
 {
   "summary": {
-    "as_of_date": "2026-08-02",
+    "as_of_date": "2026-08-16",
     "headlines": [
-      "NDA projects to 274 seats (\u00b126 at 90% confidence), 19 below its 2024 result of 293.",
-      "The most likely outcome is an NDA majority at 56%, with a hung parliament at 32%. The projection has sat above the 272 line for 1700 consecutive days.",
-      "The 30-day trend is rising at +0.050 seats/day (+1.5 seats over the window, R\u00b2 0.75), with the 7-day average above the 30-day by 0.5 seats.",
-      "The composite sentiment index reads -28 on a \u00b1100 scale, against -28.4 on the 30-day average. Daily volatility is 0.18 seats, so moves under roughly 0.4 seats are inside the day-to-day noise.",
-      "The single heaviest drag is \"Current expenses have become difficult to manage\" at 69.5% of respondents, contributing -10.9 index points."
+      "NDA projects to 274 seats (\u00b127 at 90% confidence), 19 below its 2024 result of 293.",
+      "The most likely outcome is an NDA majority at 57%, with a hung parliament at 32%. The projection has sat above the 272 line for 1714 consecutive days.",
+      "The 30-day trend is flat: the -0.000 seats/day slope is not statistically distinguishable from zero (t=-3.9).",
+      "The composite sentiment index reads -27 on a \u00b1100 scale, against -27.8 on the 30-day average. Daily volatility is 0.18 seats, so moves under roughly 0.4 seats are inside the day-to-day noise.",
+      "The single heaviest drag is \"Current expenses have become difficult to manage\" at 69.0% of respondents, contributing -10.8 index points."
     ],
     "drivers": {
       "negative": [
         {
           "metric": "Current expenses have become difficult to manage",
-          "share": 69.5,
-          "contribution": -10.921
+          "share": 69.03,
+          "contribution": -10.848
         },
         {
           "metric": "My life & the country both are in a poor state",
-          "share": 33.52,
-          "contribution": -7.183
+          "share": 33.21,
+          "contribution": -7.116
         },
         {
           "metric": "Will Deteriorate",
-          "share": 30.7,
-          "contribution": -5.701
+          "share": 30.5,
+          "contribution": -5.664
         }
       ],
       "positive": [
         {
           "metric": "Will Improve",
-          "share": 33.88,
-          "contribution": 6.292
+          "share": 34.72,
+          "contribution": 6.448
         },
         {
           "metric": "The country is moving forward and my life too",
-          "share": 35.46,
-          "contribution": 5.699
+          "share": 35.8,
+          "contribution": 5.754
         },
         {
           "metric": "Improved",
-          "share": 26.62,
-          "contribution": 4.237
+          "share": 27.01,
+          "contribution": 4.3
         }
       ]
     },
@@ -57,16 +57,16 @@
       "nda_vs_last_election": -19,
       "nda_ci": [
         247,
-        300
+        301
       ],
-      "prob_nda_majority": 0.5603,
-      "prob_hung": 0.32295,
-      "prob_india_majority": 0.11675,
-      "trend_slope_per_day": 0.0498,
-      "trend_direction": "rising",
+      "prob_nda_majority": 0.5673,
+      "prob_hung": 0.31925,
+      "prob_india_majority": 0.11345,
+      "trend_slope_per_day": -0.0,
+      "trend_direction": "flat",
       "volatility": 0.1826,
-      "momentum": 0.4667,
-      "composite": -28
+      "momentum": 0.0,
+      "composite": -27
     }
   },
   "impacts": {
@@ -164,7 +164,7 @@
         "post_seats": 271.7,
         "impact_seats": -4.0,
         "impact_composite": -7.4,
-        "z": -2.0,
+        "z": -2.01,
         "partial": false,
         "post_days_used": 30,
         "direction": "hurt NDA",
@@ -187,10 +187,10 @@
         "prior_expectation": "negative",
         "description": "Cockroach Janta Party and left student groups occupied Jantar Mantar for 50 days over exam irregularities, demanding Dharmendra Pradhan's resignation. Sonam Wangchuk began a hunger strike on 28 Jun and was hospitalised on 18 Jul.",
         "pre_seats": 276.7,
-        "post_seats": 273.7,
-        "impact_seats": -3.0,
-        "impact_composite": -5.76,
-        "z": -1.5,
+        "post_seats": 273.8,
+        "impact_seats": -2.9,
+        "impact_composite": -5.68,
+        "z": -1.47,
         "partial": true,
         "post_days_used": 30,
         "direction": "hurt NDA",
@@ -203,7 +203,7 @@
         ],
         "window": {
           "pre": "2026-05-07 .. 2026-06-05",
-          "post": "2026-06-06 .. 2026-08-02 (truncated by end of data)"
+          "post": "2026-06-06 .. 2026-08-16 (truncated by end of data)"
         },
         "within_noise": false
       },
@@ -260,11 +260,11 @@
         "within_noise": true
       }
     ],
-    "evaluated": 25,
+    "evaluated": 26,
     "reported": 7,
     "excluded": {
       "elections": 4,
-      "contradicts_nature": 5,
+      "contradicts_nature": 6,
       "below_noise_floor": 8
     },
     "method": {

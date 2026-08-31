@@ -86,7 +86,7 @@ def create_app() -> Flask:
     app.config["SEND_FILE_MAX_AGE_DEFAULT"] = STATIC_MAX_AGE
 
     from app.elections.routes import bp as elections_bp
-    from app.routes import bp
+    from app.routes import bp, build_nav
 
     app.register_blueprint(bp)
     app.register_blueprint(elections_bp)
@@ -98,12 +98,16 @@ def create_app() -> Flask:
     @app.context_processor
     def inject_defaults():
         # Error templates extend base.html, so these have to be available
-        # outside the normal route context too.
+        # outside the normal route context too. The nav is here rather than in
+        # routes._common() for that reason: 404 and 500 render without a route
+        # context, and a header with no navigation on them is exactly the page
+        # a visitor most needs a way off.
         return {
             "asset_v": asset_version,
             "current_year": date.today().year,
             "ga_measurement_id": GA_MEASUREMENT_ID,
             "clarity_project_id": CLARITY_PROJECT_ID,
+            "nav_items": build_nav(request.endpoint),
         }
 
     @app.after_request

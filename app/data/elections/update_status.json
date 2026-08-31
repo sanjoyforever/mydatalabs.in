@@ -1,11 +1,23 @@
 {
-  "started_at": "2026-08-23T09:40:52+00:00",
+  "started_at": "2026-08-31T16:15:44+00:00",
   "forced": false,
-  "local_latest_date": "2026-08-02",
-  "remote_latest_date": "2026-08-02",
-  "status": "up_to_date",
-  "reason": "no_new_data",
-  "new_rows": 0,
-  "finished_at": "2026-08-23T09:40:54+00:00",
-  "duration_seconds": 1.96
+  "local_latest_date": "2026-08-16",
+  "remote_latest_date": "2026-08-16",
+  "status": "updated",
+  "reason": "new_data",
+  "rows_before": 2771,
+  "rows_after": 2785,
+  "new_rows": 14,
+  "metrics": 41,
+  "derived": {
+    "calibration": {
+      "cube_exponent": 2.655,
+      "slope": 0.036668,
+      "intercept": 44.244889
+    },
+    "projections_rows": 2785,
+    "latest_nda_seats": 274
+  },
+  "finished_at": "2026-08-31T16:16:23+00:00",
+  "duration_seconds": 39.41
 }

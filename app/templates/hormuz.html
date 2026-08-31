@@ -46,20 +46,6 @@
           "value": {{ cr.current_value if cr.current_value is not none else 'null' }},
           "description": {{ ("Component weight " ~ (cr.component.weight * 100)|round|int ~ "%. Baseline " ~ "%.2f"|format(cr.baseline_value) ~ ". Source: " ~ cr.component.source ~ ".")|tojson }}
         }{% endfor %}
-      ],
-      "distribution": [
-        {
-          "@type": "DataDownload",
-          "encodingFormat": "application/json",
-          "contentUrl": "{{ origin }}/api/hormuz-index/data.json",
-          "name": "HMX-INDEX current snapshot and full weekly history (JSON)"
-        },
-        {
-          "@type": "DataDownload",
-          "encodingFormat": "text/csv",
-          "contentUrl": "{{ origin }}/api/hormuz-index/data.csv",
-          "name": "HMX-INDEX weekly history with raw component values (CSV)"
-        }
       ]
     },
     {

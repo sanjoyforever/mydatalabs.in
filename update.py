@@ -179,6 +179,9 @@ def main() -> int:
     parser.add_argument("--aviation", action="store_true", help="Airline Pressure Index only")
     parser.add_argument("--hormuz", action="store_true", help="Hormuz Crisis Index only")
     parser.add_argument("--elections", action="store_true", help="Lok Sabha projection only")
+    parser.add_argument("--solvency", action="store_true",
+                        help="rebuild the 80-year Solvency Index series from FRED "
+                             "(annual; not part of a default run)")
     parser.add_argument("--check", action="store_true", help="report freshness and exit, no writes")
     parser.add_argument("--dry-run", action="store_true", help="recompute without persisting")
     parser.add_argument("--force", action="store_true",
@@ -192,8 +195,13 @@ def main() -> int:
     if args.check:
         return check_freshness()
 
-    # If no specific target is given, update all three
-    any_specified = args.aviation or args.hormuz or args.elections
+    # If no specific target is given, update all three weekly indices. The
+    # Solvency Index is deliberately not in that set: its inputs are annual
+    # fiscal-year series that only change once, at FY close, so refetching ten
+    # FRED series on every weekly run would be pure noise. Its *derived* views
+    # (projections, decade means, threshold crossings) are rebuilt with the
+    # other route artifacts by precomputed.build_all().
+    any_specified = args.aviation or args.hormuz or args.elections or args.solvency
     do_aviation = args.aviation or not any_specified
     do_hormuz = args.hormuz or not any_specified
     do_elections = args.elections or not any_specified
@@ -228,11 +236,24 @@ def main() -> int:
             print(f"  ERROR: Lok Sabha update raised: {err}", file=sys.stderr)
             failures.append("elections")
 
+    if args.solvency:
+        _hr("U.S. Sovereign Solvency Index — rebuilding from FRED")
+        try:
+            import subprocess
+            cmd = [sys.executable, os.path.join(ROOT_DIR, "scripts", "build_solvency_history.py")]
+            if args.dry_run:
+                cmd.append("--dry-run")
+            if subprocess.call(cmd) != 0:
+                failures.append("solvency")
+        except Exception as err:  # noqa: BLE001
+            print(f"  ERROR: Solvency rebuild raised: {err}", file=sys.stderr)
+            failures.append("solvency")
+
     # Route artifacts last: they read what the two updates above just wrote.
     # update_hormuz() already rebuilds them via update_data.update_index(), but
     # an elections-only run would otherwise leave the home page's Lok Sabha
     # card reporting the previous seat count.
-    if not args.dry_run and do_elections:
+    if not args.dry_run and (do_elections or args.solvency):
         _hr("Per-route precomputed artifacts")
         try:
             from app import precomputed

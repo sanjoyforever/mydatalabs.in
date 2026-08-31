@@ -403,21 +403,134 @@ main {
   z-index: 100;
 }
 
-.dropdown:hover .dropdown-menu,
-.dropdown:focus-within .dropdown-menu { display: block; }
+/* Click-only, driven by the .is-open class theme.js toggles. It used to be
+   :hover / :focus-within, which had no class hook at all — so the keyboard
+   handling in theme.js opened a menu that never became visible — and mixing
+   hover-open with click-toggle means a click on an already-hovered menu reads
+   as "close" and does nothing. Escape, tab-out and outside-click all close it. */
+.dropdown.is-open .dropdown-menu { display: block; }
+
+.dropdown-toggle .dropdown-caret {
+  font-size: 18px;
+  margin-left: -2px;
+  transition: transform 0.15s ease;
+}
+.dropdown.is-open .dropdown-toggle .dropdown-caret { transform: rotate(180deg); }
 
 .dropdown-menu a {
-  display: block;
-  padding: 8px 12px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 12px;
   border-radius: 6px;
   font-size: 0.88rem;
   color: var(--text-sub);
+  text-decoration: none;
 }
 
 .dropdown-menu a:hover {
   color: var(--text-main);
   background: var(--accent-blue-bg);
 }
+
+/* The page you are already on, marked in the menu that leads to it. */
+.dropdown-menu a.is-current {
+  color: var(--accent-blue);
+  background: var(--accent-blue-bg);
+  font-weight: 600;
+}
+
+.dropdown-item-label { white-space: nowrap; }
+
+/* Tickers are how these indices are cited elsewhere on the site; carrying them
+   into the menu means the label and the citation are learned together. */
+.dropdown-item-ticker {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   MOBILE NAVIGATION
+   ==========================================================================
+   Under the desktop breakpoint the header carried no navigation whatsoever —
+   .header-nav was display:none with nothing put in its place, so the footer
+   was the only way off a page on a phone. */
+
+.nav-toggle { display: none; }
+.nav-toggle .icon-close { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-open { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+
+.mobile-nav {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px 16px;
+  background: var(--surface-header);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-sub);
+  text-decoration: none;
+}
+
+.mobile-nav-link:hover { background: var(--surface-card-hover); color: var(--text-main); }
+
+.mobile-nav-link.active {
+  color: var(--accent-blue);
+  background: var(--accent-blue-bg);
+  font-weight: 600;
+}
+
+.mobile-nav-link .nav-icon { font-size: 20px; }
+.mobile-nav-label { flex: 1 1 auto; }
+
+/* Group heading for a dropdown flattened into the drawer. A drawer that needs
+   its own expand/collapse to reach four links is a menu inside a menu. */
+.mobile-nav-group {
+  margin: 12px 0 2px;
+  padding: 0 12px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.mobile-nav-sub { padding-left: 12px; }
+.mobile-nav-sub .dropdown-item-ticker { margin-left: auto; }
+
+@media (max-width: 900px) {
+  .nav-toggle { display: flex; }
+  .mobile-nav { display: flex; }
+}
+
+/* The attribute has to beat the display rules above in both directions —
+   without this, `hidden` on a flex container is ignored. */
+.mobile-nav[hidden] { display: none; }
 
 .header-actions {
   display: flex;
@@ -1780,13 +1893,8 @@ main:focus { outline: none; }
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  border: 1px solid var(--border);
-  background-color: var(--surface);
-  background-image: url('/static/img/aviation-banner.webp');
-  background-position: right center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  margin-bottom: 36px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--surface-card);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   display: block;
   text-decoration: none;
@@ -1854,16 +1962,12 @@ main:focus { outline: none; }
   gap: 6px;
   padding: 4px 12px;
   border-radius: 9999px;
-  background: rgba(56, 189, 248, 0.14);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #0284C7;
+  background: color-mix(in srgb, var(--hero-accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hero-accent) 35%, transparent);
+  color: var(--hero-accent);
   font-size: 0.75rem;
   font-weight: 750;
   letter-spacing: 0.04em;
-}
-
-[data-theme="dark"] .av-badge-pill {
-  color: #38BDF8;
 }
 
 .av-pill-icon {
@@ -1884,21 +1988,17 @@ main:focus { outline: none; }
   line-height: 1.12;
   letter-spacing: -0.035em;
   margin: 0 0 16px;
-  color: var(--text-primary);
+  color: var(--text-main);
 }
 
 .av-dot {
-  color: #0284C7;
-}
-
-[data-theme="dark"] .av-dot {
-  color: #38BDF8;
+  color: var(--hero-accent);
 }
 
 .av-desc {
   font-size: 0.95rem;
   line-height: 1.62;
-  color: var(--text-secondary);
+  color: var(--text-sub);
   margin: 0 0 28px;
   max-width: 500px;
 }
@@ -1932,21 +2032,20 @@ main:focus { outline: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  color: #0284C7;
+  color: var(--hero-accent);
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 [data-theme="dark"] .av-feat-icon-circle {
   background: rgba(30, 41, 59, 0.85);
-  color: #38BDF8;
 }
 
 .av-feat-item:hover .av-feat-icon-circle {
   transform: translateY(-2px);
-  border-color: #38BDF8;
+  border-color: var(--hero-accent);
 }
 
 .av-feat-icon-circle .material-symbols-outlined {
@@ -1957,7 +2056,7 @@ main:focus { outline: none; }
   font-size: 0.72rem;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--text-secondary);
+  color: var(--text-sub);
 }
 
 .av-hero-floating-metrics {
@@ -2018,6 +2117,348 @@ main:focus { outline: none; }
   font-size: 0.68rem;
   color: rgba(255, 255, 255, 0.85);
   font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   Featured index carousel (home page)
+
+   The track is a scroll-snap row rather than a translated filmstrip, so touch
+   swipe, momentum and keyboard scrolling are the browser's job and the slides
+   still read as a plain stack of banners with JavaScript off.
+   -------------------------------------------------------------------------- */
+
+.hcar {
+  position: relative;
+  padding-top: 10px;
+  margin-bottom: 36px;
+}
+
+.hcar-track {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hcar-track::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hcar-track { scroll-behavior: auto; }
+}
+
+.hcar-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* The card carried the hero's own spacing when it was the only banner on the
+   page; inside the track that spacing belongs to the carousel. */
+.hcar-slide .av-hero-card {
+  height: 100%;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+.hcar-slide .av-hero-content {
+  width: 100%;
+}
+
+.hcar-slide .av-hero-card:hover {
+  transform: none;
+}
+
+/* Per-slide accent. Each pair is light first, then the dark override, so the
+   dark rule always wins at equal specificity. */
+.av-hero-card { --hero-accent: #0284C7; }
+[data-theme="dark"] .av-hero-card { --hero-accent: #38BDF8; }
+
+.hcar-solvency .av-hero-card { --hero-accent: #4F46E5; }
+[data-theme="dark"] .hcar-solvency .av-hero-card { --hero-accent: #818CF8; }
+
+.hcar-hormuz .av-hero-card { --hero-accent: #C2410C; }
+[data-theme="dark"] .hcar-hormuz .av-hero-card { --hero-accent: #FB923C; }
+
+/* Only the aviation slide is photographic; the other two are drawn from their
+   own history series, below. */
+.hcar-aviation .av-hero-card {
+  background-image: url('/static/img/aviation-banner.webp');
+  background-position: right center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.hcar-solvency .av-hero-card,
+.hcar-hormuz .av-hero-card {
+  background-image:
+    radial-gradient(120% 140% at 88% 12%, color-mix(in srgb, var(--hero-accent) 16%, transparent) 0%, transparent 60%);
+}
+
+/* The overlay exists to hold text off a photograph. Over a gradient it only
+   needs to keep the left column clean. */
+.hcar-solvency .av-hero-overlay,
+.hcar-hormuz .av-hero-overlay {
+  background: linear-gradient(90deg,
+    var(--surface-card) 0%,
+    color-mix(in srgb, var(--surface-card) 78%, transparent) 46%,
+    transparent 78%);
+}
+
+/* --- Background series ---------------------------------------------------- */
+
+.hcar-spark {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 55%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hcar-spark-fill {
+  fill: var(--hero-accent);
+  opacity: 0.14;
+}
+
+.hcar-spark-line {
+  fill: none;
+  stroke: var(--hero-accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.5;
+}
+
+/* --- Slide content -------------------------------------------------------- */
+
+.hcar-score-line {
+  font-size: 0.95rem;
+  color: var(--text-sub);
+  margin: -6px 0 18px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hcar-score-line strong {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.hcar-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* --- Right-hand status card and metric bubbles ---------------------------- */
+
+.hcar-visual {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 56%;
+  z-index: 2;
+  display: none;
+  pointer-events: none;
+}
+
+@media (min-width: 900px) {
+  .hcar-visual { display: block; }
+}
+
+.hcar-window {
+  position: absolute;
+  top: 50%;
+  left: 6%;
+  transform: translateY(-50%);
+  width: 236px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+}
+
+.hcar-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--surface-card-hover);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.hcar-win-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.hcar-win-dot-r { background: #F87171; }
+.hcar-win-dot-y { background: #FBBF24; }
+.hcar-win-dot-g { background: #34D399; }
+
+.hcar-window-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px 22px;
+  text-align: center;
+}
+
+.hcar-window-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hcar-window-status {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.hcar-window-score {
+  font-family: var(--font-mono);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-main);
+}
+
+.hcar-bubble {
+  position: absolute;
+  right: 4%;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px;
+  text-align: center;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14);
+}
+
+.hcar-bubble-1 { top: 8%; }
+.hcar-bubble-2 { top: 50%; transform: translateY(-50%); right: 2%; }
+.hcar-bubble-3 { bottom: 8%; }
+
+.hcar-bubble-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-muted);
+}
+
+.hcar-bubble-val {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--hero-accent);
+}
+
+/* --- Controls ------------------------------------------------------------- */
+
+.hcar-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* Below the banner rather than over it: the right edge of every slide is
+   already occupied by the floating metrics an overlaid arrow would cover. */
+.hcar-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  /* Before the icon font arrives the ligature renders as its own name, which
+     is wide enough to sit on top of the dots. */
+  overflow: hidden;
+  cursor: pointer;
+  color: var(--text-sub);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.16);
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .hcar-arrow { display: flex; }
+}
+
+.hcar-arrow .material-symbols-outlined {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.hcar-arrow:hover {
+  color: var(--accent-blue);
+  border-color: var(--border-accent);
+}
+
+.hcar-arrow:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+.hcar-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.hcar-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--border-bright);
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.hcar-dot.is-active {
+  width: 24px;
+  border-radius: 999px;
+  background: var(--accent-blue);
+}
+
+.hcar-dot:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 3px;
 }
 
 .hero-updated { font-size: 0.82rem; color: var(--text-sub); font-family: var(--font-mono); }
@@ -2569,22 +3010,6 @@ main:has(> .prose-page) { max-width: 1080px; }
 html, body { overflow-x: hidden; }
 .table-responsive { max-width: 100%; -webkit-overflow-scrolling: touch; }
 
-@media (max-width: 900px) {
-  /* Five nav links plus the dropdown no longer fit on one line. Let the row
-     scroll horizontally rather than widening the whole document. */
-  .site-nav {
-    order: 3;
-    width: 100%;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
-    padding-bottom: 2px;
-  }
-  .site-nav::-webkit-scrollbar { display: none; }
-  .nav-link { white-space: nowrap; flex-shrink: 0; }
-  .dropdown-menu { left: auto; right: 0; }
-}
-
 @media (max-width: 700px) {
   main { padding: 20px 16px 60px; }
   .prose-header h1 { font-size: 1.8rem; }
@@ -2767,7 +3192,7 @@ background: linear-gradient(90deg,
 @media (max-width: 700px) {
   .hero-copy { padding: 28px 22px 32px; }
   .hero-media { min-height: 180px; }
-  .header-right { gap: 10px; width: 100%; }
+  .header-right { gap: 6px; }
 }
 
 /* ==========================================================================
@@ -3493,31 +3918,10 @@ background: linear-gradient(90deg,
   gap: 8px;
 }
 
-.nav-link {
-  font-family: var(--font-display);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-sub);
-  padding: 6px 0;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  transition: color 0.15s ease;
-  white-space: nowrap;
-  height: 100%;
-}
-
-.nav-link:hover {
-  color: var(--accent-blue);
-}
-
-.nav-link.active {
-  color: var(--accent-blue);
-  font-weight: 600;
-}
+/* The pill .nav-link ruleset earlier in this file is the only one. A second
+   copy lived here and set `padding: 6px 0`, but lost to the pill's
+   `.nav-link.active { background }` on specificity — so the active item drew a
+   blue background with no horizontal padding around it. */
 
 .footer-right-links {
   display: flex;
@@ -3593,11 +3997,14 @@ background: linear-gradient(90deg,
 .header-nav {
   display: none;
   align-items: center;
-  gap: 24px;
+  gap: 4px;
   height: 100%;
 }
 
-@media (min-width: 769px) {
+/* 900px, not 769: the brand lockup plus four pills is what has to fit, and it
+   stops fitting well before a tablet's width. Below this the drawer takes
+   over. */
+@media (min-width: 901px) {
   .header-nav {
     display: flex;
   }

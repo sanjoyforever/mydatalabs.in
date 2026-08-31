@@ -1,30 +1,30 @@
 {
   "live_values": {
-    "brent": 93.05000305175781,
-    "ttf_gas": 65.86499786376953,
-    "vix": 15.130000114440918,
-    "ship_traffic": 25.0
+    "brent": 88.16999816894531,
+    "ttf_gas": 70.2699966430664,
+    "vix": 15.260000228881836,
+    "ship_traffic": 35.0
   },
-  "live_values_at": "2026-08-24",
-  "portwatch_week_end": "2026-08-16",
+  "live_values_at": "2026-08-31",
+  "portwatch_week_end": "2026-08-23",
   "sentiment": {
     "available": true,
-    "week_start": "2026-08-17",
-    "votes": 0,
-    "index": null,
-    "level_label": null,
-    "level_status": null,
-    "scale_pct": null,
-    "mean_rating": null,
+    "week_start": "2026-08-31",
+    "votes": 14,
+    "index": 160.2,
+    "level_label": "Severe",
+    "level_status": "serious",
+    "scale_pct": 60.2,
+    "mean_rating": 6.42,
     "distribution": [
       0,
       0,
       0,
       0,
       0,
-      0,
-      0,
-      0,
+      9,
+      4,
+      1,
       0,
       0
     ],
@@ -46,15 +46,36 @@
     },
     {
       "week_start": "2026-08-10",
-      "votes": 9,
-      "mean_rating": 6.61,
-      "index": 162.3
+      "votes": 13,
+      "mean_rating": 6.32,
+      "index": 159.1
+    },
+    {
+      "week_start": "2026-08-17",
+      "votes": 249,
+      "mean_rating": 6.42,
+      "index": 160.2
+    },
+    {
+      "week_start": "2026-08-24",
+      "votes": 89,
+      "mean_rating": 6.38,
+      "index": 159.7
+    },
+    {
+      "week_start": "2026-08-31",
+      "votes": 14,
+      "mean_rating": 6.42,
+      "index": 160.2
     }
   ],
   "perception_by_week": {
     "2026-07-27": 166.9,
     "2026-08-03": 158.3,
-    "2026-08-10": 162.3
+    "2026-08-10": 159.1,
+    "2026-08-17": 160.2,
+    "2026-08-24": 159.7,
+    "2026-08-31": 160.2
   },
   "perception_series": [
     null,
@@ -88,7 +109,8 @@
     null,
     166.9,
     158.3,
-    162.3,
-    null
+    159.1,
+    160.2,
+    160.2
   ]
 }

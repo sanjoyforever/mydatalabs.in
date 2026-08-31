@@ -1,0 +1,3830 @@
+{
+  "snapshot": {
+    "score": 128.1,
+    "level_label": "Watch",
+    "level_status": "warning",
+    "year": "2025"
+  },
+  "latest": {
+    "year": 2025,
+    "raw_values": {
+      "debt_gdp": 98.07,
+      "interest_burden": 18.53,
+      "primary_deficit": 2.62,
+      "productivity": 1.87,
+      "real_gdp_pc": 1.8,
+      "inflation": 2.63,
+      "r_minus_g": -1.56
+    },
+    "context": {
+      "output_gap": 1.0,
+      "recession_share": 0.0,
+      "defense_pct_gdp": 3.7,
+      "gdp_bn": 30762.1,
+      "cpi_index": 321.943,
+      "gross_debt_pct_gdp": 0.12,
+      "receipts_pct_gdp": 17.02,
+      "effective_rate": 3.44,
+      "nominal_gdp_growth": 5.0,
+      "interest_outlays_bn": 970.1,
+      "receipts_bn": 5236.4,
+      "debt_public_bn": 30167.2
+    },
+    "score": 128.1,
+    "level_label": "Watch",
+    "level_status": "warning",
+    "stresses": {
+      "debt_gdp": 54.8,
+      "interest_burden": 47.9,
+      "primary_deficit": 32.8,
+      "productivity": 11.0,
+      "real_gdp_pc": 18.2,
+      "inflation": 7.9,
+      "r_minus_g": 0.0
+    },
+    "contributions": {
+      "debt_gdp": 9.86,
+      "interest_burden": 8.14,
+      "primary_deficit": 4.92,
+      "productivity": 1.65,
+      "real_gdp_pc": 2.73,
+      "inflation": 0.79,
+      "r_minus_g": 0.0
+    },
+    "block_contributions": {
+      "fiscal": 22.92,
+      "growth": 4.38,
+      "monetary": 0.79
+    },
+    "partial": false,
+    "covered_weight": 1.0
+  },
+  "decades": [
+    {
+      "decade": "1940s",
+      "start": 1940,
+      "mean": 135.1,
+      "years": 5,
+      "level": "Strained",
+      "status": "serious"
+    },
+    {
+      "decade": "1950s",
+      "start": 1950,
+      "mean": 108.4,
+      "years": 10,
+      "level": "Sustainable",
+      "status": "good"
+    },
+    {
+      "decade": "1960s",
+      "start": 1960,
+      "mean": 103.7,
+      "years": 10,
+      "level": "Sustainable",
+      "status": "good"
+    },
+    {
+      "decade": "1970s",
+      "start": 1970,
+      "mean": 108.8,
+      "years": 10,
+      "level": "Sustainable",
+      "status": "good"
+    },
+    {
+      "decade": "1980s",
+      "start": 1980,
+      "mean": 123.3,
+      "years": 10,
+      "level": "Watch",
+      "status": "warning"
+    },
+    {
+      "decade": "1990s",
+      "start": 1990,
+      "mean": 119.6,
+      "years": 10,
+      "level": "Watch",
+      "status": "warning"
+    },
+    {
+      "decade": "2000s",
+      "start": 2000,
+      "mean": 110.8,
+      "years": 10,
+      "level": "Sustainable",
+      "status": "good"
+    },
+    {
+      "decade": "2010s",
+      "start": 2010,
+      "mean": 124.5,
+      "years": 10,
+      "level": "Watch",
+      "status": "warning"
+    },
+    {
+      "decade": "2020s",
+      "start": 2020,
+      "mean": 133.5,
+      "years": 6,
+      "level": "Strained",
+      "status": "serious"
+    }
+  ],
+  "turning_points": [
+    {
+      "year": 1946,
+      "label": "Demobilisation",
+      "title": "Post-war demobilisation",
+      "description": "Defence outlays fell from 37% of GDP to under 5% in three years. Combined with 1946-48 inflation, which cut the real value of the debt stock by roughly a third, the ratio fell faster than any deliberate repayment could have achieved.",
+      "score": 154.7
+    },
+    {
+      "year": 1965,
+      "label": "Medicare/Medicaid",
+      "title": "Social Security Act Amendments of 1965",
+      "description": "Created Medicare and Medicaid as open-ended fee-for-service entitlements with no dedicated actuarial pre-funding. The cost showed up decades later, which is exactly why a contemporaneous index registers almost nothing here.",
+      "score": 100.4
+    },
+    {
+      "year": 1971,
+      "label": "Bretton Woods ends",
+      "title": "Suspension of gold convertibility",
+      "description": "Ended the dollar's gold peg and removed the external constraint on monetary expansion. The 1972 Social Security amendments added automatic CPI indexing on a formula that over-corrected for inflation until it was repaired in 1977.",
+      "score": 104.2
+    },
+    {
+      "year": 1981,
+      "label": "ERTA",
+      "title": "Economic Recovery Tax Act of 1981",
+      "description": "Cut marginal rates 23% across the board while defence spending rose to 6.1% of GDP. Establishes the modern pattern of large structural deficits at full employment, visible here as the first sustained peacetime rise in the interest burden.",
+      "score": 118.4
+    },
+    {
+      "year": 1990,
+      "label": "PAYGO",
+      "title": "Budget Enforcement Act of 1990",
+      "description": "Introduced statutory PAYGO and discretionary caps. With the 1993 OBRA rate increases and the late-1990s productivity acceleration, this produced the only sustained surpluses in the post-war record.",
+      "score": 126.5
+    },
+    {
+      "year": 2001,
+      "label": "PAYGO lapses",
+      "title": "EGTRRA and the expiry of statutory PAYGO",
+      "description": "PAYGO was allowed to expire, the 2001 and 2003 tax cuts passed without offsets, and Medicare Part D was added in 2003 with no dedicated financing. The projected surplus reverted to structural deficit within two years.",
+      "score": 112.4
+    },
+    {
+      "year": 2008,
+      "label": "GFC",
+      "title": "Financial crisis and the zero-rate era",
+      "description": "The debt ratio roughly doubled, but near-zero policy rates held the effective cost of the stock down: r \u2212 g stayed firmly negative for a decade, which is why the interest burden fell while the debt rose.",
+      "score": 120.8
+    },
+    {
+      "year": 2021,
+      "label": "Rate shock",
+      "title": "Post-COVID inflation and the end of free debt",
+      "description": "525bp of tightening from 2022 repriced the stock as it rolled over. Net interest went from $352bn in FY2021 to over $1tn in FY2025, passing total defence outlays \u2014 the single largest change in the fiscal block in the series.",
+      "score": 134.4
+    }
+  ],
+  "projections": [
+    {
+      "key": "favorable",
+      "label": "Favourable",
+      "color": "#10B981",
+      "narrative": "Rates stay near today's effective cost while nominal growth runs at the pre-2008 trend, and the primary deficit is halved to 1.5% of GDP. r \u2212 g stays negative, so the debt ratio erodes on its own.",
+      "terminal_r": 3.4,
+      "nominal_growth": 4.4,
+      "terminal_pb": 1.5,
+      "r_minus_g": -1.0,
+      "path": [
+        {
+          "year": 2026,
+          "debt_gdp": 99.7,
+          "effective_rate": 3.43,
+          "primary_deficit": 2.51,
+          "interest_pct_gdp": 3.37,
+          "interest_pct_receipts": 19.8
+        },
+        {
+          "year": 2027,
+          "debt_gdp": 101.1,
+          "effective_rate": 3.43,
+          "primary_deficit": 2.4,
+          "interest_pct_gdp": 3.42,
+          "interest_pct_receipts": 20.1
+        },
+        {
+          "year": 2028,
+          "debt_gdp": 102.5,
+          "effective_rate": 3.42,
+          "primary_deficit": 2.28,
+          "interest_pct_gdp": 3.46,
+          "interest_pct_receipts": 20.3
+        },
+        {
+          "year": 2029,
+          "debt_gdp": 103.7,
+          "effective_rate": 3.42,
+          "primary_deficit": 2.17,
+          "interest_pct_gdp": 3.5,
+          "interest_pct_receipts": 20.6
+        },
+        {
+          "year": 2030,
+          "debt_gdp": 104.8,
+          "effective_rate": 3.42,
+          "primary_deficit": 2.06,
+          "interest_pct_gdp": 3.54,
+          "interest_pct_receipts": 20.8
+        },
+        {
+          "year": 2031,
+          "debt_gdp": 105.7,
+          "effective_rate": 3.41,
+          "primary_deficit": 1.95,
+          "interest_pct_gdp": 3.58,
+          "interest_pct_receipts": 21.0
+        },
+        {
+          "year": 2032,
+          "debt_gdp": 106.6,
+          "effective_rate": 3.41,
+          "primary_deficit": 1.84,
+          "interest_pct_gdp": 3.61,
+          "interest_pct_receipts": 21.2
+        },
+        {
+          "year": 2033,
+          "debt_gdp": 107.3,
+          "effective_rate": 3.41,
+          "primary_deficit": 1.72,
+          "interest_pct_gdp": 3.63,
+          "interest_pct_receipts": 21.3
+        },
+        {
+          "year": 2034,
+          "debt_gdp": 107.9,
+          "effective_rate": 3.41,
+          "primary_deficit": 1.61,
+          "interest_pct_gdp": 3.66,
+          "interest_pct_receipts": 21.5
+        },
+        {
+          "year": 2035,
+          "debt_gdp": 108.3,
+          "effective_rate": 3.41,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.67,
+          "interest_pct_receipts": 21.6
+        },
+        {
+          "year": 2036,
+          "debt_gdp": 108.8,
+          "effective_rate": 3.41,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.69,
+          "interest_pct_receipts": 21.7
+        },
+        {
+          "year": 2037,
+          "debt_gdp": 109.3,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.7,
+          "interest_pct_receipts": 21.8
+        },
+        {
+          "year": 2038,
+          "debt_gdp": 109.7,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.72,
+          "interest_pct_receipts": 21.9
+        },
+        {
+          "year": 2039,
+          "debt_gdp": 110.2,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.73,
+          "interest_pct_receipts": 21.9
+        },
+        {
+          "year": 2040,
+          "debt_gdp": 110.6,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.75,
+          "interest_pct_receipts": 22.0
+        },
+        {
+          "year": 2041,
+          "debt_gdp": 111.1,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.76,
+          "interest_pct_receipts": 22.1
+        },
+        {
+          "year": 2042,
+          "debt_gdp": 111.5,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.78,
+          "interest_pct_receipts": 22.2
+        },
+        {
+          "year": 2043,
+          "debt_gdp": 111.9,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.79,
+          "interest_pct_receipts": 22.3
+        },
+        {
+          "year": 2044,
+          "debt_gdp": 112.4,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.81,
+          "interest_pct_receipts": 22.4
+        },
+        {
+          "year": 2045,
+          "debt_gdp": 112.8,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.82,
+          "interest_pct_receipts": 22.5
+        },
+        {
+          "year": 2046,
+          "debt_gdp": 113.2,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.84,
+          "interest_pct_receipts": 22.5
+        },
+        {
+          "year": 2047,
+          "debt_gdp": 113.6,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.85,
+          "interest_pct_receipts": 22.6
+        },
+        {
+          "year": 2048,
+          "debt_gdp": 114.0,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.86,
+          "interest_pct_receipts": 22.7
+        },
+        {
+          "year": 2049,
+          "debt_gdp": 114.5,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.88,
+          "interest_pct_receipts": 22.8
+        },
+        {
+          "year": 2050,
+          "debt_gdp": 114.9,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.89,
+          "interest_pct_receipts": 22.9
+        },
+        {
+          "year": 2051,
+          "debt_gdp": 115.3,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.91,
+          "interest_pct_receipts": 22.9
+        },
+        {
+          "year": 2052,
+          "debt_gdp": 115.7,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.92,
+          "interest_pct_receipts": 23.0
+        },
+        {
+          "year": 2053,
+          "debt_gdp": 116.0,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.93,
+          "interest_pct_receipts": 23.1
+        },
+        {
+          "year": 2054,
+          "debt_gdp": 116.4,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.95,
+          "interest_pct_receipts": 23.2
+        },
+        {
+          "year": 2055,
+          "debt_gdp": 116.8,
+          "effective_rate": 3.4,
+          "primary_deficit": 1.5,
+          "interest_pct_gdp": 3.96,
+          "interest_pct_receipts": 23.3
+        }
+      ],
+      "end_debt_gdp": 116.8,
+      "end_interest_receipts": 23.3,
+      "crossings": {
+        "20": 2027,
+        "25": null,
+        "35": null
+      }
+    },
+    {
+      "key": "baseline",
+      "label": "Baseline",
+      "color": "#38BDF8",
+      "narrative": "The effective rate on the stock converges upward to 4.3% as low-coupon debt from the 2010s rolls off, nominal growth settles at 4.0%, and the primary deficit holds near its current 3% of GDP. r \u2212 g turns mildly positive.",
+      "terminal_r": 4.3,
+      "nominal_growth": 4.0,
+      "terminal_pb": 3.0,
+      "r_minus_g": 0.3,
+      "path": [
+        {
+          "year": 2026,
+          "debt_gdp": 100.3,
+          "effective_rate": 3.58,
+          "primary_deficit": 2.66,
+          "interest_pct_gdp": 3.51,
+          "interest_pct_receipts": 20.6
+        },
+        {
+          "year": 2027,
+          "debt_gdp": 102.7,
+          "effective_rate": 3.7,
+          "primary_deficit": 2.7,
+          "interest_pct_gdp": 3.72,
+          "interest_pct_receipts": 21.8
+        },
+        {
+          "year": 2028,
+          "debt_gdp": 105.3,
+          "effective_rate": 3.8,
+          "primary_deficit": 2.73,
+          "interest_pct_gdp": 3.91,
+          "interest_pct_receipts": 23.0
+        },
+        {
+          "year": 2029,
+          "debt_gdp": 107.9,
+          "effective_rate": 3.89,
+          "primary_deficit": 2.77,
+          "interest_pct_gdp": 4.09,
+          "interest_pct_receipts": 24.0
+        },
+        {
+          "year": 2030,
+          "debt_gdp": 110.7,
+          "effective_rate": 3.95,
+          "primary_deficit": 2.81,
+          "interest_pct_gdp": 4.27,
+          "interest_pct_receipts": 25.1
+        },
+        {
+          "year": 2031,
+          "debt_gdp": 113.6,
+          "effective_rate": 4.01,
+          "primary_deficit": 2.85,
+          "interest_pct_gdp": 4.44,
+          "interest_pct_receipts": 26.1
+        },
+        {
+          "year": 2032,
+          "debt_gdp": 116.5,
+          "effective_rate": 4.06,
+          "primary_deficit": 2.89,
+          "interest_pct_gdp": 4.61,
+          "interest_pct_receipts": 27.1
+        },
+        {
+          "year": 2033,
+          "debt_gdp": 119.5,
+          "effective_rate": 4.1,
+          "primary_deficit": 2.92,
+          "interest_pct_gdp": 4.78,
+          "interest_pct_receipts": 28.1
+        },
+        {
+          "year": 2034,
+          "debt_gdp": 122.7,
+          "effective_rate": 4.13,
+          "primary_deficit": 2.96,
+          "interest_pct_gdp": 4.94,
+          "interest_pct_receipts": 29.0
+        },
+        {
+          "year": 2035,
+          "debt_gdp": 125.9,
+          "effective_rate": 4.16,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 5.1,
+          "interest_pct_receipts": 30.0
+        },
+        {
+          "year": 2036,
+          "debt_gdp": 129.1,
+          "effective_rate": 4.18,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 5.27,
+          "interest_pct_receipts": 30.9
+        },
+        {
+          "year": 2037,
+          "debt_gdp": 132.3,
+          "effective_rate": 4.2,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 5.43,
+          "interest_pct_receipts": 31.9
+        },
+        {
+          "year": 2038,
+          "debt_gdp": 135.6,
+          "effective_rate": 4.22,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 5.58,
+          "interest_pct_receipts": 32.8
+        },
+        {
+          "year": 2039,
+          "debt_gdp": 138.9,
+          "effective_rate": 4.23,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 5.74,
+          "interest_pct_receipts": 33.7
+        },
+        {
+          "year": 2040,
+          "debt_gdp": 142.2,
+          "effective_rate": 4.24,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 5.9,
+          "interest_pct_receipts": 34.6
+        },
+        {
+          "year": 2041,
+          "debt_gdp": 145.6,
+          "effective_rate": 4.25,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 6.05,
+          "interest_pct_receipts": 35.5
+        },
+        {
+          "year": 2042,
+          "debt_gdp": 149.0,
+          "effective_rate": 4.26,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 6.2,
+          "interest_pct_receipts": 36.5
+        },
+        {
+          "year": 2043,
+          "debt_gdp": 152.3,
+          "effective_rate": 4.27,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 6.36,
+          "interest_pct_receipts": 37.3
+        },
+        {
+          "year": 2044,
+          "debt_gdp": 155.7,
+          "effective_rate": 4.27,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 6.51,
+          "interest_pct_receipts": 38.2
+        },
+        {
+          "year": 2045,
+          "debt_gdp": 159.2,
+          "effective_rate": 4.28,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 6.66,
+          "interest_pct_receipts": 39.1
+        },
+        {
+          "year": 2046,
+          "debt_gdp": 162.6,
+          "effective_rate": 4.28,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 6.81,
+          "interest_pct_receipts": 40.0
+        },
+        {
+          "year": 2047,
+          "debt_gdp": 166.0,
+          "effective_rate": 4.28,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 6.97,
+          "interest_pct_receipts": 40.9
+        },
+        {
+          "year": 2048,
+          "debt_gdp": 169.5,
+          "effective_rate": 4.29,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 7.12,
+          "interest_pct_receipts": 41.8
+        },
+        {
+          "year": 2049,
+          "debt_gdp": 173.0,
+          "effective_rate": 4.29,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 7.27,
+          "interest_pct_receipts": 42.7
+        },
+        {
+          "year": 2050,
+          "debt_gdp": 176.4,
+          "effective_rate": 4.29,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 7.42,
+          "interest_pct_receipts": 43.6
+        },
+        {
+          "year": 2051,
+          "debt_gdp": 179.9,
+          "effective_rate": 4.29,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 7.57,
+          "interest_pct_receipts": 44.5
+        },
+        {
+          "year": 2052,
+          "debt_gdp": 183.4,
+          "effective_rate": 4.29,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 7.73,
+          "interest_pct_receipts": 45.4
+        },
+        {
+          "year": 2053,
+          "debt_gdp": 187.0,
+          "effective_rate": 4.29,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 7.88,
+          "interest_pct_receipts": 46.3
+        },
+        {
+          "year": 2054,
+          "debt_gdp": 190.5,
+          "effective_rate": 4.3,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 8.03,
+          "interest_pct_receipts": 47.2
+        },
+        {
+          "year": 2055,
+          "debt_gdp": 194.0,
+          "effective_rate": 4.3,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 8.18,
+          "interest_pct_receipts": 48.1
+        }
+      ],
+      "end_debt_gdp": 194.0,
+      "end_interest_receipts": 48.1,
+      "crossings": {
+        "20": 2026,
+        "25": 2030,
+        "35": 2041
+      }
+    },
+    {
+      "key": "adverse",
+      "label": "Adverse",
+      "color": "#EF4444",
+      "narrative": "Term premia rebuild, the effective rate reaches 5.5%, nominal growth slows to 3.5% on demographic drag, and the primary deficit widens to 4.5% as retirement and health outlays land. r \u2212 g sits at +2pp and the ratio compounds.",
+      "terminal_r": 5.5,
+      "nominal_growth": 3.5,
+      "terminal_pb": 4.5,
+      "r_minus_g": 2.0,
+      "path": [
+        {
+          "year": 2026,
+          "debt_gdp": 101.1,
+          "effective_rate": 3.78,
+          "primary_deficit": 2.81,
+          "interest_pct_gdp": 3.71,
+          "interest_pct_receipts": 21.8
+        },
+        {
+          "year": 2027,
+          "debt_gdp": 104.7,
+          "effective_rate": 4.07,
+          "primary_deficit": 3.0,
+          "interest_pct_gdp": 4.12,
+          "interest_pct_receipts": 24.2
+        },
+        {
+          "year": 2028,
+          "debt_gdp": 108.7,
+          "effective_rate": 4.31,
+          "primary_deficit": 3.18,
+          "interest_pct_gdp": 4.51,
+          "interest_pct_receipts": 26.5
+        },
+        {
+          "year": 2029,
+          "debt_gdp": 113.1,
+          "effective_rate": 4.51,
+          "primary_deficit": 3.37,
+          "interest_pct_gdp": 4.9,
+          "interest_pct_receipts": 28.8
+        },
+        {
+          "year": 2030,
+          "debt_gdp": 118.0,
+          "effective_rate": 4.67,
+          "primary_deficit": 3.56,
+          "interest_pct_gdp": 5.29,
+          "interest_pct_receipts": 31.1
+        },
+        {
+          "year": 2031,
+          "debt_gdp": 123.2,
+          "effective_rate": 4.81,
+          "primary_deficit": 3.75,
+          "interest_pct_gdp": 5.67,
+          "interest_pct_receipts": 33.3
+        },
+        {
+          "year": 2032,
+          "debt_gdp": 128.8,
+          "effective_rate": 4.93,
+          "primary_deficit": 3.94,
+          "interest_pct_gdp": 6.07,
+          "interest_pct_receipts": 35.7
+        },
+        {
+          "year": 2033,
+          "debt_gdp": 134.9,
+          "effective_rate": 5.02,
+          "primary_deficit": 4.12,
+          "interest_pct_gdp": 6.47,
+          "interest_pct_receipts": 38.0
+        },
+        {
+          "year": 2034,
+          "debt_gdp": 141.3,
+          "effective_rate": 5.1,
+          "primary_deficit": 4.31,
+          "interest_pct_gdp": 6.88,
+          "interest_pct_receipts": 40.4
+        },
+        {
+          "year": 2035,
+          "debt_gdp": 148.0,
+          "effective_rate": 5.17,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 7.3,
+          "interest_pct_receipts": 42.9
+        },
+        {
+          "year": 2036,
+          "debt_gdp": 155.0,
+          "effective_rate": 5.22,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 7.73,
+          "interest_pct_receipts": 45.4
+        },
+        {
+          "year": 2037,
+          "debt_gdp": 162.1,
+          "effective_rate": 5.27,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 8.17,
+          "interest_pct_receipts": 48.0
+        },
+        {
+          "year": 2038,
+          "debt_gdp": 169.5,
+          "effective_rate": 5.31,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 8.61,
+          "interest_pct_receipts": 50.6
+        },
+        {
+          "year": 2039,
+          "debt_gdp": 177.0,
+          "effective_rate": 5.34,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 9.05,
+          "interest_pct_receipts": 53.2
+        },
+        {
+          "year": 2040,
+          "debt_gdp": 184.7,
+          "effective_rate": 5.37,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 9.5,
+          "interest_pct_receipts": 55.8
+        },
+        {
+          "year": 2041,
+          "debt_gdp": 192.6,
+          "effective_rate": 5.39,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 9.95,
+          "interest_pct_receipts": 58.5
+        },
+        {
+          "year": 2042,
+          "debt_gdp": 200.6,
+          "effective_rate": 5.41,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 10.41,
+          "interest_pct_receipts": 61.2
+        },
+        {
+          "year": 2043,
+          "debt_gdp": 208.8,
+          "effective_rate": 5.42,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 10.88,
+          "interest_pct_receipts": 63.9
+        },
+        {
+          "year": 2044,
+          "debt_gdp": 217.2,
+          "effective_rate": 5.44,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 11.35,
+          "interest_pct_receipts": 66.7
+        },
+        {
+          "year": 2045,
+          "debt_gdp": 225.8,
+          "effective_rate": 5.45,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 11.83,
+          "interest_pct_receipts": 69.5
+        },
+        {
+          "year": 2046,
+          "debt_gdp": 234.6,
+          "effective_rate": 5.46,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 12.32,
+          "interest_pct_receipts": 72.4
+        },
+        {
+          "year": 2047,
+          "debt_gdp": 243.5,
+          "effective_rate": 5.46,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 12.81,
+          "interest_pct_receipts": 75.3
+        },
+        {
+          "year": 2048,
+          "debt_gdp": 252.7,
+          "effective_rate": 5.47,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 13.32,
+          "interest_pct_receipts": 78.3
+        },
+        {
+          "year": 2049,
+          "debt_gdp": 262.0,
+          "effective_rate": 5.47,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 13.83,
+          "interest_pct_receipts": 81.3
+        },
+        {
+          "year": 2050,
+          "debt_gdp": 271.5,
+          "effective_rate": 5.48,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 14.35,
+          "interest_pct_receipts": 84.3
+        },
+        {
+          "year": 2051,
+          "debt_gdp": 281.2,
+          "effective_rate": 5.48,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 14.88,
+          "interest_pct_receipts": 87.4
+        },
+        {
+          "year": 2052,
+          "debt_gdp": 291.1,
+          "effective_rate": 5.49,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 15.42,
+          "interest_pct_receipts": 90.6
+        },
+        {
+          "year": 2053,
+          "debt_gdp": 301.2,
+          "effective_rate": 5.49,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 15.97,
+          "interest_pct_receipts": 93.8
+        },
+        {
+          "year": 2054,
+          "debt_gdp": 311.5,
+          "effective_rate": 5.49,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 16.53,
+          "interest_pct_receipts": 97.1
+        },
+        {
+          "year": 2055,
+          "debt_gdp": 322.0,
+          "effective_rate": 5.49,
+          "primary_deficit": 4.5,
+          "interest_pct_gdp": 17.1,
+          "interest_pct_receipts": 100.5
+        }
+      ],
+      "end_debt_gdp": 322.0,
+      "end_interest_receipts": 100.5,
+      "crossings": {
+        "20": 2026,
+        "25": 2028,
+        "35": 2032
+      }
+    }
+  ],
+  "horizon": {
+    "start_year": 2025,
+    "thresholds": [
+      {
+        "pct": 20.0,
+        "label": "Crowding-out",
+        "desc": "Debt service exceeds all non-defence discretionary spending.",
+        "earliest": 2026,
+        "latest": 2027,
+        "never_count": 0,
+        "scenario_years": {
+          "favorable": 2027,
+          "baseline": 2026,
+          "adverse": 2026
+        },
+        "years_away": 1
+      },
+      {
+        "pct": 25.0,
+        "label": "Distress zone",
+        "desc": "The band where rating agencies have historically downgraded sovereigns.",
+        "earliest": 2028,
+        "latest": 2030,
+        "never_count": 1,
+        "scenario_years": {
+          "favorable": null,
+          "baseline": 2030,
+          "adverse": 2028
+        },
+        "years_away": 3
+      },
+      {
+        "pct": 35.0,
+        "label": "Fiscal dominance",
+        "desc": "Debt service crowds out the discretionary budget entirely; monetary policy loses independence.",
+        "earliest": 2032,
+        "latest": 2041,
+        "never_count": 1,
+        "scenario_years": {
+          "favorable": null,
+          "baseline": 2041,
+          "adverse": 2032
+        },
+        "years_away": 7
+      }
+    ]
+  },
+  "quadrant_points": [
+    {
+      "year": 1945,
+      "x": 0.1,
+      "y": 19.49,
+      "score": 141.1,
+      "debt_gdp": 103.15,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1946,
+      "x": 1.95,
+      "y": 5.2,
+      "score": 154.7,
+      "debt_gdp": 106.31,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1947,
+      "x": -7.97,
+      "y": -3.29,
+      "score": 129.8,
+      "debt_gdp": 89.86,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1948,
+      "x": -8.02,
+      "y": -5.88,
+      "score": 122.7,
+      "debt_gdp": 78.81,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1949,
+      "x": 2.82,
+      "y": -1.87,
+      "score": 127.3,
+      "debt_gdp": 78.65,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 1950,
+      "x": -7.79,
+      "y": -0.56,
+      "score": 113.2,
+      "debt_gdp": 73.04,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1951,
+      "x": -13.57,
+      "y": -3.1,
+      "score": 117.6,
+      "debt_gdp": 61.77,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1952,
+      "x": -3.69,
+      "y": -0.87,
+      "score": 105.7,
+      "debt_gdp": 58.47,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1953,
+      "x": -3.56,
+      "y": 0.34,
+      "score": 105.6,
+      "debt_gdp": 56.11,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1954,
+      "x": 1.86,
+      "y": -0.94,
+      "score": 115.2,
+      "debt_gdp": 57.48,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 1955,
+      "x": -6.78,
+      "y": -0.44,
+      "score": 104.1,
+      "debt_gdp": 53.26,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1956,
+      "x": -3.37,
+      "y": -2.01,
+      "score": 103.2,
+      "debt_gdp": 49.45,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1957,
+      "x": -3.08,
+      "y": -1.85,
+      "score": 103.7,
+      "debt_gdp": 46.26,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1958,
+      "x": 1.04,
+      "y": -0.59,
+      "score": 111.4,
+      "debt_gdp": 47.03,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 1959,
+      "x": -5.85,
+      "y": 1.36,
+      "score": 104.1,
+      "debt_gdp": 44.99,
+      "era": "postwar",
+      "era_label": "1945\u201359 Post-war",
+      "color": "#94A3B8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1960,
+      "x": -1.01,
+      "y": -1.34,
+      "score": 104.1,
+      "debt_gdp": 43.66,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1961,
+      "x": -0.82,
+      "y": -0.6,
+      "score": 107.9,
+      "debt_gdp": 42.4,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1962,
+      "x": -4.53,
+      "y": 0.04,
+      "score": 105.9,
+      "debt_gdp": 41.06,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1963,
+      "x": -2.43,
+      "y": -0.47,
+      "score": 105.7,
+      "debt_gdp": 39.85,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1964,
+      "x": -4.15,
+      "y": -0.33,
+      "score": 100.7,
+      "debt_gdp": 37.52,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1965,
+      "x": -5.1,
+      "y": -0.97,
+      "score": 100.4,
+      "debt_gdp": 35.13,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1966,
+      "x": -5.98,
+      "y": -0.7,
+      "score": 101.3,
+      "debt_gdp": 32.42,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1967,
+      "x": -1.83,
+      "y": -0.19,
+      "score": 101.0,
+      "debt_gdp": 31.0,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1968,
+      "x": -5.22,
+      "y": 1.5,
+      "score": 105.7,
+      "debt_gdp": 30.78,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1969,
+      "x": -3.8,
+      "y": -1.57,
+      "score": 104.3,
+      "debt_gdp": 27.33,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1970,
+      "x": -0.3,
+      "y": -1.07,
+      "score": 106.5,
+      "debt_gdp": 26.39,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1971,
+      "x": -3.29,
+      "y": 0.7,
+      "score": 104.2,
+      "debt_gdp": 26.01,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1972,
+      "x": -4.7,
+      "y": 0.62,
+      "score": 102.8,
+      "debt_gdp": 25.21,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1973,
+      "x": -6.05,
+      "y": -0.17,
+      "score": 105.2,
+      "debt_gdp": 23.92,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1974,
+      "x": -2.12,
+      "y": -0.99,
+      "score": 110.1,
+      "debt_gdp": 22.24,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1975,
+      "x": -2.28,
+      "y": 1.78,
+      "score": 113.9,
+      "debt_gdp": 23.43,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1976,
+      "x": -4.42,
+      "y": 2.51,
+      "score": 112.3,
+      "debt_gdp": 25.48,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1977,
+      "x": -4.86,
+      "y": 1.14,
+      "score": 108.8,
+      "debt_gdp": 26.38,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1978,
+      "x": -6.5,
+      "y": 1.01,
+      "score": 111.1,
+      "debt_gdp": 25.82,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1979,
+      "x": -4.7,
+      "y": -0.07,
+      "score": 112.7,
+      "debt_gdp": 24.37,
+      "era": "bw_inflation",
+      "era_label": "1960\u201379 Bretton Woods \u2192 Great Inflation",
+      "color": "#A855F7",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 1980,
+      "x": -0.55,
+      "y": 0.75,
+      "score": 117.3,
+      "debt_gdp": 24.92,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1981,
+      "x": -2.58,
+      "y": 0.32,
+      "score": 118.4,
+      "debt_gdp": 24.61,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1982,
+      "x": 6.51,
+      "y": 1.28,
+      "score": 135.0,
+      "debt_gdp": 27.65,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1983,
+      "x": 1.03,
+      "y": 3.25,
+      "score": 131.0,
+      "debt_gdp": 31.3,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1984,
+      "x": -1.34,
+      "y": 1.84,
+      "score": 117.9,
+      "debt_gdp": 32.37,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 1985,
+      "x": 2.44,
+      "y": 1.91,
+      "score": 125.9,
+      "debt_gdp": 34.74,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1986,
+      "x": 3.48,
+      "y": 1.86,
+      "score": 126.1,
+      "debt_gdp": 38.01,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1987,
+      "x": 1.95,
+      "y": 0.23,
+      "score": 122.5,
+      "debt_gdp": 38.92,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1988,
+      "x": 0.18,
+      "y": 0.06,
+      "score": 119.3,
+      "debt_gdp": 39.18,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1989,
+      "x": 0.5,
+      "y": -0.29,
+      "score": 119.9,
+      "debt_gdp": 38.83,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 1990,
+      "x": 2.72,
+      "y": 0.62,
+      "score": 126.5,
+      "debt_gdp": 40.44,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1991,
+      "x": 4.79,
+      "y": 1.21,
+      "score": 128.7,
+      "debt_gdp": 43.67,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1992,
+      "x": 1.53,
+      "y": 1.4,
+      "score": 119.9,
+      "debt_gdp": 46.01,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1993,
+      "x": 1.44,
+      "y": 0.82,
+      "score": 120.1,
+      "debt_gdp": 47.36,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1994,
+      "x": -0.0,
+      "y": 0.0,
+      "score": 116.3,
+      "debt_gdp": 47.11,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 1995,
+      "x": 1.92,
+      "y": -0.89,
+      "score": 123.8,
+      "debt_gdp": 47.18,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 1996,
+      "x": 1.02,
+      "y": -1.66,
+      "score": 121.7,
+      "debt_gdp": 46.25,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 1997,
+      "x": 0.29,
+      "y": -2.59,
+      "score": 116.4,
+      "debt_gdp": 43.98,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 1998,
+      "x": 0.73,
+      "y": -3.42,
+      "score": 114.4,
+      "debt_gdp": 41.06,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 1999,
+      "x": -0.1,
+      "y": -3.69,
+      "score": 108.1,
+      "debt_gdp": 37.72,
+      "era": "disinflation",
+      "era_label": "1980\u201399 Disinflation & consolidation",
+      "color": "#F59E0B",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 2000,
+      "x": -0.3,
+      "y": -4.48,
+      "score": 105.9,
+      "debt_gdp": 33.26,
+      "era": "precrisis",
+      "era_label": "2000\u201307 Pre-crisis",
+      "color": "#10B981",
+      "quadrant": "consolidating"
+    },
+    {
+      "year": 2001,
+      "x": 2.82,
+      "y": -3.16,
+      "score": 112.4,
+      "debt_gdp": 31.37,
+      "era": "precrisis",
+      "era_label": "2000\u201307 Pre-crisis",
+      "color": "#10B981",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 2002,
+      "x": 1.87,
+      "y": -0.12,
+      "score": 108.2,
+      "debt_gdp": 32.39,
+      "era": "precrisis",
+      "era_label": "2000\u201307 Pre-crisis",
+      "color": "#10B981",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 2003,
+      "x": -0.5,
+      "y": 1.96,
+      "score": 105.7,
+      "debt_gdp": 34.16,
+      "era": "precrisis",
+      "era_label": "2000\u201307 Pre-crisis",
+      "color": "#10B981",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2004,
+      "x": -2.55,
+      "y": 2.07,
+      "score": 105.2,
+      "debt_gdp": 35.16,
+      "era": "precrisis",
+      "era_label": "2000\u201307 Pre-crisis",
+      "color": "#10B981",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2005,
+      "x": -2.45,
+      "y": 1.03,
+      "score": 104.1,
+      "debt_gdp": 35.22,
+      "era": "precrisis",
+      "era_label": "2000\u201307 Pre-crisis",
+      "color": "#10B981",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2006,
+      "x": -1.02,
+      "y": 0.16,
+      "score": 102.9,
+      "debt_gdp": 34.95,
+      "era": "precrisis",
+      "era_label": "2000\u201307 Pre-crisis",
+      "color": "#10B981",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2007,
+      "x": 0.14,
+      "y": -0.53,
+      "score": 105.8,
+      "debt_gdp": 34.79,
+      "era": "precrisis",
+      "era_label": "2000\u201307 Pre-crisis",
+      "color": "#10B981",
+      "quadrant": "running_to_stand_still"
+    },
+    {
+      "year": 2008,
+      "x": 2.98,
+      "y": 1.39,
+      "score": 120.8,
+      "debt_gdp": 39.29,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 2009,
+      "x": 5.2,
+      "y": 8.47,
+      "score": 137.0,
+      "debt_gdp": 52.11,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 2010,
+      "x": -1.34,
+      "y": 7.3,
+      "score": 127.8,
+      "debt_gdp": 59.93,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2011,
+      "x": -1.11,
+      "y": 6.86,
+      "score": 129.3,
+      "debt_gdp": 64.93,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2012,
+      "x": -2.02,
+      "y": 5.27,
+      "score": 124.6,
+      "debt_gdp": 69.41,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2013,
+      "x": -1.9,
+      "y": 2.72,
+      "score": 121.7,
+      "debt_gdp": 70.98,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2014,
+      "x": -2.4,
+      "y": 1.45,
+      "score": 121.7,
+      "debt_gdp": 72.58,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2015,
+      "x": -2.15,
+      "y": 1.2,
+      "score": 122.1,
+      "debt_gdp": 71.7,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2016,
+      "x": -0.96,
+      "y": 1.83,
+      "score": 124.7,
+      "debt_gdp": 75.34,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2017,
+      "x": -2.44,
+      "y": 2.05,
+      "score": 124.7,
+      "debt_gdp": 74.78,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2018,
+      "x": -3.11,
+      "y": 2.2,
+      "score": 124.7,
+      "debt_gdp": 76.25,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2019,
+      "x": -1.89,
+      "y": 2.82,
+      "score": 124.0,
+      "debt_gdp": 78.0,
+      "era": "zirp",
+      "era_label": "2008\u201319 Zero-rate era",
+      "color": "#38BDF8",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2020,
+      "x": 2.82,
+      "y": 12.87,
+      "score": 147.3,
+      "debt_gdp": 98.32,
+      "era": "postcovid",
+      "era_label": "2020\u2013 Post-COVID",
+      "color": "#EF4444",
+      "quadrant": "compounding"
+    },
+    {
+      "year": 2021,
+      "x": -9.32,
+      "y": 10.21,
+      "score": 134.4,
+      "debt_gdp": 93.92,
+      "era": "postcovid",
+      "era_label": "2020\u2013 Post-COVID",
+      "color": "#EF4444",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2022,
+      "x": -7.68,
+      "y": 3.45,
+      "score": 132.1,
+      "debt_gdp": 93.09,
+      "era": "postcovid",
+      "era_label": "2020\u2013 Post-COVID",
+      "color": "#EF4444",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2023,
+      "x": -4.03,
+      "y": 3.7,
+      "score": 130.3,
+      "debt_gdp": 94.33,
+      "era": "postcovid",
+      "era_label": "2020\u2013 Post-COVID",
+      "color": "#EF4444",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2024,
+      "x": -1.99,
+      "y": 3.19,
+      "score": 129.1,
+      "debt_gdp": 96.23,
+      "era": "postcovid",
+      "era_label": "2020\u2013 Post-COVID",
+      "color": "#EF4444",
+      "quadrant": "outgrowing"
+    },
+    {
+      "year": 2025,
+      "x": -1.56,
+      "y": 2.62,
+      "score": 128.1,
+      "debt_gdp": 98.07,
+      "era": "postcovid",
+      "era_label": "2020\u2013 Post-COVID",
+      "color": "#EF4444",
+      "quadrant": "outgrowing"
+    }
+  ],
+  "quadrant_counts": [
+    {
+      "key": "compounding",
+      "name": "Compounding",
+      "x": "pos",
+      "y": "pos",
+      "color": "#EF4444",
+      "desc": "r > g and a primary deficit. Both terms push the ratio up; it rises with no new policy at all.",
+      "years": 16,
+      "pct": 19.8,
+      "latest": 2020,
+      "current": false
+    },
+    {
+      "key": "outgrowing",
+      "name": "Outgrowing the deficit",
+      "x": "neg",
+      "y": "pos",
+      "color": "#F59E0B",
+      "desc": "A primary deficit absorbed by favourable dynamics. Durable only while r stays below g.",
+      "years": 32,
+      "pct": 39.5,
+      "latest": 2025,
+      "current": true
+    },
+    {
+      "key": "consolidating",
+      "name": "Consolidating",
+      "x": "neg",
+      "y": "neg",
+      "color": "#10B981",
+      "desc": "Primary surplus and r < g. Both terms cut the ratio \u2014 the post-war and late-1990s configuration.",
+      "years": 22,
+      "pct": 27.2,
+      "latest": 2000,
+      "current": false
+    },
+    {
+      "key": "running_to_stand_still",
+      "name": "Running to stand still",
+      "x": "pos",
+      "y": "neg",
+      "color": "#38BDF8",
+      "desc": "A primary surplus spent offsetting adverse dynamics. Real austerity, little improvement in the ratio.",
+      "years": 11,
+      "pct": 13.6,
+      "latest": 2007,
+      "current": false
+    }
+  ],
+  "decomposition": [
+    {
+      "year": 1946,
+      "change": 3.16,
+      "snowball": 2.03,
+      "primary": 5.2,
+      "sfa": -4.07
+    },
+    {
+      "year": 1947,
+      "change": -16.45,
+      "snowball": -7.71,
+      "primary": -3.29,
+      "sfa": -5.45
+    },
+    {
+      "year": 1948,
+      "change": -11.05,
+      "snowball": -6.55,
+      "primary": -5.88,
+      "sfa": 1.38
+    },
+    {
+      "year": 1949,
+      "change": -0.16,
+      "snowball": 2.24,
+      "primary": -1.87,
+      "sfa": -0.53
+    },
+    {
+      "year": 1950,
+      "change": -5.61,
+      "snowball": -5.57,
+      "primary": -0.56,
+      "sfa": 0.52
+    },
+    {
+      "year": 1951,
+      "change": -11.27,
+      "snowball": -8.57,
+      "primary": -3.1,
+      "sfa": 0.4
+    },
+    {
+      "year": 1952,
+      "change": -3.3,
+      "snowball": -2.16,
+      "primary": -0.87,
+      "sfa": -0.27
+    },
+    {
+      "year": 1953,
+      "change": -2.36,
+      "snowball": -1.96,
+      "primary": 0.34,
+      "sfa": -0.74
+    },
+    {
+      "year": 1954,
+      "change": 1.37,
+      "snowball": 1.04,
+      "primary": -0.94,
+      "sfa": 1.27
+    },
+    {
+      "year": 1955,
+      "change": -4.22,
+      "snowball": -3.58,
+      "primary": -0.44,
+      "sfa": -0.2
+    },
+    {
+      "year": 1956,
+      "change": -3.81,
+      "snowball": -1.7,
+      "primary": -2.01,
+      "sfa": -0.1
+    },
+    {
+      "year": 1957,
+      "change": -3.19,
+      "snowball": -1.44,
+      "primary": -1.85,
+      "sfa": 0.1
+    },
+    {
+      "year": 1958,
+      "change": 0.77,
+      "snowball": 0.47,
+      "primary": -0.59,
+      "sfa": 0.89
+    },
+    {
+      "year": 1959,
+      "change": -2.04,
+      "snowball": -2.54,
+      "primary": 1.36,
+      "sfa": -0.86
+    },
+    {
+      "year": 1960,
+      "change": -1.33,
+      "snowball": -0.44,
+      "primary": -1.34,
+      "sfa": 0.45
+    },
+    {
+      "year": 1961,
+      "change": -1.26,
+      "snowball": -0.35,
+      "primary": -0.6,
+      "sfa": -0.31
+    },
+    {
+      "year": 1962,
+      "change": -1.34,
+      "snowball": -1.79,
+      "primary": 0.04,
+      "sfa": 0.41
+    },
+    {
+      "year": 1963,
+      "change": -1.21,
+      "snowball": -0.95,
+      "primary": -0.47,
+      "sfa": 0.21
+    },
+    {
+      "year": 1964,
+      "change": -2.33,
+      "snowball": -1.54,
+      "primary": -0.33,
+      "sfa": -0.46
+    },
+    {
+      "year": 1965,
+      "change": -2.39,
+      "snowball": -1.76,
+      "primary": -0.97,
+      "sfa": 0.34
+    },
+    {
+      "year": 1966,
+      "change": -2.71,
+      "snowball": -1.92,
+      "primary": -0.7,
+      "sfa": -0.09
+    },
+    {
+      "year": 1967,
+      "change": -1.42,
+      "snowball": -0.56,
+      "primary": -0.19,
+      "sfa": -0.67
+    },
+    {
+      "year": 1968,
+      "change": -0.22,
+      "snowball": -1.48,
+      "primary": 1.5,
+      "sfa": -0.24
+    },
+    {
+      "year": 1969,
+      "change": -3.45,
+      "snowball": -1.08,
+      "primary": -1.57,
+      "sfa": -0.8
+    },
+    {
+      "year": 1970,
+      "change": -0.94,
+      "snowball": -0.08,
+      "primary": -1.07,
+      "sfa": 0.21
+    },
+    {
+      "year": 1971,
+      "change": -0.38,
+      "snowball": -0.8,
+      "primary": 0.7,
+      "sfa": -0.28
+    },
+    {
+      "year": 1972,
+      "change": -0.8,
+      "snowball": -1.11,
+      "primary": 0.62,
+      "sfa": -0.31
+    },
+    {
+      "year": 1973,
+      "change": -1.29,
+      "snowball": -1.37,
+      "primary": -0.17,
+      "sfa": 0.25
+    },
+    {
+      "year": 1974,
+      "change": -1.68,
+      "snowball": -0.47,
+      "primary": -0.99,
+      "sfa": -0.22
+    },
+    {
+      "year": 1975,
+      "change": 1.19,
+      "snowball": -0.47,
+      "primary": 1.78,
+      "sfa": -0.12
+    },
+    {
+      "year": 1976,
+      "change": 2.05,
+      "snowball": -0.93,
+      "primary": 2.51,
+      "sfa": 0.47
+    },
+    {
+      "year": 1977,
+      "change": 0.9,
+      "snowball": -1.11,
+      "primary": 1.14,
+      "sfa": 0.87
+    },
+    {
+      "year": 1978,
+      "change": -0.56,
+      "snowball": -1.52,
+      "primary": 1.01,
+      "sfa": -0.05
+    },
+    {
+      "year": 1979,
+      "change": -1.45,
+      "snowball": -1.09,
+      "primary": -0.07,
+      "sfa": -0.29
+    },
+    {
+      "year": 1980,
+      "change": 0.55,
+      "snowball": -0.12,
+      "primary": 0.75,
+      "sfa": -0.08
+    },
+    {
+      "year": 1981,
+      "change": -0.31,
+      "snowball": -0.57,
+      "primary": 0.32,
+      "sfa": -0.06
+    },
+    {
+      "year": 1982,
+      "change": 3.04,
+      "snowball": 1.54,
+      "primary": 1.28,
+      "sfa": 0.22
+    },
+    {
+      "year": 1983,
+      "change": 3.65,
+      "snowball": 0.26,
+      "primary": 3.25,
+      "sfa": 0.14
+    },
+    {
+      "year": 1984,
+      "change": 1.07,
+      "snowball": -0.38,
+      "primary": 1.84,
+      "sfa": -0.39
+    },
+    {
+      "year": 1985,
+      "change": 2.37,
+      "snowball": 0.74,
+      "primary": 1.91,
+      "sfa": -0.28
+    },
+    {
+      "year": 1986,
+      "change": 3.27,
+      "snowball": 1.14,
+      "primary": 1.86,
+      "sfa": 0.27
+    },
+    {
+      "year": 1987,
+      "change": 0.91,
+      "snowball": 0.7,
+      "primary": 0.23,
+      "sfa": -0.02
+    },
+    {
+      "year": 1988,
+      "change": 0.26,
+      "snowball": 0.06,
+      "primary": 0.06,
+      "sfa": 0.14
+    },
+    {
+      "year": 1989,
+      "change": -0.35,
+      "snowball": 0.18,
+      "primary": -0.29,
+      "sfa": -0.24
+    },
+    {
+      "year": 1990,
+      "change": 1.61,
+      "snowball": 1.0,
+      "primary": 0.62,
+      "sfa": -0.01
+    },
+    {
+      "year": 1991,
+      "change": 3.23,
+      "snowball": 1.88,
+      "primary": 1.21,
+      "sfa": 0.14
+    },
+    {
+      "year": 1992,
+      "change": 2.34,
+      "snowball": 0.63,
+      "primary": 1.4,
+      "sfa": 0.31
+    },
+    {
+      "year": 1993,
+      "change": 1.35,
+      "snowball": 0.63,
+      "primary": 0.82,
+      "sfa": -0.1
+    },
+    {
+      "year": 1994,
+      "change": -0.25,
+      "snowball": 0.0,
+      "primary": 0.0,
+      "sfa": -0.25
+    },
+    {
+      "year": 1995,
+      "change": 0.07,
+      "snowball": 0.86,
+      "primary": -0.89,
+      "sfa": 0.1
+    },
+    {
+      "year": 1996,
+      "change": -0.93,
+      "snowball": 0.46,
+      "primary": -1.66,
+      "sfa": 0.27
+    },
+    {
+      "year": 1997,
+      "change": -2.27,
+      "snowball": 0.12,
+      "primary": -2.59,
+      "sfa": 0.2
+    },
+    {
+      "year": 1998,
+      "change": -2.92,
+      "snowball": 0.3,
+      "primary": -3.42,
+      "sfa": 0.2
+    },
+    {
+      "year": 1999,
+      "change": -3.34,
+      "snowball": -0.04,
+      "primary": -3.69,
+      "sfa": 0.39
+    },
+    {
+      "year": 2000,
+      "change": -4.46,
+      "snowball": -0.11,
+      "primary": -4.48,
+      "sfa": 0.13
+    },
+    {
+      "year": 2001,
+      "change": -1.89,
+      "snowball": 0.91,
+      "primary": -3.16,
+      "sfa": 0.36
+    },
+    {
+      "year": 2002,
+      "change": 1.02,
+      "snowball": 0.57,
+      "primary": -0.12,
+      "sfa": 0.57
+    },
+    {
+      "year": 2003,
+      "change": 1.77,
+      "snowball": -0.16,
+      "primary": 1.96,
+      "sfa": -0.03
+    },
+    {
+      "year": 2004,
+      "change": 1.0,
+      "snowball": -0.82,
+      "primary": 2.07,
+      "sfa": -0.25
+    },
+    {
+      "year": 2005,
+      "change": 0.06,
+      "snowball": -0.81,
+      "primary": 1.03,
+      "sfa": -0.16
+    },
+    {
+      "year": 2006,
+      "change": -0.27,
+      "snowball": -0.34,
+      "primary": 0.16,
+      "sfa": -0.09
+    },
+    {
+      "year": 2007,
+      "change": -0.16,
+      "snowball": 0.05,
+      "primary": -0.53,
+      "sfa": 0.32
+    },
+    {
+      "year": 2008,
+      "change": 4.5,
+      "snowball": 1.02,
+      "primary": 1.39,
+      "sfa": 2.09
+    },
+    {
+      "year": 2009,
+      "change": 12.82,
+      "snowball": 2.08,
+      "primary": 8.47,
+      "sfa": 2.27
+    },
+    {
+      "year": 2010,
+      "change": 7.82,
+      "snowball": -0.67,
+      "primary": 7.3,
+      "sfa": 1.19
+    },
+    {
+      "year": 2011,
+      "change": 5.0,
+      "snowball": -0.64,
+      "primary": 6.86,
+      "sfa": -1.22
+    },
+    {
+      "year": 2012,
+      "change": 4.48,
+      "snowball": -1.25,
+      "primary": 5.27,
+      "sfa": 0.46
+    },
+    {
+      "year": 2013,
+      "change": 1.57,
+      "snowball": -1.27,
+      "primary": 2.72,
+      "sfa": 0.12
+    },
+    {
+      "year": 2014,
+      "change": 1.6,
+      "snowball": -1.63,
+      "primary": 1.45,
+      "sfa": 1.78
+    },
+    {
+      "year": 2015,
+      "change": -0.88,
+      "snowball": -1.5,
+      "primary": 1.2,
+      "sfa": -0.58
+    },
+    {
+      "year": 2016,
+      "change": 3.64,
+      "snowball": -0.67,
+      "primary": 1.83,
+      "sfa": 2.48
+    },
+    {
+      "year": 2017,
+      "change": -0.56,
+      "snowball": -1.76,
+      "primary": 2.05,
+      "sfa": -0.85
+    },
+    {
+      "year": 2018,
+      "change": 1.47,
+      "snowball": -2.21,
+      "primary": 2.2,
+      "sfa": 1.48
+    },
+    {
+      "year": 2019,
+      "change": 1.75,
+      "snowball": -1.39,
+      "primary": 2.82,
+      "sfa": 0.32
+    },
+    {
+      "year": 2020,
+      "change": 20.32,
+      "snowball": 2.22,
+      "primary": 12.87,
+      "sfa": 5.23
+    },
+    {
+      "year": 2021,
+      "change": -4.4,
+      "snowball": -8.26,
+      "primary": 10.21,
+      "sfa": -6.35
+    },
+    {
+      "year": 2022,
+      "change": -0.83,
+      "snowball": -6.57,
+      "primary": 3.45,
+      "sfa": 2.29
+    },
+    {
+      "year": 2023,
+      "change": 1.24,
+      "snowball": -3.51,
+      "primary": 3.7,
+      "sfa": 1.05
+    },
+    {
+      "year": 2024,
+      "change": 1.9,
+      "snowball": -1.78,
+      "primary": 3.19,
+      "sfa": 0.49
+    },
+    {
+      "year": 2025,
+      "change": 1.84,
+      "snowball": -1.43,
+      "primary": 2.62,
+      "sfa": 0.65
+    }
+  ],
+  "simulator": {
+    "start_year": 2025,
+    "debt_gdp": 98.07,
+    "effective_rate": 3.44,
+    "primary_deficit": 2.62,
+    "receipts_pct_gdp": 17.02,
+    "productivity": 1.87,
+    "real_gdp_pc": 1.8,
+    "inflation": 2.63,
+    "terminal_r": 4.3,
+    "nominal_growth": 4.0,
+    "terminal_pb": 3.0,
+    "usd_reserve_share": 57.7,
+    "cny_reserve_share": 2.2,
+    "passthrough_bp": 2.43,
+    "full_displacement_bp": 140.0,
+    "repricing_speed": 0.16666666666666666,
+    "projection_years": 30,
+    "index_horizon_years": 10,
+    "bands": {
+      "debt_gdp": [
+        35.0,
+        150.0
+      ],
+      "interest_burden": [
+        8.0,
+        30.0
+      ],
+      "primary_deficit": [
+        0.0,
+        8.0
+      ],
+      "productivity": [
+        2.1,
+        0.0
+      ],
+      "real_gdp_pc": [
+        2.2,
+        0.0
+      ],
+      "inflation": [
+        2.0,
+        10.0
+      ],
+      "r_minus_g": [
+        -1.0,
+        3.0
+      ]
+    },
+    "weights": {
+      "debt_gdp": 0.18,
+      "interest_burden": 0.17,
+      "primary_deficit": 0.15,
+      "productivity": 0.15,
+      "real_gdp_pc": 0.15,
+      "inflation": 0.1,
+      "r_minus_g": 0.1
+    },
+    "thresholds": [
+      20.0,
+      25.0,
+      35.0
+    ],
+    "scale_min": 100.0,
+    "level_bands": [
+      [
+        0.0,
+        "Sustainable",
+        "good"
+      ],
+      [
+        115.0,
+        "Watch",
+        "warning"
+      ],
+      [
+        130.0,
+        "Strained",
+        "serious"
+      ],
+      [
+        145.0,
+        "Severe",
+        "critical"
+      ]
+    ]
+  },
+  "presidential": {
+    "rows": [
+      {
+        "id": "trump",
+        "name": "Donald Trump",
+        "party": "R",
+        "first": 2018,
+        "last": 2021,
+        "inherited": 124.7,
+        "ending": 134.4,
+        "raw_change": 9.7,
+        "cyclical": -3.0,
+        "adjusted": 12.7,
+        "years": 4,
+        "expected": -4.6,
+        "residual": 17.3,
+        "residual_per_year": 4.33,
+        "recession_share": 0.04,
+        "party_label": "Republican",
+        "rank": 1,
+        "rank_min": 1,
+        "rank_max": 4,
+        "rank_spread": 3,
+        "ranks_by_scheme": {
+          "balanced": 1,
+          "fiscal_heavy": 1,
+          "growth_heavy": 4,
+          "equal": 1
+        },
+        "residual_by_scheme": {
+          "balanced": 17.3,
+          "fiscal_heavy": 21.4,
+          "growth_heavy": 10.2,
+          "equal": 17.0
+        },
+        "raw_rank": 2,
+        "rank_shift_vs_raw": 1
+      },
+      {
+        "id": "bush43",
+        "name": "George W. Bush",
+        "party": "R",
+        "first": 2002,
+        "last": 2009,
+        "inherited": 112.4,
+        "ending": 137.0,
+        "raw_change": 24.6,
+        "cyclical": 8.8,
+        "adjusted": 15.8,
+        "years": 8,
+        "expected": 1.6,
+        "residual": 14.2,
+        "residual_per_year": 1.77,
+        "recession_share": 0.19,
+        "party_label": "Republican",
+        "rank": 2,
+        "rank_min": 1,
+        "rank_max": 2,
+        "rank_spread": 1,
+        "ranks_by_scheme": {
+          "balanced": 2,
+          "fiscal_heavy": 2,
+          "growth_heavy": 1,
+          "equal": 2
+        },
+        "residual_by_scheme": {
+          "balanced": 14.2,
+          "fiscal_heavy": 15.3,
+          "growth_heavy": 12.7,
+          "equal": 12.7
+        },
+        "raw_rank": 1,
+        "rank_shift_vs_raw": -1
+      },
+      {
+        "id": "reagan",
+        "name": "Ronald Reagan",
+        "party": "R",
+        "first": 1982,
+        "last": 1989,
+        "inherited": 118.4,
+        "ending": 119.9,
+        "raw_change": 1.5,
+        "cyclical": -7.8,
+        "adjusted": 9.3,
+        "years": 8,
+        "expected": -1.5,
+        "residual": 10.8,
+        "residual_per_year": 1.35,
+        "recession_share": 0.11,
+        "party_label": "Republican",
+        "rank": 3,
+        "rank_min": 3,
+        "rank_max": 3,
+        "rank_spread": 0,
+        "ranks_by_scheme": {
+          "balanced": 3,
+          "fiscal_heavy": 3,
+          "growth_heavy": 3,
+          "equal": 3
+        },
+        "residual_by_scheme": {
+          "balanced": 10.8,
+          "fiscal_heavy": 9.7,
+          "growth_heavy": 11.0,
+          "equal": 11.6
+        },
+        "raw_rank": 6,
+        "rank_shift_vs_raw": 3
+      },
+      {
+        "id": "obama",
+        "name": "Barack Obama",
+        "party": "D",
+        "first": 2010,
+        "last": 2017,
+        "inherited": 137.0,
+        "ending": 124.7,
+        "raw_change": -12.3,
+        "cyclical": -9.2,
+        "adjusted": -3.1,
+        "years": 8,
+        "expected": -10.8,
+        "residual": 7.7,
+        "residual_per_year": 0.96,
+        "recession_share": 0.0,
+        "party_label": "Democrat",
+        "rank": 4,
+        "rank_min": 2,
+        "rank_max": 5,
+        "rank_spread": 3,
+        "ranks_by_scheme": {
+          "balanced": 4,
+          "fiscal_heavy": 5,
+          "growth_heavy": 2,
+          "equal": 5
+        },
+        "residual_by_scheme": {
+          "balanced": 7.7,
+          "fiscal_heavy": 5.3,
+          "growth_heavy": 12.3,
+          "equal": 5.4
+        },
+        "raw_rank": 13,
+        "rank_shift_vs_raw": 9
+      },
+      {
+        "id": "biden",
+        "name": "Joe Biden",
+        "party": "D",
+        "first": 2022,
+        "last": 2025,
+        "inherited": 134.4,
+        "ending": 128.1,
+        "raw_change": -6.3,
+        "cyclical": -0.7,
+        "adjusted": -5.6,
+        "years": 4,
+        "expected": -9.5,
+        "residual": 3.9,
+        "residual_per_year": 0.97,
+        "recession_share": 0.0,
+        "party_label": "Democrat",
+        "rank": 5,
+        "rank_min": 4,
+        "rank_max": 7,
+        "rank_spread": 3,
+        "ranks_by_scheme": {
+          "balanced": 5,
+          "fiscal_heavy": 4,
+          "growth_heavy": 7,
+          "equal": 7
+        },
+        "residual_by_scheme": {
+          "balanced": 3.9,
+          "fiscal_heavy": 8.2,
+          "growth_heavy": 0.8,
+          "equal": 0.9
+        },
+        "raw_rank": 11,
+        "rank_shift_vs_raw": 6
+      },
+      {
+        "id": "carter",
+        "name": "Jimmy Carter",
+        "party": "D",
+        "first": 1978,
+        "last": 1981,
+        "inherited": 108.8,
+        "ending": 118.4,
+        "raw_change": 9.6,
+        "cyclical": 2.5,
+        "adjusted": 7.1,
+        "years": 4,
+        "expected": 3.4,
+        "residual": 3.7,
+        "residual_per_year": 0.93,
+        "recession_share": 0.23,
+        "party_label": "Democrat",
+        "rank": 6,
+        "rank_min": 4,
+        "rank_max": 6,
+        "rank_spread": 2,
+        "ranks_by_scheme": {
+          "balanced": 6,
+          "fiscal_heavy": 6,
+          "growth_heavy": 5,
+          "equal": 4
+        },
+        "residual_by_scheme": {
+          "balanced": 3.7,
+          "fiscal_heavy": 1.8,
+          "growth_heavy": 6.3,
+          "equal": 5.5
+        },
+        "raw_rank": 3,
+        "rank_shift_vs_raw": -3
+      },
+      {
+        "id": "johnson",
+        "name": "Lyndon B. Johnson",
+        "party": "D",
+        "first": 1964,
+        "last": 1969,
+        "inherited": 105.7,
+        "ending": 104.3,
+        "raw_change": -1.4,
+        "cyclical": -6.7,
+        "adjusted": 5.3,
+        "years": 6,
+        "expected": 4.9,
+        "residual": 0.4,
+        "residual_per_year": 0.07,
+        "recession_share": 0.0,
+        "party_label": "Democrat",
+        "rank": 7,
+        "rank_min": 6,
+        "rank_max": 7,
+        "rank_spread": 1,
+        "ranks_by_scheme": {
+          "balanced": 7,
+          "fiscal_heavy": 7,
+          "growth_heavy": 6,
+          "equal": 6
+        },
+        "residual_by_scheme": {
+          "balanced": 0.4,
+          "fiscal_heavy": -1.4,
+          "growth_heavy": 0.9,
+          "equal": 3.2
+        },
+        "raw_rank": 9,
+        "rank_shift_vs_raw": 2
+      },
+      {
+        "id": "kennedy",
+        "name": "John F. Kennedy",
+        "party": "D",
+        "first": 1962,
+        "last": 1963,
+        "inherited": 107.9,
+        "ending": 105.7,
+        "raw_change": -2.2,
+        "cyclical": -4.8,
+        "adjusted": 2.6,
+        "years": 2,
+        "expected": 3.8,
+        "residual": -1.2,
+        "residual_per_year": -0.6,
+        "recession_share": 0.0,
+        "party_label": "Democrat",
+        "rank": 8,
+        "rank_min": 8,
+        "rank_max": 9,
+        "rank_spread": 1,
+        "ranks_by_scheme": {
+          "balanced": 8,
+          "fiscal_heavy": 9,
+          "growth_heavy": 8,
+          "equal": 8
+        },
+        "residual_by_scheme": {
+          "balanced": -1.2,
+          "fiscal_heavy": -2.9,
+          "growth_heavy": 0.7,
+          "equal": -1.0
+        },
+        "raw_rank": 10,
+        "rank_shift_vs_raw": 2
+      },
+      {
+        "id": "bush41",
+        "name": "George H. W. Bush",
+        "party": "R",
+        "first": 1990,
+        "last": 1993,
+        "inherited": 119.9,
+        "ending": 120.1,
+        "raw_change": 0.2,
+        "cyclical": 6.2,
+        "adjusted": -6.0,
+        "years": 4,
+        "expected": -2.2,
+        "residual": -3.8,
+        "residual_per_year": -0.95,
+        "recession_share": 0.17,
+        "party_label": "Republican",
+        "rank": 9,
+        "rank_min": 8,
+        "rank_max": 11,
+        "rank_spread": 3,
+        "ranks_by_scheme": {
+          "balanced": 9,
+          "fiscal_heavy": 8,
+          "growth_heavy": 11,
+          "equal": 11
+        },
+        "residual_by_scheme": {
+          "balanced": -3.8,
+          "fiscal_heavy": -1.4,
+          "growth_heavy": -6.6,
+          "equal": -4.6
+        },
+        "raw_rank": 7,
+        "rank_shift_vs_raw": -2
+      },
+      {
+        "id": "ford",
+        "name": "Gerald Ford",
+        "party": "R",
+        "first": 1975,
+        "last": 1977,
+        "inherited": 110.1,
+        "ending": 108.8,
+        "raw_change": -1.3,
+        "cyclical": 0.1,
+        "adjusted": -1.4,
+        "years": 3,
+        "expected": 2.7,
+        "residual": -4.1,
+        "residual_per_year": -1.37,
+        "recession_share": 0.08,
+        "party_label": "Republican",
+        "rank": 10,
+        "rank_min": 9,
+        "rank_max": 10,
+        "rank_spread": 1,
+        "ranks_by_scheme": {
+          "balanced": 10,
+          "fiscal_heavy": 10,
+          "growth_heavy": 9,
+          "equal": 10
+        },
+        "residual_by_scheme": {
+          "balanced": -4.1,
+          "fiscal_heavy": -4.2,
+          "growth_heavy": -3.7,
+          "equal": -4.4
+        },
+        "raw_rank": 8,
+        "rank_shift_vs_raw": -2
+      },
+      {
+        "id": "clinton",
+        "name": "Bill Clinton",
+        "party": "D",
+        "first": 1994,
+        "last": 2001,
+        "inherited": 120.1,
+        "ending": 112.4,
+        "raw_change": -7.7,
+        "cyclical": -0.8,
+        "adjusted": -6.9,
+        "years": 8,
+        "expected": -2.3,
+        "residual": -4.6,
+        "residual_per_year": -0.57,
+        "recession_share": 0.08,
+        "party_label": "Democrat",
+        "rank": 11,
+        "rank_min": 9,
+        "rank_max": 11,
+        "rank_spread": 2,
+        "ranks_by_scheme": {
+          "balanced": 11,
+          "fiscal_heavy": 11,
+          "growth_heavy": 10,
+          "equal": 9
+        },
+        "residual_by_scheme": {
+          "balanced": -4.6,
+          "fiscal_heavy": -7.4,
+          "growth_heavy": -3.8,
+          "equal": -1.3
+        },
+        "raw_rank": 12,
+        "rank_shift_vs_raw": 1
+      },
+      {
+        "id": "nixon",
+        "name": "Richard Nixon",
+        "party": "R",
+        "first": 1970,
+        "last": 1974,
+        "inherited": 104.3,
+        "ending": 110.1,
+        "raw_change": 5.8,
+        "cyclical": 7.8,
+        "adjusted": -2.0,
+        "years": 5,
+        "expected": 5.7,
+        "residual": -7.7,
+        "residual_per_year": -1.54,
+        "recession_share": 0.4,
+        "party_label": "Republican",
+        "rank": 12,
+        "rank_min": 12,
+        "rank_max": 12,
+        "rank_spread": 0,
+        "ranks_by_scheme": {
+          "balanced": 12,
+          "fiscal_heavy": 12,
+          "growth_heavy": 12,
+          "equal": 12
+        },
+        "residual_by_scheme": {
+          "balanced": -7.7,
+          "fiscal_heavy": -8.0,
+          "growth_heavy": -7.1,
+          "equal": -6.0
+        },
+        "raw_rank": 4,
+        "rank_shift_vs_raw": -8
+      },
+      {
+        "id": "eisenhower",
+        "name": "Dwight D. Eisenhower",
+        "party": "R",
+        "first": 1954,
+        "last": 1961,
+        "inherited": 105.6,
+        "ending": 107.9,
+        "raw_change": 2.3,
+        "cyclical": 11.4,
+        "adjusted": -9.1,
+        "years": 8,
+        "expected": 5.0,
+        "residual": -14.1,
+        "residual_per_year": -1.76,
+        "recession_share": 0.24,
+        "party_label": "Republican",
+        "rank": 13,
+        "rank_min": 13,
+        "rank_max": 13,
+        "rank_spread": 0,
+        "ranks_by_scheme": {
+          "balanced": 13,
+          "fiscal_heavy": 13,
+          "growth_heavy": 13,
+          "equal": 13
+        },
+        "residual_by_scheme": {
+          "balanced": -14.1,
+          "fiscal_heavy": -14.4,
+          "growth_heavy": -10.7,
+          "equal": -16.1
+        },
+        "raw_rank": 5,
+        "rank_shift_vs_raw": -8
+      },
+      {
+        "id": "truman",
+        "name": "Harry S. Truman",
+        "party": "D",
+        "first": 1946,
+        "last": 1953,
+        "inherited": 141.1,
+        "ending": 105.6,
+        "raw_change": -35.5,
+        "cyclical": null,
+        "adjusted": -35.5,
+        "years": 8,
+        "expected": -12.9,
+        "residual": -22.6,
+        "residual_per_year": -2.83,
+        "recession_share": 0.17,
+        "party_label": "Democrat",
+        "rank": 14,
+        "rank_min": 14,
+        "rank_max": 14,
+        "rank_spread": 0,
+        "ranks_by_scheme": {
+          "balanced": 14,
+          "fiscal_heavy": 14,
+          "growth_heavy": 14,
+          "equal": 14
+        },
+        "residual_by_scheme": {
+          "balanced": -22.6,
+          "fiscal_heavy": -21.9,
+          "growth_heavy": -22.9,
+          "equal": -22.6
+        },
+        "raw_rank": 14,
+        "rank_shift_vs_raw": 0
+      }
+    ],
+    "indistinguishable": [
+      "Ronald Reagan",
+      "Barack Obama",
+      "Joe Biden",
+      "Jimmy Carter",
+      "Lyndon B. Johnson",
+      "John F. Kennedy",
+      "George H. W. Bush",
+      "Gerald Ford",
+      "Bill Clinton",
+      "Richard Nixon"
+    ],
+    "indistinguishable_count": 10,
+    "distinguishable": [
+      {
+        "name": "Donald Trump",
+        "residual": 17.3,
+        "party": "R"
+      },
+      {
+        "name": "George W. Bush",
+        "residual": 14.2,
+        "party": "R"
+      },
+      {
+        "name": "Dwight D. Eisenhower",
+        "residual": -14.1,
+        "party": "R"
+      },
+      {
+        "name": "Harry S. Truman",
+        "residual": -22.6,
+        "party": "D"
+      }
+    ],
+    "party_means": {
+      "D": -1.81,
+      "R": 1.8
+    },
+    "party_gap": 3.61,
+    "schemes": [
+      {
+        "key": "balanced",
+        "label": "Balanced (published index)",
+        "desc": "50% fiscal / 30% growth / 20% monetary \u2014 the weighting used everywhere else on this page."
+      },
+      {
+        "key": "fiscal_heavy",
+        "label": "Fiscal-heavy",
+        "desc": "65% fiscal / 20% growth / 15% monetary \u2014 a pure solvency reading."
+      },
+      {
+        "key": "growth_heavy",
+        "label": "Growth-heavy",
+        "desc": "35% fiscal / 45% growth / 20% monetary \u2014 treats productive capacity as the binding constraint."
+      },
+      {
+        "key": "equal",
+        "label": "Equal weights",
+        "desc": "One seventh each \u2014 the naive benchmark, included because it embeds no judgement at all."
+      }
+    ],
+    "cyclical_model": {
+      "alpha": 0.08027135556673488,
+      "beta": -2.274945503464315,
+      "r2": 0.4724279708314438,
+      "se_beta": 0.2794655099200785,
+      "t": -8.140344417151523,
+      "n": 76,
+      "resid_sd": 4.698872176618283,
+      "scheme": "balanced"
+    },
+    "reversion_model": {
+      "alpha": 58.2720483194182,
+      "beta": -0.5044890187056803,
+      "r2": 0.24869644600300544,
+      "se_beta": 0.253124408908813,
+      "t": -1.993047690977208,
+      "n": 14,
+      "resid_sd": 11.290645805135773
+    },
+    "residual_sd": 11.3,
+    "correlations": {
+      "raw_vs_inherited": 0.417,
+      "adjusted_vs_inherited": 0.249
+    },
+    "max_rank_spread": 3,
+    "unstable_count": 0
+  },
+  "executive_summary": {
+    "year": 2025,
+    "score": 128.1,
+    "level": "Watch",
+    "status": "warning",
+    "points_above_baseline": 28.1,
+    "peak": {
+      "year": 1946,
+      "score": 154.7
+    },
+    "trough": {
+      "year": 1965,
+      "score": 100.4
+    },
+    "best_decade": {
+      "decade": "1960s",
+      "start": 1960,
+      "mean": 103.7,
+      "years": 10,
+      "level": "Sustainable",
+      "status": "good"
+    },
+    "current_decade": {
+      "decade": "2020s",
+      "start": 2020,
+      "mean": 133.5,
+      "years": 6,
+      "level": "Strained",
+      "status": "serious"
+    },
+    "prior_worst_decade": {
+      "decade": "1940s",
+      "start": 1940,
+      "mean": 135.1,
+      "years": 5,
+      "level": "Strained",
+      "status": "serious"
+    },
+    "decade_is_worst_since": "1940s",
+    "interest_burden": 18.53,
+    "interest_burden_is_series_high": true,
+    "worst_burden_year": 2025,
+    "worst_burden": 18.53,
+    "debt_gdp": 98.07,
+    "r_minus_g": -1.56,
+    "primary_deficit": 2.62,
+    "quadrant": {
+      "key": "outgrowing",
+      "name": "Outgrowing the deficit",
+      "x": "neg",
+      "y": "pos",
+      "color": "#F59E0B",
+      "desc": "A primary deficit absorbed by favourable dynamics. Durable only while r stays below g.",
+      "years": 32,
+      "pct": 39.5,
+      "latest": 2025,
+      "current": true
+    },
+    "fiscal_dominance": {
+      "pct": 35.0,
+      "label": "Fiscal dominance",
+      "desc": "Debt service crowds out the discretionary budget entirely; monetary policy loses independence.",
+      "earliest": 2032,
+      "latest": 2041,
+      "never_count": 1,
+      "scenario_years": {
+        "favorable": null,
+        "baseline": 2041,
+        "adverse": 2032
+      },
+      "years_away": 7
+    },
+    "reducers": [
+      {
+        "name": "Harry S. Truman",
+        "residual": -22.6,
+        "party": "D"
+      },
+      {
+        "name": "Dwight D. Eisenhower",
+        "residual": -14.1,
+        "party": "R"
+      }
+    ],
+    "adders": [
+      {
+        "name": "Donald Trump",
+        "residual": 17.3,
+        "party": "R"
+      },
+      {
+        "name": "George W. Bush",
+        "residual": 14.2,
+        "party": "R"
+      }
+    ],
+    "indistinguishable_count": 10,
+    "term_count": 14,
+    "residual_sd": 11.3,
+    "party_means": {
+      "D": -1.81,
+      "R": 1.8
+    },
+    "party_gap": 3.61,
+    "party_gap_ratio": 0.32,
+    "snowball_5y": -21.6,
+    "primary_5y": 23.2,
+    "usd_reserve_share": 57.7,
+    "sim_full_shift": 2035,
+    "sim_loose_pb": 2036,
+    "sim_tight_pb": 2048
+  },
+  "defence": {
+    "year": 2025,
+    "defence": 3.7,
+    "lowest": {
+      "year": 2022,
+      "defence": 3.6
+    },
+    "highest": {
+      "year": 1945,
+      "defence": 37.2
+    },
+    "rank_from_bottom": 4,
+    "total": 81,
+    "is_near_record_low": true
+  },
+  "war_periods": [
+    {
+      "key": "wwii",
+      "label": "WWII",
+      "short": "WWII",
+      "start": 1945,
+      "end": 1945,
+      "color": "#EF4444",
+      "partial": true,
+      "peak_defence": 37.2,
+      "mean_defence": 37.2,
+      "debt_gdp_change": 0.0,
+      "index_change": 0.0
+    },
+    {
+      "key": "korea",
+      "label": "Korea",
+      "short": "Korea",
+      "start": 1950,
+      "end": 1953,
+      "color": "#F59E0B",
+      "partial": false,
+      "peak_defence": 15.7,
+      "mean_defence": 12.88,
+      "debt_gdp_change": -22.5,
+      "index_change": -21.7
+    },
+    {
+      "key": "vietnam",
+      "label": "Vietnam",
+      "short": "Vietnam",
+      "start": 1965,
+      "end": 1975,
+      "color": "#A855F7",
+      "partial": false,
+      "peak_defence": 11.1,
+      "mean_defence": 8.95,
+      "debt_gdp_change": -14.1,
+      "index_change": 13.2
+    },
+    {
+      "key": "reagan",
+      "label": "Cold War buildup",
+      "short": "Cold War",
+      "start": 1981,
+      "end": 1989,
+      "color": "#64748B",
+      "partial": false,
+      "peak_defence": 7.7,
+      "mean_defence": 7.34,
+      "debt_gdp_change": 13.9,
+      "index_change": 2.6
+    },
+    {
+      "key": "gulf",
+      "label": "Gulf War",
+      "short": "Gulf",
+      "start": 1990,
+      "end": 1991,
+      "color": "#38BDF8",
+      "partial": false,
+      "peak_defence": 6.8,
+      "mean_defence": 6.75,
+      "debt_gdp_change": 4.8,
+      "index_change": 8.8
+    },
+    {
+      "key": "post911",
+      "label": "Post-9/11 wars",
+      "short": "Post-9/11",
+      "start": 2001,
+      "end": 2021,
+      "color": "#10B981",
+      "partial": false,
+      "peak_defence": 5.5,
+      "mean_defence": 4.46,
+      "debt_gdp_change": 60.7,
+      "index_change": 28.5
+    }
+  ],
+  "debt_by_administration": {
+    "rows": [
+      {
+        "id": "obama",
+        "name": "Barack Obama",
+        "party": "D",
+        "first": 2010,
+        "last": 2017,
+        "party_label": "Democrat",
+        "years": 8,
+        "debt_start_bn": 7544.7,
+        "debt_end_bn": 14665.4,
+        "nominal_added_bn": 7120.7,
+        "nominal_per_year_bn": 890.1,
+        "real_added_bn": 7939.8,
+        "real_per_year_bn": 992.5,
+        "debt_gdp_start": 52.11,
+        "debt_gdp_end": 74.78,
+        "debt_gdp_change": 22.7,
+        "multiple": 1.94
+      },
+      {
+        "id": "bush43",
+        "name": "George W. Bush",
+        "party": "R",
+        "first": 2002,
+        "last": 2009,
+        "party_label": "Republican",
+        "years": 8,
+        "debt_start_bn": 3319.6,
+        "debt_end_bn": 7544.7,
+        "nominal_added_bn": 4225.1,
+        "nominal_per_year_bn": 528.1,
+        "real_added_bn": 5286.2,
+        "real_per_year_bn": 660.8,
+        "debt_gdp_start": 31.37,
+        "debt_gdp_end": 52.11,
+        "debt_gdp_change": 20.7,
+        "multiple": 2.27
+      },
+      {
+        "id": "trump",
+        "name": "Donald Trump",
+        "party": "R",
+        "first": 2018,
+        "last": 2021,
+        "party_label": "Republican",
+        "years": 4,
+        "debt_start_bn": 14665.4,
+        "debt_end_bn": 22284.0,
+        "nominal_added_bn": 7618.6,
+        "nominal_per_year_bn": 1904.7,
+        "real_added_bn": 7214.2,
+        "real_per_year_bn": 1803.6,
+        "debt_gdp_start": 74.78,
+        "debt_gdp_end": 93.92,
+        "debt_gdp_change": 19.1,
+        "multiple": 1.52
+      },
+      {
+        "id": "reagan",
+        "name": "Ronald Reagan",
+        "party": "R",
+        "first": 1982,
+        "last": 1989,
+        "party_label": "Republican",
+        "years": 8,
+        "debt_start_bn": 789.4,
+        "debt_end_bn": 2190.7,
+        "nominal_added_bn": 1401.3,
+        "nominal_per_year_bn": 175.2,
+        "real_added_bn": 2894.2,
+        "real_per_year_bn": 361.8,
+        "debt_gdp_start": 24.61,
+        "debt_gdp_end": 38.83,
+        "debt_gdp_change": 14.2,
+        "multiple": 2.78
+      },
+      {
+        "id": "bush41",
+        "name": "George H. W. Bush",
+        "party": "R",
+        "first": 1990,
+        "last": 1993,
+        "party_label": "Republican",
+        "years": 4,
+        "debt_start_bn": 2190.7,
+        "debt_end_bn": 3248.4,
+        "nominal_added_bn": 1057.7,
+        "nominal_per_year_bn": 264.4,
+        "real_added_bn": 1550.2,
+        "real_per_year_bn": 387.6,
+        "debt_gdp_start": 38.83,
+        "debt_gdp_end": 47.36,
+        "debt_gdp_change": 8.5,
+        "multiple": 1.48
+      },
+      {
+        "id": "ford",
+        "name": "Gerald Ford",
+        "party": "R",
+        "first": 1975,
+        "last": 1977,
+        "party_label": "Republican",
+        "years": 3,
+        "debt_start_bn": 343.7,
+        "debt_end_bn": 549.1,
+        "nominal_added_bn": 205.4,
+        "nominal_per_year_bn": 68.5,
+        "real_added_bn": 672.7,
+        "real_per_year_bn": 224.2,
+        "debt_gdp_start": 22.24,
+        "debt_gdp_end": 26.38,
+        "debt_gdp_change": 4.1,
+        "multiple": 1.6
+      },
+      {
+        "id": "biden",
+        "name": "Joe Biden",
+        "party": "D",
+        "first": 2022,
+        "last": 2025,
+        "party_label": "Democrat",
+        "years": 4,
+        "debt_start_bn": 22284.0,
+        "debt_end_bn": 30167.2,
+        "nominal_added_bn": 7883.2,
+        "nominal_per_year_bn": 1970.8,
+        "real_added_bn": 3691.3,
+        "real_per_year_bn": 922.8,
+        "debt_gdp_start": 93.92,
+        "debt_gdp_end": 98.07,
+        "debt_gdp_change": 4.1,
+        "multiple": 1.35
+      },
+      {
+        "id": "carter",
+        "name": "Jimmy Carter",
+        "party": "D",
+        "first": 1978,
+        "last": 1981,
+        "party_label": "Democrat",
+        "years": 4,
+        "debt_start_bn": 549.1,
+        "debt_end_bn": 789.4,
+        "nominal_added_bn": 240.3,
+        "nominal_per_year_bn": 60.1,
+        "real_added_bn": -121.7,
+        "real_per_year_bn": -30.4,
+        "debt_gdp_start": 26.38,
+        "debt_gdp_end": 24.61,
+        "debt_gdp_change": -1.8,
+        "multiple": 1.44
+      },
+      {
+        "id": "kennedy",
+        "name": "John F. Kennedy",
+        "party": "D",
+        "first": 1962,
+        "last": 1963,
+        "party_label": "Democrat",
+        "years": 2,
+        "debt_start_bn": 238.4,
+        "debt_end_bn": 254.0,
+        "nominal_added_bn": 15.6,
+        "nominal_per_year_bn": 7.8,
+        "real_added_bn": 102.5,
+        "real_per_year_bn": 51.3,
+        "debt_gdp_start": 42.4,
+        "debt_gdp_end": 39.85,
+        "debt_gdp_change": -2.5,
+        "multiple": 1.07
+      },
+      {
+        "id": "nixon",
+        "name": "Richard Nixon",
+        "party": "R",
+        "first": 1970,
+        "last": 1974,
+        "party_label": "Republican",
+        "years": 5,
+        "debt_start_bn": 278.1,
+        "debt_end_bn": 343.7,
+        "nominal_added_bn": 65.6,
+        "nominal_per_year_bn": 13.1,
+        "real_added_bn": -196.6,
+        "real_per_year_bn": -39.3,
+        "debt_gdp_start": 27.33,
+        "debt_gdp_end": 22.24,
+        "debt_gdp_change": -5.1,
+        "multiple": 1.24
+      },
+      {
+        "id": "johnson",
+        "name": "Lyndon B. Johnson",
+        "party": "D",
+        "first": 1964,
+        "last": 1969,
+        "party_label": "Democrat",
+        "years": 6,
+        "debt_start_bn": 254.0,
+        "debt_end_bn": 278.1,
+        "nominal_added_bn": 24.1,
+        "nominal_per_year_bn": 4.0,
+        "real_added_bn": -229.5,
+        "real_per_year_bn": -38.2,
+        "debt_gdp_start": 39.85,
+        "debt_gdp_end": 27.33,
+        "debt_gdp_change": -12.5,
+        "multiple": 1.09
+      },
+      {
+        "id": "eisenhower",
+        "name": "Dwight D. Eisenhower",
+        "party": "R",
+        "first": 1954,
+        "last": 1961,
+        "party_label": "Republican",
+        "years": 8,
+        "debt_start_bn": 218.4,
+        "debt_end_bn": 238.4,
+        "nominal_added_bn": 20.0,
+        "nominal_per_year_bn": 2.5,
+        "real_added_bn": -59.2,
+        "real_per_year_bn": -7.4,
+        "debt_gdp_start": 56.11,
+        "debt_gdp_end": 42.4,
+        "debt_gdp_change": -13.7,
+        "multiple": 1.09
+      },
+      {
+        "id": "clinton",
+        "name": "Bill Clinton",
+        "party": "D",
+        "first": 1994,
+        "last": 2001,
+        "party_label": "Democrat",
+        "years": 8,
+        "debt_start_bn": 3248.4,
+        "debt_end_bn": 3319.6,
+        "nominal_added_bn": 71.2,
+        "nominal_per_year_bn": 8.9,
+        "real_added_bn": -1203.8,
+        "real_per_year_bn": -150.5,
+        "debt_gdp_start": 47.36,
+        "debt_gdp_end": 31.37,
+        "debt_gdp_change": -16.0,
+        "multiple": 1.02
+      },
+      {
+        "id": "truman",
+        "name": "Harry S. Truman",
+        "party": "D",
+        "first": 1946,
+        "last": 1953,
+        "party_label": "Democrat",
+        "years": 8,
+        "debt_start_bn": 235.2,
+        "debt_end_bn": 218.4,
+        "nominal_added_bn": -16.8,
+        "nominal_per_year_bn": -2.1,
+        "real_added_bn": -1581.8,
+        "real_per_year_bn": -197.7,
+        "debt_gdp_start": 103.15,
+        "debt_gdp_end": 56.11,
+        "debt_gdp_change": -47.0,
+        "multiple": 0.93
+      }
+    ],
+    "top_nominal": {
+      "id": "biden",
+      "name": "Joe Biden",
+      "party": "D",
+      "first": 2022,
+      "last": 2025,
+      "party_label": "Democrat",
+      "years": 4,
+      "debt_start_bn": 22284.0,
+      "debt_end_bn": 30167.2,
+      "nominal_added_bn": 7883.2,
+      "nominal_per_year_bn": 1970.8,
+      "real_added_bn": 3691.3,
+      "real_per_year_bn": 922.8,
+      "debt_gdp_start": 93.92,
+      "debt_gdp_end": 98.07,
+      "debt_gdp_change": 4.1,
+      "multiple": 1.35
+    },
+    "top_real": {
+      "id": "obama",
+      "name": "Barack Obama",
+      "party": "D",
+      "first": 2010,
+      "last": 2017,
+      "party_label": "Democrat",
+      "years": 8,
+      "debt_start_bn": 7544.7,
+      "debt_end_bn": 14665.4,
+      "nominal_added_bn": 7120.7,
+      "nominal_per_year_bn": 890.1,
+      "real_added_bn": 7939.8,
+      "real_per_year_bn": 992.5,
+      "debt_gdp_start": 52.11,
+      "debt_gdp_end": 74.78,
+      "debt_gdp_change": 22.7,
+      "multiple": 1.94
+    },
+    "top_share": {
+      "id": "obama",
+      "name": "Barack Obama",
+      "party": "D",
+      "first": 2010,
+      "last": 2017,
+      "party_label": "Democrat",
+      "years": 8,
+      "debt_start_bn": 7544.7,
+      "debt_end_bn": 14665.4,
+      "nominal_added_bn": 7120.7,
+      "nominal_per_year_bn": 890.1,
+      "real_added_bn": 7939.8,
+      "real_per_year_bn": 992.5,
+      "debt_gdp_start": 52.11,
+      "debt_gdp_end": 74.78,
+      "debt_gdp_change": 22.7,
+      "multiple": 1.94
+    },
+    "bottom_share": {
+      "id": "truman",
+      "name": "Harry S. Truman",
+      "party": "D",
+      "first": 1946,
+      "last": 1953,
+      "party_label": "Democrat",
+      "years": 8,
+      "debt_start_bn": 235.2,
+      "debt_end_bn": 218.4,
+      "nominal_added_bn": -16.8,
+      "nominal_per_year_bn": -2.1,
+      "real_added_bn": -1581.8,
+      "real_per_year_bn": -197.7,
+      "debt_gdp_start": 103.15,
+      "debt_gdp_end": 56.11,
+      "debt_gdp_change": -47.0,
+      "multiple": 0.93
+    },
+    "party_totals": {
+      "D": {
+        "nominal_bn": 15338.3,
+        "debt_gdp_change": -53.0,
+        "years": 40,
+        "terms": 7
+      },
+      "R": {
+        "nominal_bn": 14593.7,
+        "debt_gdp_change": 47.8,
+        "years": 40,
+        "terms": 7
+      }
+    },
+    "base_year": 2025
+  },
+  "fiscal_items": {
+    "entries": [
+      {
+        "key": "obbba",
+        "name": "One Big Beautiful Bill Act (H.R. 1)",
+        "enacted": "July 2025",
+        "window": "FY2025\u20132034",
+        "primary_tn": 3.4,
+        "with_interest_tn": 4.1,
+        "if_extended_tn": 5.5,
+        "kind": "legislation",
+        "source": "CBO final score; extension estimate from CRFB",
+        "source_url": "https://www.crfb.org/press-releases/final-obbba-score-confirms-long-road-fiscal-recovery",
+        "note": "The single largest fiscal action in the series' recent history. CBO's $3.4tn is the primary-deficit effect; $4.1tn includes the debt service it generates. Neither figure includes macroeconomic feedback, which CRFB expects would add to borrowing rather than offset it.",
+        "pct_gdp_per_year": 0.89,
+        "pct_gdp_per_year_extended": 1.43
+      },
+      {
+        "key": "iran",
+        "name": "Iran conflict (Operation Epic Fury)",
+        "enacted": "2026, ongoing",
+        "window": "FY2026",
+        "cost_low_bn": 30.0,
+        "cost_high_bn": 40.0,
+        "requested_bn": 87.6,
+        "kind": "conflict",
+        "source": "OMB testimony (30 June 2026) and CSIS analysis (July 2026)",
+        "source_url": "https://www.csis.org/analysis/war-costs-make-third-876-billion-supplemental-request",
+        "note": "OMB puts direct war costs near $30bn; CSIS estimates ~$40bn including base repair. The $87.6bn supplemental request is broader than the war \u2014 roughly a third is war-related, the rest is other defence priorities and unrelated agency funding.",
+        "pct_gdp_one_off": 0.13
+      },
+      {
+        "key": "defence26",
+        "name": "FY2026 national defence budget",
+        "enacted": "FY2026",
+        "window": "annual",
+        "level_tn": 1.0,
+        "requested_next_tn": 1.5,
+        "kind": "budget",
+        "source": "CRFB, defence funding in context",
+        "source_url": "https://www.crfb.org/blogs/defense-funding-put-context",
+        "note": "National defence passed $1tn for the first time in FY2026, up more than 13% on FY2025, with $1.5tn requested for FY2027. In share-of-GDP terms \u2014 the measure that matters for solvency \u2014 this is still near the lowest of the whole post-war record."
+      }
+    ],
+    "ten_year_gdp_tn": 384.1,
+    "obbba_vs_iran_ratio": 85,
+    "obbba_cumulative_pct_gdp": 8.9,
+    "iran_pct_gdp": 0.13,
+    "baseline_crossing": 2041,
+    "obbba_crossing": 2039,
+    "baseline_end_debt": 194.0,
+    "obbba_end_debt": 217.5,
+    "years_lost": 2
+  }
+}

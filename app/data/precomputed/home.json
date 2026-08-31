@@ -1,14 +1,19 @@
 {
   "cards": {
     "airline-index": {
-      "value": "127.6",
+      "value": "127.9",
       "unit": "score",
       "status": "warning"
     },
     "hormuz-index": {
-      "value": "174.0",
+      "value": "170.1",
       "unit": "score",
       "status": "serious"
+    },
+    "solvency-index": {
+      "value": "128.1",
+      "unit": "score",
+      "status": "warning"
     },
     "lok-sabha-index": {
       "value": "274",

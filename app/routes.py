@@ -1,5 +1,3 @@
-import csv
-import io
 import json
 import os
 import re
@@ -7,10 +5,20 @@ import threading
 import time
 from datetime import date, datetime
 
-from flask import Blueprint, Response, abort, jsonify, redirect, render_template, request
+from flask import (
+    Blueprint,
+    Response,
+    abort,
+    current_app,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+)
 
-from app import db, manual_data, precomputed, scoring, storage, votes
-from app.indices import aviation, hormuz
+from app import db, precomputed, scoring, storage, votes
+from app.indices import aviation, hormuz, solvency
 
 bp = Blueprint("main", __name__)
 
@@ -19,8 +27,9 @@ bp = Blueprint("main", __name__)
 # ever changes so no template has to be edited.
 SITE_ORIGIN = os.environ.get("SITE_ORIGIN", "https://mydatalabs.in").rstrip("/")
 
-# Data licence, stated identically in the footer, the /data page and the
-# Dataset JSON-LD so the three can never contradict each other.
+# Data licence, stated identically in the footer, the methodology and the
+# JSON-LD so the three can never contradict each other. It covers the figures
+# as published on the page; the site distributes no dataset.
 DATA_LICENSE_NAME = "CC BY 4.0"
 DATA_LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/"
 
@@ -41,6 +50,19 @@ REPORTS = [
         "blurb": "Weekly composite index tracking jet fuel crack spreads, fleet grounding, ATC delays, and geopolitical detours across global aviation.",
         "category": "Maritime & Supply",
         "url": "/airline-index",
+        "endpoint": "main.airline_index",
+        "nav_group": "indices",
+        "live": True,
+    },
+    {
+        "slug": "solvency-index",
+        "title": "U.S. Sovereign Solvency Index",
+        "ticker": "USS-INDEX",
+        "blurb": "Eighty-year annual composite of U.S. federal debt, interest burden, primary deficit, productivity and r−g, with debt dynamics projected as a scenario band.",
+        "category": "Financial Stress",
+        "url": "/solvency-index",
+        "endpoint": "main.solvency_index",
+        "nav_group": "indices",
         "live": True,
     },
     {
@@ -50,6 +72,8 @@ REPORTS = [
         "blurb": "Weekly composite index tracking geopolitical stress, vessel traffic disruption, and insurance risk in the Strait of Hormuz.",
         "category": "Geo Politics",
         "url": "/hormuz-index",
+        "endpoint": "main.hormuz_index",
+        "nav_group": "indices",
         "live": True,
     },
     {
@@ -59,9 +83,116 @@ REPORTS = [
         "blurb": "Daily 543-seat Lok Sabha projection from CVoter's option-level public opinion trackers, calibrated on the 2019 and 2024 general election results.",
         "category": "Geo Politics",
         "url": "/lok-sabha-index",
+        "endpoint": "elections.lok_sabha_index",
+        "nav_group": "india",
         "live": True,
     },
 ]
+
+# What each live index compresses, in one line, for the About page. Deliberately
+# no weights, thresholds or component counts: those describe a single index and
+# are already documented on that index's own methodology tab, next to the number
+# they produce. This page argues why a number exists at all.
+ABOUT_INDEX_NOTES = {
+    "airline-index": {
+        "compresses": "Whether flying is getting harder and costlier to operate",
+        "cadence": "Weekly",
+    },
+    "solvency-index": {
+        "compresses": "Whether the United States can keep affording itself",
+        "cadence": "Annual",
+    },
+    "hormuz-index": {
+        "compresses": "How much stress the Strait of Hormuz is under",
+        "cadence": "Weekly",
+    },
+    "lok-sabha-index": {
+        "compresses": "Where 543 Lok Sabha seats would land on today's opinion",
+        "cadence": "Daily",
+    },
+}
+
+
+# --- Primary navigation ----------------------------------------------------
+# The header used to hand-list seven links in base.html, which is how it ended
+# up with two labels that named no page ("Intelligence" was the Hormuz index,
+# "India" was the Lok Sabha one) and a "Global" entry pointing at href="#".
+# It is built from REPORTS now, so an index reaches the menu the day it ships
+# and can only be labelled with the name it is published under.
+#
+# The two groups are deliberate and not symmetric. "Indices" collects the desks
+# that read globally; India is its own top-level section rather than one more
+# row in that menu, because it is a separate audience arriving for a separate
+# reason, and burying it one hover deep would cost it the traffic.
+NAV_GROUPS = [
+    {"group": "indices", "label": "Indices", "icon": "monitoring"},
+    {"group": "india", "label": "India", "icon": "how_to_vote"},
+]
+
+
+def build_nav(endpoint):
+    """The primary nav for `endpoint`, with the active item already marked.
+
+    Matches on endpoint rather than on request.path: the six hardcoded path
+    strings this replaces lost their highlight on anything the router also
+    accepts for the same page (a trailing slash, a fragment link back to the
+    page you are on), and would have gone quietly stale the first time a URL
+    moved.
+    """
+    nav = [{
+        "kind": "link",
+        "label": "Home",
+        "icon": "home",
+        "url": "/",
+        "active": endpoint == "main.home",
+    }]
+
+    for spec in NAV_GROUPS:
+        items = [
+            {
+                "label": r["title"],
+                "ticker": r["ticker"],
+                "url": r["url"],
+                "active": endpoint == r["endpoint"],
+            }
+            for r in REPORTS
+            if r.get("nav_group") == spec["group"] and r.get("live")
+        ]
+        if not items:
+            # A group with nothing live behind it is left out entirely. An
+            # empty menu is worse than no menu, and it is how the dead
+            # "Global" link survived as long as it did.
+            continue
+
+        if len(items) == 1:
+            # One destination does not earn a dropdown — that is a click and a
+            # hover in front of the only thing behind it.
+            only = items[0]
+            nav.append({
+                "kind": "link",
+                "label": spec["label"],
+                "icon": spec["icon"],
+                "url": only["url"],
+                "active": only["active"],
+            })
+        else:
+            nav.append({
+                "kind": "menu",
+                "label": spec["label"],
+                "icon": spec["icon"],
+                "active": any(i["active"] for i in items),
+                "items": items,
+            })
+
+    nav.append({
+        "kind": "link",
+        "label": "About",
+        "icon": "info",
+        "url": "/about",
+        "active": endpoint == "main.about",
+    })
+    return nav
+
 
 # Internal event log. These entries are MyDataLabs' own annotations of the
 # index trajectory — they are not wire reports, so they are attributed to this
@@ -262,6 +393,26 @@ def _pct_change(current, baseline):
     return (current - baseline) / baseline * 100
 
 
+def _spark_points(values, width: float = 600.0, height: float = 120.0) -> str:
+    """An index's own history as SVG polyline points, for a hero backdrop.
+
+    The banner behind each carousel slide is that index's real series rather
+    than decorative artwork, so it cannot show a shape the dashboard contradicts.
+    Scaled to the series' own min/max because the backdrop reads as a silhouette,
+    not a measured chart — the numbers beside it carry the levels.
+    """
+    vals = [float(v) for v in values if v is not None]
+    if len(vals) < 2:
+        return ""
+    lo, hi = min(vals), max(vals)
+    span = (hi - lo) or 1.0
+    step = width / (len(vals) - 1)
+    return " ".join(
+        f"{i * step:.1f},{height - (v - lo) / span * height:.1f}"
+        for i, v in enumerate(vals)
+    )
+
+
 def build_press_dispatch(snapshot, total_attacks: int) -> dict:
     """Every figure and every qualitative word in the press dispatch, derived
     from the live snapshot.
@@ -327,67 +478,18 @@ def build_press_dispatch(snapshot, total_attacks: int) -> dict:
     }
 
 
-def _history_meta() -> dict:
-    """Provenance flags stored alongside the weekly series."""
-    return storage.load_history(hormuz.INDEX_KEY)
+def _about_indices():
+    """One row per live index for the About page, built from REPORTS.
 
-
-def _observation_meta(key: str) -> dict:
-    """Provenance for one component's current hand-entered value, if it has one.
-
-    Returns {} for a component with no observation on file, so an automatic
-    series does not sprout empty "observed_by" fields in the API response.
+    Driven by REPORTS so a new index appears here the moment it ships, rather
+    than whenever someone remembers this page exists.
     """
-    keyed = manual_data.entry(key)
-    if keyed is None:
-        return {}
-    return {
-        "observed_on": keyed.as_of,
-        "observed_source": keyed.source,
-        "observation_note": keyed.note,
-        "confidence": keyed.confidence,
-    }
-
-
-def component_correlations(history: list[dict]) -> dict:
-    """Pearson correlation between every pair of component series in history.
-
-    Published because Brent, TTF gas and VIX together carry 50% of index weight
-    and tend to move together during an energy shock — the composite is less
-    diversified than seven components implies, and a reader should be able to
-    see by how much rather than take the caveat on trust.
-    """
-    keys = [c.key for c in hormuz.COMPONENTS]
-    series: dict[str, list[float]] = {k: [] for k in keys}
-    for week in history:
-        raw = week.get("raw_values", {})
-        if any(raw.get(k) is None for k in keys):
-            continue
-        for k in keys:
-            series[k].append(float(raw[k]))
-
-    n = len(next(iter(series.values()), []))
-    if n < 3:
-        return {"n": n, "columns": keys, "matrix": {}}
-
-    means = {k: sum(v) / n for k, v in series.items()}
-
-    def corr(a: str, b: str) -> float | None:
-        va, vb = series[a], series[b]
-        ma, mb = means[a], means[b]
-        num = sum((x - ma) * (y - mb) for x, y in zip(va, vb))
-        da = sum((x - ma) ** 2 for x in va) ** 0.5
-        db = sum((y - mb) ** 2 for y in vb) ** 0.5
-        if da == 0 or db == 0:
-            return None
-        return round(num / (da * db), 3)
-
-    return {
-        "n": n,
-        "columns": keys,
-        "labels": {c.key: c.label for c in hormuz.COMPONENTS},
-        "matrix": {a: {b: corr(a, b) for b in keys} for a in keys},
-    }
+    rows = []
+    for report in REPORTS:
+        row = {k: report[k] for k in ("slug", "title", "ticker", "url")}
+        row.update(ABOUT_INDEX_NOTES.get(report["slug"], {}))
+        rows.append(row)
+    return rows
 
 
 def _common(**extra):
@@ -416,6 +518,14 @@ def _report_cards(snapshot):
             "status": av_snap.level_status,
         }
 
+    if "solvency-index" not in figures:
+        sv_snap = solvency.compute_snapshot()
+        figures["solvency-index"] = {
+            "value": f"{sv_snap.score:.1f}",
+            "unit": "score",
+            "status": sv_snap.level_status,
+        }
+
     if "hormuz-index" not in figures:
         figures["hormuz-index"] = {
             "value": f"{snapshot.score:.1f}",
@@ -441,6 +551,29 @@ def _report_cards(snapshot):
     return cards
 
 
+def _build_solvency_hero(snapshot, latest):
+    """The three headline ratios the solvency carousel slide floats."""
+    raw = latest.get("raw_values") or {}
+    return {
+        "year": latest.get("year"),
+        "debt_gdp": raw.get("debt_gdp"),
+        "interest_burden": raw.get("interest_burden"),
+        "primary_deficit": raw.get("primary_deficit"),
+    }
+
+
+def _build_hormuz_hero(snapshot):
+    """The three headline figures the Hormuz carousel slide floats."""
+    brent = hormuz.component_result(snapshot, "brent")
+    war_risk = hormuz.component_result(snapshot, "war_risk")
+    reroutes = hormuz.component_result(snapshot, "reroutes")
+    return {
+        "brent": brent.current_value if brent else None,
+        "war_risk": war_risk.current_value if war_risk else None,
+        "reroutes": reroutes.current_value if reroutes else None,
+    }
+
+
 @bp.route("/")
 def home():
     av_snapshot = get_aviation_snapshot()
@@ -453,10 +586,20 @@ def home():
     prev_score = history[-2]["score"] if len(history) >= 2 else None
     delta = (snapshot.score - prev_score) if prev_score is not None else 0.0
 
+    sv_snapshot = solvency.compute_snapshot()
+    sv_history = solvency.get_history()
+    sv_latest = solvency.latest_row()
+
     html = render_template(
         "home.html",
         **_common(
             reports=_report_cards(snapshot),
+            solvency_snapshot=sv_snapshot,
+            solvency_hero=_build_solvency_hero(sv_snapshot, sv_latest),
+            solvency_spark=_spark_points(r.get("score") for r in sv_history),
+            hormuz_hero=_build_hormuz_hero(snapshot),
+            hormuz_spark=_spark_points(r.get("score") for r in history[-104:]),
+            aviation_spark=_spark_points(r.get("score") for r in av_history[-104:]),
             aviation_snapshot=av_snapshot,
             aviation_score=av_snapshot.score,
             aviation_level=av_snapshot.level_label,
@@ -533,6 +676,84 @@ def airline_index():
             components=snapshot.components,
             license_name=DATA_LICENSE_NAME,
             license_url=DATA_LICENSE_URL,
+        ),
+    )
+    return _cached(Response(html, mimetype="text/html"))
+
+
+@bp.route("/solvency-index")
+def solvency_index():
+    snapshot = solvency.compute_snapshot()
+    history = solvency.get_history()
+    latest = solvency.latest_row()
+    prev_score = history[-2]["score"] if len(history) >= 2 else None
+    delta = (snapshot.score - prev_score) if prev_score is not None else 0.0
+
+    projections = solvency.projections()
+    meta = solvency.get_meta()
+
+    decomposition = solvency.debt_decomposition()
+    sfa_mean = (
+        sum(abs(row["sfa"]) for row in decomposition) / len(decomposition)
+        if decomposition else 0.0
+    )
+
+    # FY1965 is the post-war low. Publishing it on the methodology tab is a
+    # standing check that the baselines are calibrated rather than fitted: a
+    # well-anchored equilibrium should score at or near 100 there.
+    baseline_check = next(
+        (row["score"] for row in history if row["year"] == 1965), snapshot.score
+    )
+
+    html = render_template(
+        "solvency.html",
+        **_common(
+            snapshot=snapshot,
+            history=history,
+            latest=latest,
+            delta=delta,
+            top_driver=solvency.top_driver(snapshot),
+            peak=max(history, key=lambda r: r["score"]),
+            trough=min(history, key=lambda r: r["score"]),
+            decades=solvency.decade_averages(),
+            blocks=solvency.BLOCKS,
+            block_labels={
+                key: next(b["label"] for b in solvency.BLOCKS if b["key"] == block)
+                for key, block in solvency.COMPONENT_BLOCK.items()
+            },
+            block_colors={
+                key: next(b["color"] for b in solvency.BLOCKS if b["key"] == block)
+                for key, block in solvency.COMPONENT_BLOCK.items()
+            },
+            crisis_values=solvency.CRISIS_VALUES,
+            baseline_anchors=solvency.BASELINE_ANCHORS,
+            baseline_check=baseline_check,
+            source_series=solvency.SOURCE_SERIES,
+            turning_points=solvency.turning_points_with_scores(),
+            quadrant_points=solvency.quadrant_points(),
+            quadrants=solvency.QUADRANTS,
+            quadrant_counts=solvency.quadrant_counts(),
+            eras=solvency.ERAS,
+            decomposition=decomposition,
+            sfa_mean=sfa_mean,
+            sim=solvency.simulator_defaults(),
+            pres=solvency.presidential_comparison(),
+            summary=solvency.executive_summary(),
+            defence=solvency.defence_burden_summary(),
+            defence_series=solvency.defence_series(),
+            war_periods=solvency.war_periods_measured(),
+            crs_wars=solvency.CRS_WAR_COSTS,
+            debt_admin=solvency.debt_by_administration(),
+            pending=solvency.fiscal_items_with_impact(),
+            projections=projections,
+            projection_years=solvency.PROJECTION_YEARS,
+            repricing_speed=solvency.REPRICING_SPEED,
+            horizon=solvency.horizon_summary(projections),
+            generated_at=meta.get("generated_at", ""),
+            band_positions=solvency.band_positions(),
+            scale_pct=solvency.scale_pct(snapshot.score),
+            scale_min=solvency.SCALE_MIN,
+            scale_max=solvency.SCALE_MAX,
         ),
     )
     return _cached(Response(html, mimetype="text/html"))
@@ -646,10 +867,19 @@ def _methodology_context():
 
 
 
-@bp.route("/data")
-def data_page():
-    """Permanent 301 redirect to the raw JSON data endpoint."""
-    return redirect("/api/hormuz-index/data.json", code=301)
+@bp.route("/about")
+def about():
+    """Why the site exists: the argument for compressing a topic into one number.
+
+    Kept as its own page rather than folded into the methodology, because the
+    methodology answers "how is this number computed" for one index, and this
+    answers "why publish a number at all" for all of them.
+    """
+    html = render_template(
+        "about.html",
+        **_common(indices=_about_indices()),
+    )
+    return _cached(Response(html, mimetype="text/html"))
 
 
 @bp.route("/terms")
@@ -665,111 +895,6 @@ def coming_soon(slug):
         abort(404)
     html = render_template("coming_soon.html", **_common(category=category))
     return _cached(Response(html, mimetype="text/html"))
-
-
-# --- API -------------------------------------------------------------------
-
-
-@bp.route("/api/hormuz-index/data.json")
-def api_hormuz_json():
-    snapshot = get_snapshot()
-    history = hormuz.get_history()
-    resp = jsonify({
-        "ticker": "HMX-INDEX",
-        "index_name": "Hormuz Crisis Index",
-        "license": {"name": DATA_LICENSE_NAME, "url": DATA_LICENSE_URL},
-        "attribution": "MyDataLabs Hormuz Crisis Index (HMX-INDEX) — mydatalabs.in",
-        "generated_at": snapshot.generated_at,
-        "current_snapshot": {
-            "week_start": snapshot.week_start,
-            "score": snapshot.score,
-            "level_label": snapshot.level_label,
-            "level_status": snapshot.level_status,
-            "degraded": snapshot.degraded,
-            "stale_weight": snapshot.stale_weight,
-        },
-        "baseline": {
-            "window": hormuz.BASELINE_WINDOW,
-            "values": hormuz.BASELINE_VALUES,
-        },
-        # Series whose weekly history was re-anchored rather than measured. Both
-        # this list and the notes below are generated on every update run from
-        # the feeder file and the current snapshot (app/manual_data.py). They
-        # were hand-written prose until 2026-08, which meant they described
-        # whatever was true the day somebody typed them.
-        "reconstructed_series": _history_meta().get("reconstructed_series", []),
-        "series_source_notes": _history_meta().get("series_source_notes", {}),
-        "scale": {"min": scoring.SCALE_MIN, "max": scoring.SCALE_MAX},
-        "components": [
-            {
-                "key": c.component.key,
-                "label": c.component.label,
-                "weight": c.component.weight,
-                "unit": c.component.unit,
-                "current_value": c.current_value,
-                "baseline_value": c.baseline_value,
-                "cap_pct": c.component.cap_pct,
-                "inverted": c.component.invert,
-                "stress_score": round(c.stress, 2),
-                "contribution": round(c.contribution, 2),
-                "source": c.component.source,
-                "manual": c.component.manual,
-                "update_cadence": c.component.update_cadence,
-                "last_updated": c.last_updated,
-                "stale": c.stale,
-                "carried_forward": c.carried_forward,
-                # Per-point provenance for the hand-entered components. The
-                # series-level reconstructed_series flag above cannot say that
-                # this week's war-risk figure is a real broker quote while
-                # earlier weeks were re-anchored; this can.
-                **_observation_meta(c.component.key),
-            }
-            for c in snapshot.components
-        ],
-        "component_correlations": component_correlations(history),
-        "history": history,
-    })
-    return _cached(resp)
-
-
-@bp.route("/api/hormuz-index/data.csv")
-def api_hormuz_csv():
-    history = hormuz.get_history()
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow([
-        "Week Start",
-        "Composite Score",
-        "Level",
-        "Brent ($/bbl)",
-        "Ship Traffic (transits/wk)",
-        "War Risk Insurance (%)",
-        "Tanker Freight (BDTI)",
-        "TTF Gas (EUR/MWh)",
-        "VIX Index",
-        "Cape Reroutes (%)",
-    ])
-
-    for w in history:
-        rv = w.get("raw_values", {})
-        writer.writerow([
-            w.get("week_start", ""),
-            w.get("score", ""),
-            w.get("level_label", ""),
-            rv.get("brent", ""),
-            rv.get("ship_traffic", ""),
-            rv.get("war_risk", ""),
-            rv.get("tanker_freight", ""),
-            rv.get("ttf_gas", ""),
-            rv.get("vix", ""),
-            rv.get("reroutes", ""),
-        ])
-
-    return _cached(Response(
-        output.getvalue(),
-        mimetype="text/csv",
-        headers={"Content-Disposition": "attachment; filename=hormuz_crisis_index_history.csv"},
-    ))
 
 
 @bp.route("/api/health")
@@ -934,6 +1059,10 @@ def sitemap():
         {"loc": f"{SITE_ORIGIN}/airline-index", "priority": "1.0", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/hormuz-index", "priority": "0.9", "changefreq": "daily"},
         {"loc": f"{SITE_ORIGIN}/lok-sabha-index", "priority": "0.9", "changefreq": "daily"},
+        # Annual series: the page only changes at fiscal-year close, so a daily
+        # changefreq here would be a claim the lastmod cannot support.
+        {"loc": f"{SITE_ORIGIN}/solvency-index", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": f"{SITE_ORIGIN}/about", "priority": "0.7", "changefreq": "monthly"},
         {"loc": f"{SITE_ORIGIN}/terms", "priority": "0.5", "changefreq": "monthly"},
     ]
 
@@ -958,6 +1087,10 @@ def robots():
         "User-agent: *\n"
         "Allow: /\n"
         "Disallow: /reports/\n"
+        # Nothing under /api/ serves data any more — what is left is the vote
+        # widget, the health probe and the cron trigger. None of it is a page,
+        # so keep crawlers off it rather than let them spend crawl budget there.
+        "Disallow: /api/\n"
         "\n"
         f"Sitemap: {SITE_ORIGIN}/sitemap.xml\n"
     )
@@ -973,6 +1106,12 @@ def llms_txt():
     head terms. This tells them what exists and how to attribute it.
     """
     snapshot = get_snapshot()
+    # Counted from the component list rather than written out, because this is
+    # a claim about the data quality made to crawlers: the previous hardcoded
+    # "four of seven / 50%" outlived the component it described and kept
+    # overstating how much of the index is hand-keyed.
+    manual = [c for c in hormuz.COMPONENTS if c.manual]
+    manual_pct = round(sum(c.weight for c in manual) * 100)
     content = f"""# MyDataLabs
 
 > Quantitative composite indices tracking geopolitical stress, maritime
@@ -987,21 +1126,21 @@ Current HMX-INDEX reading: {snapshot.score:.1f} ({snapshot.level_label}), week o
 - [Hormuz Crisis Index dashboard]({SITE_ORIGIN}/hormuz-index): live composite score, component breakdown, weekly trajectory since January 2026.
 - [Lok Sabha Projection Engine]({SITE_ORIGIN}/lok-sabha-index): daily 543-seat projection from CVoter's option-level opinion trackers, Monte Carlo intervals, event impact analysis, 2019/2024 backtest.
 - [Methodology]({SITE_ORIGIN}/hormuz-index#methodology): index formula, component weights, cap thresholds and their rationale, baseline selection, known limitations.
-
-## Machine-readable data
-
-- [JSON]({SITE_ORIGIN}/api/hormuz-index/data.json): current snapshot, per-component breakdown, full weekly history.
-- [CSV]({SITE_ORIGIN}/api/hormuz-index/data.csv): weekly history with raw component values.
+- [About the indices]({SITE_ORIGIN}/about): why each topic is compressed into one number, the construction rules shared by every index, and what a single number cannot express.
 
 ## Licence and attribution
 
-Index data is published under {DATA_LICENSE_NAME} ({DATA_LICENSE_URL}).
+Index figures as published on the pages above are available under
+{DATA_LICENSE_NAME} ({DATA_LICENSE_URL}).
 Cite as: MyDataLabs Hormuz Crisis Index (HMX-INDEX), mydatalabs.in.
+
+The underlying datasets are not distributed and there is no data feed or
+download endpoint; please cite the pages above rather than scraping them.
 
 ## Important limitations
 
-- Four of seven components (50% of index weight) are entered manually from
-  paywalled sources and refresh weekly, not continuously. Each component
+- {len(manual)} of the {len(hormuz.COMPONENTS)} components ({manual_pct}% of index weight) are entered manually
+  from paywalled sources and refresh weekly, not continuously. Each component
   publishes its own last-updated date.
 - The vessel incident log shown on the dashboard is compiled separately from
   the index components and contributes nothing to the composite score.
