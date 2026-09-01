@@ -12,6 +12,7 @@
   * **Airline Pressure Index (API-INDEX)** &mdash; weekly composite score and **7-Region Stress Contribution Analysis** across operational fleet groundings, crack spreads, and geopolitical airspace detours.
   * **Lok Sabha Projection Engine (LS-PROJ)** &mdash; daily opinion tracker and seat projection model for Indian parliamentary elections.
   * **U.S. Sovereign Solvency Index (USS-INDEX)** &mdash; 80-year annual composite (1945&ndash;present) of federal debt, interest burden, primary deficit, productivity and *r*&nbsp;&minus;&nbsp;*g*, with debt dynamics projected as a scenario band rather than a single date.
+  * **Hard-Metric Democracy Index (HMDI)** &mdash; ten published counts and rates scored across the top 30 economies for every year since 2000. No expert survey anywhere in it, and the page says plainly what that costs.
 
 The site publishes its full methodology, component weights and caps, refresh cadence and known limitations. The figures are shown on the pages; the underlying datasets are not distributed, and the site exposes no data API.
 
@@ -200,6 +201,63 @@ The 80-year series is rebuilt once a year at fiscal-year close:
 python update.py --solvency          # or: python scripts/build_solvency_history.py
 ```
 
+### 4. Hard-Metric Democracy Index (HMDI)
+
+Annual, 2000&ndash;2024, thirty economies. Every conventional democracy index
+&mdash; V-Dem, Freedom House, EIU &mdash; aggregates expert questionnaires. This one
+uses only counts, rates and electoral mathematics, so no country is scored on an
+opinion about it. **The cost of that discipline is stated on the page rather than
+buried:** judicial independence, press pluralism and whether an election was
+actually free are the things that matter most, and none of them is a number anyone
+publishes, so none of them is here.
+
+| Pillar | Weight | Scored indicators |
+| :--- | :---: | :--- |
+| Electoral Health & Representation | 20% | Turnout (% of VAP), Gallagher disproportionality, constitutional transfer integrity |
+| Power Dispersion & Checks | 20% | Legislative HHI, women's legislative share |
+| Economic Equity & Parity | 20% | Income Gini |
+| Information & Telemetry Freedom | 20% | Internet disruption person-hours/capita, journalists imprisoned per 10M |
+| Due Process & Rule of Law | 20% | Pre-trial detention share, incarceration rate per 100k |
+
+Every indicator is a rate, ratio or per-capita quantity, so India and Norway sit on
+one axis and population size drops out. Each is scored linearly between **fixed**
+bounds rather than against the sample, so adding a country cannot restate history.
+
+**Aggregation is geometric across pillars, not arithmetic.** An arithmetic mean
+makes pillars perfectly substitutable, which let the UAE &mdash; a federal absolute
+monarchy with no elected national legislature &mdash; score 61.7 for 2024, four
+points *above* the United States, by averaging a legislative-concentration score of
+0 against an appointed 50%-female chamber scoring 100. The weighted geometric mean
+is the standard fix (it is why the HDI changed in 2010). It barely moves the league
+table &mdash; the top twenty shift by at most one place &mdash; while the UAE falls
+to 54.6, Saudi Arabia to 31.9 and China to 28.6, the first time any of them reaches
+the bottom tier at all.
+
+**Two of the source dataset's twelve indicators were the same indicator twice.**
+Effective Number of Parties and the legislative HHI are algebraically identical
+(ENP = 10000 / HHI), had been keyed independently, and disagreed with each other by
+a median of 6.6%; Gini and Palma summarise one Lorenz curve at &rho;&nbsp;=&nbsp;+0.99.
+Both pairs were scoring their construct twice, through two pillars in the ENP case.
+HHI and Gini are scored; ENP (derived from HHI) and Palma are published as context.
+The full correlation matrix stays on the methodology tab permanently &mdash; the only
+reason anyone found those two pairs is that somebody computed it.
+
+**Provenance is first-class.** The panel is not twelve annual series. It is
+**1,663 hand-keyed anchor points out of 9,000 country-year-indicator cells (18.5%)**,
+with linear interpolation between anchors and flat-carry outside them. That is a
+reasonable way to carry sources that do not publish annually &mdash; an election
+result exists in election years and not between them &mdash; and it is not
+measurement. Every row carries its anchor share, the ranking table shows it, and the
+trajectory chart plots panel-wide anchor density beneath the lines so a smooth
+trajectory is never mistaken for a stable decade.
+
+`app/data/democracy_anchors.json` is the input of record; the published panel is
+generated from it and should never be hand-edited:
+
+```bash
+python update.py --democracy         # or: python scripts/build_democracy_history.py
+```
+
 ---
 
 ## Routes
@@ -211,16 +269,26 @@ python update.py --solvency          # or: python scripts/build_solvency_history
 | `/hormuz-index` | HMX-INDEX dashboard: gauge, trajectory, component matrix, press dispatch |
 | `/lok-sabha-index` | Lok Sabha Projection Engine: daily seat forecast + 2019/2024 backtest |
 | `/solvency-index` | USS-INDEX dashboard: 80-year trajectory, block decomposition, debt-dynamics scenario band, statutory turning points |
-| `/terms`, `/privacy` | Legal disclaimers and methodology notes |
+| `/democracy-index` | HMDI dashboard: 30-economy rankings, live pillar reweighting, trajectories against anchor density, per-country indicator drawer, collinearity and saturation diagnostics |
+| `/about` | Why a topic is compressed into one number, the construction rules every index shares, and what a single number cannot express |
+| `/terms` | Legal disclaimers and use conditions |
+| `/methodology` | 301 to `/hormuz-index#methodology`. Kept as a redirect rather than deleted: the URL was indexed and is cited from the event log's source links |
+| `/reports/<slug>` | "In development" placeholder for a nav category with no index yet. `noindex`, and deliberately absent from the sitemap |
+| `/admin`, `/admin/queue` | Critique moderation queue. Registered **only** when both `SECRET_KEY` and `ADMIN_PASSWORD_HASH` are set — a blueprint that cannot check a password must not be reachable |
+| `/sitemap.xml` | Eight indexable pages. `lastmod` per URL comes from the mtime of the file that backs the page (its precomputed artifact, or its template), not from today's date |
+| `/robots.txt` | Disallows `/reports/` and `/api/`. `/admin` is deliberately *not* disallowed: it answers `X-Robots-Tag: noindex`, and a path blocked in robots.txt is one a crawler may never fetch and may still list from an inbound link |
+| `/llms.txt` | Pointer file for AI answer surfaces: current HMX reading, page index, licence, and the manual-component caveat counted from the component list rather than hardcoded |
 | `/favicon.ico` | Multi-resolution site favicon |
 
 There are **no public data endpoints.** The site used to serve
 `/api/hormuz-index/data.{json,csv}` and thirteen read endpoints under
 `/api/lok-sabha-index/`; all of them were removed so that no dataset is
 redistributable. Every figure a dashboard draws is now serialised into the page
-that draws it. The only routes left under `/api/` are operational and hand out
-nothing: `/api/health`, `/api/cron/update-hormuz`,
-`/api/hormuz-index/sentiment` (the reader vote widget) and
+that draws it. The only routes left under `/api/` are operational or accept
+reader input, and none of them hands out a dataset: `/api/health`,
+`/api/cron/update-hormuz`, `/api/hormuz-index/sentiment` (the reader vote
+widget), `/api/<report_key>/critique` (GET returns the whitelist of things a
+report may be critiqued about; POST queues a submission for moderation) and
 `/api/lok-sabha-index/refresh_data` (off unless `ALLOW_WEB_REFRESH` is set).
 
 `tests/test_routes.py::test_no_public_data_endpoints` asserts each removed path
@@ -238,35 +306,62 @@ mydatalabs-in/
 │   │   ├── hormuz_history.json     # Weekly series + generated provenance (updater writes)
 │   │   ├── hormuz_manual.json      # Current hand-entered figures (humans write)
 │   │   ├── vessel_attacks.json     # dashboard incident log (not an index input)
+│   │   ├── aviation_history.json   # API-INDEX weekly series
+│   │   ├── solvency_history.json   # USS-INDEX annual series (FRED-derived, machine-written)
+│   │   ├── democracy_history.json  # HMDI panel, 30 economies × 2000-2024
+│   │   ├── democracy_anchors.json  # Per-indicator anchor density (what backs each score)
+│   │   ├── vdem_libdem.json        # V-Dem comparator — carried beside HMDI, never an input
+│   │   ├── precomputed/            # One JSON per route. See app/precomputed.py
 │   │   └── elections/              # CVoter trackers, projections, calibration, catalog
 │   ├── elections/             # Lok Sabha Projection Engine
 │   │   ├── routes.py          # Page blueprint, mtime-keyed section cache
 │   │   └── engine/            # Model: scraper, calibration, seat model, ML suite,
 │   │                          #   backtest, insights, events, trend analytics, paths
 │   ├── indices/hormuz.py      # Component definitions, fetchers, snapshot assembly
+│   ├── indices/aviation.py    # API-INDEX components, regional stress contribution
+│   ├── indices/solvency.py    # USS-INDEX: linear baseline→crisis scoring, debt dynamics
+│   ├── indices/democracy.py   # HMDI: bounds, pillars, geometric aggregation, diagnostics
 │   ├── manual_data.py         # Hand-entered figures: reading, validation, generated notes
+│   ├── precomputed.py         # Per-route JSON artifacts. A render never touches the
+│   │                          #   network or the database; the updaters pay that cost
+│   ├── critiques.py           # Reader critique whitelist, validation, moderation states
+│   ├── admin.py               # Moderation queue. Registered only when it can be locked
 │   ├── static/
 │   │   ├── css/style.css      # Design tokens, dark/light themes, a11y primitives
 │   │   ├── css/elections.css  # Projection dashboard, scoped under .elections-dash
-│   │   ├── js/theme.js        # Theme toggle, keyboard-accessible nav, clipboard
+│   │   ├── js/theme.js        # Theme toggle, keyboard-accessible nav, clipboard,
+│   │   │                      #   and the site-wide GA4 event bindings
 │   │   ├── js/charts.js       # ECharts setup, theme-reactive, fallback handling
 │   │   ├── js/elections.js    # Chart.js forecast chart, tabs, event overlay
+│   │   ├── js/democracy.js    # HMDI table, pillar reweighting, per-country drawer
+│   │   ├── js/hero-carousel.js # Home hero rotation
 │   │   └── js/vote.js         # HMX-PPI drag-to-vote gauge, anonymous token handling
-│   ├── templates/             # base, home, hormuz, elections, methodology, data, errors
-│   ├── routes.py              # Routing, snapshot cache, press dispatch derivation
+│   ├── templates/             # base, home, hormuz, aviation, elections, solvency,
+│   │   │                      #   democracy, about, terms, methodology, errors
+│   │   └── admin/             # Login + moderation queue
+│   ├── routes.py              # Routing, snapshot cache, press dispatch derivation,
+│   │                          #   sitemap / robots / llms.txt
 │   ├── scoring.py             # Generic composite engine (index-agnostic)
 │   ├── storage.py             # History persistence with durability reporting
 │   ├── db.py                  # Postgres connections + idempotent schema bootstrap
 │   ├── votes.py               # HMX-PPI aggregation, dedup and privacy design
-│   └── __init__.py            # App factory, security headers, static caching
+│   └── __init__.py            # App factory, security headers, static caching,
+│                              #   GA4 + Clarity ids injected into every template
 ├── scripts/
-│   ├── build_assets.py        # Regenerate icons + 1200x630 OG card from logo.png
-│   ├── restate_2026_07_26.py  # Revision artifact: units/cap fix + full recompute
-│   ├── update_hormuz.py       # Wrapper around update_data.py
-│   ├── update_elections.py    # Operational CVoter refresh (schedule this one)
-│   └── elections_pipeline.py  # Full model pipeline: fetch → calibrate → backtest → plot
-├── tests/test_scoring.py      # Scoring engine edge cases
+│   ├── build_assets.py            # Regenerate icons + 1200x630 OG card from logo.png
+│   ├── build_solvency_history.py  # USS-INDEX series from FRED (nothing hand-keyed)
+│   ├── build_democracy_history.py # HMDI panel + anchor density
+│   ├── build_vdem_reference.py    # V-Dem comparator extract
+│   ├── populate_aviation_history.py # API-INDEX backfill
+│   ├── refresh_sentiment_artifact.py # Rebuild the HMX-PPI precomputed block
+│   ├── restate_2026_07_26.py      # Revision artifact: units/cap fix + full recompute
+│   ├── update_hormuz.py           # Wrapper around update_data.py
+│   ├── update_elections.py        # Operational CVoter refresh (schedule this one)
+│   └── elections_pipeline.py      # Full pipeline: fetch → calibrate → backtest → plot
+├── tests/                     # scoring, routes, manual data, aviation, solvency,
+│                              #   democracy, critiques
 ├── update_data.py             # Weekly updater
+├── push_to_prod.py            # Recompute, validate, commit and push in one step
 ├── requirements-pipeline.txt  # Offline-only deps (matplotlib, selenium fallback)
 ├── vercel.json                # Rewrites, cache/security headers, cron schedule
 └── app.py                     # Local dev entrypoint
@@ -282,7 +377,8 @@ source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 python app.py                   # http://127.0.0.1:5000
-python -m pytest tests/ -q      # scoring engine tests
+python -m pytest tests/ -q      # 291 tests: scoring, routes, manual data,
+                                # aviation, solvency, democracy, critiques
 ```
 
 ### Weekly data update
@@ -391,9 +487,65 @@ derivatives are ever served). Re-run after replacing either source image.
 | `STATIC_MAX_AGE` | `31536000` | `Cache-Control: max-age` for `/static/*` |
 | `DATABASE_URL` | *(unset, falls back to `db`)* | Postgres DSN for community voting. Unset disables the vote block; nothing else on the site depends on it |
 | `VOTE_PEPPER` | *(dev placeholder)* | Secret mixed into vote token hashes. **Set this in production** |
-| `MIN_VOTES_TO_PUBLISH` | `5` | Ballots required before the perception number is shown |
+| `MIN_VOTES_TO_PUBLISH` | `1` | Ballots required before the perception number is shown |
 | `MAX_VOTES_PER_ORIGIN` | `25` | Weekly ballot ceiling per coarse network hash |
+| `SECRET_KEY` | *(unset)* | Session signing key. Required — with `ADMIN_PASSWORD_HASH` — before the `/admin` blueprint is registered at all |
+| `ADMIN_PASSWORD_HASH` | *(unset)* | Werkzeug password hash for the moderation queue. Unset means `/admin` does not exist, not that it is open |
+| `ALLOW_WEB_REFRESH` | *(unset)* | Enables `/api/lok-sabha-index/refresh_data`. Off by default: it is an operational trigger, not a page |
+| `CRITIQUE_MIN_BODY` / `CRITIQUE_MAX_BODY` | `40` / `600` | Length bounds on a submitted critique |
+| `CRITIQUE_MAX_REMEDY` | `300` | Length bound on the suggested-remedy field |
+| `CRITIQUE_MIN_FILL_SECONDS` | `5` | Minimum time-on-form before a submission is accepted (bot filter) |
+| `CRITIQUE_MAX_PER_ORIGIN` | `5` | Submission ceiling per coarse network hash |
+| `GA_MEASUREMENT_ID` | `G-3376VRHZW8` | GA4 property. Empty string omits the tag entirely |
+| `CLARITY_PROJECT_ID` | `y3gm1j4qyn` | Microsoft Clarity project. Empty string omits the tag entirely |
+| `LIVE_CACHE_TTL_SECONDS` | `900` | How long a fetched live quote is reused |
+| `LIVE_FETCH_TIMEOUT_SECONDS` | `8` | Per-fetch timeout for a live component |
+| `SENTIMENT_HISTORY_WEEKS` | `104` | Weeks of HMX-PPI history carried into the page |
 
+
+---
+
+## Analytics
+
+GA4 and Microsoft Clarity are injected by the app factory into every template
+and rendered in `base.html` only when their id is non-empty, so clearing either
+variable removes the tag rather than shipping a broken one.
+
+Everything else goes through one wrapper, defined in `base.html` **before** the
+GA tag loads:
+
+```js
+window.trackEvent = function (eventName, params) {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, Object.assign({ page_path: location.pathname }, params || {}));
+  }
+};
+```
+
+The typeof guard is the point. `gtag/js` is loaded `async`, and an ad-blocker
+may mean it never loads at all — a large share of this site's audience runs
+one. A missed event is the correct outcome there; a `ReferenceError` thrown out
+of a click handler is not, because it would take the interaction down with it.
+Every call site guards again for the same reason, so no page depends on
+analytics having loaded to work.
+
+| Source | Events |
+| :--- | :--- |
+| `js/theme.js` *(every page)* | `theme_toggle`, `nav_click`, `nav_drawer_open`, `file_download`, `copy_to_clipboard`, `copy_to_clipboard_fallback`, `click` (outbound), `exit_to_cvoter`, `report_tab_switch`, `table_expand`, `cta_click`, `exception` |
+| `js/charts.js` *(Hormuz)* | `chart_pan_zoom` |
+| `js/vote.js` *(HMX-PPI)* | `ppi_vote_interact`, `ppi_vote_submit`, `ppi_vote_withdraw`, `ppi_vote_error` |
+| `js/elections.js` | `report_tab_switch`, `chart_series_toggle`, `chart_events_toggle`, `chart_event_filter`, `chart_pan_zoom`, `chart_range_select`, `chart_reset_zoom` |
+| `js/democracy.js` | `hmdi_country_open` |
+| `js/hero-carousel.js` *(home)* | `hero_carousel_change` |
+| `templates/aviation.html` | `simulator_interact`, `simulator_reset` |
+| `templates/404.html`, `500.html` | `exception` |
+
+`report_tab_switch` is emitted from two places, and they do not overlap:
+`theme.js` binds `[data-report-tab]`, which is what every dashboard except the
+projection engine uses, while `elections.js` owns its own `[data-tab]` panels.
+Giving the two tab systems the same event name but different attributes keeps
+the funnel comparable across reports without double-counting the one page that
+has its own implementation.
 
 ---
 

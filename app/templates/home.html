@@ -11,12 +11,6 @@
     <article class="hcar-slide hcar-solvency" role="group" aria-roledescription="slide"
              aria-label="1 of 3: U.S. Sovereign Solvency Index" data-slide="solvency-index">
       <div class="av-hero-card">
-        {% if solvency_spark %}
-        <svg class="hcar-spark" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <polygon class="hcar-spark-fill" points="0,120 {{ solvency_spark }} 600,120"></polygon>
-          <polyline class="hcar-spark-line" points="{{ solvency_spark }}"></polyline>
-        </svg>
-        {% endif %}
         <div class="av-hero-overlay"></div>
 
         <div class="av-hero-content">
@@ -25,67 +19,101 @@
               <span class="material-symbols-outlined av-pill-icon">account_balance</span>
               U.S. SOVEREIGN SOLVENCY INDEX
             </span>
-            <span class="av-badge-meta">MONITOR U.S. FISCAL HEALTH</span>
+          </div>
+
+          <div class="av-badge-meta av-badge-meta-line">
+            FISCAL HEALTH &bull; DEBT SUSTAINABILITY &bull; ECONOMIC RESILIENCE
           </div>
 
           <h1 class="av-headline">
-            The Sovereign<br>Solvency Index<span class="av-dot">.</span>
+            Track. Analyze.<br>Stay Ahead<span class="av-dot">.</span>
           </h1>
 
-          <p class="hcar-score-line">
-            FY{{ solvency_hero.year }} composite score:
-            <strong>{{ "%.1f"|format(solvency_snapshot.score) }}</strong>
-            <span class="status-badge status-{{ solvency_snapshot.level_status }}">
-              <span class="status-dot" aria-hidden="true"></span>{{ solvency_snapshot.level_label }}
-            </span>
+          <p class="av-desc">
+            Quantitative intelligence on the financial solvency of the United States &mdash;
+            tracking debt levels, interest burden, fiscal balance, and economic resilience
+            against a long-term sustainable baseline. All in one place.
           </p>
 
-          <p class="av-desc">
-            A multi-decade, bipartisan accumulation of structural risk. Eighty years of U.S. debt
-            dynamics — debt held by the public, the interest burden on receipts, the primary
-            balance, productivity and r&minus;g — scored against a sustainable 100 baseline.
-          </p>
+          <div class="av-features-grid av-features-grid-5">
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">account_balance</span>
+              </div>
+              <span class="av-feat-label">Debt &amp; Liabilities</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">percent</span>
+              </div>
+              <span class="av-feat-label">Interest Burden</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">balance</span>
+              </div>
+              <span class="av-feat-label">Fiscal Balance</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">bar_chart</span>
+              </div>
+              <span class="av-feat-label">Economic Growth</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">shield</span>
+              </div>
+              <span class="av-feat-label">Solvency Risk</span>
+            </div>
+          </div>
 
           <div class="hcar-actions">
             <a href="{{ url_for('main.solvency_index') }}" class="btn-primary" data-cta="/solvency-index">
-              Explore U.S. Solvency Dashboard <span aria-hidden="true">&rarr;</span>
+              Explore Live Dashboard <span aria-hidden="true">&rarr;</span>
             </a>
             <a href="{{ url_for('main.solvency_index') }}#methodology" class="btn-secondary" data-cta="/solvency-index#methodology">
-              View Report Methodology
+              Methodology
             </a>
           </div>
         </div>
 
-        <div class="hcar-visual" aria-hidden="true">
-          <div class="hcar-window">
-            <div class="hcar-window-bar">
-              <span class="hcar-win-dot hcar-win-dot-r"></span>
-              <span class="hcar-win-dot hcar-win-dot-y"></span>
-              <span class="hcar-win-dot hcar-win-dot-g"></span>
-            </div>
-            <div class="hcar-window-body">
-              <span class="hcar-window-label">FY{{ solvency_hero.year }} status</span>
-              <span class="hcar-window-status status-{{ solvency_snapshot.level_status }}">{{ solvency_snapshot.level_label|upper }}</span>
-              <span class="hcar-window-score">{{ "%.1f"|format(solvency_snapshot.score) }}</span>
-            </div>
+        <!-- Floating live metrics over the photograph -->
+        <div class="av-hero-floating-metrics" aria-hidden="true">
+          <div class="av-floating-metric float-score">
+            <span class="float-num float-num-lg">{{ "%.1f"|format(solvency_snapshot.score) }}</span>
+            <span class="float-caption">Composite (100 = Sustainable)</span>
           </div>
 
+          {% if solvency_hero.score_delta is not none %}
+          <div class="av-floating-metric float-delta is-ghost">
+            <span class="float-num">{{ "%+.1f"|format(solvency_hero.score_delta) }}</span>
+            <span class="float-caption">vs FY{{ solvency_hero.year - 1 }}</span>
+          </div>
+          {% endif %}
+
           {% if solvency_hero.debt_gdp is not none %}
-          <div class="hcar-bubble hcar-bubble-1">
-            <span class="hcar-bubble-label">Debt/GDP</span>
-            <span class="hcar-bubble-val">{{ "%.1f"|format(solvency_hero.debt_gdp) }}%</span>
+          <div class="av-floating-metric float-mid">
+            <span class="float-num">{{ "%.0f"|format(solvency_hero.debt_gdp) }}%</span>
+            <span class="float-caption">Debt to GDP</span>
           </div>
           {% endif %}
+
           {% if solvency_hero.interest_burden is not none %}
-          <div class="hcar-bubble hcar-bubble-2">
-            <span class="hcar-bubble-label">Interest / receipts</span>
-            <span class="hcar-bubble-val">{{ "%.1f"|format(solvency_hero.interest_burden) }}%</span>
+          <div class="av-floating-metric float-far">
+            <span class="float-num">{{ "%.1f"|format(solvency_hero.interest_burden) }}%</span>
+            <span class="float-caption">Interest Burden<br>of Receipts</span>
           </div>
           {% endif %}
+
           {% if solvency_hero.primary_deficit is not none %}
-          <div class="hcar-bubble hcar-bubble-3">
-            <span class="hcar-bubble-label">Primary deficit</span>
-            <span class="hcar-bubble-val">{{ "%.1f"|format(solvency_hero.primary_deficit) }}%</span>
+          <div class="av-floating-metric float-bot">
+            <span class="float-num">{{ "%+.1f"|format(-solvency_hero.primary_deficit) }}%</span>
+            <span class="float-caption">Primary Balance<br>of GDP</span>
           </div>
           {% endif %}
         </div>
@@ -190,12 +218,6 @@
     <article class="hcar-slide hcar-hormuz" role="group" aria-roledescription="slide"
              aria-label="3 of 3: Hormuz Crisis Index" data-slide="hormuz-index">
       <div class="av-hero-card">
-        {% if hormuz_spark %}
-        <svg class="hcar-spark" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <polygon class="hcar-spark-fill" points="0,120 {{ hormuz_spark }} 600,120"></polygon>
-          <polyline class="hcar-spark-line" points="{{ hormuz_spark }}"></polyline>
-        </svg>
-        {% endif %}
         <div class="av-hero-overlay"></div>
 
         <div class="av-hero-content">

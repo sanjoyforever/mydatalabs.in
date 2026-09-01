@@ -1,0 +1,84 @@
+{% extends "admin/_base.html" %}
+{% block title %}Queue{% endblock %}
+{% block body %}
+{# Every reader-supplied value below — body, remedy, display_name — is printed
+   through Jinja's default autoescaping and never through |safe. It arrives
+   here unmoderated, so this page is the one place it must be hardest to
+   mistake for markup. #}
+<header class="bar">
+  <h1>Moderation queue</h1>
+  <form method="post" action="{{ url_for('admin.logout') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf }}">
+    <button type="submit">Sign out</button>
+  </form>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="notice {{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+
+{% if db_error %}<div class="notice error">Database: {{ db_error }}</div>{% endif %}
+
+<div class="row" style="margin-bottom:18px">
+  {% for key in ['pending', 'published', 'accepted', 'rejected'] %}
+    <a href="{{ url_for('admin.queue', status=key) }}"
+       style="text-decoration:none">
+      <button {% if status == key %}class="primary"{% endif %} type="button">
+        {{ key|capitalize }}{% if counts.get(key) %} ({{ counts[key] }}){% endif %}
+      </button>
+    </a>
+  {% endfor %}
+</div>
+
+{% if not rows %}
+  <div class="card muted">Nothing {{ status }}.</div>
+{% endif %}
+
+{% for row in rows %}
+  <article class="card">
+    <div class="muted" style="margin-bottom:8px">
+      <strong style="color:var(--text)">{{ row.report_label }}</strong>
+      &middot; {{ row.target_label }}
+      &middot; {{ row.verdict_label }}
+      &middot; {{ row.created_at.strftime('%Y-%m-%d %H:%M') if row.created_at }}
+      {% if row.display_name %}&middot; &ldquo;{{ row.display_name }}&rdquo;{% endif %}
+      &middot; #{{ row.id }}
+    </div>
+
+    <p style="white-space:pre-wrap; margin:0 0 10px">{{ row.body }}</p>
+
+    {% if row.remedy %}
+      <p class="muted" style="white-space:pre-wrap; margin:0 0 10px">
+        <strong>Suggested fix:</strong> {{ row.remedy }}
+      </p>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('admin.moderate', critique_id=row.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf }}">
+      <input type="hidden" name="from" value="{{ status }}">
+
+      <label for="response-{{ row.id }}">Your response (shown with the critique)</label>
+      <textarea id="response-{{ row.id }}" name="response"
+                placeholder="Why the choice was made, or what you have changed."
+                >{{ row.response or '' }}</textarea>
+
+      <label for="changelog-{{ row.id }}" style="margin-top:10px">
+        Changelog note (only used when accepting)
+      </label>
+      <input type="text" id="changelog-{{ row.id }}" name="changelog"
+             value="{{ row.changelog or '' }}"
+             placeholder="e.g. Baseline moved to Jan 2026 from this objection.">
+
+      <div class="row" style="margin-top:12px">
+        <button type="submit" name="action" value="publish" class="primary">Publish</button>
+        <button type="submit" name="action" value="accept" class="good">Accept &amp; changelog</button>
+        <button type="submit" name="action" value="reject">Reject</button>
+        <button type="submit" name="action" value="delete" class="warn"
+                onclick="return confirm('Delete #{{ row.id }} permanently?')">Delete</button>
+      </div>
+    </form>
+  </article>
+{% endfor %}
+{% endblock %}

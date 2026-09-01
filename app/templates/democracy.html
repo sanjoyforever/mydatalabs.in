@@ -1,0 +1,1511 @@
+{% extends "base.html" %}
+
+{% set latest = panel[-1] if panel else None %}
+{% set top = rankings[0] if rankings else None %}
+{% set bottom = rankings[-1] if rankings else None %}
+
+{% block title %}Hard-Metric Democracy Index (HMDI) — 30 Economies, 2000–{{ year }} — MyDataLabs{% endblock %}
+{% block meta_desc %}A democracy index built only from published counts and rates — turnout, seat proportionality, legislative concentration, inequality, internet shutdowns, detention — across the top 30 economies for every year since 2000. No expert survey anywhere in it. Panel mean {{ "%.1f"|format(snapshot.score) }} for {{ year }}.{% endblock %}
+{% block og_title %}Hard-Metric Democracy Index: 30 economies scored on countable evidence{% endblock %}
+{% block og_desc %}Ten published indicators, five pillars, geometric aggregation, 2000–{{ year }}. Every input is a count or a rate someone published; no country is scored on an opinion about it. Open methodology, free data.{% endblock %}
+{% block twitter_title %}Hard-Metric Democracy Index — {{ year }}{% endblock %}
+{% block twitter_desc %}Democracy scored on turnout, proportionality, concentration, inequality, shutdowns and detention. 30 economies, 25 years, no expert survey.{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Dataset",
+      "@id": "{{ origin }}/democracy-index#dataset",
+      "name": "Hard-Metric Democracy Index (HMDI)",
+      "description": "Annual composite democracy index for the 30 largest economies, 2000-{{ year }}, built exclusively from published counts, rates and electoral mathematics: voter turnout against voting-age population, Gallagher disproportionality, legislative Herfindahl-Hirschman concentration, women's legislative share, income Gini, internet shutdown person-hours per capita, journalists imprisoned per 10M, pre-trial detention share and incarceration rate. Five pillars aggregated by weighted geometric mean.",
+      "url": "{{ origin }}/democracy-index",
+      "keywords": ["democracy index", "voter turnout", "Gallagher index", "electoral disproportionality", "legislative concentration", "income inequality", "internet shutdowns", "pre-trial detention", "comparative politics"],
+      "creator": { "@id": "{{ origin }}/#organization" },
+      "publisher": { "@id": "{{ origin }}/#organization" },
+      "license": "{{ license_url }}",
+      "isAccessibleForFree": true,
+      "temporalCoverage": "{{ years[0] }}/{{ years[-1] }}",
+      "spatialCoverage": "Top 30 economies by GDP",
+      "dateModified": "{{ generated_at }}",
+      "measurementTechnique": "Fixed-bound linear normalisation of each indicator to 0-100, arithmetic mean within pillar, weighted geometric mean across five pillars",
+      "variableMeasured": [
+        {
+          "@type": "PropertyValue",
+          "name": "HMDI panel mean composite",
+          "value": {{ "%.1f"|format(snapshot.score) }},
+          "minValue": 0,
+          "maxValue": 100
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ origin }}/" },
+        { "@type": "ListItem", "position": 2, "name": "Hard-Metric Democracy Index", "item": "{{ origin }}/democracy-index" }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+  /* Page-scoped layout for the multi-country dashboard. Every colour, radius
+     and step comes from the global tokens, so the page follows the theme
+     toggle without a second palette. */
+
+  .hmdi-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .hmdi-kpi {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius);
+    padding: var(--space-4);
+    display: flex; flex-direction: column; gap: 2px;
+    border-top: 3px solid var(--kpi-accent, var(--accent-blue));
+  }
+  .hmdi-kpi-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .hmdi-kpi-value {
+    font-family: var(--font-mono); font-size: 1.7rem; font-weight: 700;
+    line-height: 1.15; color: var(--kpi-accent, var(--text-main));
+  }
+  .hmdi-kpi-value .hmdi-kpi-unit { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+  .hmdi-kpi-note { font-size: 0.76rem; color: var(--text-muted); line-height: 1.35; }
+
+  /* --- Controls ---------------------------------------------------------- */
+  .hmdi-controls {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius);
+    padding: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .hmdi-controls-head {
+    display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4);
+  }
+  .hmdi-controls-head h2 { font-size: 1rem; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .hmdi-year-readout {
+    font-family: var(--font-mono); font-size: 1.9rem; font-weight: 700;
+    color: var(--accent-blue); line-height: 1;
+  }
+  .hmdi-year-row { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4); }
+  .hmdi-year-row input[type="range"] { flex: 1; accent-color: var(--accent-blue); cursor: pointer; min-width: 160px; }
+  .hmdi-year-ends { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+
+  .hmdi-weight-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: var(--space-4);
+    padding-top: var(--space-4); border-top: 1px solid var(--border-subtle);
+  }
+  .hmdi-weight label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 8px; font-size: 0.75rem; font-weight: 600; margin-bottom: 6px;
+  }
+  .hmdi-weight-pct { font-family: var(--font-mono); font-weight: 700; color: var(--accent-blue); }
+  .hmdi-weight input[type="range"] { width: 100%; cursor: pointer; }
+  .hmdi-weight-note {
+    grid-column: 1 / -1; font-size: 0.76rem; color: var(--text-muted);
+    line-height: 1.45; display: flex; flex-wrap: wrap; gap: var(--space-3);
+    align-items: center; justify-content: space-between;
+  }
+
+  /* --- Rankings table ---------------------------------------------------- */
+  .hmdi-table-toolbar {
+    display: flex; flex-wrap: wrap; gap: var(--space-3);
+    align-items: center; justify-content: space-between; margin-bottom: var(--space-3);
+  }
+  .hmdi-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hmdi-filters input, .hmdi-filters select {
+    background: var(--surface-input); border: 1px solid var(--border-subtle);
+    color: var(--text-main); border-radius: 8px; padding: 7px 10px; font-size: 0.8rem;
+    font-family: var(--font-sans);
+  }
+  .hmdi-filters input:focus, .hmdi-filters select:focus { outline: 2px solid var(--accent-blue); outline-offset: 1px; }
+
+  table.hmdi-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  table.hmdi-table th {
+    text-align: left; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted); font-weight: 700; padding: 8px 10px;
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+    position: sticky; top: 0; background: var(--surface-card); z-index: 2;
+  }
+  table.hmdi-table th[data-sort] { cursor: pointer; user-select: none; }
+  table.hmdi-table th[data-sort]:hover { color: var(--text-main); }
+  table.hmdi-table th .hmdi-sort-caret { font-size: 0.9em; opacity: 0.45; }
+  table.hmdi-table th[aria-sort] .hmdi-sort-caret { opacity: 1; color: var(--accent-blue); }
+  table.hmdi-table td { padding: 8px 10px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+  table.hmdi-table tbody tr { cursor: pointer; }
+  table.hmdi-table tbody tr:hover { background: var(--surface-card-hover); }
+  table.hmdi-table tbody tr:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: -2px; }
+  .hmdi-num { font-family: var(--font-mono); text-align: right; }
+  .hmdi-rank { font-family: var(--font-mono); color: var(--text-muted); width: 3ch; }
+  .hmdi-country { display: flex; align-items: center; gap: 9px; }
+  .hmdi-code {
+    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700;
+    background: var(--surface-input); border: 1px solid var(--border-subtle);
+    border-radius: 5px; padding: 2px 5px; color: var(--text-muted); letter-spacing: 0.04em;
+  }
+  .hmdi-score-cell { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+  .hmdi-score-bar {
+    display: inline-block;
+    width: 54px; height: 5px;
+    border-radius: 3px; background: var(--surface-input);
+    overflow: hidden; flex: none; vertical-align: middle;
+  }
+  .hmdi-score-bar i { display: block; height: 100%; border-radius: 3px; }
+  .hmdi-pill-cells span {
+    display: inline-block; width: 30px; height: 16px; border-radius: 3px;
+    font-size: 0.6rem; line-height: 16px; text-align: center; font-family: var(--font-mono);
+    color: #0B1220; font-weight: 700; margin-right: 2px;
+  }
+
+  /* Column sizing. `table-layout: fixed` plus a colgroup is what stops a
+     table from sizing itself to its content and leaving the rest of the card
+     empty; the prose column takes the slack in every case. */
+  .hmdi-fixed { table-layout: fixed; width: 100%; }
+  .hmdi-fixed td, .hmdi-fixed th { overflow-wrap: anywhere; }
+
+  /* Diverging bar for a correlation coefficient: centre is 0, left is
+     negative, right is positive. The correlation table was 704px of a 1303px
+     card with the right half empty — this earns the width rather than padding
+     it, and makes the two collinear pairs visible without reading the number. */
+  .hmdi-rho-track {
+    /* display:block is load-bearing, not cosmetic: as an inline span the
+       height and the absolutely-positioned fills collapse to nothing and the
+       column renders empty. */
+    display: block; position: relative; height: 14px; border-radius: 3px;
+    background: var(--surface-input); overflow: hidden;
+  }
+  .hmdi-rho-track::before {
+    content: ""; position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 1px; background: var(--border-bright); opacity: 0.7;
+  }
+  .hmdi-rho-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 2px; }
+
+  /* Same track without the zero line. The spread bars run 0-100, where a tick
+     at the midpoint marks nothing — it was being read as a second mean. */
+  .hmdi-spread-track { display: block; position: relative; height: 14px; border-radius: 3px;
+                       background: var(--surface-input); overflow: hidden; }
+
+  /* --- Provenance -------------------------------------------------------- */
+  .hmdi-anchor-chip {
+    font-family: var(--font-mono); font-size: 0.68rem; padding: 2px 6px;
+    border-radius: 4px; border: 1px solid var(--border-subtle); color: var(--text-muted);
+  }
+  .hmdi-anchor-chip.is-thin { color: var(--accent-amber); border-color: var(--accent-amber); }
+
+  /* --- V-Dem comparator column ------------------------------------------- */
+  /* Deliberately the quietest column in the table: it is a second opinion, not
+     a second score, and it must not read as part of the index. Muted text, no
+     accent colour, no bar. */
+  .hmdi-vdem-col { color: var(--text-muted); }
+  .hmdi-vdem-chip {
+    display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.15;
+    font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
+  }
+  .hmdi-vdem-chip i { font-style: normal; font-size: 0.6rem; opacity: 0.65; font-weight: 400; }
+  .hmdi-vdem-chip.is-empty { opacity: 0.45; }
+  .hmdi-drawer-score.is-muted { opacity: 0.72; }
+  .hmdi-drawer-score.is-muted .hmdi-drawer-score-value { font-size: 1.05rem; color: var(--text-muted); }
+
+  /* --- Country drawer ---------------------------------------------------- */
+  .hmdi-drawer-backdrop {
+    position: fixed; inset: 0; background: rgba(2, 6, 23, 0.66);
+    backdrop-filter: blur(3px); z-index: 90; display: none;
+  }
+  .hmdi-drawer-backdrop[data-open="true"] { display: block; }
+  .hmdi-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 100%);
+    background: var(--surface-header); color: var(--text-main);
+    border-left: 1px solid var(--border-bright);
+    box-shadow: -18px 0 44px rgba(2, 6, 23, 0.28);
+    z-index: 91; overflow-y: auto; overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--space-5);
+    transform: translateX(100%); transition: transform 0.22s ease;
+  }
+  .hmdi-drawer[hidden] { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .hmdi-drawer { transition: none; }
+  }
+  .hmdi-drawer-backdrop[data-open="true"] + .hmdi-drawer,
+  .hmdi-drawer[data-open="true"] { transform: translateX(0); }
+  .hmdi-drawer-head {
+    position: sticky; top: calc(var(--space-5) * -1);
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: var(--space-3); margin: calc(var(--space-5) * -1) calc(var(--space-5) * -1) var(--space-4);
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    background: var(--surface-header); border-bottom: 1px solid var(--border-bright);
+    z-index: 1;
+  }
+  .hmdi-drawer-head > div:first-child { min-width: 0; }
+  .hmdi-drawer-head h2 { margin: 0 0 4px; font-size: 1.15rem; color: var(--text-main); overflow-wrap: anywhere; }
+  .hmdi-drawer-head .header-icon-btn { flex: 0 0 auto; }
+  .hmdi-drawer h3 { margin: var(--space-4) 0 var(--space-2); font-size: 0.82rem; color: var(--text-main); }
+  .hmdi-drawer-sub { font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; }
+  .hmdi-drawer-scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); margin-bottom: var(--space-4); }
+  .hmdi-drawer-score { background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); padding: var(--space-3); }
+  .hmdi-drawer-score-label { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 700; }
+  .hmdi-drawer-score-value { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; margin-top: 3px; }
+  #hmdi-drawer-radar {
+    width: 100%; height: 280px;
+    background: var(--surface-card); border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius);
+  }
+  .hmdi-drawer table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .hmdi-drawer th { text-align: left; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); padding: 6px 8px; border-bottom: 1px solid var(--border-bright); }
+  .hmdi-drawer td { padding: 6px 8px; border-bottom: 1px solid var(--border-subtle); color: var(--text-sub); }
+  .hmdi-drawer td strong { color: var(--text-main); }
+  .hmdi-drawer .hmdi-num { text-align: right; font-family: var(--font-mono); white-space: nowrap; }
+  .hmdi-drawer table td:first-child { width: 46%; }
+
+  /* --- Methodology ------------------------------------------------------- */
+  .hmdi-pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  @media (max-width: 1240px) { .hmdi-pillar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 860px)  { .hmdi-pillar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px)  { .hmdi-pillar-grid { grid-template-columns: 1fr; } }
+  .hmdi-pillar-card { border: 1px solid var(--border-subtle); border-radius: var(--card-radius); padding: var(--space-4); background: var(--surface-card); border-left: 3px solid var(--pillar-color, var(--accent-blue)); }
+  .hmdi-pillar-card h3 { margin: 0 0 4px; font-size: 0.92rem; }
+  .hmdi-pillar-q { font-size: 0.78rem; color: var(--text-muted); font-style: italic; margin-bottom: 10px; }
+  .hmdi-pillar-card ul { margin: 0; padding-left: 16px; font-size: 0.78rem; line-height: 1.6; }
+
+  /* Methodology prose. One column spanning its card: the paragraphs were
+     inline-capped at 74ch, which read as a narrow column stranded on the left
+     of a 1360px card. Line length is held by the card's own padding instead. */
+  .hmdi-prose {
+    font-size: 0.9rem;
+    color: var(--text-sub);
+    line-height: 1.65;
+    margin: 0 0 var(--space-3);
+  }
+  .hmdi-prose:last-of-type { margin-bottom: 0; }
+
+  .hmdi-note-box {
+    border: 1px solid var(--border-subtle); border-left: 3px solid var(--accent-amber);
+    border-radius: var(--card-radius); padding: var(--space-4);
+    background: var(--surface-card); margin-top: var(--space-4);
+  }
+  .hmdi-note-box h3 { margin: 0 0 6px; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+  .hmdi-note-box p { margin: 0 0 8px; font-size: 0.82rem; line-height: 1.6; color: var(--text-sub); }
+  .hmdi-note-box p:last-child { margin-bottom: 0; }
+
+  .hmdi-repro-grid {
+    list-style: none; margin: var(--space-4) 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3);
+  }
+  .hmdi-repro-grid li {
+    border: 1px solid var(--border-subtle); border-radius: var(--card-radius);
+    padding: var(--space-4); background: var(--surface-card);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .hmdi-repro-grid code { font-size: 0.74rem; word-break: break-all; color: var(--text-main); }
+  .hmdi-repro-grid > li > a { font-size: 0.8rem; font-weight: 600; line-height: 1.35; color: var(--text-main); }
+  .hmdi-repro-grid > li > a:hover { color: var(--accent-blue); }
+  .hmdi-repro-grid p { margin: 0; font-size: 0.78rem; line-height: 1.5; color: var(--text-muted); }
+  .hmdi-repro-step {
+    font-size: 0.64rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--accent-blue);
+  }
+  @media (max-width: 1000px) { .hmdi-repro-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px)  { .hmdi-repro-grid { grid-template-columns: 1fr; } }
+
+  /* --- Executive summary --------------------------------------------------
+     The page's one piece of long-form prose, so it follows the solvency card:
+     a highlighted lede, then question blocks in two columns on wide screens
+     with the closing block spanning both. */
+  .hmdi-exec { border-top: 3px solid var(--accent-blue); }
+  .hmdi-exec-body { padding: var(--space-5) 0 var(--space-4); }
+  .hmdi-exec-lede {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--text-main);
+    padding: var(--space-4);
+    background: var(--accent-blue-bg);
+    border-left: 4px solid var(--accent-blue);
+    border-radius: 0 var(--card-radius) var(--card-radius) 0;
+    margin: 0 0 var(--space-5);
+  }
+  .hmdi-exec-lede strong { font-family: var(--font-mono); }
+  .hmdi-exec-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6);
+  }
+  @media (min-width: 1024px) {
+    .hmdi-exec-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6) var(--space-8);
+    }
+  }
+  .hmdi-exec-q h3 {
+    font-size: 0.95rem; font-weight: 700; margin: 0 0 8px;
+    color: var(--accent-blue); line-height: 1.4;
+  }
+  .hmdi-exec-q p {
+    font-size: 0.88rem; line-height: 1.7; color: var(--text-muted); margin: 0 0 10px;
+  }
+  .hmdi-exec-q p strong { color: var(--text-main); }
+  .hmdi-exec-bottom {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--space-4);
+  }
+  .hmdi-exec-caveat {
+    font-size: 0.82rem !important; font-style: italic;
+    border-left: 3px solid var(--border-subtle); padding-left: var(--space-3);
+  }
+  .hmdi-exec-list { list-style: none; margin: 0; padding: 0; }
+  .hmdi-exec-list li {
+    padding: 8px 0; border-top: 1px solid var(--border-subtle);
+  }
+  .hmdi-exec-list li:first-child { border-top: 0; }
+  .hmdi-exec-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3);
+    font-size: 0.85rem; font-weight: 600;
+  }
+  .hmdi-exec-delta { font-family: var(--font-mono); font-weight: 700; white-space: nowrap; }
+  .hmdi-exec-delta.is-up { color: var(--accent-emerald); }
+  .hmdi-exec-delta.is-down { color: var(--accent-rose); }
+  .hmdi-exec-why { font-size: 0.76rem; color: var(--text-muted); line-height: 1.4; margin-top: 2px; }
+  .hmdi-exec-endpoints { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 500; color: var(--text-muted); }
+  .hmdi-exec-bar {
+    height: 4px; border-radius: 2px; background: var(--border-subtle);
+    margin-top: 6px; overflow: hidden; display: flex;
+  }
+  .hmdi-exec-bar i { display: block; height: 100%; border-radius: 2px; }
+
+  .hmdi-chartwrap { width: 100%; height: 420px; }
+  .hmdi-chartwrap-sm { width: 100%; height: 300px; }
+
+  .hmdi-legend { display: flex; flex-wrap: wrap; gap: var(--space-3); font-size: 0.74rem; color: var(--text-muted); margin-top: 10px; }
+  .hmdi-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .hmdi-legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+  .hmdi-country-picker { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: var(--space-3); }
+  .hmdi-country-picker button {
+    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
+    padding: 3px 7px; border-radius: 5px; cursor: pointer;
+    background: var(--surface-input); border: 1px solid var(--border-subtle); color: var(--text-muted);
+  }
+  .hmdi-country-picker button[aria-pressed="true"] { background: var(--accent-blue-bg); border-color: var(--accent-blue); color: var(--accent-blue); }
+
+  @media (max-width: 640px) {
+    .hmdi-drawer { padding: var(--space-4); }
+    .hmdi-drawer-head {
+      top: calc(var(--space-4) * -1);
+      margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) var(--space-3);
+      padding: var(--space-4) var(--space-4) var(--space-3);
+    }
+    .hmdi-drawer-scores { grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: var(--space-2); }
+    .hmdi-drawer-score { padding: var(--space-2); }
+    .hmdi-drawer-score-value { font-size: 1.05rem; }
+    .hmdi-chartwrap { height: 340px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="report-dash-canvas">
+
+  <div class="elections-topbar">
+    <nav class="breadcrumb-v2" aria-label="Breadcrumb">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <span class="breadcrumb-current" aria-current="page">Hard-Metric Democracy Index</span>
+    </nav>
+
+    <div class="tab-segmented" role="tablist" aria-label="Report sections">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true"
+              aria-controls="tab-dashboard" data-report-tab="dashboard">
+        <span class="material-symbols-outlined">dashboard</span>
+        Dashboard
+      </button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false"
+              aria-controls="tab-methodology" data-report-tab="methodology">
+        <span class="material-symbols-outlined">science</span>
+        Methodology
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= DASHBOARD ================= -->
+  <div id="tab-dashboard" class="report-panel active" role="tabpanel">
+
+    <div class="hero-projection-card" style="margin-bottom: 24px;">
+      <div class="hero-blur-accent"></div>
+      <div class="hero-projection-content">
+        <div class="hero-left">
+          <div class="hero-badge-row">
+            <span class="hero-badge-live">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              30 economies &middot; {{ years[0] }}&ndash;{{ years[-1] }}
+            </span>
+            <span class="status-badge status-{{ snapshot.level_status }}">
+              <span class="status-dot" aria-hidden="true"></span>{{ snapshot.level_label|upper }}
+            </span>
+            <span class="hero-survey-date">Panel year {{ year }}</span>
+          </div>
+
+          <div>
+            <h1>Hard-Metric Democracy Index</h1>
+            <div class="hero-meta">
+              <span>Ten published counts and rates. No expert survey.</span>
+              <span class="meta-dot" aria-hidden="true">&bull;</span>
+              <span>Five pillars, aggregated by geometric mean</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div>
+            <div class="hero-metric-label">PANEL MEAN, {{ year }}</div>
+            <div class="hero-metric-row">
+              <span class="hero-metric-value font-mono">{{ "%.1f"|format(snapshot.score) }}</span>
+              <span class="hero-metric-denom">/ 100</span>
+            </div>
+            <div class="hero-trend">
+              <span class="hero-trend-pill {% if delta >= 0 %}trend-good{% else %}trend-critical{% endif %}">
+                <span class="material-symbols-outlined">{% if delta >= 0 %}arrow_upward{% else %}arrow_downward{% endif %}</span>
+                {% if delta >= 0 %}+{% else %}&minus;{% endif %}{{ "%.1f"|format(delta|abs) }}
+              </span>
+              <span class="hero-trend-caption">vs {{ years[-2] if years|length > 1 else '—' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Headline figures -->
+    <div class="hmdi-kpi-grid">
+      <div class="hmdi-kpi" style="--kpi-accent: var(--accent-emerald);">
+        <span class="hmdi-kpi-label">Highest scoring</span>
+        <span class="hmdi-kpi-value" id="hmdi-kpi-top-name" style="font-size: 1.2rem;">{{ top.country_name if top else '—' }}</span>
+        <span class="hmdi-kpi-note"><strong class="font-mono" id="hmdi-kpi-top-score">{{ "%.1f"|format(top.composite) if top else '—' }}</strong> &mdash; <span id="hmdi-kpi-top-tier">{{ top.tier if top else '' }}</span></span>
+      </div>
+      <div class="hmdi-kpi" style="--kpi-accent: var(--accent-rose);">
+        <span class="hmdi-kpi-label">Lowest scoring</span>
+        <span class="hmdi-kpi-value" id="hmdi-kpi-bottom-name" style="font-size: 1.2rem;">{{ bottom.country_name if bottom else '—' }}</span>
+        <span class="hmdi-kpi-note"><strong class="font-mono" id="hmdi-kpi-bottom-score">{{ "%.1f"|format(bottom.composite) if bottom else '—' }}</strong> &mdash; <span id="hmdi-kpi-bottom-tier">{{ bottom.tier if bottom else '' }}</span></span>
+      </div>
+      <div class="hmdi-kpi" style="--kpi-accent: var(--accent-blue);">
+        <span class="hmdi-kpi-label">Spread, top to bottom</span>
+        <span class="hmdi-kpi-value" id="hmdi-kpi-spread">{{ "%.1f"|format(latest.spread) if latest else '—' }}<span class="hmdi-kpi-unit"> pts</span></span>
+        <span class="hmdi-kpi-note">The gap a panel mean hides. Watch it against the mean on the trajectory chart.</span>
+      </div>
+      <div class="hmdi-kpi" style="--kpi-accent: var(--accent-purple);">
+        <span class="hmdi-kpi-label">Indicators scored</span>
+        <span class="hmdi-kpi-value">{{ metrics|length }}<span class="hmdi-kpi-unit"> of 12</span></span>
+        <span class="hmdi-kpi-note">Two source columns restate two others and are published as context rather than scored. <a href="#hmdi-collinearity" data-goto-method>Why</a>.</span>
+      </div>
+      <div class="hmdi-kpi" style="--kpi-accent: var(--accent-amber);">
+        <span class="hmdi-kpi-label">Sits on a source</span>
+        <span class="hmdi-kpi-value">{{ "%.0f"|format((provenance.anchor_share or 0) * 100) }}<span class="hmdi-kpi-unit">%</span></span>
+        <span class="hmdi-kpi-note">{{ "{:,}".format(provenance.anchor_cells or 0) }} of {{ "{:,}".format(provenance.total_cells or 0) }} cells. The rest is interpolated between anchors. <a href="#hmdi-provenance" data-goto-method>Read this first</a>.</span>
+      </div>
+    </div>
+
+    <!-- The honest caveat, above the fold rather than buried on tab two. -->
+    <div class="notice notice-warning" style="margin-bottom: 24px;">
+      <strong>What this index cannot see.</strong>
+      Judicial independence, press pluralism and whether an election was actually free are the
+      things that matter most, and none of them are a number anyone publishes — so none of them
+      are here. A high score means the countable things look healthy. It is not a verdict on a
+      country. And {{ "%.0f"|format(100 - (provenance.anchor_share or 0) * 100) }}% of the panel's
+      cells are interpolated between source-backed years rather than measured in them, so a
+      smooth line is often inference, not stability.
+    </div>
+
+    <!-- Controls -->
+    <section class="hmdi-controls" aria-labelledby="hmdi-controls-heading">
+      <div class="hmdi-controls-head">
+        <h2 id="hmdi-controls-heading">
+          <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+          Year and pillar weights
+        </h2>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span class="hmdi-year-readout" id="hmdi-year-readout">{{ year }}</span>
+          <button type="button" class="btn-secondary btn-sm" id="hmdi-reset-weights">Reset to equal weights</button>
+        </div>
+      </div>
+
+      <div class="hmdi-year-row">
+        <span class="hmdi-year-ends">{{ years[0] }}</span>
+        <input type="range" id="hmdi-year" min="{{ years[0] }}" max="{{ years[-1] }}" step="1"
+               value="{{ year }}" aria-label="Panel year" aria-describedby="hmdi-year-readout">
+        <span class="hmdi-year-ends">{{ years[-1] }}</span>
+      </div>
+
+      <div class="hmdi-weight-grid">
+        {% for p in pillars %}
+        <div class="hmdi-weight">
+          <label for="hmdi-w-{{ p.key }}">
+            <span style="color: {{ p.color }};">{{ p.short }}</span>
+            <span class="hmdi-weight-pct" id="hmdi-w-{{ p.key }}-val">20%</span>
+          </label>
+          <input type="range" id="hmdi-w-{{ p.key }}" data-pillar="{{ p.key }}"
+                 min="0" max="50" step="1" value="20"
+                 style="accent-color: {{ p.color }};">
+        </div>
+        {% endfor %}
+        <p class="hmdi-weight-note">
+          <span>
+            Equal weights are the published default because there is no empirical basis for
+            saying due process is 1.4&times; electoral health. Move them and watch the table:
+            if a ranking survives every weighting, the weights were never carrying it.
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <!-- Rankings -->
+    <section class="components-card" aria-labelledby="hmdi-rank-heading">
+      <div class="components-card-head">
+        <h2 id="hmdi-rank-heading">Rankings, <span id="hmdi-rank-year">{{ year }}</span></h2>
+        <span class="card-sub">Click a row for the full indicator breakdown</span>
+      </div>
+
+      <div class="hmdi-table-toolbar">
+        <div class="hmdi-filters">
+          <input type="search" id="hmdi-search" placeholder="Search country…" aria-label="Search country">
+          <select id="hmdi-region" aria-label="Filter by region">
+            <option value="">All regions</option>
+            {% for r in regions %}<option value="{{ r }}">{{ r }}</option>{% endfor %}
+          </select>
+        </div>
+        <span class="card-sub" id="hmdi-row-count">{{ rankings|length }} economies</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="hmdi-table">
+          <thead>
+            <tr>
+              <th data-sort="rank" aria-sort="ascending">#<span class="hmdi-sort-caret"> ▲</span></th>
+              <th data-sort="name">Economy<span class="hmdi-sort-caret"> ▲</span></th>
+              <th data-sort="composite" style="text-align:right;">Composite<span class="hmdi-sort-caret"> ▲</span></th>
+              <th>Pillars</th>
+              <th data-sort="vdem" class="hmdi-vdem-col" style="text-align:right;"
+                  title="V-Dem Liberal Democracy Index rank within these thirty. Expert-coded, not an input to this index.">V-Dem&nbsp;#<span class="hmdi-sort-caret"> ▲</span></th>
+              <th data-sort="tier">Classification<span class="hmdi-sort-caret"> ▲</span></th>
+              <th data-sort="anchor" style="text-align:right;">On source<span class="hmdi-sort-caret"> ▲</span></th>
+            </tr>
+          </thead>
+          <tbody id="hmdi-tbody">
+            {# Server-rendered so the table is in the HTML for a crawler and for
+               a reader with no JS. The script replaces these rows wholesale on
+               the first year or weight change. #}
+            {% for row in rankings %}
+            <tr tabindex="0" data-code="{{ row.country_code }}" data-region="{{ row.region }}">
+              <td class="hmdi-rank">{{ row.rank }}</td>
+              <td>
+                <div class="hmdi-country">
+                  <span class="hmdi-code">{{ row.country_code }}</span>
+                  <span>{{ row.country_name }}</span>
+                </div>
+              </td>
+              <td class="hmdi-num">
+                <div class="hmdi-score-cell">
+                  <span class="hmdi-score-bar"><i style="width: {{ row.composite }}%; background: {{ pillars[0].color }};"></i></span>
+                  <strong>{{ "%.1f"|format(row.composite) }}</strong>
+                </div>
+              </td>
+              <td class="hmdi-pill-cells">
+                {% for p in pillars %}<span title="{{ p.label }}: {{ '%.1f'|format(row.pillars[p.key]) }}"
+                  style="background: {{ p.color }}; opacity: {{ 0.25 + 0.75 * (row.pillars[p.key] / 100) }};">{{ row.pillars[p.key]|round|int }}</span>{% endfor %}
+              </td>
+              <td class="hmdi-num hmdi-vdem-col">
+                {% if row.vdem_rank %}<span class="hmdi-vdem-chip" title="V-Dem liberal democracy index {{ row.vdem_score }} ({{ year }})">{{ row.vdem_rank }}<i>{{ "%.2f"|format(row.vdem_score) }}</i></span>{% else %}<span class="hmdi-vdem-chip is-empty">—</span>{% endif %}
+              </td>
+              <td><span class="status-badge status-{{ row.status }}">{{ row.tier }}</span></td>
+              <td class="hmdi-num">
+                <span class="hmdi-anchor-chip {% if row.anchor_share < 0.5 %}is-thin{% endif %}">{{ "%.0f"|format(row.anchor_share * 100) }}%</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="components-footnote">
+        The <em>On source</em> column is the share of that row's ten indicators anchored to a
+        published figure for that year rather than interpolated from neighbouring years. A row at
+        20% is four-fifths inference; read its score accordingly.
+        <br>
+        The grey <em>V-Dem&nbsp;#</em> column is that country's rank on V-Dem's expert-coded
+        Liberal Democracy Index <em>within these same thirty</em> (its 0&ndash;1 score beneath it),
+        for the selected year. It is a comparator and never an input: it does not move when the
+        weight sliders move. Where the two ranks disagree is where counting and expert judgement
+        tell different stories &mdash;
+        <a href="#hmdi-vdem" data-goto-method>the divergences are tabulated in the methodology</a>.
+      </p>
+    </section>
+
+    <!-- Trajectories -->
+    <section class="chart-card" aria-labelledby="hmdi-traj-heading" style="margin-top: 24px;">
+      <div class="chart-header">
+        <div>
+          <h2 id="hmdi-traj-heading">Trajectories, {{ years[0] }}&ndash;{{ years[-1] }}</h2>
+          <p class="section-desc">
+            Composite score per year against the unweighted panel mean. The vertical axis is scaled
+            to the plotted series, so the visible range changes as countries and weights change.
+          </p>
+        </div>
+      </div>
+      <div class="hmdi-country-picker" id="hmdi-traj-picker" role="group" aria-label="Countries to plot"></div>
+      <div class="hmdi-chartwrap" id="hmdi-traj-chart">
+        <p class="chart-fallback">Trajectory chart needs JavaScript. The ranking table above is complete without it.</p>
+      </div>
+    </section>
+
+    <!-- Movers -->
+    <section class="chart-card" aria-labelledby="hmdi-movers-heading" style="margin-top: 24px;">
+      <div class="chart-header">
+        <div>
+          <h2 id="hmdi-movers-heading">Movement, {{ years[0] }} to {{ years[-1] }}</h2>
+          <p class="section-desc">
+            Change in composite over the full panel. A quarter-century is long enough that these
+            are structural moves rather than the noise of one election, but every bar inherits the
+            interpolation caveat: the endpoints are anchored more often than the middle.
+          </p>
+        </div>
+      </div>
+      <div class="hmdi-chartwrap" id="hmdi-movers-chart">
+        <p class="chart-fallback">Chart needs JavaScript.</p>
+      </div>
+    </section>
+
+    <!-- Pillar means over time -->
+    <section class="chart-card" aria-labelledby="hmdi-pillars-heading" style="margin-top: 24px;">
+      <div class="chart-header">
+        <div>
+          <h2 id="hmdi-pillars-heading">Which pillar moved</h2>
+          <p class="section-desc">
+            Panel mean for each pillar, year by year. The composite is a product of these five, so
+            a flat headline with two pillars moving in opposite directions is a different world
+            from a genuinely stable one.
+          </p>
+        </div>
+      </div>
+      <div class="hmdi-chartwrap-sm" id="hmdi-pillar-chart">
+        <p class="chart-fallback">Chart needs JavaScript.</p>
+      </div>
+    </section>
+
+    <!-- Executive summary. Every figure comes from democracy.executive_summary(),
+         which reads the series at render time, so this prose cannot drift away
+         from the charts above it. -->
+    <section class="components-card hmdi-exec" id="hmdi-exec" aria-labelledby="hmdi-exec-heading" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2 id="hmdi-exec-heading">
+          <span class="material-symbols-outlined" aria-hidden="true" style="vertical-align: -4px; margin-right: 6px;">summarize</span>
+          Executive Summary
+        </h2>
+        <span class="section-desc">
+          What {{ exec_summary.n }} economies and {{ exec_summary.span }} years of counting add up to, in plain
+          language. Read under the published equal weighting, not whatever the sliders above are currently set to.
+        </span>
+      </div>
+
+      <div class="hmdi-exec-body">
+
+        <div class="hmdi-exec-lede">
+          The panel mean has {{ exec_summary.direction }} by
+          <strong>{{ "%+.1f"|format(exec_summary.mean_delta) }} points</strong> in
+          {{ exec_summary.span }} years &mdash; {{ "%.1f"|format(exec_summary.mean_from) }} in
+          {{ exec_summary.start_year }} to {{ "%.1f"|format(exec_summary.mean_to) }} in {{ exec_summary.end_year }} &mdash;
+          and that average is the least interesting number here. The gap between the highest and lowest
+          scoring economy grew {{ "%.1f"|format(exec_summary.spread_delta|abs) }} points
+          {{ exec_summary.spread_direction }} over the same decade, from
+          {{ "%.1f"|format(exec_summary.spread_from) }} to {{ "%.1f"|format(exec_summary.spread_to) }}.
+          {{ exec_summary.improved_count }} of {{ exec_summary.n }} economies improved,
+          {{ exec_summary.declined_count }} declined{% if exec_summary.flat_count %},
+          {{ exec_summary.flat_count }} did neither{% endif %}. This is divergence, not a global trend.
+        </div>
+
+        <div class="hmdi-exec-grid">
+
+          <!-- Q1 -->
+          <div class="hmdi-exec-q">
+            <h3>What actually drove the change?</h3>
+            <p>
+              One pillar, and inside it largely one indicator.
+              <strong>{{ exec_summary.drivers[0].label }}</strong> contributes
+              {{ "%+.1f"|format(exec_summary.drivers[0].contribution) }} points of the
+              {{ "%+.1f"|format(exec_summary.mean_delta) }}-point move; the other four pillars together account
+              for {{ "%+.1f"|format(exec_summary.mean_delta - exec_summary.drivers[0].contribution) }}. The figures below
+              are an exact decomposition &mdash; they sum to the headline change with nothing left over.
+            </p>
+            <ul class="hmdi-exec-list">
+              {% for d in exec_summary.drivers %}
+              <li>
+                <div class="hmdi-exec-row">
+                  <span>{{ d.short }}</span>
+                  <span class="hmdi-exec-delta {{ 'is-up' if d.contribution >= 0 else 'is-down' }}">{{ "%+.2f"|format(d.contribution) }} pts</span>
+                </div>
+                <div class="hmdi-exec-why">
+                  Pillar mean {{ "%.1f"|format(d.from) }} &rarr; {{ "%.1f"|format(d.to) }}.
+                  {% if d.top_metric %}Largest indicator inside it: {{ d.top_metric.short|lower }}
+                  {{ "%+.1f"|format(d.top_metric.delta) }} pts of score, moving the right way in
+                  {{ d.top_metric.improved }} of {{ exec_summary.n }} economies and the wrong way in
+                  {{ d.top_metric.worsened }}.{% endif %}
+                </div>
+                <span class="hmdi-exec-bar"><i style="width: {{ (d.contribution|abs / (exec_summary.drivers[0].contribution|abs or 1) * 100)|round(1) }}%; background: {{ '#34D399' if d.contribution >= 0 else '#F87171' }};"></i></span>
+              </li>
+              {% endfor %}
+            </ul>
+            <p style="margin-top: 12px;">
+              Read the top line sceptically. {{ exec_summary.top_metric_up.label }} is a seat count, and a seat
+              count cannot tell an elected chamber from an appointed one, or a quota from a contest. It moves
+              this index because it is published and comparable, which is the whole basis on which anything is
+              in here &mdash; not because a rise in it proves a country became more democratic.
+            </p>
+          </div>
+
+          <!-- Q2 -->
+          <div class="hmdi-exec-q">
+            <h3>Which countries moved most, and why?</h3>
+            <p>
+              Six of {{ exec_summary.n }}, three each way. Each is shown with the two pillars that carry most of
+              its move and the single indicator inside them that moved furthest.
+            </p>
+            <ul class="hmdi-exec-list">
+              {% for m in exec_summary.risers + exec_summary.fallers %}
+              <li>
+                <div class="hmdi-exec-row">
+                  <span>{{ m.country_name }}
+                    <span class="hmdi-exec-endpoints">{{ "%.1f"|format(m.from_score) }} &rarr; {{ "%.1f"|format(m.to_score) }}</span>
+                  </span>
+                  <span class="hmdi-exec-delta {{ 'is-up' if m.delta >= 0 else 'is-down' }}">{{ "%+.1f"|format(m.delta) }} pts</span>
+                </div>
+                <div class="hmdi-exec-why">
+                  {% if m.rank_delta %}{{ m.rank_delta|abs }} place{{ 's' if m.rank_delta|abs != 1 }}
+                  {{ 'up' if m.rank_delta > 0 else 'down' }} to rank {{ m.to_rank }}{% else %}Rank unchanged at {{ m.to_rank }}{% endif %}{% if m.tier_changed %},
+                  crossing from &ldquo;{{ m.from_tier }}&rdquo; into &ldquo;{{ m.to_tier }}&rdquo;{% endif %}.
+                  {% for r in m.reasons %}{{ r.short }} {{ "%+.1f"|format(r.points) }} pts{% if r.metric %}
+                  ({{ r.metric.label|lower }} {{ r.metric.from_display }} &rarr; {{ r.metric.to_display }}){% endif %}{{ '; ' if not loop.last else '.' }}{% endfor %}
+                </div>
+                <span class="hmdi-exec-bar"><i style="width: {{ (m.delta|abs / ((exec_summary.risers + exec_summary.fallers)|map(attribute='delta')|map('abs')|max or 1) * 100)|round(1) }}%; background: {{ '#34D399' if m.delta >= 0 else '#F87171' }};"></i></span>
+              </li>
+              {% endfor %}
+            </ul>
+            <p style="margin-top: 12px;">
+              {{ exec_summary.tier_changes|length }} of {{ exec_summary.n }} economies changed tier over the
+              decade. A tier change is a threshold being crossed, not a transformation: a country a tenth of a
+              point either side of {{ "%.0f"|format(tiers[1].lower) }} is the same country.
+            </p>
+          </div>
+
+          <!-- Q3 -->
+          <div class="hmdi-exec-q">
+            <h3>Does counting agree with the experts?</h3>
+            <p>
+              Mostly, and the disagreements are the point. Against V-Dem's expert-coded Liberal Democracy Index
+              for {{ exec_summary.vdem_year }}, the rank correlation is
+              <strong>&rho; = {{ "%.2f"|format(exec_summary.vdem_rho) }}</strong> across the
+              {{ exec_summary.n }}. High enough that this index is measuring democracy rather than something
+              else; far from 1.0, so it is not reproducing V-Dem by a longer route.
+            </p>
+            <p>
+              {% for d in exec_summary.vdem_over %}<strong>{{ d.country_name }}</strong> ({{ d.gap }} places){% if not loop.last %} and {% endif %}{% endfor %}
+              place better on countable evidence than expert coders will allow &mdash; the mechanics look intact,
+              the judgement of how they are used does not.
+              {% for d in exec_summary.vdem_under %}<strong>{{ d.country_name }}</strong> ({{ d.gap }}){% if not loop.last %} and {% endif %}{% endfor %}
+              place worse: the counts penalise things &mdash; disproportional seat allocation, incarceration,
+              two-party concentration &mdash; that experts weigh lightly against a functioning liberal order.
+              Neither ranking is the correction to the other.
+            </p>
+          </div>
+
+          <!-- Q4 -->
+          <div class="hmdi-exec-q">
+            <h3>How much of this is measured, and how much is inferred?</h3>
+            <p>
+              Across the whole {{ years[0] }}&ndash;{{ years[-1] }} panel,
+              <strong>{{ "%.0f"|format(exec_summary.anchor_share * 100) }}% of scored cells sit on a published
+              source</strong>; the rest are interpolated between anchor years. In {{ exec_summary.end_year }}
+              itself the figure is {{ "%.0f"|format(exec_summary.anchor_share_end * 100) }}%, because recent
+              years are the ones with the most reporting behind them.
+            </p>
+            <p>
+              Coverage is not spread evenly, and that is the more serious problem.
+              {{ exec_summary.thinnest_country.country_name }} rests on
+              {{ "%.0f"|format(exec_summary.thinnest_country.share * 100) }}% source-backed cells &mdash; its
+              trajectory is mostly a line drawn between distant points. Closed states publish least, so the
+              scores this index is least sure of are exactly the ones a reader most wants to trust.
+              <a href="#hmdi-provenance" data-goto-method>Per-country coverage is tabulated in the methodology</a>.
+            </p>
+          </div>
+
+          <!-- Bottom line -->
+          <div class="hmdi-exec-q hmdi-exec-bottom">
+            <h3>Bottom line</h3>
+            <p>
+              On countable evidence the last decade is <strong>divergence, not decline</strong>: a mean that
+              drifted {{ "%+.1f"|format(exec_summary.mean_delta) }} points while the distance between the ends of
+              the table grew {{ "%.1f"|format(exec_summary.spread_delta|abs) }} points
+              {{ exec_summary.spread_direction }}. The improvement is concentrated in
+              {{ exec_summary.drivers[0].short|lower }} and is largely one published seat-share statistic; the
+              deterioration is concentrated in {{ exec_summary.drivers[2].short|lower }} and
+              {{ exec_summary.drivers[3].short|lower }}, where the falls
+              ({{ exec_summary.top_metric_down.short|lower }} worst among them) are the kind of thing states do
+              deliberately and then report.
+            </p>
+            <p class="hmdi-exec-caveat">
+              None of this is a verdict on any country. This index scores what is counted, and the things that
+              matter most &mdash; whether courts are independent, whether an election was free, whether a
+              newspaper can print &mdash; are not counted by anyone. A high score means the countable things look
+              healthy. Where the counts and the experts disagree, treat both as evidence and neither as the
+              answer.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ================= METHODOLOGY ================= -->
+  <div id="tab-methodology" class="report-panel" role="tabpanel" style="display: none;">
+
+    <section class="components-card">
+      <div class="components-card-head">
+        <h2>What this index measures, and what it refuses to</h2>
+      </div>
+      <p class="hmdi-prose">
+        V-Dem, Freedom House and the EIU all build their democracy scores from expert
+        questionnaires: country specialists answer ordinal questions and the answers are
+        aggregated. That method sees things no counter can, and it carries an irreducible
+        coder-subjectivity term that no inter-rater statistic removes.
+      </p>
+      <p class="hmdi-prose">
+        This index takes the opposite trade. Every input is a count, a rate or a ratio somebody
+        published — votes over voting-age population, seat shares through Gallagher's formula,
+        women's seats over total seats, detainees over prisoners, prisoners over population.
+        Nothing here is an opinion about a country, and no country's classification, regime type
+        or region touches its score.
+      </p>
+
+      <div class="hmdi-note-box">
+        <h3><span class="material-symbols-outlined" aria-hidden="true">warning</span> The cost of that discipline</h3>
+        <p>
+          The things hardest to count are often the things that matter most. Judicial
+          independence, press pluralism, media capture, whether an election was actually free —
+          none appear below, because none is a number anyone publishes. An index that only counts
+          what is counted will systematically miss a country that keeps its forms while hollowing
+          out their substance, which is the most common way democracies decline.
+        </p>
+        <p>
+          Read a high score as <em>the countable things look healthy</em>, not as
+          <em>this is a good democracy</em>. Where this index and a survey-based one disagree,
+          the disagreement is the finding — this one is not the tiebreaker.
+        </p>
+      </div>
+    </section>
+
+    <section class="components-card" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2>Five pillars, ten scored indicators</h2>
+        <span class="card-sub">Every indicator is a rate, ratio or per-capita quantity, so population size drops out</span>
+      </div>
+      <div class="hmdi-pillar-grid">
+        {% for p in pillars %}
+        <div class="hmdi-pillar-card" style="--pillar-color: {{ p.color }};">
+          <h3 style="color: {{ p.color }};">{{ p.label }}</h3>
+          <p class="hmdi-pillar-q">{{ p.question }}</p>
+          <ul>
+            {% for key in pillar_metrics[p.key] %}
+            {% set m = (metrics | selectattr('key', 'equalto', key) | list)[0] %}
+            <li><strong>{{ m.short }}</strong> — {{ m.unit }}, {{ 'higher better' if m.better == 'high' else 'lower better' }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="table-responsive" style="margin-top: 24px;">
+        <table class="components-table hmdi-fixed">
+          <colgroup>
+            <col style="width: 18%;"><col style="width: 11%;"><col style="width: 27%;">
+            <col style="width: 9%;"><col style="width: 9%;"><col style="width: 26%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Indicator</th><th>Pillar</th><th>Formula</th>
+              <th style="text-align:right;">Scores 0 at</th><th style="text-align:right;">Scores 100 at</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for m in metrics %}
+            <tr>
+              <td class="cell-strong">{{ m.label }}</td>
+              <td><span class="badge-tag" style="color: {{ pillars | selectattr('key','equalto',m.pillar) | map(attribute='color') | first }};">{{ pillars | selectattr('key','equalto',m.pillar) | map(attribute='short') | first }}</span></td>
+              <td><code>{{ m.formula }}</code></td>
+              <td class="hmdi-num">{{ m.hi if m.better == 'low' else m.lo }}</td>
+              <td class="hmdi-num">{{ m.lo if m.better == 'low' else m.hi }}</td>
+              <td class="cell-sub">{{ m.source }}</td>
+            </tr>
+            <tr>
+              <td colspan="6" class="cell-sub" style="padding-top:0; border-top:none; color: var(--text-muted); font-size: 0.76rem; line-height:1.5;">{{ m.note }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="components-footnote">
+        Bounds are fixed, not sample-derived. Normalising against the sample would restate every
+        historical score the moment a country was added, and would make the index able to say only
+        &ldquo;worse than these thirty&rdquo; rather than &ldquo;bad in absolute terms&rdquo;.
+        Values outside the bounds clamp; the diagnostics below report how often that bites.
+      </p>
+    </section>
+
+    <!-- Aggregation -->
+    <section class="components-card" style="margin-top: 24px;" id="hmdi-aggregation">
+      <div class="components-card-head">
+        <h2>Aggregation: why a geometric mean</h2>
+      </div>
+      <div class="formula-box">
+        composite = exp( &sum;<sub>p</sub> w<sub>p</sub> &middot; ln( max(pillar<sub>p</sub>, 1) ) )
+        &nbsp;&nbsp;with&nbsp; &sum; w<sub>p</sub> = 1
+      </div>
+      <p class="hmdi-prose">
+        Indicators average arithmetically within a pillar. The five pillars then combine
+        geometrically, not arithmetically, because an arithmetic mean makes pillars perfectly
+        substitutable — a country can buy back a pillar score of zero with a hundred somewhere
+        else. Democracy does not work that way; the pillars are complements.
+      </p>
+      <p class="hmdi-prose">
+        This is not hypothetical. Under an arithmetic mean the United Arab Emirates — a federal
+        absolute monarchy with no elected national legislature — scored
+        {% set are = (rankings | selectattr('country_code','equalto','ARE') | list) %}
+        {% if are %}<strong class="font-mono">{{ "%.1f"|format(are[0].composite_arithmetic) }}</strong>{% endif %},
+        because a legislative-concentration score of 0 was averaged against an appointed 50% female
+        chamber scoring 100, and the resulting 50 was then averaged away. Geometrically it scores
+        {% if are %}<strong class="font-mono">{{ "%.1f"|format(are[0].composite) }}</strong>{% endif %}.
+        The switch is the standard fix — it is why the Human Development Index changed in 2010 —
+        and it barely disturbs the league table: the top twenty move by at most one place.
+      </p>
+
+      <div class="table-responsive" style="margin-top: 16px;">
+        <table class="components-table hmdi-fixed">
+          <colgroup>
+            <col style="width: 20%;"><col style="width: 14%;"><col style="width: 14%;">
+            <col style="width: 14%;"><col style="width: 16%;"><col style="width: 22%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Economy</th>
+              <th style="text-align:right;">Geometric (published)</th>
+              <th style="text-align:right;">Arithmetic (rejected)</th>
+              <th style="text-align:right;">Compensation denied</th>
+              <th>Weakest pillar</th>
+              <th>Gap</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rankings | sort(attribute='composite_arithmetic', reverse=true) %}
+            {% set gap = row.composite_arithmetic - row.composite %}
+            {% if gap > 1.0 %}
+            <tr>
+              <td class="cell-strong">{{ row.country_name }}</td>
+              <td class="hmdi-num">{{ "%.1f"|format(row.composite) }}</td>
+              <td class="hmdi-num cell-muted">{{ "%.1f"|format(row.composite_arithmetic) }}</td>
+              <td class="hmdi-num" style="color: var(--accent-amber);">&minus;{{ "%.1f"|format(gap) }}</td>
+              <td class="cell-sub">
+                {% set lo = row.pillars.items() | sort(attribute='1') | first %}
+                {{ pillars | selectattr('key','equalto',lo[0]) | map(attribute='short') | first }}
+                <span class="font-mono">({{ "%.0f"|format(lo[1]) }})</span>
+              </td>
+              <td>
+                {# Scaled against 10 points, the largest gap in the panel. #}
+                <span class="hmdi-score-bar" style="display: block; width: 100%; height: 9px;">
+                  <i style="width: {{ [gap / 10 * 100, 100]|min|round(1) }}%; background: var(--accent-amber);"></i>
+                </span>
+              </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="components-footnote">
+        Only rows where the two methods differ by more than a point. The gap is exactly the
+        compensation an arithmetic mean would have granted for an unbalanced profile. Pillar
+        scores are floored at 1.0 before the log, so a genuine zero darkens a composite hard
+        without collapsing it and discarding every other measurement in the row.
+      </p>
+    </section>
+
+    <!-- Collinearity -->
+    <section class="components-card" style="margin-top: 24px;" id="hmdi-collinearity">
+      <div class="components-card-head">
+        <h2>Two indicators were the same indicator</h2>
+        <span class="card-sub">Spearman &rho; across the panel, {{ year }}</span>
+      </div>
+      <p class="hmdi-prose">
+        The source dataset carried twelve scored indicators. Two pairs turned out to be one
+        statistic counted twice:
+      </p>
+      <ul class="limitations-list">
+        <li>
+          <strong>Effective Number of Parties and legislative HHI are algebraically identical</strong>
+          — ENP = 10000 / HHI, exactly, for seat shares. They had been keyed independently and
+          disagreed with each other by a median of 6.6% (24% for Brazil), which is a
+          self-inconsistency rather than two readings. Scoring both put party fragmentation into
+          the composite at 15% weight through two different pillars. HHI is now scored; ENP is
+          derived from it and published as context, which also removes the disagreement.
+        </li>
+        <li>
+          <strong>Gini and the Palma ratio summarise one Lorenz curve</strong> and correlate at
+          &rho; = +0.99 here. Gini is scored; Palma is published as context. Scoring both would
+          have double-weighted income inequality inside a pillar that is already 20% of the index.
+        </li>
+      </ul>
+      <p class="hmdi-prose">
+        The table below is left on the page permanently rather than deleted once the problem was
+        fixed. The only reason anyone found those two pairs is that somebody computed this; leaving
+        it visible is what makes the next redundancy findable.
+      </p>
+      <div class="table-responsive" style="margin-top: 12px;">
+        <table class="components-table hmdi-fixed">
+          <colgroup>
+            <col style="width: 16%;"><col style="width: 16%;">
+            <col style="width: 9%;"><col style="width: 30%;"><col style="width: 29%;">
+          </colgroup>
+          <thead><tr>
+            <th>Indicator A</th><th>Indicator B</th>
+            <th style="text-align:right;">&rho;</th>
+            <th>&minus;1 &nbsp;&larr;&nbsp; 0 &nbsp;&rarr;&nbsp; +1</th>
+            <th>Reading</th>
+          </tr></thead>
+          <tbody>
+            {% for c in correlations[:10] %}
+            {% set mag = c.rho|abs %}
+            {% set tone = 'var(--accent-rose)' if mag >= 0.85 else ('var(--accent-amber)' if mag >= 0.6 else 'var(--accent-blue)') %}
+            <tr>
+              <td class="cell-strong">{{ c.a_label }}</td>
+              <td class="cell-strong">{{ c.b_label }}</td>
+              <td class="hmdi-num corr-cell {% if mag >= 0.85 %}corr-strong{% elif mag >= 0.6 %}corr-mid{% endif %}">{{ "%+.3f"|format(c.rho) }}</td>
+              <td>
+                {# Half-widths off the centre line: a coefficient of +0.86 fills
+                   43% of the track to the right of zero. #}
+                <span class="hmdi-rho-track">
+                  <i class="hmdi-rho-fill" style="background: {{ tone }};
+                     {% if c.rho >= 0 %}left: 50%; width: {{ (mag * 50)|round(1) }}%;
+                     {% else %}right: 50%; width: {{ (mag * 50)|round(1) }}%;{% endif %}"></i>
+                </span>
+              </td>
+              <td class="cell-sub">
+                {% if mag >= 0.9 %}Effectively the same measurement
+                {% elif mag >= 0.75 %}Strongly related; plausibly one underlying cause
+                {% elif mag >= 0.5 %}Related, distinct enough to score separately
+                {% else %}Independent{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="components-footnote">
+        Highest remaining pair after the fix is disproportionality against concentration
+        ({{ "%+.3f"|format(correlations[0].rho) if correlations else '—' }}), which is expected:
+        both are downstream of the electoral system. They measure different consequences of it —
+        how votes map to seats, and how seats are held — so both are scored.
+      </p>
+    </section>
+
+    <!-- V-Dem comparator -->
+    <section class="components-card" style="margin-top: 24px;" id="hmdi-vdem">
+      <div class="components-card-head">
+        <h2>Where this parts company with V-Dem</h2>
+        <span class="card-sub">{{ vdem_meta.label }} ({{ vdem_meta.indicator }}), {{ year }}</span>
+      </div>
+      <p class="hmdi-prose">
+        This index is built in opposition to expert-coded indices, and an argument like that is
+        worth nothing if the reader cannot see the other side of it. The grey column in the
+        rankings is each country's rank on V-Dem's Liberal Democracy Index
+        <strong>within these same thirty</strong> — not V-Dem's global rank over 179 countries,
+        which would not be comparable with a rank out of 30. V-Dem is never an input here: no
+        expert score touches the composite, and the grey column does not move when the weight
+        sliders do.
+      </p>
+      <p class="hmdi-prose">
+        Across the panel the two rankings agree at Spearman
+        <strong class="font-mono">&rho; = {{ "%+.3f"|format(vdem_agreement.rho) if vdem_agreement.rho is not none else '—' }}</strong>
+        for {{ year }}. That is the number to hold onto: high enough that counting recovers most of
+        what country experts see, and far enough from 1.0 that the residual is real. The residual
+        is the table below.
+      </p>
+      <div class="table-responsive" style="margin-top: 12px;">
+        <table class="components-table hmdi-fixed">
+          <colgroup>
+            <col style="width: 24%;"><col style="width: 14%;"><col style="width: 14%;">
+            <col style="width: 12%;"><col style="width: 36%;">
+          </colgroup>
+          <thead><tr>
+            <th>Economy</th>
+            <th style="text-align:right;">HMDI #</th>
+            <th style="text-align:right;">V-Dem #</th>
+            <th style="text-align:right;">Gap</th>
+            <th>What the gap is</th>
+          </tr></thead>
+          <tbody>
+            {% for d in vdem_divergence[:10] %}
+            <tr>
+              <td class="cell-strong">{{ d.country_name }}</td>
+              <td class="hmdi-num">{{ d.hmdi_rank }}</td>
+              <td class="hmdi-num cell-sub">{{ d.vdem_rank }} <span class="cell-sub">({{ "%.2f"|format(d.vdem_score) }})</span></td>
+              <td class="hmdi-num {% if d.gap > 0 %}corr-mid{% elif d.gap < 0 %}corr-strong{% endif %}">{{ "%+d"|format(d.gap) }}</td>
+              <td class="cell-sub">
+                {% if d.gap > 0 %}Counts better than experts judge it — turnout, proportionality and
+                  parity look healthier than the qualities nothing here measures.
+                {% else %}Experts judge it better than it counts — carceral, turnout or
+                  disproportionality figures drag a country whose institutions V-Dem rates highly.
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="components-footnote">
+        Positive gap = better on hard counts than on expert coding; negative = the reverse. Sorted
+        by absolute gap, so the rows that most need explaining are at the top. Ties on the V-Dem
+        score share the lower rank. Source: {{ vdem_meta.source }} — {{ vdem_meta.release }},
+        scale {{ vdem_meta.scale }}. Regenerate with
+        <span class="font-mono">scripts/build_vdem_reference.py</span>.
+      </p>
+    </section>
+
+    <!-- Dispersion -->
+    <section class="components-card" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2>Which indicators actually discriminate</h2>
+        <span class="card-sub">Normalised score spread across the panel, {{ year }}</span>
+      </div>
+      <p class="hmdi-prose">
+        An indicator on which most of the panel scores exactly 100 is not measuring most of the
+        panel; it is a floor detector, separating states that do a thing from states that do not.
+        That is a legitimate job. A reader is entitled to know which indicators are doing it,
+        because they inflate every clean country's score by the same amount and discriminate only
+        at the bottom.
+      </p>
+      <div class="table-responsive">
+        <table class="components-table hmdi-fixed">
+          <colgroup>
+            <col style="width: 21%;"><col style="width: 7%;"><col style="width: 6%;">
+            <col style="width: 7%;"><col style="width: 6%;"><col style="width: 8%;">
+            <col style="width: 22%;"><col style="width: 23%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Indicator</th><th style="text-align:right;">Mean</th><th style="text-align:right;">SD</th>
+              <th style="text-align:right;">At 100</th><th style="text-align:right;">At 0</th>
+              <th style="text-align:right;">Clamped</th>
+              <th>Spread of the 30 scores</th>
+              <th>Reads as</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in dispersion %}
+            <tr>
+              <td class="cell-strong">{{ d.label }}</td>
+              <td class="hmdi-num">{{ "%.1f"|format(d.mean) }}</td>
+              <td class="hmdi-num">{{ "%.1f"|format(d.sd) }}</td>
+              <td class="hmdi-num {% if d.at_ceiling > d.n // 2 %}cell-strong{% endif %}">{{ d.at_ceiling }}</td>
+              <td class="hmdi-num">{{ d.at_floor }}</td>
+              <td class="hmdi-num {% if d.clamped %}cell-muted{% endif %}">{{ d.clamped }}</td>
+              <td>
+                {# Mean marked on a 0-100 track with a ±1 SD band around it. A
+                   short band pinned near 100 is what a floor detector looks
+                   like, which is the point the column exists to make. #}
+                <span class="hmdi-spread-track">
+                  <i class="hmdi-rho-fill"
+                     style="background: {{ pillars | selectattr('key','equalto',d.pillar) | map(attribute='color') | first }};
+                            opacity: 0.45;
+                            left: {{ [d.mean - d.sd, 0]|max|round(1) }}%;
+                            width: {{ ([d.mean + d.sd, 100]|min - [d.mean - d.sd, 0]|max)|round(1) }}%;"></i>
+                  <i class="hmdi-rho-fill"
+                     style="background: {{ pillars | selectattr('key','equalto',d.pillar) | map(attribute='color') | first }};
+                            left: {{ [d.mean, 99]|min|round(1) }}%; width: 2px;"></i>
+                </span>
+              </td>
+              <td class="cell-sub">
+                {% if d.at_ceiling > d.n // 2 %}Floor detector — silent on the {{ d.at_ceiling }} at the ceiling
+                {% elif d.sd < 15 %}Narrow spread; contributes little separation
+                {% else %}Discriminates across the panel{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="components-footnote">
+        <em>Clamped</em> counts panel-wide values (all {{ years|length }} years) pinned by a
+        scoring bound rather than by their own magnitude — where it is non-zero, the bound rather
+        than the country decided part of that column.
+      </p>
+    </section>
+
+    <!-- Provenance -->
+    <section class="components-card" style="margin-top: 24px;" id="hmdi-provenance">
+      <div class="components-card-head">
+        <h2>Provenance: what is measured and what is inferred</h2>
+        <span class="card-sub">{{ "{:,}".format(provenance.anchor_cells or 0) }} of {{ "{:,}".format(provenance.total_cells or 0) }} cells sit on a source</span>
+      </div>
+      <div class="hmdi-note-box">
+        <h3><span class="material-symbols-outlined" aria-hidden="true">info</span> This panel is not twelve annual series</h3>
+        <p>
+          Twelve indicators for thirty economies over twenty-five years is 9,000 cells. Nobody
+          keyed 9,000 cells. What was keyed is
+          <strong>{{ "{:,}".format(provenance.anchor_cells or 0) }} anchor points</strong> — a
+          value attached to a year for which a real source exists: an election result, an IPU
+          Parline snapshot, a World Prison Brief report, a World Bank PIP release, a CPJ census —
+          plus a number of series asserted flat across the whole period. Everything between two
+          anchors is straight-line interpolation; everything outside the outermost anchors is held
+          flat.
+        </p>
+        <p>
+          That is a reasonable way to carry sources that do not publish annually. An election
+          result exists in election years and not between them. It is <em>not</em> the same thing
+          as measurement, and the difference has to survive into the published figures rather than
+          being flattened into a table where every number looks equally solid.
+        </p>
+        <p>
+          So every row carries its anchor share, the ranking table shows it, and the chart below
+          shows it by year. Where the density is thin, a smooth trajectory is the interpolation
+          drawing a straight line — not evidence of a stable decade.
+        </p>
+      </div>
+
+      <div class="hmdi-chartwrap-sm" id="hmdi-anchor-chart" style="margin-top: 20px;">
+        <p class="chart-fallback">Chart needs JavaScript; the table below carries the same figures.</p>
+      </div>
+
+      <h3 style="margin-top: 24px; font-size: 0.92rem;">Anchor coverage by economy</h3>
+      <p class="section-desc">Thinnest evidence first. These are the rows to trust least.</p>
+      <div class="table-responsive">
+        <table class="components-table">
+          <colgroup>
+            <col style="width: 22%;"><col style="width: 14%;">
+            <col style="width: 10%;"><col style="width: 54%;">
+          </colgroup>
+          <thead><tr><th>Economy</th><th style="text-align:right;">Anchored cells</th><th style="text-align:right;">Share</th><th>Coverage</th></tr></thead>
+          <tbody>
+            {% for a in anchor_coverage %}
+            <tr>
+              <td class="cell-strong">{{ a.country_name }}</td>
+              <td class="hmdi-num">{{ a.anchor_cells }} / {{ a.total_cells }}</td>
+              <td class="hmdi-num">{{ "%.1f"|format(a.share * 100) }}%</td>
+              <td>
+                {# Bar scaled against 25% rather than 100%: no country exceeds a
+                   quarter, so a 0-100 track would render thirty near-identical
+                   slivers and show nothing. #}
+                <span class="hmdi-score-bar" style="display: block; width: 100%; height: 9px;">
+                  <i style="width: {{ [a.share / 0.25 * 100, 100]|min|round(1) }}%; background: {% if a.share < 0.15 %}var(--accent-rose){% elif a.share < 0.2 %}var(--accent-amber){% else %}var(--accent-emerald){% endif %};"></i>
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="components-footnote">
+        Bar scaled to a 25% ceiling, not 100% &mdash; no economy in the panel exceeds a quarter.
+        Anchors are the input of record and are interpolated into the published panel; changing a
+        figure means changing an anchor, never the generated series.
+      </p>
+    </section>
+
+    <!-- Limitations -->
+    <section class="components-card" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2>Known limitations</h2>
+        <span class="card-sub">Each of these is a real defect, not a disclaimer</span>
+      </div>
+      <ul class="limitations-list">
+        <li>
+          <strong>Compulsory voting is scored as civic participation.</strong> Belgium, Australia
+          and Brazil post high turnout for a legal reason. No adjustment is made, so the turnout
+          column reads partly as a map of compulsory-voting law.
+        </li>
+        <li>
+          <strong>Gender representation cannot tell an elected chamber from an appointed one.</strong>
+          The UAE Federal National Council is half women by appointment and scores 100 on that
+          indicator. Geometric aggregation stops it carrying the composite, but the indicator
+          itself is blind here.
+        </li>
+        <li>
+          <strong>Incarceration and pre-trial rates reward states that publish low numbers.</strong>
+          A state that detains outside the prison system, or reports partially, scores as though it
+          detains little. The pillar reads as carceral burden where statistics are credible and as
+          an artefact where they are not — which is exactly backwards from where it is most needed.
+        </li>
+        <li>
+          <strong>More parties is treated as more plural.</strong> Legislative concentration scores
+          a two-party system poorly by construction. That is a defensible reading of power
+          dispersion and a contestable reading of democratic health; a stable two-party system is
+          not obviously less democratic than a fragmented multi-party one.
+        </li>
+        <li>
+          <strong>Transfer integrity is the one coded judgement here.</strong> It is a scored
+          reading of historical events rather than a published count, and 24 of 30 countries sit at
+          100, so it discriminates only at the bottom of the panel.
+        </li>
+        <li>
+          <strong>Zero turnout is recorded as a zero, not as an absence.</strong> Years in which a
+          country held no national election carry a 0 that scores as catastrophic participation
+          rather than as a structurally different situation.
+        </li>
+        <li>
+          <strong>The sample is the thirty largest economies.</strong> That is a selection on GDP,
+          not on population, region or regime, and every panel-wide average inherits it. It is not
+          a world average.
+        </li>
+      </ul>
+    </section>
+
+    <section class="components-card" style="margin-top: 24px;">
+      <div class="components-card-head">
+        <h2>Data sources</h2>
+        <span class="card-sub">Where each anchor value comes from</span>
+      </div>
+      <p class="section-desc">
+        Every anchor point is keyed from one of the publishers below. The indicator table above
+        names the source for each of the ten scored indicators; these are the underlying datasets.
+      </p>
+      <ul class="hmdi-repro-grid">
+        <li>
+          <span class="hmdi-repro-step">Turnout</span>
+          <a href="https://www.idea.int/data-tools/data/voter-turnout-database" rel="noopener" target="_blank">International IDEA &mdash; Voter Turnout Database</a>
+          <p>National election turnout as a share of voting-age population.</p>
+        </li>
+        <li>
+          <span class="hmdi-repro-step">Disproportionality</span>
+          <a href="https://www.tcd.ie/Political_Science/people/michael_gallagher/ElSystems/index.php" rel="noopener" target="_blank">Michael Gallagher &mdash; Election Indices</a>
+          <p>Gallagher index of vote-to-seat disproportionality, plus effective number of parties.</p>
+        </li>
+        <li>
+          <span class="hmdi-repro-step">Constitutions</span>
+          <a href="https://comparativeconstitutionsproject.org/" rel="noopener" target="_blank">Comparative Constitutions Project</a>
+          <p>Constitutional text and succession records behind the transfer-integrity reading.</p>
+        </li>
+        <li>
+          <span class="hmdi-repro-step">Legislatures</span>
+          <a href="https://data.ipu.org/" rel="noopener" target="_blank">IPU Parline</a>
+          <p>Chamber composition and women in national parliaments, with national electoral registries.</p>
+        </li>
+        <li>
+          <span class="hmdi-repro-step">Inequality</span>
+          <a href="https://pip.worldbank.org/" rel="noopener" target="_blank">World Bank Poverty &amp; Inequality Platform</a>
+          <p>Gini and Palma, cross-checked against the <a href="https://wid.world/" rel="noopener" target="_blank">World Inequality Database</a>.</p>
+        </li>
+        <li>
+          <span class="hmdi-repro-step">Connectivity</span>
+          <a href="https://ooni.org/" rel="noopener" target="_blank">OONI</a>
+          <p>Shutdown hours corroborated across <a href="https://netblocks.org/" rel="noopener" target="_blank">NetBlocks</a>, <a href="https://internetshutdowns.in/" rel="noopener" target="_blank">SFLC.in</a> and <a href="https://radar.cloudflare.com/" rel="noopener" target="_blank">Cloudflare Radar</a>.</p>
+        </li>
+        <li>
+          <span class="hmdi-repro-step">Press</span>
+          <a href="https://cpj.org/data/" rel="noopener" target="_blank">Committee to Protect Journalists</a>
+          <p>Annual prison census and killed-journalist database, per 10M population.</p>
+        </li>
+        <li>
+          <span class="hmdi-repro-step">Detention</span>
+          <a href="https://www.prisonstudies.org/" rel="noopener" target="_blank">World Prison Brief</a>
+          <p>Incarceration and pre-trial rates, with <a href="https://dataunodc.un.org/" rel="noopener" target="_blank">UNODC</a> and, for India, <a href="https://ncrb.gov.in/" rel="noopener" target="_blank">NCRB</a>.</p>
+        </li>
+      </ul>
+      <p class="components-footnote">
+        Panel generated {{ generated_at or '—' }}. Figures licensed
+        <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_name }}</a>.
+      </p>
+    </section>
+
+  </div>
+</div>
+
+<!-- Country drawer -->
+<div class="hmdi-drawer-backdrop" id="hmdi-drawer-backdrop" data-open="false"></div>
+<aside class="hmdi-drawer" id="hmdi-drawer" data-open="false" role="dialog" aria-modal="true"
+       aria-labelledby="hmdi-drawer-name" tabindex="-1" hidden>
+  <div class="hmdi-drawer-head">
+    <div>
+      <h2 id="hmdi-drawer-name">—</h2>
+      <p class="hmdi-drawer-sub" id="hmdi-drawer-sub">—</p>
+    </div>
+    <button type="button" class="header-icon-btn" id="hmdi-drawer-close" aria-label="Close country detail">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+  </div>
+
+  <div class="hmdi-drawer-scores">
+    <div class="hmdi-drawer-score">
+      <div class="hmdi-drawer-score-label">Composite</div>
+      <div class="hmdi-drawer-score-value" id="hmdi-drawer-score">—</div>
+    </div>
+    <div class="hmdi-drawer-score">
+      <div class="hmdi-drawer-score-label">Rank</div>
+      <div class="hmdi-drawer-score-value" id="hmdi-drawer-rank">—</div>
+    </div>
+    <div class="hmdi-drawer-score">
+      <div class="hmdi-drawer-score-label">On source</div>
+      <div class="hmdi-drawer-score-value" id="hmdi-drawer-anchor">—</div>
+    </div>
+    <div class="hmdi-drawer-score is-muted">
+      <div class="hmdi-drawer-score-label">V-Dem rank</div>
+      <div class="hmdi-drawer-score-value" id="hmdi-drawer-vdem">—</div>
+    </div>
+  </div>
+
+  <div id="hmdi-drawer-radar"></div>
+
+  <h3 style="font-size: 0.85rem; margin: 18px 0 8px;">Indicators</h3>
+  <table>
+    <thead><tr><th>Indicator</th><th style="text-align:right;">Value</th><th style="text-align:right;">Score</th><th style="text-align:right;">Src</th></tr></thead>
+    <tbody id="hmdi-drawer-metrics"></tbody>
+  </table>
+
+  <h3 style="font-size: 0.85rem; margin: 18px 0 8px;">Context, not scored</h3>
+  <table>
+    <thead><tr><th>Measure</th><th style="text-align:right;">Value</th></tr></thead>
+    <tbody id="hmdi-drawer-context"></tbody>
+  </table>
+  <p class="components-footnote" style="margin-top: 10px;">
+    Both restate a scored indicator — see <a href="#hmdi-collinearity" data-goto-method>the collinearity note</a>.
+  </p>
+</aside>
+
+<script id="hmdi-data" type="application/json">{{ {
+  "years": years,
+  "panelRows": panel_rows,
+  "panel": panel,
+  "anchorDensity": anchor_density,
+  "vdem": vdem,
+  "countries": countries,
+  "pillars": pillars,
+  "metrics": metrics,
+  "contextMetrics": context_metrics,
+  "tiers": tiers,
+  "defaultWeights": default_weights,
+  "pillarMetrics": pillar_metrics
+}|tojson }}</script>
+
+<script src="{{ url_for('static', filename='js/democracy.js') }}?v={{ asset_v }}" defer></script>
+{% endblock %}

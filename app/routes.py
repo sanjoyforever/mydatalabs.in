@@ -17,8 +17,8 @@ from flask import (
     send_from_directory,
 )
 
-from app import db, precomputed, scoring, storage, votes
-from app.indices import aviation, hormuz, solvency
+from app import critiques, db, precomputed, scoring, storage, votes
+from app.indices import aviation, democracy, hormuz, solvency
 
 bp = Blueprint("main", __name__)
 
@@ -77,6 +77,17 @@ REPORTS = [
         "live": True,
     },
     {
+        "slug": "democracy-index",
+        "title": "Hard-Metric Democracy Index",
+        "ticker": "HMDI",
+        "blurb": "Ten published counts and rates — turnout, seat proportionality, legislative concentration, inequality, shutdowns, detention — scored across the top 30 economies for every year since 2000, with no expert survey anywhere in it.",
+        "category": "Geo Politics",
+        "url": "/democracy-index",
+        "endpoint": "main.democracy_index",
+        "nav_group": "indices",
+        "live": True,
+    },
+    {
         "slug": "lok-sabha-index",
         "title": "Lok Sabha Projection Engine",
         "ticker": "LS-PROJ",
@@ -105,6 +116,10 @@ ABOUT_INDEX_NOTES = {
     "hormuz-index": {
         "compresses": "How much stress the Strait of Hormuz is under",
         "cadence": "Weekly",
+    },
+    "democracy-index": {
+        "compresses": "How thirty large economies score on the countable parts of democracy",
+        "cadence": "Annual",
     },
     "lok-sabha-index": {
         "compresses": "Where 543 Lok Sabha seats would land on today's opinion",
@@ -393,26 +408,6 @@ def _pct_change(current, baseline):
     return (current - baseline) / baseline * 100
 
 
-def _spark_points(values, width: float = 600.0, height: float = 120.0) -> str:
-    """An index's own history as SVG polyline points, for a hero backdrop.
-
-    The banner behind each carousel slide is that index's real series rather
-    than decorative artwork, so it cannot show a shape the dashboard contradicts.
-    Scaled to the series' own min/max because the backdrop reads as a silhouette,
-    not a measured chart — the numbers beside it carry the levels.
-    """
-    vals = [float(v) for v in values if v is not None]
-    if len(vals) < 2:
-        return ""
-    lo, hi = min(vals), max(vals)
-    span = (hi - lo) or 1.0
-    step = width / (len(vals) - 1)
-    return " ".join(
-        f"{i * step:.1f},{height - (v - lo) / span * height:.1f}"
-        for i, v in enumerate(vals)
-    )
-
-
 def build_press_dispatch(snapshot, total_attacks: int) -> dict:
     """Every figure and every qualitative word in the press dispatch, derived
     from the live snapshot.
@@ -533,6 +528,17 @@ def _report_cards(snapshot):
             "status": snapshot.level_status,
         }
 
+    if "democracy-index" not in figures:
+        dm = democracy.headline()
+        figures["democracy-index"] = {
+            "value": dm["value"],
+            "unit": dm["unit"],
+            # The panel mean is a descriptive average, not a stress reading, so
+            # it carries the neutral status rather than being banded as if a
+            # lower global average were an alert condition.
+            "status": "good",
+        }
+
     if "lok-sabha-index" not in figures:
         from app.elections.routes import headline as elections_headline
 
@@ -551,14 +557,18 @@ def _report_cards(snapshot):
     return cards
 
 
-def _build_solvency_hero(snapshot, latest):
-    """The three headline ratios the solvency carousel slide floats."""
+def _build_solvency_hero(snapshot, latest, history=None):
+    """The headline ratios the solvency carousel slide floats, plus the
+    year-on-year move in the composite the banner shows beside the score."""
     raw = latest.get("raw_values") or {}
+    rows = list(history or [])
+    prev_score = rows[-2].get("score") if len(rows) >= 2 else None
     return {
         "year": latest.get("year"),
         "debt_gdp": raw.get("debt_gdp"),
         "interest_burden": raw.get("interest_burden"),
         "primary_deficit": raw.get("primary_deficit"),
+        "score_delta": (snapshot.score - prev_score) if prev_score is not None else None,
     }
 
 
@@ -595,11 +605,8 @@ def home():
         **_common(
             reports=_report_cards(snapshot),
             solvency_snapshot=sv_snapshot,
-            solvency_hero=_build_solvency_hero(sv_snapshot, sv_latest),
-            solvency_spark=_spark_points(r.get("score") for r in sv_history),
+            solvency_hero=_build_solvency_hero(sv_snapshot, sv_latest, sv_history),
             hormuz_hero=_build_hormuz_hero(snapshot),
-            hormuz_spark=_spark_points(r.get("score") for r in history[-104:]),
-            aviation_spark=_spark_points(r.get("score") for r in av_history[-104:]),
             aviation_snapshot=av_snapshot,
             aviation_score=av_snapshot.score,
             aviation_level=av_snapshot.level_label,
@@ -754,6 +761,76 @@ def solvency_index():
             scale_pct=solvency.scale_pct(snapshot.score),
             scale_min=solvency.SCALE_MIN,
             scale_max=solvency.SCALE_MAX,
+        ),
+    )
+    return _cached(Response(html, mimetype="text/html"))
+
+
+@bp.route("/democracy-index")
+def democracy_index():
+    """The multi-country dashboard.
+
+    Unlike the single-series indices, the page ships the whole scored panel —
+    every country, every year, every normalised indicator — as one JSON block
+    and does the year switching, reweighting, sorting and filtering in the
+    browser. 750 scored rows is ~600KB of JSON, which is cheaper to send once
+    than to serve as 25 year-endpoints plus a request per weight change, and it
+    is what lets the weight sliders recompute a composite live rather than
+    round-trip for every drag.
+    """
+    data = precomputed.load("democracy-index")
+
+    year = democracy.latest_year()
+    rankings = data.get("rankings") or democracy.index_for_year(year)
+    panel = data.get("panel") or democracy.panel_average()
+    snapshot = democracy.compute_snapshot()
+
+    # Year-on-year move in the panel mean, shown beside the headline. Two years
+    # of panel average is the minimum for a delta; before that it is 0.
+    prev_mean = panel[-2]["mean"] if len(panel) > 1 else None
+    # Rounded before the template compares it to zero, or a move of -0.04
+    # renders as a downward arrow beside "-0.0" — a direction the displayed
+    # figure does not support.
+    delta = round(panel[-1]["mean"] - prev_mean, 1) if prev_mean is not None else 0.0
+
+    meta = democracy.get_meta()
+    provenance = meta.get("provenance") or {}
+
+    html = render_template(
+        "democracy.html",
+        **_common(
+            snapshot=snapshot,
+            year=year,
+            years=democracy.available_years(),
+            rankings=rankings,
+            panel=panel,
+            delta=delta,
+            pillars=democracy.PILLARS,
+            metrics=democracy.METRICS,
+            context_metrics=democracy.CONTEXT_METRICS,
+            pillar_metrics=democracy.PILLAR_METRICS,
+            countries=democracy.COUNTRIES,
+            regions=democracy.REGIONS,
+            tiers=democracy.TIERS,
+            default_weights=democracy.DEFAULT_WEIGHTS,
+            band_positions=democracy.band_positions(),
+            scale_pct=democracy.scale_pct(snapshot.score),
+            movers=data.get("movers") or democracy.movers(),
+            vdem=data.get("vdem") or democracy.vdem_table(),
+            vdem_divergence=data.get("vdem_divergence") or democracy.vdem_divergence(),
+            vdem_agreement=data.get("vdem_agreement") or democracy.vdem_agreement(),
+            vdem_meta=democracy.vdem_meta(),
+            # correlations/dispersion/anchor_* drive the methodology tab; the
+            # `or` fallbacks let the page render from a cold repo before
+            # update.py has written the artifact.
+            correlations=data.get("correlations") or democracy.pillar_correlations(),
+            dispersion=data.get("dispersion") or democracy.metric_dispersion(),
+            anchor_coverage=data.get("anchor_coverage") or democracy.anchor_coverage(),
+            anchor_density=data.get("anchor_density") or democracy.anchor_density(),
+            exec_summary=data.get("exec_summary") or democracy.executive_summary(),
+            panel_rows=data.get("panel_rows") or {},
+            provenance=provenance,
+            generated_at=meta.get("generated_at", ""),
         ),
     )
     return _cached(Response(html, mimetype="text/html"))
@@ -1046,6 +1123,63 @@ def api_sentiment_withdraw():
     return _no_store(jsonify(summary))
 
 
+# --- Reader critiques ------------------------------------------------------
+# Structured, component-anchored objections. See app/critiques.py for the
+# design; nothing submitted here is ever visible until it is approved by hand
+# in /admin, so this endpoint cannot publish anything on its own.
+
+
+@bp.route("/api/<report_key>/critique", methods=["GET"])
+def api_critique_form(report_key):
+    """The whitelist of things this report may be critiqued about."""
+    if report_key not in critiques.REPORTS:
+        return jsonify({"error": "Unknown report."}), 404
+    return _no_store(jsonify({
+        "report": report_key,
+        "targets": [{"key": k, "label": v} for k, v in critiques.targets_for(report_key)],
+        "verdicts": [{"key": k, "label": v} for k, v in critiques.VERDICTS],
+        "min_body": critiques.MIN_BODY,
+        "max_body": critiques.MAX_BODY,
+        "available": db.is_configured(),
+    }))
+
+
+@bp.route("/api/<report_key>/critique", methods=["POST"])
+def api_critique_submit(report_key):
+    if report_key not in critiques.REPORTS:
+        return jsonify({"error": "Unknown report."}), 404
+
+    token = _voter_token()
+    if not token:
+        return _no_store(jsonify({"error": "Missing or malformed token."})), 400
+
+    if not db.is_configured():
+        return _no_store(jsonify({"error": "Feedback is not available right now."})), 503
+
+    payload = request.get_json(silent=True) or {}
+    week_start = critiques.current_week_start()
+    try:
+        result = critiques.submit(
+            payload,
+            report_key,
+            voter_hash=votes.hash_voter_token(token),
+            origin_hash=_origin_hash(week_start),
+        )
+    except critiques.CritiqueRejected as exc:
+        # 422: the submission was understood and refused on its merits. The
+        # message is written to be read by the person who wrote the critique.
+        return _no_store(jsonify({"error": str(exc)})), 422
+    except Exception:
+        return _no_store(jsonify({"error": "Could not save that. Try again."})), 503
+
+    return _no_store(jsonify({
+        "ok": True,
+        "id": result["id"],
+        "message": "Thank you — this goes to the author for review before it "
+                   "appears on the page.",
+    }))
+
+
 # --- Crawler-facing files --------------------------------------------------
 
 
@@ -1054,25 +1188,53 @@ def sitemap():
     # Only substantive, indexable pages. The /reports/* placeholders render a
     # near-identical "in development" template and are noindexed, so listing
     # them here would submit five thin duplicates for indexing.
+    #
+    # `src` is what actually changes the page: the precomputed artifact the
+    # route reads for a dashboard, the template for a static page. lastmod is
+    # taken from that file's mtime rather than today's date, because a sitemap
+    # that stamps every URL with today claims eight daily edits the site does
+    # not make — and a lastmod contradicted by the page is one crawlers learn
+    # to ignore, which costs the pages that genuinely do change daily.
     pages = [
-        {"loc": f"{SITE_ORIGIN}/", "priority": "1.0", "changefreq": "daily"},
-        {"loc": f"{SITE_ORIGIN}/airline-index", "priority": "1.0", "changefreq": "daily"},
-        {"loc": f"{SITE_ORIGIN}/hormuz-index", "priority": "0.9", "changefreq": "daily"},
-        {"loc": f"{SITE_ORIGIN}/lok-sabha-index", "priority": "0.9", "changefreq": "daily"},
+        {"loc": "/", "priority": "1.0", "changefreq": "daily",
+         "src": precomputed.path_for("home")},
+        {"loc": "/airline-index", "priority": "1.0", "changefreq": "daily",
+         "src": precomputed.path_for("airline-index")},
+        {"loc": "/hormuz-index", "priority": "0.9", "changefreq": "daily",
+         "src": precomputed.path_for("hormuz-index")},
+        {"loc": "/lok-sabha-index", "priority": "0.9", "changefreq": "daily",
+         "src": precomputed.path_for("lok-sabha-index")},
         # Annual series: the page only changes at fiscal-year close, so a daily
         # changefreq here would be a claim the lastmod cannot support.
-        {"loc": f"{SITE_ORIGIN}/solvency-index", "priority": "0.9", "changefreq": "monthly"},
-        {"loc": f"{SITE_ORIGIN}/about", "priority": "0.7", "changefreq": "monthly"},
-        {"loc": f"{SITE_ORIGIN}/terms", "priority": "0.5", "changefreq": "monthly"},
+        {"loc": "/solvency-index", "priority": "0.9", "changefreq": "monthly",
+         "src": precomputed.path_for("solvency-index")},
+        {"loc": "/democracy-index", "priority": "0.9", "changefreq": "monthly",
+         "src": precomputed.path_for("democracy-index")},
+        {"loc": "/about", "priority": "0.7", "changefreq": "monthly",
+         "src": os.path.join(current_app.root_path, "templates", "about.html")},
+        {"loc": "/terms", "priority": "0.5", "changefreq": "monthly",
+         "src": os.path.join(current_app.root_path, "templates", "terms.html")},
     ]
+
+    today = date.today().isoformat()
+
+    def lastmod_for(path):
+        """Modification date of the file that backs a page, or today.
+
+        Today is the fallback rather than an omitted tag because a deploy that
+        has not yet written its artifacts should still submit a valid entry.
+        """
+        try:
+            return date.fromtimestamp(os.path.getmtime(path)).isoformat()
+        except OSError:
+            return today
 
     xml = ['<?xml version="1.0" encoding="UTF-8"?>']
     xml.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    today = date.today().isoformat()
     for p in pages:
         xml.append("  <url>")
-        xml.append(f"    <loc>{p['loc']}</loc>")
-        xml.append(f"    <lastmod>{today}</lastmod>")
+        xml.append(f"    <loc>{SITE_ORIGIN}{p['loc']}</loc>")
+        xml.append(f"    <lastmod>{lastmod_for(p['src'])}</lastmod>")
         xml.append(f"    <changefreq>{p['changefreq']}</changefreq>")
         xml.append(f"    <priority>{p['priority']}</priority>")
         xml.append("  </url>")
@@ -1091,6 +1253,12 @@ def robots():
         # widget, the health probe and the cron trigger. None of it is a page,
         # so keep crawlers off it rather than let them spend crawl budget there.
         "Disallow: /api/\n"
+        # /admin is deliberately NOT disallowed here. It answers a login page
+        # to anyone unauthenticated and sends X-Robots-Tag: noindex — but a
+        # crawler must fetch a URL to read that header, and a path blocked in
+        # robots.txt is one it may never fetch and may still list from an
+        # inbound link. Blocking it would replace a directive that works with
+        # one that cannot be read.
         "\n"
         f"Sitemap: {SITE_ORIGIN}/sitemap.xml\n"
     )
@@ -1125,6 +1293,8 @@ Current HMX-INDEX reading: {snapshot.score:.1f} ({snapshot.level_label}), week o
 
 - [Hormuz Crisis Index dashboard]({SITE_ORIGIN}/hormuz-index): live composite score, component breakdown, weekly trajectory since January 2026.
 - [Lok Sabha Projection Engine]({SITE_ORIGIN}/lok-sabha-index): daily 543-seat projection from CVoter's option-level opinion trackers, Monte Carlo intervals, event impact analysis, 2019/2024 backtest.
+- [Hard-Metric Democracy Index]({SITE_ORIGIN}/democracy-index): thirty largest economies, 2000-2024, scored only on published counts and ratios - turnout, Gallagher disproportionality, legislative concentration, incarceration, imprisoned journalists - never on expert judgement. V-Dem carried beside every row as a comparator, never as an input.
+- [Sovereign Solvency Index]({SITE_ORIGIN}/solvency-index): annual sovereign balance-sheet stress composite.
 - [Methodology]({SITE_ORIGIN}/hormuz-index#methodology): index formula, component weights, cap thresholds and their rationale, baseline selection, known limitations.
 - [About the indices]({SITE_ORIGIN}/about): why each topic is compressed into one number, the construction rules shared by every index, and what a single number cannot express.
 

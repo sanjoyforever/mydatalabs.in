@@ -1,0 +1,71 @@
+{# Standalone shell for the admin area.
+
+   Deliberately does not extend base.html: the moderation screens want no site
+   navigation, no hero, and above all no GA4 or Clarity tag — session recording
+   on the one page that displays unmoderated submissions would be a poor idea.
+   The palette mirrors style.css so the two do not look like different sites. #}
+<!-- noindex is also sent as an HTTP header by admin.py; this is the belt to
+     that braces, for anything that reads markup but not headers. -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>{% block title %}Moderation{% endblock %} · mydatalabs</title>
+<style>
+  :root {
+    --bg: #F8FAFC; --card: #FFFFFF; --input: #FFFFFF;
+    --border: rgba(15, 23, 42, 0.12); --border-strong: rgba(15, 23, 42, 0.22);
+    --text: #0F172A; --sub: #475569; --muted: #64748B;
+    --blue: #0284C7; --emerald: #059669; --amber: #D97706; --rose: #E11D48;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0B1120; --card: #111C31; --input: #0B1120;
+      --border: rgba(148, 163, 184, 0.18); --border-strong: rgba(148, 163, 184, 0.34);
+      --text: #E2E8F0; --sub: #94A3B8; --muted: #7C8AA0;
+      --blue: #38BDF8; --emerald: #34D399; --amber: #FBBF24; --rose: #FB7185;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.55 'Inter', system-ui, -apple-system, sans-serif;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  a { color: var(--blue); }
+  h1 { font-size: 21px; margin: 0; letter-spacing: -0.01em; }
+  header.bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px; margin-bottom: 14px;
+  }
+  label { display: block; font-size: 13px; color: var(--sub); margin-bottom: 5px; }
+  input[type=password], input[type=text], textarea, select {
+    width: 100%; padding: 9px 11px; border-radius: 8px; font: inherit;
+    background: var(--input); color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  textarea { resize: vertical; min-height: 62px; }
+  button {
+    font: inherit; font-weight: 600; padding: 8px 14px; border-radius: 8px;
+    border: 1px solid var(--border-strong); background: var(--card);
+    color: var(--text); cursor: pointer;
+  }
+  button:hover { border-color: var(--blue); }
+  button.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  button.good { border-color: var(--emerald); color: var(--emerald); }
+  button.warn { border-color: var(--rose); color: var(--rose); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .notice {
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 14px;
+    border: 1px solid var(--border-strong);
+  }
+  .notice.error { border-color: var(--rose); color: var(--rose); }
+  .notice.ok { border-color: var(--emerald); color: var(--emerald); }
+</style>
+<div class="wrap">
+  {% block body %}{% endblock %}
+</div>

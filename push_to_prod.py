@@ -86,6 +86,13 @@ DATA_PATHS = [
     # got. The precomputed artifact below is not a substitute — it is derived
     # from this file, and goes stale the moment the series moves.
     os.path.join("app", "data", "solvency_history.json"),
+    # The Democracy Index panel and the anchors it is generated from. The
+    # anchors file ships as data rather than source because it is the input of
+    # record — the figures themselves, not code that computes them — and a
+    # deploy carrying the panel without it would leave production unable to say
+    # where any number came from.
+    os.path.join("app", "data", "democracy_anchors.json"),
+    os.path.join("app", "data", "democracy_history.json"),
     os.path.join("app", "data", "vessel_attacks.json"),
     os.path.join("app", "data", "precomputed"),
     os.path.join("app", "data", "elections"),

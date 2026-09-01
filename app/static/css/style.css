@@ -17,6 +17,12 @@
   
   --border-subtle:     rgba(15, 23, 42, 0.08);
   --border-bright:     rgba(15, 23, 42, 0.18);
+  /* Aliases: bare --surface / --border / --card are used by a few page-level
+     stylesheets. Without these they resolve to nothing and the whole
+     declaration is dropped (transparent panels, missing borders). */
+  --surface:           #FFFFFF;
+  --border:            rgba(15, 23, 42, 0.18);
+  --card:              #FFFFFF;
   --border-accent:     rgba(2, 132, 199, 0.30);
   
   --text-main:         #0F172A;
@@ -93,6 +99,12 @@
   
   --border-subtle:     rgba(15, 23, 42, 0.08);
   --border-bright:     rgba(15, 23, 42, 0.18);
+  /* Aliases: bare --surface / --border / --card are used by a few page-level
+     stylesheets. Without these they resolve to nothing and the whole
+     declaration is dropped (transparent panels, missing borders). */
+  --surface:           #FFFFFF;
+  --border:            rgba(15, 23, 42, 0.18);
+  --card:              #FFFFFF;
   --border-accent:     rgba(2, 132, 199, 0.30);
   
   --text-main:         #0F172A;
@@ -138,6 +150,9 @@
   
   --border-subtle:     rgba(255, 255, 255, 0.08);
   --border-bright:     rgba(255, 255, 255, 0.16);
+  --surface:           #0D121F;
+  --border:            rgba(255, 255, 255, 0.16);
+  --card:              #111726;
   --border-accent:     rgba(56, 189, 248, 0.30);
   
   --text-main:         #F8FAFC;
@@ -2017,6 +2032,21 @@ main:focus { outline: none; }
   }
 }
 
+.av-features-grid-5 {
+  grid-template-columns: repeat(5, 1fr);
+  max-width: 560px;
+}
+
+@media (max-width: 540px) {
+  .av-features-grid-5 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* The strapline sits on its own row under the pill on the solvency slide,
+   where the pill and the three-part meta would otherwise crowd each other. */
+.av-badge-meta-line {
+  margin: -6px 0 14px;
+}
+
 .av-feat-item {
   display: flex;
   flex-direction: column;
@@ -2106,6 +2136,61 @@ main:focus { outline: none; }
   left: 120px;
 }
 
+.av-floating-metric.float-score {
+  top: 28px;
+  right: 40px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.av-floating-metric.float-delta {
+  top: 92px;
+  right: 46px;
+}
+
+.av-floating-metric.float-far {
+  top: 44%;
+  right: 40px;
+}
+
+/* The Capitol only occupies the right of the solvency banner, so its readings
+   start further in than the aviation slide's. Sunlit stonework sits behind
+   several of them, so they carry a heavier tint than the aviation pills. */
+.hcar-solvency .av-hero-floating-metrics { left: 62%; }
+
+.hcar-solvency .av-floating-metric {
+  background: rgba(15, 23, 42, 0.48);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.hcar-solvency .av-floating-metric.is-ghost {
+  background: transparent;
+  border-color: transparent;
+}
+.hcar-solvency .av-floating-metric.float-mid { top: 30%; left: 4%; }
+.hcar-solvency .av-floating-metric.float-bot { bottom: 14%; left: 8%; }
+
+/* Second-tier readings: present, but they should not compete with the score. */
+.av-floating-metric.is-ghost {
+  background: transparent;
+  border-color: transparent;
+  backdrop-filter: none;
+  padding: 0;
+}
+
+.av-floating-metric.is-ghost .float-num,
+.av-floating-metric.is-ghost .float-caption {
+  opacity: 0.8;
+}
+
+.av-floating-metric .float-num-lg {
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+}
+
+.av-floating-metric .float-caption {
+  text-align: right;
+}
+
 .av-floating-metric .float-num {
   font-family: var(--font-mono);
   font-size: 0.82rem;
@@ -2170,8 +2255,49 @@ main:focus { outline: none; }
   width: 100%;
 }
 
+/* Banner runs about 20% shorter than the standalone hero: the vertical padding,
+   the headline and the gaps between blocks each give back a slice. */
+.hcar-slide .av-hero-content {
+  padding: 30px 48px;
+}
+
+@media (max-width: 768px) {
+  .hcar-slide .av-hero-content { padding: 20px 24px; }
+}
+
+.hcar-slide .av-badge-row { margin-bottom: 12px; }
+
+.hcar-slide .av-headline {
+  font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+  margin-bottom: 10px;
+}
+
+.hcar-slide .av-desc {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
 .hcar-slide .av-hero-card:hover {
   transform: none;
+}
+
+/* On a phone the copy runs the full width of the card, so the photograph has
+   to sit well behind it rather than fading out at the halfway point. */
+@media (max-width: 768px) {
+  .hcar-slide .av-hero-overlay {
+    background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.97) 0%,
+      rgba(255, 255, 255, 0.93) 60%,
+      rgba(255, 255, 255, 0.86) 100%);
+  }
+
+  [data-theme="dark"] .hcar-slide .av-hero-overlay {
+    background: linear-gradient(90deg,
+      rgba(15, 23, 42, 0.97) 0%,
+      rgba(15, 23, 42, 0.93) 60%,
+      rgba(15, 23, 42, 0.86) 100%);
+  }
 }
 
 /* Per-slide accent. Each pair is light first, then the dark override, so the
@@ -2185,8 +2311,8 @@ main:focus { outline: none; }
 .hcar-hormuz .av-hero-card { --hero-accent: #C2410C; }
 [data-theme="dark"] .hcar-hormuz .av-hero-card { --hero-accent: #FB923C; }
 
-/* Only the aviation slide is photographic; the other two are drawn from their
-   own history series, below. */
+/* Aviation and Hormuz are photographic; solvency is drawn from its own history
+   series, below. Hormuz reuses the original site hero photograph. */
 .hcar-aviation .av-hero-card {
   background-image: url('/static/img/aviation-banner.webp');
   background-position: right center;
@@ -2194,46 +2320,20 @@ main:focus { outline: none; }
   background-repeat: no-repeat;
 }
 
-.hcar-solvency .av-hero-card,
 .hcar-hormuz .av-hero-card {
-  background-image:
-    radial-gradient(120% 140% at 88% 12%, color-mix(in srgb, var(--hero-accent) 16%, transparent) 0%, transparent 60%);
+  background-image: url('/static/img/hero-1400.webp');
+  background-position: right center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
-/* The overlay exists to hold text off a photograph. Over a gradient it only
-   needs to keep the left column clean. */
-.hcar-solvency .av-hero-overlay,
-.hcar-hormuz .av-hero-overlay {
-  background: linear-gradient(90deg,
-    var(--surface-card) 0%,
-    color-mix(in srgb, var(--surface-card) 78%, transparent) 46%,
-    transparent 78%);
-}
-
-/* --- Background series ---------------------------------------------------- */
-
-.hcar-spark {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 55%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.hcar-spark-fill {
-  fill: var(--hero-accent);
-  opacity: 0.14;
-}
-
-.hcar-spark-line {
-  fill: none;
-  stroke: var(--hero-accent);
-  stroke-width: 1.5;
-  vector-effect: non-scaling-stroke;
-  opacity: 0.5;
+.hcar-solvency .av-hero-card {
+  /* Capitol banner. The asset carries its own alpha fade on the left, so the
+     card surface — light or dark — supplies the copy column. */
+  background-image: url('/static/img/solvency-banner.webp');
+  background-position: right center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 /* --- Slide content -------------------------------------------------------- */
@@ -2241,7 +2341,7 @@ main:focus { outline: none; }
 .hcar-score-line {
   font-size: 0.95rem;
   color: var(--text-sub);
-  margin: -6px 0 18px;
+  margin: -4px 0 12px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;

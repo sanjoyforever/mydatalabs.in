@@ -2,7 +2,7 @@
 {% set origin = site_origin|default('https://mydatalabs.in') %}
 
 {% block title %}Terms of Use &amp; Disclaimers — MyDataLabs{% endblock %}
-{% block meta_desc %}Terms of use, financial disclaimers, limitation of liability, third-party data attribution, and licence terms for MyDataLabs quantitative intelligence indices.{% endblock %}
+{% block meta_desc %}Terms of use, financial disclaimers, limitation of liability, third-party data attribution, licence terms, corrections and right of reply for MyDataLabs quantitative intelligence indices.{% endblock %}
 
 {% block content %}
 <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -23,7 +23,7 @@
   <section aria-labelledby="financial-disclaimer-h">
     <h2 id="financial-disclaimer-h">1. Financial &amp; Investment Disclaimer</h2>
     <div class="callout warning-callout" style="border-left: 4px solid var(--accent-orange, #f59e0b); padding: 1rem; background: rgba(245, 158, 11, 0.08); border-radius: 4px; margin-bottom: 1.5rem;">
-      <strong>IMPORTANT NOTICE:</strong> The quantitative indices, composite scores, asset price transformations, and risk indicators published on MyDataLabs (including the Hormuz Crisis Index / HMX-INDEX) are provided solely for general information, quantitative analysis, academic research, and news reporting purposes.
+      <strong>IMPORTANT NOTICE:</strong> The quantitative indices, composite scores, asset price transformations, and risk indicators published on MyDataLabs (including the Hormuz Crisis Index / HMX-INDEX, the Hard-Metric Democracy Index / HMDI, the Sovereign Solvency Index and the Lok Sabha Projection Engine / LS-PROJ) are provided solely for general information, quantitative analysis, academic research, and news reporting purposes.
     </div>
     <p>
       Nothing on this website or in our API outputs constitutes financial, investment, trading, commodity, legal, or tax advice. MyDataLabs is an independent intelligence network and is not a registered investment advisor, broker-dealer, or financial services provider.
@@ -68,17 +68,85 @@
     <p>
       Seat projections represent probabilistic statistical estimates, not official election results or official forecasts issued by election commissions or government bodies.
     </p>
+    <p>
+      MyDataLabs conducts no fieldwork, interviews no respondents and does not carry out any exit poll. LS-PROJ is a re-analysis of survey results already published by third parties. Where Section 126A of the Representation of the People Act, 1951, or any direction of the Election Commission of India restricts the conduct, publication or dissemination of exit polls or opinion polls for a defined period, publication of the affected projections is suspended for that period.
+    </p>
+    <p>
+      The projection is a statistical estimate of present public opinion projected onto a hypothetical immediate poll. It is not a prediction of any announced or unannounced election, is not affiliated with or endorsed by any political party, candidate, or the Election Commission of India, and must not be represented as an official or semi-official forecast.
+    </p>
+  </section>
+
+  <section aria-labelledby="democracy-h">
+    <h2 id="democracy-h">5. Comparative Country Indices &amp; Statements of Opinion</h2>
+    <p>
+      The Hard-Metric Democracy Index (HMDI) and other comparative country indices published on this site are computed entirely from counts, rates and ratios previously published by third-party statistical bodies. No indicator is an assessment of, or opinion about, any country supplied by MyDataLabs, and no natural person is scored, named, ranked or profiled by any index on this site.
+    </p>
+    <ul>
+      <li>Composite scores, ranks and tier labels (for example &ldquo;Established Democracy&rdquo; or &ldquo;Hybrid / Constrained Regime&rdquo;) are the arithmetic output of a formula published in full on the relevant page. They are expressions of opinion and fair comment on a matter of public interest, not assertions of fact about any government, institution, official, political party or private entity.</li>
+      <li>No index, rank, tier or figure on this site alleges unlawful, corrupt or improper conduct by any identified person or body, and none should be read as making such an allegation.</li>
+      <li>Rankings do not constitute an endorsement, criticism, boycott call, or political position taken by MyDataLabs with respect to any state or government.</li>
+      <li>Several indices expose user-adjustable indicator weights. Where a reader alters those weights, the resulting figures are the reader's own construction and not a MyDataLabs published figure.</li>
+      <li>Third-party expert indices displayed for comparison (including V-Dem's Liberal Democracy Index) are shown as external reference only. They are not inputs to any MyDataLabs composite, and their inclusion implies no endorsement of, affiliation with, or approval by their publishers.</li>
+      <li>The known limitations, selection bias, interpolation share and anchor coverage of each index are published on that index's own page and form part of these terms by reference. Figures cited without those limitations are cited out of context.</li>
+    </ul>
   </section>
 
   <section aria-labelledby="licence-h">
-    <h2 id="licence-h">5. Data Licence &amp; Fair Use</h2>
+    <h2 id="licence-h">6. Data Licence &amp; Fair Use</h2>
     <p>
-      MyDataLabs composite index scores and historical series are licensed under
+      Composite index scores, pillar scores, ranks and derived historical series <strong>computed by MyDataLabs</strong> are licensed under
       <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_name }}</a>.
-      You are free to share, copy, redistribute, and transform the index figures for commercial or non-commercial purposes, provided appropriate attribution is given to MyDataLabs with a link back to <code>mydatalabs.in</code>.
+      You are free to share, copy, redistribute, and transform those figures for commercial or non-commercial purposes, provided appropriate attribution is given to MyDataLabs with a link back to <code>mydatalabs.in</code>.
+    </p>
+    <p>
+      <strong>That licence covers our computed outputs only.</strong> It does not extend, and MyDataLabs cannot extend it, to the underlying third-party datasets from which those outputs are derived &mdash; including but not limited to International IDEA, the Gallagher Election Indices, the Comparative Constitutions Project, IPU Parline, the World Bank Poverty &amp; Inequality Platform, the World Inequality Database, OONI, NetBlocks, SFLC.in, Cloudflare Radar, the Committee to Protect Journalists, the World Prison Brief, UNODC, NCRB, V-Dem and CVoter India. Each remains the property of its publisher and is governed by that publisher's own terms and licence. Anyone wishing to redistribute the underlying source data, as opposed to our computed figures, must obtain those rights from the originating publisher.
+    </p>
+    <p>
+      MyDataLabs distributes no bulk dataset, feed or download endpoint for third-party source data. Source values are reproduced on our pages only to the extent necessary to document how a published figure was computed.
     </p>
     <p>
       We kindly request automated systems and API consumers to cache responses in accordance with HTTP headers to prevent server overload.
+    </p>
+  </section>
+
+  <section aria-labelledby="corrections-h">
+    <h2 id="corrections-h">7. Corrections, Right of Reply &amp; Grievance Redressal</h2>
+    <p>
+      MyDataLabs publishes computed figures, and computed figures can be wrong. If you believe a value, source citation, rank or statement on this site is factually inaccurate, we want to correct it.
+    </p>
+    <p>
+      Write to <a href="mailto:contact@mydatalabs.in">contact@mydatalabs.in</a> identifying the page, the specific figure or statement, and the source you believe is correct. We aim to acknowledge every such complaint within 72 hours and to resolve it within fifteen days. Where a published figure is found to be in error it is corrected at source and the correction is noted on the page.
+    </p>
+    <p>
+      Any government, institution, organisation or individual that considers itself mischaracterised by anything published here may submit a statement in reply to the same address. Substantive replies are published alongside the material complained of.
+    </p>
+    <p>
+      The same address serves as the grievance contact for all complaints regarding content published on this site.
+    </p>
+  </section>
+
+  <section aria-labelledby="acceptable-use-h">
+    <h2 id="acceptable-use-h">8. Acceptable Use</h2>
+    <p>When using this site or any figure published on it, you agree not to:</p>
+    <ul>
+      <li>present any index, score, rank or projection as an official statistic, government figure, or the output of any election commission, regulator or international body;</li>
+      <li>state or imply that MyDataLabs endorses any political party, candidate, government, campaign, security, or investment;</li>
+      <li>reproduce a score, rank or tier while stripping the accompanying methodology, weighting and limitations, in a manner that materially misrepresents what the figure measures;</li>
+      <li>remove or obscure attribution required by the licence in Section 6;</li>
+      <li>place automated load on the site beyond what the published cache headers contemplate, or attempt to circumvent access controls on non-public routes.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="law-h">
+    <h2 id="law-h">9. Governing Law &amp; Changes to These Terms</h2>
+    <p>
+      MyDataLabs is operated from Noida, Uttar Pradesh, India. These terms are governed by the laws of India, and the courts at Gautam Buddh Nagar (Noida), Uttar Pradesh shall have exclusive jurisdiction over any dispute arising out of the use of this site or its published figures.
+    </p>
+    <p>
+      This site is not directed at, and makes no representation of compliance with the local law of, any jurisdiction outside India. Users accessing it from elsewhere do so on their own initiative and are responsible for compliance with their own local law.
+    </p>
+    <p>
+      These terms may be revised as the published indices change. The version in force is the one displayed on this page; continued use of the site after a revision constitutes acceptance of it.
     </p>
   </section>
 </article>

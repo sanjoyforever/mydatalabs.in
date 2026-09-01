@@ -1,5 +1,5 @@
 import os
-from datetime import date
+from datetime import date, timedelta
 
 from flask import Flask, render_template, request
 
@@ -85,11 +85,32 @@ def create_app() -> Flask:
     )
     app.config["SEND_FILE_MAX_AGE_DEFAULT"] = STATIC_MAX_AGE
 
+    # Signs the admin session cookie. It must come from the environment and be
+    # stable across instances: generating one per boot would sign each cold
+    # start with a different key, and the moderator would be logged out by
+    # whichever serverless instance happened to answer their next request.
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "")
+    app.config.update(
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE="Lax",
+        SESSION_COOKIE_SECURE=bool(os.environ.get("VERCEL") or not app.debug),
+        PERMANENT_SESSION_LIFETIME=timedelta(days=30),
+    )
+
     from app.elections.routes import bp as elections_bp
     from app.routes import bp, build_nav
 
     app.register_blueprint(bp)
     app.register_blueprint(elections_bp)
+
+    # The moderation queue. Registered only when it can actually be locked —
+    # without a signing key or a password hash there is no way to authenticate
+    # anyone, and an admin blueprint that cannot check a password must not be
+    # reachable at all.
+    if app.config["SECRET_KEY"] and os.environ.get("ADMIN_PASSWORD_HASH"):
+        from app.admin import bp as admin_bp
+
+        app.register_blueprint(admin_bp)
 
     # Cache-busting token for /static assets. Derived from the newest mtime in
     # the static tree so a deploy invalidates the year-long cache above.

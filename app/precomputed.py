@@ -236,14 +236,97 @@ def _build_solvency_index() -> dict:
     }
 
 
+def _build_democracy_index() -> dict:
+    """The whole scored panel for the Hard-Metric Democracy Index.
+
+    Like solvency this fetches nothing: the panel is rebuilt from
+    app/data/democracy_anchors.json by scripts/build_democracy_history.py and
+    committed. What is expensive is the scoring — index_for_year() is called 25
+    times over by rank_history(), score_history() and panel_average(), and the
+    diagnostics tab re-ranks the whole panel again — so it is settled here.
+
+    `panel_rows` is the full 750-row scored panel keyed "CODE-YYYY", because
+    the page reweights and re-ranks in the browser and so needs every
+    country-year on the client, not just the default-weighted ranking for one
+    year. It is stored as bare arrays rather than as objects: the readable
+    keyed form was 1.1 MB of mostly repeated field names inlined into the HTML,
+    and the same numbers positionally are a tenth of that. The schema is fixed
+    by PANEL_ROW_SCHEMA below and read back by the template's decoder.
+
+    Normalised indicator scores are *not* shipped. They are a fixed linear
+    function of the raw value and the bounds in democracy.METRICS, both of
+    which the page already has, so sending them would be sending the same
+    column twice.
+    """
+    from app.indices import democracy
+
+    year = democracy.latest_year()
+
+    metric_keys = democracy.METRIC_KEYS
+    context_keys = [c["key"] for c in democracy.CONTEXT_METRICS]
+
+    panel_rows = {}
+    for y in democracy.available_years():
+        for row in democracy.index_for_year(y):
+            panel_rows[f"{row['country_code']}-{y}"] = [
+                row["composite"],
+                row["rank"],
+                [row["pillars"][p] for p in democracy.PILLAR_KEYS],
+                [row["metrics"][k]["raw"] for k in metric_keys],
+                [row["context"][k]["raw"] for k in context_keys],
+                # Anchor flags as one bitmask rather than ten booleans: it is
+                # the single most repeated field in the panel.
+                sum(1 << i for i, k in enumerate(metric_keys) if row["metrics"][k]["anchor"]),
+            ]
+
+    return {
+        "year": year,
+        "years": democracy.available_years(),
+        "rankings": democracy.index_for_year(year),
+        "panel": democracy.panel_average(),
+        "panel_rows": panel_rows,
+        # Positional schema for panel_rows. Kept beside the data so a reader of
+        # the artifact (or of the page source) can decode it without this file.
+        "panel_row_schema": [
+            "composite", "rank", "pillars[5]", "raw_metrics[10]",
+            "raw_context[2]", "anchor_bitmask",
+        ],
+        "panel_row_keys": {
+            "pillars": democracy.PILLAR_KEYS,
+            "metrics": metric_keys,
+            "context": context_keys,
+        },
+        "movers": democracy.movers(),
+        # External comparator column: V-Dem's expert-coded ranking of the same
+        # thirty. Independent of the weights, so one copy serves every slider
+        # position the reader lands on.
+        "vdem": democracy.vdem_table(),
+        "vdem_divergence": democracy.vdem_divergence(),
+        "vdem_agreement": democracy.vdem_agreement(),
+        "correlations": democracy.pillar_correlations(),
+        "dispersion": democracy.metric_dispersion(),
+        "anchor_coverage": democracy.anchor_coverage(),
+        "anchor_density": democracy.anchor_density(),
+        # The closing prose is all figures, computed once here rather than on
+        # every request: it re-ranks the panel for two years and decomposes
+        # thirty country moves.
+        "exec_summary": democracy.executive_summary(),
+        "score_history": democracy.score_history(),
+        "rank_history": democracy.rank_history(),
+        "meta": democracy.get_meta(),
+        "headline": democracy.headline(),
+    }
+
+
 def _build_home() -> dict:
     """Headline figure for each report card on the landing page."""
-    from app.indices import aviation, hormuz, solvency
+    from app.indices import aviation, democracy, hormuz, solvency
 
     aviation_snap = aviation.compute_snapshot(allow_network=False)
     snapshot = hormuz.compute_snapshot(persist=False)
     solvency_snap = solvency.compute_snapshot()
     ls = load("lok-sabha-index").get("headline")
+    dm = democracy.headline()
 
     return {
         "cards": {
@@ -261,6 +344,11 @@ def _build_home() -> dict:
                 "value": f"{solvency_snap.score:.1f}",
                 "unit": "score",
                 "status": solvency_snap.level_status,
+            },
+            "democracy-index": {
+                "value": dm["value"],
+                "unit": dm["unit"],
+                "status": "good",
             },
             "lok-sabha-index": {
                 "value": str(ls["value"]) if ls else None,
@@ -378,6 +466,7 @@ def _build_lok_sabha_index() -> dict:
 
 BUILDERS = {
     "airline-index": _build_airline_index,
+    "democracy-index": _build_democracy_index,
     "solvency-index": _build_solvency_index,
     "hormuz-index": _build_hormuz_index,
     "lok-sabha-index": _build_lok_sabha_index,

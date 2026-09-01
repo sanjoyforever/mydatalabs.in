@@ -1,0 +1,24 @@
+{% extends "admin/_base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block body %}
+<header class="bar"><h1>Moderation</h1></header>
+
+{% if disabled %}
+  <div class="notice error">{{ disabled }}</div>
+  <p class="muted">
+    Set <code>ADMIN_PASSWORD_HASH</code> in the environment. Generate one with
+    <code>python -m app.admin hash</code>.
+  </p>
+{% else %}
+  {% if error %}<div class="notice error">{{ error }}</div>{% endif %}
+  <form method="post" class="card" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="{{ csrf }}">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required autofocus
+           autocomplete="current-password">
+    <div class="row" style="margin-top:14px">
+      <button type="submit" class="primary">Sign in</button>
+    </div>
+  </form>
+{% endif %}
+{% endblock %}

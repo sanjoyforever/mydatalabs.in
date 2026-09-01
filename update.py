@@ -17,6 +17,10 @@ precomputed artifact the site renders from:
       - calibration refit, daily projections rebuilt
       - overview / trend_analytics / events / backtest / insights JSON
 
+    Democracy Index       /democracy-index
+      - annual panel re-interpolated from app/data/democracy_anchors.json
+      - only with --democracy; the panel changes at most once a year
+
     Per-route artifacts   app/data/precomputed/
       - one JSON per route, so a page render never touches the network or a
         database. See app/precomputed.py for why.
@@ -39,6 +43,7 @@ Options
     python update.py --check          report freshness of both, write nothing
     python update.py --dry-run        recompute without persisting
     python update.py --force          refetch even if the source has nothing new
+    python update.py --democracy      rebuild the Democracy Index panel from its anchors
     python update.py --stamp-manual   mark manual Hormuz components as updated today
     python update.py --quiet          print only on a real change or an error
 
@@ -182,6 +187,9 @@ def main() -> int:
     parser.add_argument("--solvency", action="store_true",
                         help="rebuild the 80-year Solvency Index series from FRED "
                              "(annual; not part of a default run)")
+    parser.add_argument("--democracy", action="store_true",
+                        help="rebuild the Democracy Index panel from its anchors file "
+                             "(annual; not part of a default run)")
     parser.add_argument("--check", action="store_true", help="report freshness and exit, no writes")
     parser.add_argument("--dry-run", action="store_true", help="recompute without persisting")
     parser.add_argument("--force", action="store_true",
@@ -196,12 +204,13 @@ def main() -> int:
         return check_freshness()
 
     # If no specific target is given, update all three weekly indices. The
-    # Solvency Index is deliberately not in that set: its inputs are annual
-    # fiscal-year series that only change once, at FY close, so refetching ten
-    # FRED series on every weekly run would be pure noise. Its *derived* views
-    # (projections, decade means, threshold crossings) are rebuilt with the
-    # other route artifacts by precomputed.build_all().
-    any_specified = args.aviation or args.hormuz or args.elections or args.solvency
+    # Solvency and Democracy indices are deliberately not in that set: both are
+    # annual series whose inputs change once a year at most — refetching ten
+    # FRED series, or re-interpolating a hand-keyed anchors file, on every
+    # weekly run would be pure noise. Their *derived* views are rebuilt with
+    # the other route artifacts by precomputed.build_all().
+    any_specified = (args.aviation or args.hormuz or args.elections
+                     or args.solvency or args.democracy)
     do_aviation = args.aviation or not any_specified
     do_hormuz = args.hormuz or not any_specified
     do_elections = args.elections or not any_specified
@@ -249,11 +258,22 @@ def main() -> int:
             print(f"  ERROR: Solvency rebuild raised: {err}", file=sys.stderr)
             failures.append("solvency")
 
+    if args.democracy:
+        _hr("Hard-Metric Democracy Index — rebuilding panel from anchors")
+        try:
+            import subprocess
+            cmd = [sys.executable, os.path.join(ROOT_DIR, "scripts", "build_democracy_history.py")]
+            if subprocess.call(cmd) != 0:
+                failures.append("democracy")
+        except Exception as err:  # noqa: BLE001
+            print(f"  ERROR: Democracy rebuild raised: {err}", file=sys.stderr)
+            failures.append("democracy")
+
     # Route artifacts last: they read what the two updates above just wrote.
     # update_hormuz() already rebuilds them via update_data.update_index(), but
     # an elections-only run would otherwise leave the home page's Lok Sabha
     # card reporting the previous seat count.
-    if not args.dry_run and (do_elections or args.solvency):
+    if not args.dry_run and (do_elections or args.solvency or args.democracy):
         _hr("Per-route precomputed artifacts")
         try:
             from app import precomputed

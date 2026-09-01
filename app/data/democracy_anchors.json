@@ -1,0 +1,3347 @@
+{
+ "USA": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 50.3,
+    "2004": 55.7,
+    "2008": 58.2,
+    "2012": 54.9,
+    "2016": 55.7,
+    "2020": 62.8,
+    "2024": 63.5
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.6,
+    "2006": 4.8,
+    "2010": 6.2,
+    "2016": 5.8,
+    "2020": 4.9,
+    "2024": 5.2
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.99,
+    "2012": 2.01,
+    "2024": 2.01
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5005.0,
+    "2010": 5012.0,
+    "2020": 5010.0,
+    "2024": 5002.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 13.8,
+    "2006": 15.2,
+    "2012": 17.8,
+    "2018": 20.6,
+    "2024": 29.2
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 40.1,
+    "2008": 40.8,
+    "2015": 41.2,
+    "2020": 41.5,
+    "2024": 41.1
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.85,
+    "2010": 1.92,
+    "2020": 1.98,
+    "2024": 1.94
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2010": 0.0,
+    "2020": 0.09,
+    "2024": 0.03
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 19.5,
+    "2010": 21.0,
+    "2018": 21.5,
+    "2024": 24.6
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 690.0,
+    "2008": 760.0,
+    "2015": 690.0,
+    "2020": 565.0,
+    "2024": 528.0
+   }
+  }
+ },
+ "CHN": {
+  "turnout_vap_pct": {
+   "kind": "constant",
+   "value": 25.0
+  },
+  "gallagher_index": {
+   "kind": "constant",
+   "value": 35.0
+  },
+  "effective_parties": {
+   "kind": "constant",
+   "value": 1.0
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "anchors",
+   "points": {
+    "2000": 50.0,
+    "2012": 50.0,
+    "2018": 20.0,
+    "2024": 10.0
+   }
+  },
+  "legislative_hhi": {
+   "kind": "constant",
+   "value": 10000.0
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 21.8,
+    "2008": 21.3,
+    "2013": 23.4,
+    "2018": 24.9,
+    "2024": 26.5
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 41.2,
+    "2008": 49.1,
+    "2015": 46.2,
+    "2020": 46.8,
+    "2024": 46.3
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.95,
+    "2008": 2.55,
+    "2015": 2.32,
+    "2020": 2.36,
+    "2024": 2.29
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.0,
+    "2009": 60.0,
+    "2015": 75.0,
+    "2020": 95.0,
+    "2024": 115.0
+   }
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.22,
+    "2008": 0.28,
+    "2015": 0.35,
+    "2020": 0.36,
+    "2024": 0.44
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 32.0,
+    "2010": 35.0,
+    "2018": 38.0,
+    "2024": 41.0
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 115.0,
+    "2010": 118.0,
+    "2018": 121.0,
+    "2024": 122.0
+   }
+  }
+ },
+ "DEU": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 79.1,
+    "2002": 79.1,
+    "2005": 77.7,
+    "2009": 70.8,
+    "2013": 71.5,
+    "2017": 76.2,
+    "2021": 76.6,
+    "2024": 76.6
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.5,
+    "2005": 1.9,
+    "2013": 2.4,
+    "2017": 2.1,
+    "2021": 1.8,
+    "2024": 1.8
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3.8,
+    "2005": 4.0,
+    "2013": 4.8,
+    "2017": 4.6,
+    "2021": 5.2,
+    "2024": 5.2
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2600.0,
+    "2005": 2400.0,
+    "2013": 2500.0,
+    "2017": 2200.0,
+    "2021": 1950.0,
+    "2024": 1950.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 30.9,
+    "2005": 31.6,
+    "2013": 36.5,
+    "2017": 30.7,
+    "2021": 34.7,
+    "2024": 35.3
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 28.3,
+    "2005": 30.2,
+    "2013": 30.5,
+    "2018": 31.1,
+    "2024": 31.0
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.95,
+    "2005": 1.05,
+    "2013": 1.06,
+    "2018": 1.08,
+    "2024": 1.07
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 24.5,
+    "2008": 22.0,
+    "2015": 20.8,
+    "2020": 20.2,
+    "2024": 19.0
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 96.0,
+    "2005": 98.0,
+    "2012": 83.0,
+    "2018": 72.0,
+    "2024": 70.0
+   }
+  }
+ },
+ "JPN": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 58.7,
+    "2003": 59.9,
+    "2005": 67.5,
+    "2009": 69.3,
+    "2012": 59.3,
+    "2014": 52.7,
+    "2017": 53.6,
+    "2021": 55.9,
+    "2024": 53.8
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 12.8,
+    "2005": 15.2,
+    "2009": 11.4,
+    "2012": 18.1,
+    "2017": 13.2,
+    "2021": 12.8,
+    "2024": 11.2
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.7,
+    "2005": 2.3,
+    "2009": 2.1,
+    "2012": 3.2,
+    "2017": 2.3,
+    "2021": 2.5,
+    "2024": 3.1
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3800.0,
+    "2005": 4800.0,
+    "2009": 5100.0,
+    "2012": 4900.0,
+    "2017": 4400.0,
+    "2024": 3500.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 7.3,
+    "2005": 9.0,
+    "2009": 11.3,
+    "2014": 9.5,
+    "2017": 10.1,
+    "2024": 15.7
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 31.8,
+    "2008": 33.1,
+    "2015": 33.5,
+    "2020": 33.5,
+    "2024": 33.4
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.1,
+    "2010": 1.16,
+    "2020": 1.19,
+    "2024": 1.18
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 16.5,
+    "2008": 14.2,
+    "2015": 12.8,
+    "2020": 12.1,
+    "2024": 11.0
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 48.0,
+    "2006": 63.0,
+    "2014": 48.0,
+    "2018": 41.0,
+    "2024": 34.0
+   }
+  }
+ },
+ "IND": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 59.9,
+    "2004": 58.1,
+    "2009": 58.2,
+    "2014": 66.4,
+    "2019": 67.4,
+    "2024": 65.8
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 10.8,
+    "2004": 8.9,
+    "2009": 9.4,
+    "2014": 15.1,
+    "2019": 16.2,
+    "2024": 11.5
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.2,
+    "2004": 6.4,
+    "2009": 6.5,
+    "2014": 2.6,
+    "2019": 2.4,
+    "2024": 3.4
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2200.0,
+    "2004": 1800.0,
+    "2009": 1900.0,
+    "2014": 3800.0,
+    "2019": 4200.0,
+    "2024": 3100.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 9.0,
+    "2004": 8.3,
+    "2009": 10.9,
+    "2014": 11.8,
+    "2019": 14.4,
+    "2024": 13.6
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 34.2,
+    "2005": 35.5,
+    "2011": 35.7,
+    "2019": 35.7,
+    "2024": 35.4
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.38,
+    "2008": 1.44,
+    "2015": 1.47,
+    "2020": 1.52,
+    "2024": 1.45
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2010": 0.0,
+    "2016": 4.5,
+    "2019": 18.5,
+    "2024": 8.1
+   }
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.01,
+    "2008": 0.02,
+    "2015": 0.03,
+    "2020": 0.05,
+    "2024": 0.036
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 67.2,
+    "2005": 68.5,
+    "2010": 66.8,
+    "2015": 67.2,
+    "2019": 69.1,
+    "2020": 76.1,
+    "2024": 73.2
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 27.0,
+    "2005": 31.0,
+    "2010": 32.0,
+    "2015": 33.0,
+    "2020": 36.0,
+    "2024": 40.0
+   }
+  }
+ },
+ "GBR": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 59.4,
+    "2001": 59.4,
+    "2005": 61.4,
+    "2010": 65.1,
+    "2015": 66.4,
+    "2017": 68.8,
+    "2019": 67.3,
+    "2024": 59.8
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 17.5,
+    "2005": 16.8,
+    "2010": 13.2,
+    "2015": 14.9,
+    "2017": 6.5,
+    "2019": 11.8,
+    "2024": 18.2
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.2,
+    "2005": 2.5,
+    "2010": 2.6,
+    "2015": 2.4,
+    "2017": 2.4,
+    "2019": 2.3,
+    "2024": 2.6
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4800.0,
+    "2005": 4300.0,
+    "2010": 3600.0,
+    "2015": 4100.0,
+    "2017": 4200.0,
+    "2019": 4800.0,
+    "2024": 4700.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 18.2,
+    "2005": 19.8,
+    "2010": 22.0,
+    "2015": 29.4,
+    "2019": 33.8,
+    "2024": 40.5
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 35.8,
+    "2008": 36.2,
+    "2014": 34.9,
+    "2019": 35.5,
+    "2024": 35.0
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.39,
+    "2008": 1.42,
+    "2015": 1.32,
+    "2019": 1.35,
+    "2024": 1.31
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 15.5,
+    "2008": 14.0,
+    "2014": 13.0,
+    "2018": 11.8,
+    "2024": 18.0
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 125.0,
+    "2008": 152.0,
+    "2015": 148.0,
+    "2019": 137.0,
+    "2024": 142.0
+   }
+  }
+ },
+ "FRA": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 60.3,
+    "2002": 60.3,
+    "2007": 60.0,
+    "2012": 55.4,
+    "2017": 48.7,
+    "2022": 47.5,
+    "2024": 66.7
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 19.8,
+    "2007": 15.2,
+    "2012": 12.1,
+    "2017": 12.4,
+    "2022": 7.8,
+    "2024": 8.2
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.8,
+    "2007": 2.5,
+    "2012": 2.9,
+    "2017": 3.1,
+    "2022": 4.8,
+    "2024": 4.9
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4500.0,
+    "2007": 4300.0,
+    "2012": 3800.0,
+    "2017": 3600.0,
+    "2022": 2400.0,
+    "2024": 2350.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 10.9,
+    "2007": 18.2,
+    "2012": 26.9,
+    "2017": 39.0,
+    "2022": 37.3,
+    "2024": 36.0
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 30.2,
+    "2007": 30.8,
+    "2012": 31.8,
+    "2018": 31.5,
+    "2024": 31.2
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.05,
+    "2008": 1.08,
+    "2014": 1.15,
+    "2018": 1.12,
+    "2024": 1.1
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 36.5,
+    "2007": 34.0,
+    "2014": 26.0,
+    "2018": 29.5,
+    "2024": 27.1
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 85.0,
+    "2008": 100.0,
+    "2014": 103.0,
+    "2018": 103.0,
+    "2024": 114.0
+   }
+  }
+ },
+ "ITA": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 81.4,
+    "2006": 83.6,
+    "2008": 80.5,
+    "2013": 75.2,
+    "2018": 72.9,
+    "2022": 63.9,
+    "2024": 63.9
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 6.2,
+    "2006": 5.1,
+    "2013": 7.8,
+    "2018": 5.6,
+    "2022": 8.9,
+    "2024": 8.9
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.4,
+    "2006": 4.8,
+    "2013": 4.2,
+    "2018": 4.2,
+    "2022": 3.8,
+    "2024": 3.8
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2200.0,
+    "2006": 2500.0,
+    "2013": 2800.0,
+    "2018": 2700.0,
+    "2022": 3100.0,
+    "2024": 3100.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 9.8,
+    "2006": 17.3,
+    "2013": 31.4,
+    "2018": 35.7,
+    "2022": 32.3,
+    "2024": 32.3
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 34.0,
+    "2008": 35.1,
+    "2015": 35.6,
+    "2018": 35.2,
+    "2024": 34.9
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.25,
+    "2008": 1.3,
+    "2015": 1.35,
+    "2018": 1.32,
+    "2024": 1.29
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 39.5,
+    "2008": 44.0,
+    "2014": 35.0,
+    "2018": 34.5,
+    "2024": 29.6
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 93.0,
+    "2008": 110.0,
+    "2014": 90.0,
+    "2018": 99.0,
+    "2024": 101.0
+   }
+  }
+ },
+ "BRA": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 78.5,
+    "2002": 82.3,
+    "2006": 83.2,
+    "2010": 81.9,
+    "2014": 80.6,
+    "2018": 79.7,
+    "2022": 79.1,
+    "2024": 79.1
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.8,
+    "2006": 2.5,
+    "2014": 3.1,
+    "2018": 3.4,
+    "2022": 3.8,
+    "2024": 3.8
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 8.5,
+    "2006": 9.3,
+    "2014": 13.1,
+    "2018": 13.2,
+    "2022": 9.4,
+    "2024": 9.4
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1400.0,
+    "2006": 1250.0,
+    "2014": 1080.0,
+    "2018": 1100.0,
+    "2022": 1400.0,
+    "2024": 1400.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.7,
+    "2006": 8.8,
+    "2014": 9.9,
+    "2018": 15.0,
+    "2022": 17.5,
+    "2024": 17.5
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 59.3,
+    "2006": 55.6,
+    "2014": 51.5,
+    "2018": 53.9,
+    "2024": 51.5
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4.2,
+    "2006": 3.6,
+    "2014": 2.9,
+    "2018": 3.2,
+    "2024": 2.85
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 38.0,
+    "2008": 42.5,
+    "2014": 40.0,
+    "2018": 41.5,
+    "2024": 27.2
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 135.0,
+    "2008": 220.0,
+    "2014": 300.0,
+    "2018": 355.0,
+    "2024": 395.0
+   }
+  }
+ },
+ "CAN": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 61.2,
+    "2004": 60.9,
+    "2006": 64.7,
+    "2008": 58.8,
+    "2011": 61.1,
+    "2015": 68.3,
+    "2019": 67.0,
+    "2021": 62.6,
+    "2024": 62.6
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 12.8,
+    "2006": 9.4,
+    "2011": 13.5,
+    "2015": 12.1,
+    "2019": 10.5,
+    "2021": 11.2,
+    "2024": 11.2
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.6,
+    "2006": 2.9,
+    "2011": 2.5,
+    "2015": 2.4,
+    "2019": 2.9,
+    "2024": 2.8
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4200.0,
+    "2006": 3500.0,
+    "2011": 4200.0,
+    "2015": 3900.0,
+    "2019": 3400.0,
+    "2024": 3500.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 20.6,
+    "2006": 20.8,
+    "2011": 24.7,
+    "2015": 27.0,
+    "2019": 29.0,
+    "2024": 31.5
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 33.1,
+    "2008": 33.8,
+    "2015": 33.2,
+    "2018": 33.3,
+    "2024": 33.0
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.2,
+    "2008": 1.26,
+    "2015": 1.21,
+    "2018": 1.22,
+    "2024": 1.2
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 28.0,
+    "2008": 32.5,
+    "2014": 36.0,
+    "2018": 38.2,
+    "2024": 46.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 107.0,
+    "2008": 116.0,
+    "2015": 106.0,
+    "2018": 104.0,
+    "2024": 95.0
+   }
+  }
+ },
+ "RUS": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 68.7,
+    "2003": 55.7,
+    "2007": 63.7,
+    "2011": 60.1,
+    "2016": 47.9,
+    "2018": 67.5,
+    "2021": 51.7,
+    "2024": 77.4
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 14.5,
+    "2007": 12.1,
+    "2011": 11.2,
+    "2016": 18.5,
+    "2021": 21.2,
+    "2024": 28.0
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4.8,
+    "2007": 2.1,
+    "2011": 2.6,
+    "2016": 1.6,
+    "2021": 1.5,
+    "2024": 1.2
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "anchors",
+   "points": {
+    "2000": 80.0,
+    "2008": 70.0,
+    "2012": 50.0,
+    "2020": 30.0,
+    "2024": 15.0
+   }
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2400.0,
+    "2007": 5800.0,
+    "2011": 4900.0,
+    "2016": 6500.0,
+    "2021": 7200.0,
+    "2024": 8100.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 7.7,
+    "2007": 14.0,
+    "2011": 13.6,
+    "2016": 15.8,
+    "2021": 16.4,
+    "2024": 16.4
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 37.1,
+    "2008": 41.5,
+    "2015": 37.7,
+    "2018": 37.5,
+    "2024": 40.8
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.5,
+    "2008": 1.78,
+    "2015": 1.56,
+    "2018": 1.55,
+    "2024": 1.82
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2010": 0.0,
+    "2016": 2.0,
+    "2018": 12.0,
+    "2024": 92.0
+   }
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.15,
+    "2008": 0.2,
+    "2015": 0.25,
+    "2018": 0.28,
+    "2024": 2.1
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 26.0,
+    "2008": 20.5,
+    "2015": 18.2,
+    "2018": 20.5,
+    "2024": 28.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 730.0,
+    "2008": 620.0,
+    "2015": 450.0,
+    "2018": 390.0,
+    "2024": 280.0
+   }
+  }
+ },
+ "MEX": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 64.0,
+    "2003": 41.7,
+    "2006": 58.6,
+    "2009": 44.6,
+    "2012": 63.1,
+    "2015": 47.7,
+    "2018": 63.4,
+    "2021": 52.6,
+    "2024": 61.0
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 6.8,
+    "2006": 7.5,
+    "2012": 5.4,
+    "2018": 7.2,
+    "2021": 5.8,
+    "2024": 8.4
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3.1,
+    "2006": 3.3,
+    "2012": 3.6,
+    "2018": 3.4,
+    "2021": 3.8,
+    "2024": 2.5
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3600.0,
+    "2006": 3300.0,
+    "2012": 3000.0,
+    "2018": 3200.0,
+    "2021": 2900.0,
+    "2024": 4500.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 16.0,
+    "2006": 22.6,
+    "2012": 36.8,
+    "2018": 48.2,
+    "2021": 50.0,
+    "2024": 50.4
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 51.2,
+    "2008": 48.5,
+    "2014": 46.2,
+    "2018": 45.4,
+    "2024": 42.8
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.8,
+    "2008": 2.5,
+    "2014": 2.3,
+    "2018": 2.25,
+    "2024": 1.96
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.05,
+    "2008": 0.08,
+    "2015": 0.09,
+    "2018": 0.08,
+    "2024": 0.07
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 43.5,
+    "2008": 41.0,
+    "2014": 38.0,
+    "2018": 39.0,
+    "2024": 43.2
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 155.0,
+    "2008": 205.0,
+    "2014": 195.0,
+    "2018": 160.0,
+    "2024": 185.0
+   }
+  }
+ },
+ "AUS": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 94.8,
+    "2001": 94.8,
+    "2004": 94.3,
+    "2007": 94.8,
+    "2010": 93.2,
+    "2013": 93.2,
+    "2016": 91.0,
+    "2019": 91.9,
+    "2022": 89.8,
+    "2024": 89.8
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 9.8,
+    "2004": 10.5,
+    "2010": 8.5,
+    "2016": 10.8,
+    "2019": 11.2,
+    "2022": 8.4,
+    "2024": 8.4
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.3,
+    "2007": 2.2,
+    "2013": 2.4,
+    "2016": 2.5,
+    "2019": 2.4,
+    "2022": 2.8,
+    "2024": 2.8
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4400.0,
+    "2007": 4600.0,
+    "2013": 4500.0,
+    "2016": 4200.0,
+    "2019": 4300.0,
+    "2022": 3600.0,
+    "2024": 3600.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 25.3,
+    "2007": 27.3,
+    "2013": 26.7,
+    "2016": 28.7,
+    "2019": 30.5,
+    "2022": 38.4,
+    "2024": 38.4
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 31.5,
+    "2008": 33.4,
+    "2015": 32.8,
+    "2018": 32.5,
+    "2024": 32.0
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.1,
+    "2008": 1.22,
+    "2015": 1.18,
+    "2018": 1.16,
+    "2024": 1.13
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 19.5,
+    "2008": 23.0,
+    "2014": 28.5,
+    "2018": 32.1,
+    "2024": 39.0
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 115.0,
+    "2008": 130.0,
+    "2015": 155.0,
+    "2018": 168.0,
+    "2024": 167.0
+   }
+  }
+ },
+ "KOR": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 57.2,
+    "2004": 60.6,
+    "2008": 46.1,
+    "2012": 54.2,
+    "2016": 58.0,
+    "2017": 77.2,
+    "2020": 66.2,
+    "2022": 77.1,
+    "2024": 67.0
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4.8,
+    "2004": 6.5,
+    "2008": 7.2,
+    "2012": 6.9,
+    "2016": 5.8,
+    "2020": 8.9,
+    "2024": 7.1
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.8,
+    "2004": 2.5,
+    "2008": 2.4,
+    "2012": 2.3,
+    "2016": 2.7,
+    "2020": 2.3,
+    "2024": 2.4
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3800.0,
+    "2004": 4200.0,
+    "2008": 4400.0,
+    "2012": 4500.0,
+    "2016": 3900.0,
+    "2020": 4800.0,
+    "2024": 4400.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.9,
+    "2004": 13.0,
+    "2008": 13.7,
+    "2012": 15.7,
+    "2016": 17.0,
+    "2020": 19.0,
+    "2024": 20.0
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 35.8,
+    "2008": 35.2,
+    "2015": 34.8,
+    "2018": 34.5,
+    "2024": 32.2
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.35,
+    "2008": 1.3,
+    "2015": 1.28,
+    "2018": 1.25,
+    "2024": 1.13
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 39.0,
+    "2008": 37.5,
+    "2014": 34.0,
+    "2018": 35.2,
+    "2024": 36.2
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 132.0,
+    "2008": 100.0,
+    "2015": 104.0,
+    "2018": 105.0,
+    "2024": 100.0
+   }
+  }
+ },
+ "ESP": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 68.7,
+    "2004": 75.7,
+    "2008": 73.8,
+    "2011": 68.9,
+    "2015": 69.7,
+    "2016": 66.5,
+    "2019": 71.8,
+    "2023": 70.4,
+    "2024": 70.4
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 6.4,
+    "2004": 4.8,
+    "2008": 4.9,
+    "2011": 6.8,
+    "2015": 4.5,
+    "2019": 4.4,
+    "2023": 4.2,
+    "2024": 4.2
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.7,
+    "2004": 2.6,
+    "2008": 2.5,
+    "2011": 2.6,
+    "2015": 4.1,
+    "2019": 4.8,
+    "2023": 4.3,
+    "2024": 4.3
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4200.0,
+    "2004": 4100.0,
+    "2008": 4200.0,
+    "2011": 4600.0,
+    "2015": 2700.0,
+    "2019": 2300.0,
+    "2023": 2600.0,
+    "2024": 2600.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 28.3,
+    "2004": 36.0,
+    "2008": 36.3,
+    "2011": 36.0,
+    "2016": 39.1,
+    "2019": 44.0,
+    "2024": 44.3
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 34.5,
+    "2008": 34.2,
+    "2014": 36.2,
+    "2018": 34.7,
+    "2024": 33.3
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.28,
+    "2008": 1.25,
+    "2014": 1.38,
+    "2018": 1.28,
+    "2024": 1.19
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 23.5,
+    "2008": 22.0,
+    "2014": 17.5,
+    "2018": 14.8,
+    "2024": 17.0
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 110.0,
+    "2008": 160.0,
+    "2014": 140.0,
+    "2018": 124.0,
+    "2024": 118.0
+   }
+  }
+ },
+ "IDN": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 84.8,
+    "2004": 84.1,
+    "2009": 77.4,
+    "2014": 75.1,
+    "2019": 81.9,
+    "2024": 82.5
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4.8,
+    "2004": 3.2,
+    "2009": 4.1,
+    "2014": 3.8,
+    "2019": 2.9,
+    "2024": 3.2
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.1,
+    "2004": 8.5,
+    "2009": 6.2,
+    "2014": 7.1,
+    "2019": 7.5,
+    "2024": 6.8
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2300.0,
+    "2004": 1500.0,
+    "2009": 1800.0,
+    "2014": 1600.0,
+    "2019": 1500.0,
+    "2024": 1650.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 8.0,
+    "2004": 11.8,
+    "2009": 18.0,
+    "2014": 17.3,
+    "2019": 20.5,
+    "2024": 21.9
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 31.0,
+    "2008": 36.8,
+    "2014": 41.4,
+    "2018": 38.4,
+    "2024": 38.2
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.15,
+    "2008": 1.48,
+    "2014": 1.82,
+    "2018": 1.6,
+    "2024": 1.59
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2010": 0.0,
+    "2016": 0.5,
+    "2019": 8.2,
+    "2024": 0.5
+   }
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 34.0,
+    "2008": 38.0,
+    "2014": 31.0,
+    "2018": 26.2,
+    "2024": 21.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 32.0,
+    "2008": 62.0,
+    "2014": 70.0,
+    "2018": 93.0,
+    "2024": 108.0
+   }
+  }
+ },
+ "NLD": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 79.1,
+    "2002": 80.0,
+    "2006": 80.4,
+    "2010": 75.4,
+    "2012": 74.6,
+    "2017": 81.9,
+    "2021": 78.7,
+    "2023": 77.8,
+    "2024": 77.8
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.4,
+    "2006": 1.1,
+    "2012": 1.3,
+    "2017": 1.2,
+    "2021": 1.1,
+    "2023": 1.3,
+    "2024": 1.3
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.1,
+    "2006": 5.9,
+    "2012": 6.4,
+    "2017": 7.8,
+    "2021": 8.6,
+    "2023": 6.2,
+    "2024": 6.2
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2100.0,
+    "2006": 1900.0,
+    "2012": 1800.0,
+    "2017": 1400.0,
+    "2021": 1300.0,
+    "2023": 1700.0,
+    "2024": 1700.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 36.0,
+    "2006": 36.7,
+    "2012": 38.7,
+    "2017": 36.0,
+    "2021": 39.3,
+    "2024": 40.0
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 28.5,
+    "2008": 28.9,
+    "2015": 28.2,
+    "2018": 28.1,
+    "2024": 27.9
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.96,
+    "2008": 0.98,
+    "2015": 0.95,
+    "2018": 0.94,
+    "2024": 0.92
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 38.5,
+    "2008": 42.0,
+    "2014": 35.0,
+    "2018": 28.4,
+    "2024": 33.8
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 88.0,
+    "2006": 130.0,
+    "2014": 75.0,
+    "2018": 59.0,
+    "2024": 67.0
+   }
+  }
+ },
+ "TUR": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 79.1,
+    "2002": 79.1,
+    "2007": 84.2,
+    "2011": 83.2,
+    "2015": 85.2,
+    "2018": 86.2,
+    "2023": 87.0,
+    "2024": 87.0
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 19.5,
+    "2002": 19.5,
+    "2007": 10.4,
+    "2011": 6.8,
+    "2015": 5.4,
+    "2018": 5.2,
+    "2023": 6.8,
+    "2024": 6.8
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.1,
+    "2002": 2.1,
+    "2007": 2.6,
+    "2011": 2.8,
+    "2015": 3.4,
+    "2018": 3.2,
+    "2023": 3.5,
+    "2024": 3.5
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "anchors",
+   "points": {
+    "2000": 90.0,
+    "2007": 90.0,
+    "2016": 60.0,
+    "2018": 45.0,
+    "2024": 40.0
+   }
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5100.0,
+    "2002": 5100.0,
+    "2007": 4100.0,
+    "2011": 4300.0,
+    "2015": 3500.0,
+    "2018": 3600.0,
+    "2023": 3300.0,
+    "2024": 3300.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4.2,
+    "2002": 4.4,
+    "2007": 9.1,
+    "2011": 14.2,
+    "2015": 14.7,
+    "2018": 17.5,
+    "2023": 20.0,
+    "2024": 20.0
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 43.1,
+    "2008": 39.0,
+    "2015": 41.2,
+    "2018": 41.9,
+    "2024": 43.6
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.05,
+    "2008": 1.8,
+    "2015": 1.88,
+    "2018": 1.9,
+    "2024": 2.06
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2010": 0.0,
+    "2016": 28.0,
+    "2018": 18.0,
+    "2024": 16.0
+   }
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.8,
+    "2008": 1.2,
+    "2016": 10.5,
+    "2018": 8.2,
+    "2024": 3.1
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 48.0,
+    "2008": 52.0,
+    "2014": 25.0,
+    "2018": 28.2,
+    "2024": 20.2
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 75.0,
+    "2008": 145.0,
+    "2014": 200.0,
+    "2018": 318.0,
+    "2024": 425.0
+   }
+  }
+ },
+ "SAU": {
+  "turnout_vap_pct": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "gallagher_index": {
+   "kind": "constant",
+   "value": 35.0
+  },
+  "effective_parties": {
+   "kind": "constant",
+   "value": 1.0
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 30.0
+  },
+  "legislative_hhi": {
+   "kind": "constant",
+   "value": 10000.0
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2012": 0.0,
+    "2013": 19.9,
+    "2018": 19.9,
+    "2024": 19.9
+   }
+  },
+  "gini_coefficient": {
+   "kind": "constant",
+   "value": 45.0
+  },
+  "palma_ratio": {
+   "kind": "constant",
+   "value": 2.2
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 25.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.5,
+    "2008": 2.2,
+    "2015": 4.0,
+    "2018": 7.4,
+    "2024": 5.8
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "constant",
+   "value": 48.0
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "constant",
+   "value": 207.0
+  }
+ },
+ "CHE": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 43.3,
+    "2003": 45.2,
+    "2007": 48.3,
+    "2011": 48.5,
+    "2015": 48.5,
+    "2019": 45.1,
+    "2023": 46.6,
+    "2024": 46.6
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.9,
+    "2007": 2.7,
+    "2015": 2.8,
+    "2019": 2.8,
+    "2023": 2.5,
+    "2024": 2.5
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.2,
+    "2007": 5.5,
+    "2015": 5.6,
+    "2019": 5.6,
+    "2023": 5.4,
+    "2024": 5.4
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1750.0,
+    "2007": 1700.0,
+    "2015": 1600.0,
+    "2019": 1600.0,
+    "2023": 1680.0,
+    "2024": 1680.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 23.0,
+    "2007": 29.5,
+    "2015": 32.0,
+    "2019": 42.0,
+    "2023": 38.5,
+    "2024": 38.5
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 33.5,
+    "2008": 33.8,
+    "2015": 33.4,
+    "2018": 33.1,
+    "2024": 32.8
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.22,
+    "2008": 1.24,
+    "2015": 1.22,
+    "2018": 1.2,
+    "2024": 1.19
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 38.5,
+    "2008": 43.0,
+    "2014": 42.5,
+    "2018": 41.2,
+    "2024": 41.8
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 78.0,
+    "2008": 83.0,
+    "2014": 82.0,
+    "2018": 82.0,
+    "2024": 78.0
+   }
+  }
+ },
+ "POL": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 46.2,
+    "2001": 46.2,
+    "2005": 40.6,
+    "2007": 53.9,
+    "2011": 48.9,
+    "2015": 50.9,
+    "2019": 61.7,
+    "2023": 74.4,
+    "2024": 74.4
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 7.8,
+    "2005": 6.2,
+    "2011": 4.8,
+    "2015": 6.8,
+    "2019": 6.5,
+    "2023": 3.9,
+    "2024": 3.9
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3.6,
+    "2005": 3.8,
+    "2011": 3.1,
+    "2015": 2.8,
+    "2019": 2.9,
+    "2023": 3.8,
+    "2024": 3.8
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3300.0,
+    "2005": 2900.0,
+    "2011": 3800.0,
+    "2015": 4400.0,
+    "2019": 4200.0,
+    "2023": 3200.0,
+    "2024": 3200.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 13.0,
+    "2005": 20.4,
+    "2011": 23.9,
+    "2015": 28.0,
+    "2019": 28.7,
+    "2023": 29.6,
+    "2024": 29.6
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 34.5,
+    "2005": 36.8,
+    "2012": 32.5,
+    "2018": 30.2,
+    "2024": 29.7
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.25,
+    "2005": 1.35,
+    "2012": 1.12,
+    "2018": 1.02,
+    "2024": 0.98
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 26.5,
+    "2008": 18.0,
+    "2014": 10.5,
+    "2018": 11.2,
+    "2024": 15.8
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 185.0,
+    "2006": 235.0,
+    "2014": 205.0,
+    "2018": 194.0,
+    "2024": 192.0
+   }
+  }
+ },
+ "ARG": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 78.5,
+    "2003": 78.5,
+    "2007": 76.2,
+    "2011": 79.4,
+    "2015": 81.1,
+    "2019": 80.4,
+    "2023": 77.0,
+    "2024": 77.0
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.2,
+    "2007": 6.8,
+    "2015": 4.8,
+    "2019": 4.2,
+    "2023": 6.2,
+    "2024": 6.2
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.8,
+    "2007": 3.2,
+    "2015": 3.6,
+    "2019": 2.8,
+    "2023": 4.1,
+    "2024": 4.1
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3900.0,
+    "2007": 3400.0,
+    "2015": 2900.0,
+    "2019": 3800.0,
+    "2023": 2700.0,
+    "2024": 2700.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 26.5,
+    "2007": 40.0,
+    "2015": 38.9,
+    "2019": 39.7,
+    "2023": 43.2,
+    "2024": 43.2
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 51.1,
+    "2008": 46.3,
+    "2014": 41.7,
+    "2018": 41.4,
+    "2024": 44.2
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2.85,
+    "2008": 2.3,
+    "2014": 1.9,
+    "2018": 1.88,
+    "2024": 2.1
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 58.0,
+    "2008": 52.0,
+    "2014": 48.0,
+    "2018": 46.2,
+    "2024": 40.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 110.0,
+    "2008": 140.0,
+    "2014": 165.0,
+    "2018": 215.0,
+    "2024": 245.0
+   }
+  }
+ },
+ "SWE": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 80.1,
+    "2002": 80.1,
+    "2006": 82.0,
+    "2010": 84.6,
+    "2014": 85.8,
+    "2018": 87.2,
+    "2022": 84.2,
+    "2024": 84.2
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.2,
+    "2006": 1.1,
+    "2014": 0.9,
+    "2018": 0.9,
+    "2022": 1.1,
+    "2024": 1.1
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4.4,
+    "2006": 4.3,
+    "2014": 4.9,
+    "2018": 4.9,
+    "2022": 4.7,
+    "2024": 4.7
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2500.0,
+    "2006": 2400.0,
+    "2014": 2000.0,
+    "2018": 1900.0,
+    "2022": 2050.0,
+    "2024": 2050.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 42.7,
+    "2006": 47.3,
+    "2014": 43.6,
+    "2018": 46.1,
+    "2022": 46.7,
+    "2024": 46.7
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 26.2,
+    "2008": 27.8,
+    "2014": 28.4,
+    "2018": 28.8,
+    "2024": 28.9
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.88,
+    "2008": 0.94,
+    "2014": 0.96,
+    "2018": 0.98,
+    "2024": 0.98
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 22.0,
+    "2008": 24.5,
+    "2014": 25.0,
+    "2018": 26.5,
+    "2024": 31.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 64.0,
+    "2008": 72.0,
+    "2014": 60.0,
+    "2018": 61.0,
+    "2024": 80.0
+   }
+  }
+ },
+ "BEL": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 90.6,
+    "2003": 91.6,
+    "2007": 91.1,
+    "2010": 89.2,
+    "2014": 89.4,
+    "2019": 88.4,
+    "2024": 87.2
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3.5,
+    "2007": 3.4,
+    "2014": 3.2,
+    "2019": 3.8,
+    "2024": 3.5
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 7.2,
+    "2007": 7.6,
+    "2014": 7.9,
+    "2019": 9.2,
+    "2024": 8.8
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1400.0,
+    "2007": 1300.0,
+    "2014": 1200.0,
+    "2019": 1050.0,
+    "2024": 1100.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 23.3,
+    "2007": 35.3,
+    "2014": 38.0,
+    "2019": 41.3,
+    "2024": 43.3
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 28.5,
+    "2008": 27.9,
+    "2014": 27.6,
+    "2018": 27.2,
+    "2024": 26.8
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.95,
+    "2008": 0.92,
+    "2014": 0.9,
+    "2018": 0.89,
+    "2024": 0.85
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 41.0,
+    "2008": 38.5,
+    "2014": 35.0,
+    "2018": 36.2,
+    "2024": 41.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 84.0,
+    "2008": 98.0,
+    "2014": 104.0,
+    "2018": 93.0,
+    "2024": 102.0
+   }
+  }
+ },
+ "NOR": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 75.5,
+    "2001": 75.5,
+    "2005": 77.4,
+    "2009": 76.4,
+    "2013": 78.3,
+    "2017": 78.2,
+    "2021": 77.2,
+    "2024": 77.2
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3.8,
+    "2005": 3.2,
+    "2013": 3.0,
+    "2017": 3.1,
+    "2021": 3.4,
+    "2024": 3.4
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.2,
+    "2005": 5.0,
+    "2013": 4.6,
+    "2017": 4.8,
+    "2021": 5.1,
+    "2024": 5.1
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1900.0,
+    "2005": 1950.0,
+    "2013": 2100.0,
+    "2017": 2000.0,
+    "2021": 1900.0,
+    "2024": 1900.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 36.4,
+    "2005": 37.9,
+    "2013": 39.6,
+    "2017": 41.4,
+    "2021": 45.0,
+    "2024": 45.0
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 26.8,
+    "2008": 27.5,
+    "2014": 27.8,
+    "2018": 27.6,
+    "2024": 27.4
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.9,
+    "2008": 0.92,
+    "2014": 0.93,
+    "2018": 0.92,
+    "2024": 0.9
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 19.5,
+    "2008": 21.0,
+    "2014": 22.0,
+    "2018": 23.1,
+    "2024": 27.0
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 57.0,
+    "2008": 71.0,
+    "2014": 72.0,
+    "2018": 58.0,
+    "2024": 59.0
+   }
+  }
+ },
+ "THA": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 69.9,
+    "2001": 69.9,
+    "2005": 72.6,
+    "2007": 74.5,
+    "2011": 75.0,
+    "2014": 46.8,
+    "2019": 74.7,
+    "2023": 75.7,
+    "2024": 75.7
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 7.2,
+    "2005": 12.8,
+    "2011": 6.5,
+    "2019": 6.2,
+    "2023": 7.8,
+    "2024": 7.8
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3.8,
+    "2005": 1.8,
+    "2011": 2.5,
+    "2019": 5.4,
+    "2023": 4.6,
+    "2024": 4.6
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "anchors",
+   "points": {
+    "2000": 80.0,
+    "2006": 20.0,
+    "2014": 10.0,
+    "2019": 50.0,
+    "2024": 65.0
+   }
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 2800.0,
+    "2005": 6100.0,
+    "2011": 4200.0,
+    "2019": 2400.0,
+    "2023": 2700.0,
+    "2024": 2700.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 9.6,
+    "2005": 10.6,
+    "2011": 15.8,
+    "2014": 4.8,
+    "2019": 16.2,
+    "2023": 19.4,
+    "2024": 19.4
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 42.8,
+    "2008": 40.5,
+    "2015": 36.4,
+    "2018": 36.4,
+    "2024": 34.8
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.95,
+    "2008": 1.75,
+    "2015": 1.45,
+    "2018": 1.45,
+    "2024": 1.33
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2006": 5.0,
+    "2014": 12.0,
+    "2018": 1.2,
+    "2024": 0.2
+   }
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2006": 0.15,
+    "2014": 0.45,
+    "2018": 0.0,
+    "2024": 0.0
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 28.5,
+    "2008": 24.0,
+    "2015": 16.5,
+    "2018": 17.5,
+    "2024": 22.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 290.0,
+    "2008": 330.0,
+    "2015": 480.0,
+    "2018": 450.0,
+    "2024": 360.0
+   }
+  }
+ },
+ "ISR": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 78.7,
+    "2003": 68.9,
+    "2006": 63.5,
+    "2009": 64.7,
+    "2013": 67.8,
+    "2015": 72.3,
+    "2019": 69.8,
+    "2022": 70.6,
+    "2024": 70.6
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.9,
+    "2006": 1.8,
+    "2013": 1.6,
+    "2015": 1.8,
+    "2019": 1.6,
+    "2022": 1.4,
+    "2024": 1.4
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 5.4,
+    "2006": 6.8,
+    "2013": 6.9,
+    "2015": 6.1,
+    "2019": 6.8,
+    "2022": 5.5,
+    "2024": 5.5
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1950.0,
+    "2006": 1650.0,
+    "2013": 1680.0,
+    "2015": 1850.0,
+    "2019": 1750.0,
+    "2022": 2100.0,
+    "2024": 2100.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 11.7,
+    "2006": 14.2,
+    "2013": 22.5,
+    "2015": 24.2,
+    "2018": 29.2,
+    "2022": 24.2,
+    "2024": 24.2
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 38.9,
+    "2008": 39.5,
+    "2014": 38.6,
+    "2018": 38.2,
+    "2024": 38.0
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.72,
+    "2008": 1.78,
+    "2014": 1.68,
+    "2018": 1.65,
+    "2024": 1.63
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2010": 0.0,
+    "2018": 0.0,
+    "2023": 1.2,
+    "2024": 2.5
+   }
+  },
+  "journalists_detained_per_10m": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2010": 0.0,
+    "2018": 0.0,
+    "2021": 1.05,
+    "2024": 6.3
+   }
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 32.0,
+    "2008": 36.5,
+    "2014": 38.0,
+    "2018": 38.5,
+    "2024": 52.0
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 180.0,
+    "2008": 240.0,
+    "2014": 230.0,
+    "2018": 220.0,
+    "2024": 290.0
+   }
+  }
+ },
+ "IRL": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 62.6,
+    "2002": 62.6,
+    "2007": 67.0,
+    "2011": 70.0,
+    "2016": 65.1,
+    "2020": 62.9,
+    "2024": 59.7
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4.8,
+    "2007": 4.1,
+    "2011": 5.6,
+    "2016": 3.6,
+    "2020": 4.2,
+    "2024": 4.0
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3.4,
+    "2007": 3.2,
+    "2011": 3.8,
+    "2016": 4.1,
+    "2020": 4.8,
+    "2024": 4.5
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 3200.0,
+    "2007": 3500.0,
+    "2011": 3100.0,
+    "2016": 2300.0,
+    "2020": 2100.0,
+    "2024": 2200.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 12.0,
+    "2007": 13.3,
+    "2011": 15.1,
+    "2016": 22.2,
+    "2020": 22.5,
+    "2024": 25.0
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 31.8,
+    "2008": 31.0,
+    "2014": 31.8,
+    "2018": 30.5,
+    "2024": 29.8
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.12,
+    "2008": 1.08,
+    "2014": 1.14,
+    "2018": 1.05,
+    "2024": 1.0
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 14.0,
+    "2008": 15.2,
+    "2014": 16.0,
+    "2018": 17.5,
+    "2024": 21.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 77.0,
+    "2008": 85.0,
+    "2014": 80.0,
+    "2018": 78.0,
+    "2024": 89.0
+   }
+  }
+ },
+ "SGP": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 94.7,
+    "2001": 94.7,
+    "2006": 94.0,
+    "2011": 93.1,
+    "2015": 93.5,
+    "2020": 95.8,
+    "2024": 95.8
+   }
+  },
+  "gallagher_index": {
+   "kind": "anchors",
+   "points": {
+    "2000": 19.5,
+    "2006": 18.8,
+    "2011": 17.4,
+    "2015": 18.2,
+    "2020": 15.6,
+    "2024": 15.6
+   }
+  },
+  "effective_parties": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.1,
+    "2006": 1.2,
+    "2011": 1.3,
+    "2015": 1.3,
+    "2020": 1.5,
+    "2024": 1.5
+   }
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 100.0
+  },
+  "legislative_hhi": {
+   "kind": "anchors",
+   "points": {
+    "2000": 9400.0,
+    "2006": 9100.0,
+    "2011": 8200.0,
+    "2015": 7800.0,
+    "2020": 7400.0,
+    "2024": 7400.0
+   }
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 4.8,
+    "2006": 24.5,
+    "2011": 23.0,
+    "2015": 23.8,
+    "2020": 29.0,
+    "2024": 31.0
+   }
+  },
+  "gini_coefficient": {
+   "kind": "anchors",
+   "points": {
+    "2000": 42.5,
+    "2008": 41.0,
+    "2014": 38.8,
+    "2018": 37.9,
+    "2024": 36.8
+   }
+  },
+  "palma_ratio": {
+   "kind": "anchors",
+   "points": {
+    "2000": 1.85,
+    "2008": 1.76,
+    "2014": 1.62,
+    "2018": 1.58,
+    "2024": 1.48
+   }
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 0.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 12.0,
+    "2008": 11.5,
+    "2014": 10.8,
+    "2018": 10.5,
+    "2024": 12.5
+   }
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "anchors",
+   "points": {
+    "2000": 380.0,
+    "2008": 290.0,
+    "2014": 210.0,
+    "2018": 165.0,
+    "2024": 162.0
+   }
+  }
+ },
+ "ARE": {
+  "turnout_vap_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2006": 25.0,
+    "2011": 28.0,
+    "2015": 34.0,
+    "2019": 34.8,
+    "2024": 35.2
+   }
+  },
+  "gallagher_index": {
+   "kind": "constant",
+   "value": 35.0
+  },
+  "effective_parties": {
+   "kind": "constant",
+   "value": 1.0
+  },
+  "constitutional_transfer_integrity": {
+   "kind": "constant",
+   "value": 40.0
+  },
+  "legislative_hhi": {
+   "kind": "constant",
+   "value": 10000.0
+  },
+  "female_parliament_pct": {
+   "kind": "anchors",
+   "points": {
+    "2000": 0.0,
+    "2006": 22.5,
+    "2011": 17.5,
+    "2015": 22.5,
+    "2019": 50.0,
+    "2024": 50.0
+   }
+  },
+  "gini_coefficient": {
+   "kind": "constant",
+   "value": 32.5
+  },
+  "palma_ratio": {
+   "kind": "constant",
+   "value": 1.25
+  },
+  "internet_shutdown_hours_pc": {
+   "kind": "constant",
+   "value": 8.0
+  },
+  "journalists_detained_per_10m": {
+   "kind": "constant",
+   "value": 1.0
+  },
+  "pretrial_detention_pct": {
+   "kind": "constant",
+   "value": 42.0
+  },
+  "incarceration_rate_per_100k": {
+   "kind": "constant",
+   "value": 104.0
+  }
+ }
+}
