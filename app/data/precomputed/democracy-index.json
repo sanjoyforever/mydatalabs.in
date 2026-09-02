@@ -37,7 +37,7 @@
       "year": 2024,
       "composite": 90.11,
       "composite_arithmetic": 90.27,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 89.74,
@@ -111,6 +111,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.847,
       "vdem_rank": 1,
       "rank": 1
@@ -124,7 +125,7 @@
       "year": 2024,
       "composite": 89.48,
       "composite_arithmetic": 89.8,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 95.1,
@@ -198,6 +199,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.846,
       "vdem_rank": 2,
       "rank": 2
@@ -211,7 +213,7 @@
       "year": 2024,
       "composite": 88.73,
       "composite_arithmetic": 89.3,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 94.08,
@@ -285,6 +287,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.81,
       "vdem_rank": 5,
       "rank": 3
@@ -298,7 +301,7 @@
       "year": 2024,
       "composite": 88.37,
       "composite_arithmetic": 88.64,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 92.06,
@@ -372,6 +375,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.766,
       "vdem_rank": 9,
       "rank": 4
@@ -385,7 +389,7 @@
       "year": 2024,
       "composite": 87.21,
       "composite_arithmetic": 87.6,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 91.04,
@@ -459,6 +463,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.778,
       "vdem_rank": 8,
       "rank": 5
@@ -472,7 +477,7 @@
       "year": 2024,
       "composite": 85.5,
       "composite_arithmetic": 86.03,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 85.93,
@@ -546,6 +551,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.743,
       "vdem_rank": 13,
       "rank": 6
@@ -559,7 +565,7 @@
       "year": 2024,
       "composite": 83.21,
       "composite_arithmetic": 83.86,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 88.0,
@@ -633,6 +639,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.613,
       "vdem_rank": 18,
       "rank": 7
@@ -646,7 +653,7 @@
       "year": 2024,
       "composite": 82.9,
       "composite_arithmetic": 83.3,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 80.36,
@@ -720,6 +727,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.8,
       "vdem_rank": 6,
       "rank": 8
@@ -733,7 +741,7 @@
       "year": 2024,
       "composite": 82.74,
       "composite_arithmetic": 83.34,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 81.37,
@@ -807,6 +815,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.83,
       "vdem_rank": 4,
       "rank": 9
@@ -820,7 +829,7 @@
       "year": 2024,
       "composite": 80.88,
       "composite_arithmetic": 81.51,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 77.02,
@@ -894,6 +903,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.843,
       "vdem_rank": 3,
       "rank": 10
@@ -907,7 +917,7 @@
       "year": 2024,
       "composite": 80.76,
       "composite_arithmetic": 81.57,
-      "tier": "Robust High-Parity Democracy",
+      "tier": "Very high countable health",
       "status": "good",
       "pillars": {
         "electoral": 90.44,
@@ -981,6 +991,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.796,
       "vdem_rank": 7,
       "rank": 11
@@ -994,7 +1005,7 @@
       "year": 2024,
       "composite": 79.23,
       "composite_arithmetic": 80.8,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 92.29,
@@ -1068,6 +1079,7 @@
         }
       },
       "anchor_share": 0.8,
+      "justice_evidence": "ok",
       "vdem_score": 0.332,
       "vdem_rank": 22,
       "rank": 12
@@ -1081,7 +1093,7 @@
       "year": 2024,
       "composite": 78.42,
       "composite_arithmetic": 79.21,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 78.43,
@@ -1155,6 +1167,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.687,
       "vdem_rank": 16,
       "rank": 13
@@ -1168,7 +1181,7 @@
       "year": 2024,
       "composite": 76.81,
       "composite_arithmetic": 77.83,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 67.49,
@@ -1242,6 +1255,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.75,
       "vdem_rank": 11,
       "rank": 14
@@ -1255,7 +1269,7 @@
       "year": 2024,
       "composite": 76.26,
       "composite_arithmetic": 78.39,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 71.69,
@@ -1329,6 +1343,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.737,
       "vdem_rank": 14,
       "rank": 15
@@ -1342,7 +1357,7 @@
       "year": 2024,
       "composite": 75.95,
       "composite_arithmetic": 76.77,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 75.6,
@@ -1416,96 +1431,10 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.744,
       "vdem_rank": 12,
       "rank": 16
-    },
-    {
-      "country_code": "KOR",
-      "country_name": "South Korea",
-      "region": "Asia",
-      "gdp_rank": 14,
-      "regime_type": "Presidential republic",
-      "year": 2024,
-      "composite": 74.77,
-      "composite_arithmetic": 76.42,
-      "tier": "Established Democracy",
-      "status": "good",
-      "pillars": {
-        "electoral": 81.58,
-        "power_dispersion": 51.82,
-        "economic_equity": 73.16,
-        "information_telemetry": 100.0,
-        "justice_rule_of_law": 75.56
-      },
-      "metrics": {
-        "turnout_vap_pct": {
-          "raw": 67.0,
-          "score": 62.67,
-          "anchor": true
-        },
-        "gallagher_index": {
-          "raw": 7.1,
-          "score": 82.06,
-          "anchor": true
-        },
-        "constitutional_transfer_integrity": {
-          "raw": 100.0,
-          "score": 100.0,
-          "anchor": false
-        },
-        "legislative_hhi": {
-          "raw": 4400.0,
-          "score": 63.64,
-          "anchor": true
-        },
-        "female_parliament_pct": {
-          "raw": 20.0,
-          "score": 40.0,
-          "anchor": true
-        },
-        "gini_coefficient": {
-          "raw": 32.2,
-          "score": 73.16,
-          "anchor": true
-        },
-        "internet_shutdown_hours_pc": {
-          "raw": 0.0,
-          "score": 100.0,
-          "anchor": false
-        },
-        "journalists_detained_per_10m": {
-          "raw": 0.0,
-          "score": 100.0,
-          "anchor": false
-        },
-        "pretrial_detention_pct": {
-          "raw": 36.2,
-          "score": 60.83,
-          "anchor": true
-        },
-        "incarceration_rate_per_100k": {
-          "raw": 100.0,
-          "score": 90.28,
-          "anchor": true
-        }
-      },
-      "context": {
-        "effective_parties": {
-          "raw": 2.27,
-          "reported": 2.4,
-          "anchor": true
-        },
-        "palma_ratio": {
-          "raw": 1.13,
-          "reported": 1.13,
-          "anchor": true
-        }
-      },
-      "anchor_share": 0.7,
-      "vdem_score": 0.627,
-      "vdem_rank": 17,
-      "rank": 17
     },
     {
       "country_code": "SGP",
@@ -1516,7 +1445,7 @@
       "year": 2024,
       "composite": 73.19,
       "composite_arithmetic": 76.04,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 85.69,
@@ -1590,8 +1519,97 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.348,
       "vdem_rank": 21,
+      "rank": 17
+    },
+    {
+      "country_code": "KOR",
+      "country_name": "South Korea",
+      "region": "Asia",
+      "gdp_rank": 14,
+      "regime_type": "Presidential republic",
+      "year": 2024,
+      "composite": 73.17,
+      "composite_arithmetic": 74.76,
+      "tier": "High countable health",
+      "status": "good",
+      "pillars": {
+        "electoral": 73.24,
+        "power_dispersion": 51.82,
+        "economic_equity": 73.16,
+        "information_telemetry": 100.0,
+        "justice_rule_of_law": 75.56
+      },
+      "metrics": {
+        "turnout_vap_pct": {
+          "raw": 67.0,
+          "score": 62.67,
+          "anchor": true
+        },
+        "gallagher_index": {
+          "raw": 7.1,
+          "score": 82.06,
+          "anchor": true
+        },
+        "constitutional_transfer_integrity": {
+          "raw": 75.0,
+          "score": 75.0,
+          "anchor": true
+        },
+        "legislative_hhi": {
+          "raw": 4400.0,
+          "score": 63.64,
+          "anchor": true
+        },
+        "female_parliament_pct": {
+          "raw": 20.0,
+          "score": 40.0,
+          "anchor": true
+        },
+        "gini_coefficient": {
+          "raw": 32.2,
+          "score": 73.16,
+          "anchor": true
+        },
+        "internet_shutdown_hours_pc": {
+          "raw": 0.0,
+          "score": 100.0,
+          "anchor": false
+        },
+        "journalists_detained_per_10m": {
+          "raw": 0.0,
+          "score": 100.0,
+          "anchor": false
+        },
+        "pretrial_detention_pct": {
+          "raw": 36.2,
+          "score": 60.83,
+          "anchor": true
+        },
+        "incarceration_rate_per_100k": {
+          "raw": 100.0,
+          "score": 90.28,
+          "anchor": true
+        }
+      },
+      "context": {
+        "effective_parties": {
+          "raw": 2.27,
+          "reported": 2.4,
+          "anchor": true
+        },
+        "palma_ratio": {
+          "raw": 1.13,
+          "reported": 1.13,
+          "anchor": true
+        }
+      },
+      "anchor_share": 0.8,
+      "justice_evidence": "ok",
+      "vdem_score": 0.627,
+      "vdem_rank": 17,
       "rank": 18
     },
     {
@@ -1603,7 +1621,7 @@
       "year": 2024,
       "composite": 72.3,
       "composite_arithmetic": 73.44,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 73.09,
@@ -1677,6 +1695,7 @@
         }
       },
       "anchor_share": 1.0,
+      "justice_evidence": "ok",
       "vdem_score": 0.306,
       "vdem_rank": 23,
       "rank": 19
@@ -1690,7 +1709,7 @@
       "year": 2024,
       "composite": 71.83,
       "composite_arithmetic": 75.13,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 86.9,
@@ -1764,6 +1783,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.558,
       "vdem_rank": 20,
       "rank": 20
@@ -1777,7 +1797,7 @@
       "year": 2024,
       "composite": 71.32,
       "composite_arithmetic": 73.74,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 77.64,
@@ -1851,6 +1871,7 @@
         }
       },
       "anchor_share": 0.8,
+      "justice_evidence": "ok",
       "vdem_score": 0.246,
       "vdem_rank": 25,
       "rank": 21
@@ -1864,7 +1885,7 @@
       "year": 2024,
       "composite": 67.7,
       "composite_arithmetic": 69.02,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 88.76,
@@ -1938,6 +1959,7 @@
         }
       },
       "anchor_share": 0.9,
+      "justice_evidence": "ok",
       "vdem_score": 0.597,
       "vdem_rank": 19,
       "rank": 22
@@ -1951,7 +1973,7 @@
       "year": 2024,
       "composite": 67.17,
       "composite_arithmetic": 68.96,
-      "tier": "Established Democracy",
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
         "electoral": 76.73,
@@ -2025,6 +2047,7 @@
         }
       },
       "anchor_share": 0.9,
+      "justice_evidence": "ok",
       "vdem_score": 0.281,
       "vdem_rank": 24,
       "rank": 23
@@ -2036,12 +2059,12 @@
       "gdp_rank": 1,
       "regime_type": "Presidential constitutional republic",
       "year": 2024,
-      "composite": 66.11,
-      "composite_arithmetic": 68.6,
-      "tier": "Established Democracy",
+      "composite": 65.56,
+      "composite_arithmetic": 67.93,
+      "tier": "High countable health",
       "status": "good",
       "pillars": {
-        "electoral": 81.88,
+        "electoral": 78.55,
         "power_dispersion": 57.6,
         "economic_equity": 49.74,
         "information_telemetry": 99.9,
@@ -2059,9 +2082,9 @@
           "anchor": true
         },
         "constitutional_transfer_integrity": {
-          "raw": 100.0,
-          "score": 100.0,
-          "anchor": false
+          "raw": 90.0,
+          "score": 90.0,
+          "anchor": true
         },
         "legislative_hhi": {
           "raw": 5002.0,
@@ -2111,7 +2134,8 @@
           "anchor": true
         }
       },
-      "anchor_share": 0.8,
+      "anchor_share": 0.9,
+      "justice_evidence": "ok",
       "vdem_score": 0.751,
       "vdem_rank": 10,
       "rank": 24
@@ -2125,7 +2149,7 @@
       "year": 2024,
       "composite": 62.37,
       "composite_arithmetic": 63.82,
-      "tier": "Moderate / Flawed System",
+      "tier": "Mixed countable health",
       "status": "warning",
       "pillars": {
         "electoral": 70.76,
@@ -2199,6 +2223,7 @@
         }
       },
       "anchor_share": 1.0,
+      "justice_evidence": "ok",
       "vdem_score": 0.109,
       "vdem_rank": 26,
       "rank": 25
@@ -2210,12 +2235,12 @@
       "gdp_rank": 9,
       "regime_type": "Federal presidential republic",
       "year": 2024,
-      "composite": 60.66,
-      "composite_arithmetic": 68.05,
-      "tier": "Moderate / Flawed System",
+      "composite": 60.29,
+      "composite_arithmetic": 67.52,
+      "tier": "Mixed countable health",
       "status": "warning",
       "pillars": {
-        "electoral": 90.19,
+        "electoral": 87.52,
         "power_dispersion": 66.37,
         "economic_equity": 22.37,
         "information_telemetry": 100.0,
@@ -2233,9 +2258,9 @@
           "anchor": true
         },
         "constitutional_transfer_integrity": {
-          "raw": 100.0,
-          "score": 100.0,
-          "anchor": false
+          "raw": 92.0,
+          "score": 92.0,
+          "anchor": true
         },
         "legislative_hhi": {
           "raw": 1400.0,
@@ -2285,7 +2310,8 @@
           "anchor": true
         }
       },
-      "anchor_share": 0.7,
+      "anchor_share": 0.8,
+      "justice_evidence": "ok",
       "vdem_score": 0.712,
       "vdem_rank": 15,
       "rank": 26
@@ -2299,7 +2325,7 @@
       "year": 2024,
       "composite": 54.56,
       "composite_arithmetic": 61.41,
-      "tier": "Moderate / Flawed System",
+      "tier": "Mixed countable health",
       "status": "warning",
       "pillars": {
         "electoral": 20.09,
@@ -2373,6 +2399,7 @@
         }
       },
       "anchor_share": 0.2,
+      "justice_evidence": "thin",
       "vdem_score": 0.077,
       "vdem_rank": 27,
       "rank": 27
@@ -2386,7 +2413,7 @@
       "year": 2024,
       "composite": 45.36,
       "composite_arithmetic": 47.63,
-      "tier": "Hybrid / Constrained Regime",
+      "tier": "Low countable health",
       "status": "serious",
       "pillars": {
         "electoral": 37.37,
@@ -2460,6 +2487,7 @@
         }
       },
       "anchor_share": 1.0,
+      "justice_evidence": "ok",
       "vdem_score": 0.057,
       "vdem_rank": 28,
       "rank": 28
@@ -2473,7 +2501,7 @@
       "year": 2024,
       "composite": 31.91,
       "composite_arithmetic": 39.91,
-      "tier": "Closed / Authoritarian Regime",
+      "tier": "Very low countable health",
       "status": "critical",
       "pillars": {
         "electoral": 10.0,
@@ -2547,6 +2575,7 @@
         }
       },
       "anchor_share": 0.2,
+      "justice_evidence": "thin",
       "vdem_score": 0.047,
       "vdem_rank": 29,
       "rank": 29
@@ -2560,7 +2589,7 @@
       "year": 2024,
       "composite": 28.56,
       "composite_arithmetic": 37.88,
-      "tier": "Closed / Authoritarian Regime",
+      "tier": "Very low countable health",
       "status": "critical",
       "pillars": {
         "electoral": 5.56,
@@ -2634,6 +2663,7 @@
         }
       },
       "anchor_share": 0.7,
+      "justice_evidence": "ok",
       "vdem_score": 0.037,
       "vdem_rank": 30,
       "rank": 30
@@ -2915,10 +2945,10 @@
     },
     {
       "year": 2021,
-      "mean": 72.44,
+      "mean": 72.4,
       "median": 76.17,
       "pillars": {
-        "electoral": 74.34,
+        "electoral": 74.12,
         "power_dispersion": 65.79,
         "economic_equity": 63.56,
         "information_telemetry": 95.12,
@@ -2928,10 +2958,10 @@
     },
     {
       "year": 2022,
-      "mean": 72.48,
+      "mean": 72.45,
       "median": 76.1,
       "pillars": {
-        "electoral": 74.42,
+        "electoral": 74.23,
         "power_dispersion": 66.08,
         "economic_equity": 63.71,
         "information_telemetry": 94.82,
@@ -2941,10 +2971,10 @@
     },
     {
       "year": 2023,
-      "mean": 72.5,
+      "mean": 72.45,
       "median": 76.02,
       "pillars": {
-        "electoral": 74.5,
+        "electoral": 74.18,
         "power_dispersion": 66.3,
         "economic_equity": 63.86,
         "information_telemetry": 94.51,
@@ -2954,10 +2984,10 @@
     },
     {
       "year": 2024,
-      "mean": 72.48,
+      "mean": 72.39,
       "median": 76.26,
       "pillars": {
-        "electoral": 74.56,
+        "electoral": 74.08,
         "power_dispersion": 66.42,
         "economic_equity": 64.01,
         "information_telemetry": 94.19,
@@ -20437,7 +20467,7 @@
         2.0,
         1.98
       ],
-      683
+      687
     ],
     "TUR-2020": [
       61.29,
@@ -21252,10 +21282,10 @@
       0
     ],
     "USA-2021": [
-      64.65,
+      63.56,
       24,
       [
-        81.86,
+        75.19,
         53.27,
         48.95,
         99.77,
@@ -21264,7 +21294,7 @@
       [
         62.97,
         4.98,
-        100.0,
+        80.0,
         5008.0,
         24.9,
         41.4,
@@ -21277,7 +21307,7 @@
         2.0,
         1.97
       ],
-      0
+      4
     ],
     "TUR-2021": [
       61.62,
@@ -22092,10 +22122,10 @@
       0
     ],
     "USA-2022": [
-      65.14,
+      64.23,
       24,
       [
-        81.87,
+        76.32,
         54.7,
         49.21,
         99.8,
@@ -22104,7 +22134,7 @@
       [
         63.15,
         5.05,
-        100.0,
+        83.33,
         5006.0,
         26.33,
         41.3,
@@ -22173,7 +22203,7 @@
         7.14,
         2.97
       ],
-      27
+      31
     ],
     "ARE-2022": [
       54.52,
@@ -22761,7 +22791,7 @@
         2.22,
         1.15
       ],
-      0
+      4
     ],
     "SGP-2023": [
       72.95,
@@ -22932,10 +22962,10 @@
       0
     ],
     "USA-2023": [
-      65.63,
+      64.91,
       24,
       [
-        81.88,
+        77.44,
         56.16,
         49.47,
         99.87,
@@ -22944,7 +22974,7 @@
       [
         63.33,
         5.12,
-        100.0,
+        86.67,
         5004.0,
         27.77,
         41.2,
@@ -22988,10 +23018,10 @@
       27
     ],
     "BRA-2023": [
-      59.84,
+      59.16,
       26,
       [
-        90.19,
+        85.19,
         66.37,
         21.32,
         100.0,
@@ -23000,7 +23030,7 @@
       [
         79.1,
         3.8,
-        100.0,
+        85.0,
         1400.0,
         17.5,
         51.9,
@@ -23013,7 +23043,7 @@
         7.14,
         2.91
       ],
-      0
+      4
     ],
     "ARE-2023": [
       54.54,
@@ -23575,37 +23605,9 @@
       ],
       827
     ],
-    "KOR-2024": [
-      74.77,
-      17,
-      [
-        81.58,
-        51.82,
-        73.16,
-        100.0,
-        75.56
-      ],
-      [
-        67.0,
-        7.1,
-        100.0,
-        4400.0,
-        20.0,
-        32.2,
-        0.0,
-        0.0,
-        36.2,
-        100.0
-      ],
-      [
-        2.27,
-        1.13
-      ],
-      827
-    ],
     "SGP-2024": [
       73.19,
-      18,
+      17,
       [
         85.69,
         45.77,
@@ -23630,6 +23632,34 @@
         1.48
       ],
       827
+    ],
+    "KOR-2024": [
+      73.17,
+      18,
+      [
+        73.24,
+        51.82,
+        73.16,
+        100.0,
+        75.56
+      ],
+      [
+        67.0,
+        7.1,
+        75.0,
+        4400.0,
+        20.0,
+        32.2,
+        0.0,
+        0.0,
+        36.2,
+        100.0
+      ],
+      [
+        2.27,
+        1.13
+      ],
+      831
     ],
     "THA-2024": [
       72.3,
@@ -23772,10 +23802,10 @@
       1019
     ],
     "USA-2024": [
-      66.11,
+      65.56,
       24,
       [
-        81.88,
+        78.55,
         57.6,
         49.74,
         99.9,
@@ -23784,7 +23814,7 @@
       [
         63.5,
         5.2,
-        100.0,
+        90.0,
         5002.0,
         29.2,
         41.1,
@@ -23797,7 +23827,7 @@
         2.0,
         1.94
       ],
-      955
+      959
     ],
     "TUR-2024": [
       62.37,
@@ -23828,10 +23858,10 @@
       1023
     ],
     "BRA-2024": [
-      60.66,
+      60.29,
       26,
       [
-        90.19,
+        87.52,
         66.37,
         22.37,
         100.0,
@@ -23840,7 +23870,7 @@
       [
         79.1,
         3.8,
-        100.0,
+        92.0,
         1400.0,
         17.5,
         51.5,
@@ -23853,7 +23883,7 @@
         7.14,
         2.85
       ],
-      827
+      831
     ],
     "ARE-2024": [
       54.56,
@@ -24211,6 +24241,19 @@
       "rank_delta": 2
     },
     {
+      "country_code": "KOR",
+      "country_name": "South Korea",
+      "region": "Asia",
+      "from_year": 2000,
+      "to_year": 2024,
+      "from_score": 68.29,
+      "to_score": 73.17,
+      "delta": 4.88,
+      "from_rank": 19,
+      "to_rank": 18,
+      "rank_delta": 1
+    },
+    {
       "country_code": "IRL",
       "country_name": "Ireland",
       "region": "Europe",
@@ -24243,24 +24286,11 @@
       "from_year": 2000,
       "to_year": 2024,
       "from_score": 59.9,
-      "to_score": 66.11,
-      "delta": 6.21,
+      "to_score": 65.56,
+      "delta": 5.66,
       "from_rank": 22,
       "to_rank": 24,
       "rank_delta": -2
-    },
-    {
-      "country_code": "KOR",
-      "country_name": "South Korea",
-      "region": "Asia",
-      "from_year": 2000,
-      "to_year": 2024,
-      "from_score": 68.29,
-      "to_score": 74.77,
-      "delta": 6.48,
-      "from_rank": 19,
-      "to_rank": 17,
-      "rank_delta": 2
     },
     {
       "country_code": "THA",
@@ -24360,8 +24390,8 @@
       "from_year": 2000,
       "to_year": 2024,
       "from_score": 36.59,
-      "to_score": 60.66,
-      "delta": 24.07,
+      "to_score": 60.29,
+      "delta": 23.7,
       "from_rank": 28,
       "to_rank": 26,
       "rank_delta": 2
@@ -24376,8 +24406,8 @@
       "to_score": 73.19,
       "delta": 26.36,
       "from_rank": 26,
-      "to_rank": 18,
-      "rank_delta": 8
+      "to_rank": 17,
+      "rank_delta": 9
     },
     {
       "country_code": "ARE",
@@ -26059,7 +26089,7 @@
       "country_code": "USA",
       "country_name": "United States",
       "hmdi_rank": 24,
-      "hmdi_score": 66.11,
+      "hmdi_score": 65.56,
       "vdem_rank": 10,
       "vdem_score": 0.751,
       "gap": -14
@@ -26077,7 +26107,7 @@
       "country_code": "BRA",
       "country_name": "Brazil",
       "hmdi_rank": 26,
-      "hmdi_score": 60.66,
+      "hmdi_score": 60.29,
       "vdem_rank": 15,
       "vdem_score": 0.712,
       "gap": -11
@@ -26146,6 +26176,15 @@
       "gap": -4
     },
     {
+      "country_code": "SGP",
+      "country_name": "Singapore",
+      "hmdi_rank": 17,
+      "hmdi_score": 73.19,
+      "vdem_rank": 21,
+      "vdem_score": 0.348,
+      "gap": 4
+    },
+    {
       "country_code": "THA",
       "country_name": "Thailand",
       "hmdi_rank": 19,
@@ -26191,15 +26230,6 @@
       "gap": -3
     },
     {
-      "country_code": "SGP",
-      "country_name": "Singapore",
-      "hmdi_rank": 18,
-      "hmdi_score": 73.19,
-      "vdem_rank": 21,
-      "vdem_score": 0.348,
-      "gap": 3
-    },
-    {
       "country_code": "ISR",
       "country_name": "Israel",
       "hmdi_rank": 22,
@@ -26236,6 +26266,15 @@
       "gap": -1
     },
     {
+      "country_code": "KOR",
+      "country_name": "South Korea",
+      "hmdi_rank": 18,
+      "hmdi_score": 73.17,
+      "vdem_rank": 17,
+      "vdem_score": 0.627,
+      "gap": -1
+    },
+    {
       "country_code": "IND",
       "country_name": "India",
       "hmdi_rank": 23,
@@ -26269,15 +26308,6 @@
       "hmdi_score": 89.48,
       "vdem_rank": 2,
       "vdem_score": 0.846,
-      "gap": 0
-    },
-    {
-      "country_code": "KOR",
-      "country_name": "South Korea",
-      "hmdi_rank": 17,
-      "hmdi_score": 74.77,
-      "vdem_rank": 17,
-      "vdem_score": 0.627,
       "gap": 0
     },
     {
@@ -26329,7 +26359,7 @@
   "vdem_agreement": {
     "year": 2024,
     "n": 30,
-    "rho": 0.821
+    "rho": 0.819
   },
   "correlations": [
     {
@@ -26340,13 +26370,6 @@
       "rho": 0.855
     },
     {
-      "a": "constitutional_transfer_integrity",
-      "b": "internet_shutdown_hours_pc",
-      "a_label": "Transfer integrity",
-      "b_label": "Shutdowns",
-      "rho": -0.821
-    },
-    {
       "a": "internet_shutdown_hours_pc",
       "b": "journalists_detained_per_10m",
       "a_label": "Shutdowns",
@@ -26355,10 +26378,10 @@
     },
     {
       "a": "constitutional_transfer_integrity",
-      "b": "journalists_detained_per_10m",
+      "b": "internet_shutdown_hours_pc",
       "a_label": "Transfer integrity",
-      "b_label": "Journalists held",
-      "rho": -0.653
+      "b_label": "Shutdowns",
+      "rho": -0.667
     },
     {
       "a": "gini_coefficient",
@@ -26368,6 +26391,13 @@
       "rho": 0.636
     },
     {
+      "a": "constitutional_transfer_integrity",
+      "b": "journalists_detained_per_10m",
+      "a_label": "Transfer integrity",
+      "b_label": "Journalists held",
+      "rho": -0.596
+    },
+    {
       "a": "gini_coefficient",
       "b": "journalists_detained_per_10m",
       "a_label": "Gini",
@@ -26375,18 +26405,11 @@
       "rho": 0.553
     },
     {
-      "a": "gallagher_index",
-      "b": "constitutional_transfer_integrity",
-      "a_label": "Disproportionality",
-      "b_label": "Transfer integrity",
-      "rho": -0.533
-    },
-    {
       "a": "constitutional_transfer_integrity",
       "b": "legislative_hhi",
       "a_label": "Transfer integrity",
       "b_label": "Concentration",
-      "rho": -0.532
+      "rho": -0.529
     },
     {
       "a": "legislative_hhi",
@@ -26403,6 +26426,20 @@
       "rho": 0.503
     },
     {
+      "a": "constitutional_transfer_integrity",
+      "b": "incarceration_rate_per_100k",
+      "a_label": "Transfer integrity",
+      "b_label": "Incarceration",
+      "rho": -0.493
+    },
+    {
+      "a": "constitutional_transfer_integrity",
+      "b": "gini_coefficient",
+      "a_label": "Transfer integrity",
+      "b_label": "Gini",
+      "rho": -0.491
+    },
+    {
       "a": "female_parliament_pct",
       "b": "internet_shutdown_hours_pc",
       "a_label": "Gender parity",
@@ -26415,6 +26452,13 @@
       "a_label": "Journalists held",
       "b_label": "Pre-trial",
       "rho": 0.452
+    },
+    {
+      "a": "gallagher_index",
+      "b": "constitutional_transfer_integrity",
+      "a_label": "Disproportionality",
+      "b_label": "Transfer integrity",
+      "rho": -0.451
     },
     {
       "a": "turnout_vap_pct",
@@ -26438,6 +26482,13 @@
       "rho": 0.438
     },
     {
+      "a": "constitutional_transfer_integrity",
+      "b": "female_parliament_pct",
+      "a_label": "Transfer integrity",
+      "b_label": "Gender parity",
+      "rho": 0.426
+    },
+    {
       "a": "turnout_vap_pct",
       "b": "legislative_hhi",
       "a_label": "Turnout",
@@ -26459,13 +26510,6 @@
       "rho": 0.422
     },
     {
-      "a": "constitutional_transfer_integrity",
-      "b": "gini_coefficient",
-      "a_label": "Transfer integrity",
-      "b_label": "Gini",
-      "rho": -0.41
-    },
-    {
       "a": "gallagher_index",
       "b": "internet_shutdown_hours_pc",
       "a_label": "Disproportionality",
@@ -26478,13 +26522,6 @@
       "a_label": "Disproportionality",
       "b_label": "Journalists held",
       "rho": 0.384
-    },
-    {
-      "a": "constitutional_transfer_integrity",
-      "b": "incarceration_rate_per_100k",
-      "a_label": "Transfer integrity",
-      "b_label": "Incarceration",
-      "rho": -0.38
     },
     {
       "a": "legislative_hhi",
@@ -26515,13 +26552,6 @@
       "rho": 0.302
     },
     {
-      "a": "constitutional_transfer_integrity",
-      "b": "female_parliament_pct",
-      "a_label": "Transfer integrity",
-      "b_label": "Gender parity",
-      "rho": 0.299
-    },
-    {
       "a": "turnout_vap_pct",
       "b": "journalists_detained_per_10m",
       "a_label": "Turnout",
@@ -26550,18 +26580,18 @@
       "rho": -0.238
     },
     {
-      "a": "turnout_vap_pct",
-      "b": "constitutional_transfer_integrity",
-      "a_label": "Turnout",
-      "b_label": "Transfer integrity",
-      "rho": 0.214
-    },
-    {
       "a": "female_parliament_pct",
       "b": "incarceration_rate_per_100k",
       "a_label": "Gender parity",
       "b_label": "Incarceration",
       "rho": -0.214
+    },
+    {
+      "a": "turnout_vap_pct",
+      "b": "constitutional_transfer_integrity",
+      "a_label": "Turnout",
+      "b_label": "Transfer integrity",
+      "rho": 0.197
     },
     {
       "a": "turnout_vap_pct",
@@ -26585,13 +26615,6 @@
       "rho": 0.173
     },
     {
-      "a": "constitutional_transfer_integrity",
-      "b": "pretrial_detention_pct",
-      "a_label": "Transfer integrity",
-      "b_label": "Pre-trial",
-      "rho": -0.156
-    },
-    {
       "a": "turnout_vap_pct",
       "b": "internet_shutdown_hours_pc",
       "a_label": "Turnout",
@@ -26611,6 +26634,13 @@
       "a_label": "Gini",
       "b_label": "Pre-trial",
       "rho": 0.136
+    },
+    {
+      "a": "constitutional_transfer_integrity",
+      "b": "pretrial_detention_pct",
+      "a_label": "Transfer integrity",
+      "b_label": "Pre-trial",
+      "rho": -0.132
     },
     {
       "a": "gallagher_index",
@@ -26760,9 +26790,9 @@
       "short": "Transfer integrity",
       "pillar": "electoral",
       "unit": "%",
-      "mean": 86.7,
-      "sd": 27.9,
-      "at_ceiling": 24,
+      "mean": 85.2,
+      "sd": 27.6,
+      "at_ceiling": 21,
       "at_floor": 0,
       "n": 30,
       "raw_min": 10.0,
@@ -26830,13 +26860,6 @@
       "share": 0.16
     },
     {
-      "country_code": "USA",
-      "country_name": "United States",
-      "anchor_cells": 42,
-      "total_cells": 250,
-      "share": 0.168
-    },
-    {
       "country_code": "FRA",
       "country_name": "France",
       "anchor_cells": 43,
@@ -26872,13 +26895,6 @@
       "share": 0.176
     },
     {
-      "country_code": "BRA",
-      "country_name": "Brazil",
-      "anchor_cells": 44,
-      "total_cells": 250,
-      "share": 0.176
-    },
-    {
       "country_code": "CHE",
       "country_name": "Switzerland",
       "anchor_cells": 44,
@@ -26905,6 +26921,13 @@
       "anchor_cells": 44,
       "total_cells": 250,
       "share": 0.176
+    },
+    {
+      "country_code": "USA",
+      "country_name": "United States",
+      "anchor_cells": 45,
+      "total_cells": 250,
+      "share": 0.18
     },
     {
       "country_code": "JPN",
@@ -26935,18 +26958,18 @@
       "share": 0.184
     },
     {
-      "country_code": "NLD",
-      "country_name": "Netherlands",
+      "country_code": "BRA",
+      "country_name": "Brazil",
       "anchor_cells": 47,
       "total_cells": 250,
       "share": 0.188
     },
     {
-      "country_code": "KOR",
-      "country_name": "South Korea",
-      "anchor_cells": 48,
+      "country_code": "NLD",
+      "country_name": "Netherlands",
+      "anchor_cells": 47,
       "total_cells": 250,
-      "share": 0.192
+      "share": 0.188
     },
     {
       "country_code": "POL",
@@ -26968,6 +26991,13 @@
       "anchor_cells": 49,
       "total_cells": 250,
       "share": 0.196
+    },
+    {
+      "country_code": "KOR",
+      "country_name": "South Korea",
+      "anchor_cells": 50,
+      "total_cells": 250,
+      "share": 0.2
     },
     {
       "country_code": "ESP",
@@ -27135,32 +27165,32 @@
     },
     {
       "year": 2020,
-      "share": 0.0933,
-      "anchor_cells": 28,
+      "share": 0.0967,
+      "anchor_cells": 29,
       "total_cells": 300
     },
     {
       "year": 2021,
-      "share": 0.0833,
-      "anchor_cells": 25,
+      "share": 0.0867,
+      "anchor_cells": 26,
       "total_cells": 300
     },
     {
       "year": 2022,
-      "share": 0.0833,
-      "anchor_cells": 25,
+      "share": 0.0867,
+      "anchor_cells": 26,
       "total_cells": 300
     },
     {
       "year": 2023,
-      "share": 0.09,
-      "anchor_cells": 27,
+      "share": 0.0967,
+      "anchor_cells": 29,
       "total_cells": 300
     },
     {
       "year": 2024,
-      "share": 0.72,
-      "anchor_cells": 216,
+      "share": 0.73,
+      "anchor_cells": 219,
       "total_cells": 300
     }
   ],
@@ -27170,8 +27200,8 @@
     "span": 10,
     "n": 30,
     "mean_from": 70.96,
-    "mean_to": 72.48,
-    "mean_delta": 1.52,
+    "mean_to": 72.39,
+    "mean_delta": 1.43,
     "direction": "risen",
     "spread_from": 58.13,
     "spread_to": 61.55,
@@ -27266,10 +27296,10 @@
         "key": "electoral",
         "label": "Electoral Health & Representation",
         "short": "Electoral",
-        "contribution": 0.07,
+        "contribution": -0.01,
         "from": 73.56,
-        "to": 74.56,
-        "delta": 1.0,
+        "to": 74.08,
+        "delta": 0.52,
         "weight": 0.2,
         "top_metric": {
           "key": "turnout_vap_pct",
@@ -27330,6 +27360,17 @@
         "worsened": 18
       },
       {
+        "key": "constitutional_transfer_integrity",
+        "label": "Constitutional transfer integrity",
+        "short": "Transfer integrity",
+        "pillar": "electoral",
+        "pillar_label": "Electoral Health & Representation",
+        "unit": "%",
+        "delta": -2.49,
+        "improved": 1,
+        "worsened": 6
+      },
+      {
         "key": "gini_coefficient",
         "label": "Income Gini coefficient",
         "short": "Gini",
@@ -27350,17 +27391,6 @@
         "delta": 1.36,
         "improved": 14,
         "worsened": 11
-      },
-      {
-        "key": "constitutional_transfer_integrity",
-        "label": "Constitutional transfer integrity",
-        "short": "Transfer integrity",
-        "pillar": "electoral",
-        "pillar_label": "Electoral Health & Representation",
-        "unit": "%",
-        "delta": -1.06,
-        "improved": 1,
-        "worsened": 3
       },
       {
         "key": "journalists_detained_per_10m",
@@ -27428,8 +27458,8 @@
         "from_rank": 27,
         "to_rank": 19,
         "rank_delta": 8,
-        "from_tier": "Moderate / Flawed System",
-        "to_tier": "Established Democracy",
+        "from_tier": "Mixed countable health",
+        "to_tier": "High countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27475,8 +27505,8 @@
         "from_rank": 28,
         "to_rank": 27,
         "rank_delta": 1,
-        "from_tier": "Hybrid / Constrained Regime",
-        "to_tier": "Moderate / Flawed System",
+        "from_tier": "Low countable health",
+        "to_tier": "Mixed countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27514,48 +27544,48 @@
         ]
       },
       {
-        "country_code": "USA",
-        "country_name": "United States",
-        "from_score": 60.35,
-        "to_score": 66.11,
-        "delta": 5.76,
-        "from_rank": 24,
-        "to_rank": 24,
-        "rank_delta": 0,
-        "from_tier": "Moderate / Flawed System",
-        "to_tier": "Established Democracy",
-        "tier_changed": true,
+        "country_code": "JPN",
+        "country_name": "Japan",
+        "from_score": 70.57,
+        "to_score": 76.26,
+        "delta": 5.69,
+        "from_rank": 19,
+        "to_rank": 15,
+        "rank_delta": 4,
+        "from_tier": "High countable health",
+        "to_tier": "High countable health",
+        "tier_changed": false,
         "reasons": [
           {
             "pillar": "power_dispersion",
             "label": "Power Dispersion & Checks",
             "short": "Power Dispersion",
-            "points": 2.55,
+            "points": 4.17,
             "metric": {
-              "key": "female_parliament_pct",
-              "label": "Gender parity",
-              "unit": "%",
-              "delta": 20.94,
-              "raw_from": 18.73,
-              "raw_to": 29.2,
-              "from_display": "18.7",
-              "to_display": "29.2%"
+              "key": "legislative_hhi",
+              "label": "Concentration",
+              "unit": "HHI",
+              "delta": 13.63,
+              "raw_from": 4700.0,
+              "raw_to": 3500.0,
+              "from_display": "4,700",
+              "to_display": "3,500 HHI"
             }
           },
           {
-            "pillar": "justice_rule_of_law",
-            "label": "Due Process & Rule of Law",
-            "short": "Due Process",
-            "points": 2.48,
+            "pillar": "electoral",
+            "label": "Electoral Health & Representation",
+            "short": "Electoral",
+            "points": 1.13,
             "metric": {
-              "key": "incarceration_rate_per_100k",
-              "label": "Incarceration",
-              "unit": "per 100k",
-              "delta": 23.89,
-              "raw_from": 700.0,
-              "raw_to": 528.0,
-              "from_display": "700",
-              "to_display": "528 per 100k"
+              "key": "gallagher_index",
+              "label": "Disproportionality",
+              "unit": "index",
+              "delta": 14.53,
+              "raw_from": 16.14,
+              "raw_to": 11.2,
+              "from_display": "16.1",
+              "to_display": "11.2"
             }
           }
         ]
@@ -27571,8 +27601,8 @@
         "from_rank": 26,
         "to_rank": 28,
         "rank_delta": -2,
-        "from_tier": "Moderate / Flawed System",
-        "to_tier": "Hybrid / Constrained Regime",
+        "from_tier": "Mixed countable health",
+        "to_tier": "Low countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27618,8 +27648,8 @@
         "from_rank": 29,
         "to_rank": 30,
         "rank_delta": -1,
-        "from_tier": "Hybrid / Constrained Regime",
-        "to_tier": "Closed / Authoritarian Regime",
+        "from_tier": "Low countable health",
+        "to_tier": "Very low countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27665,8 +27695,8 @@
         "from_rank": 16,
         "to_rank": 22,
         "rank_delta": -6,
-        "from_tier": "Established Democracy",
-        "to_tier": "Established Democracy",
+        "from_tier": "High countable health",
+        "to_tier": "High countable health",
         "tier_changed": false,
         "reasons": [
           {
@@ -27717,8 +27747,8 @@
         "from_rank": 27,
         "to_rank": 19,
         "rank_delta": 8,
-        "from_tier": "Moderate / Flawed System",
-        "to_tier": "Established Democracy",
+        "from_tier": "Mixed countable health",
+        "to_tier": "High countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27764,8 +27794,8 @@
         "from_rank": 28,
         "to_rank": 27,
         "rank_delta": 1,
-        "from_tier": "Hybrid / Constrained Regime",
-        "to_tier": "Moderate / Flawed System",
+        "from_tier": "Low countable health",
+        "to_tier": "Mixed countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27803,53 +27833,6 @@
         ]
       },
       {
-        "country_code": "USA",
-        "country_name": "United States",
-        "from_score": 60.35,
-        "to_score": 66.11,
-        "delta": 5.76,
-        "from_rank": 24,
-        "to_rank": 24,
-        "rank_delta": 0,
-        "from_tier": "Moderate / Flawed System",
-        "to_tier": "Established Democracy",
-        "tier_changed": true,
-        "reasons": [
-          {
-            "pillar": "power_dispersion",
-            "label": "Power Dispersion & Checks",
-            "short": "Power Dispersion",
-            "points": 2.55,
-            "metric": {
-              "key": "female_parliament_pct",
-              "label": "Gender parity",
-              "unit": "%",
-              "delta": 20.94,
-              "raw_from": 18.73,
-              "raw_to": 29.2,
-              "from_display": "18.7",
-              "to_display": "29.2%"
-            }
-          },
-          {
-            "pillar": "justice_rule_of_law",
-            "label": "Due Process & Rule of Law",
-            "short": "Due Process",
-            "points": 2.48,
-            "metric": {
-              "key": "incarceration_rate_per_100k",
-              "label": "Incarceration",
-              "unit": "per 100k",
-              "delta": 23.89,
-              "raw_from": 700.0,
-              "raw_to": 528.0,
-              "from_display": "700",
-              "to_display": "528 per 100k"
-            }
-          }
-        ]
-      },
-      {
         "country_code": "POL",
         "country_name": "Poland",
         "from_score": 77.88,
@@ -27858,8 +27841,8 @@
         "from_rank": 12,
         "to_rank": 7,
         "rank_delta": 5,
-        "from_tier": "Established Democracy",
-        "to_tier": "Robust High-Parity Democracy",
+        "from_tier": "High countable health",
+        "to_tier": "Very high countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27897,6 +27880,53 @@
         ]
       },
       {
+        "country_code": "USA",
+        "country_name": "United States",
+        "from_score": 60.35,
+        "to_score": 65.56,
+        "delta": 5.21,
+        "from_rank": 24,
+        "to_rank": 24,
+        "rank_delta": 0,
+        "from_tier": "Mixed countable health",
+        "to_tier": "High countable health",
+        "tier_changed": true,
+        "reasons": [
+          {
+            "pillar": "power_dispersion",
+            "label": "Power Dispersion & Checks",
+            "short": "Power Dispersion",
+            "points": 2.54,
+            "metric": {
+              "key": "female_parliament_pct",
+              "label": "Gender parity",
+              "unit": "%",
+              "delta": 20.94,
+              "raw_from": 18.73,
+              "raw_to": 29.2,
+              "from_display": "18.7",
+              "to_display": "29.2%"
+            }
+          },
+          {
+            "pillar": "justice_rule_of_law",
+            "label": "Due Process & Rule of Law",
+            "short": "Due Process",
+            "points": 2.47,
+            "metric": {
+              "key": "incarceration_rate_per_100k",
+              "label": "Incarceration",
+              "unit": "per 100k",
+              "delta": 23.89,
+              "raw_from": 700.0,
+              "raw_to": 528.0,
+              "from_display": "700",
+              "to_display": "528 per 100k"
+            }
+          }
+        ]
+      },
+      {
         "country_code": "FRA",
         "country_name": "France",
         "from_score": 78.1,
@@ -27905,8 +27935,8 @@
         "from_rank": 11,
         "to_rank": 8,
         "rank_delta": 3,
-        "from_tier": "Established Democracy",
-        "to_tier": "Robust High-Parity Democracy",
+        "from_tier": "High countable health",
+        "to_tier": "Very high countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27952,8 +27982,8 @@
         "from_rank": 10,
         "to_rank": 11,
         "rank_delta": -1,
-        "from_tier": "Established Democracy",
-        "to_tier": "Robust High-Parity Democracy",
+        "from_tier": "High countable health",
+        "to_tier": "Very high countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -27999,8 +28029,8 @@
         "from_rank": 8,
         "to_rank": 10,
         "rank_delta": -2,
-        "from_tier": "Established Democracy",
-        "to_tier": "Robust High-Parity Democracy",
+        "from_tier": "High countable health",
+        "to_tier": "Very high countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -28046,8 +28076,8 @@
         "from_rank": 29,
         "to_rank": 30,
         "rank_delta": -1,
-        "from_tier": "Hybrid / Constrained Regime",
-        "to_tier": "Closed / Authoritarian Regime",
+        "from_tier": "Low countable health",
+        "to_tier": "Very low countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -28093,8 +28123,8 @@
         "from_rank": 26,
         "to_rank": 28,
         "rank_delta": -2,
-        "from_tier": "Moderate / Flawed System",
-        "to_tier": "Hybrid / Constrained Regime",
+        "from_tier": "Mixed countable health",
+        "to_tier": "Low countable health",
         "tier_changed": true,
         "reasons": [
           {
@@ -28132,8 +28162,8 @@
         ]
       }
     ],
-    "anchor_share": 0.18,
-    "anchor_share_end": 0.72,
+    "anchor_share": 0.181,
+    "anchor_share_end": 0.73,
     "thinnest_country": {
       "country_code": "SAU",
       "country_name": "Saudi Arabia",
@@ -28141,7 +28171,7 @@
       "total_cells": 250,
       "share": 0.072
     },
-    "vdem_rho": 0.821,
+    "vdem_rho": 0.819,
     "vdem_year": 2024,
     "vdem_over": [
       {
@@ -28168,7 +28198,7 @@
         "country_code": "USA",
         "country_name": "United States",
         "hmdi_rank": 24,
-        "hmdi_score": 66.11,
+        "hmdi_score": 65.56,
         "vdem_rank": 10,
         "vdem_score": 0.751,
         "gap": -14
@@ -28177,7 +28207,7 @@
         "country_code": "BRA",
         "country_name": "Brazil",
         "hmdi_rank": 26,
-        "hmdi_score": 60.66,
+        "hmdi_score": 60.29,
         "vdem_rank": 15,
         "vdem_score": 0.712,
         "gap": -11
@@ -28208,10 +28238,10 @@
       62.52,
       63.34,
       64.15,
-      64.65,
-      65.14,
-      65.63,
-      66.11
+      63.56,
+      64.23,
+      64.91,
+      65.56
     ],
     "CHN": [
       43.36,
@@ -28426,8 +28456,8 @@
       57.22,
       58.12,
       59.0,
-      59.84,
-      60.66
+      59.16,
+      60.29
     ],
     "CAN": [
       74.19,
@@ -28562,7 +28592,7 @@
       73.59,
       74.54,
       74.66,
-      74.77
+      73.17
     ],
     "ESP": [
       77.83,
@@ -29374,7 +29404,7 @@
       17,
       17,
       17,
-      17
+      18
     ],
     "ESP": [
       8,
@@ -29779,7 +29809,7 @@
       19,
       18,
       18,
-      18
+      17
     ],
     "ARE": [
       29,
@@ -29810,11 +29840,11 @@
     ]
   },
   "meta": {
-    "generated_at": "2026-09-01",
+    "generated_at": "2026-09-02",
     "provenance": {
-      "anchor_cells": 1663,
+      "anchor_cells": 1671,
       "total_cells": 9000,
-      "anchor_share": 0.1848
+      "anchor_share": 0.1857
     },
     "years": [
       2000,
@@ -29845,7 +29875,7 @@
     ]
   },
   "headline": {
-    "value": "72.5",
+    "value": "72.4",
     "unit": "panel mean",
     "as_of": "2024"
   }

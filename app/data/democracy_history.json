@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-01",
+ "generated_at": "2026-09-02",
  "years": [
   2000,
   2001,
@@ -28,9 +28,9 @@
   2024
  ],
  "provenance": {
-  "anchor_cells": 1663,
+  "anchor_cells": 1671,
   "total_cells": 9000,
-  "anchor_share": 0.1848
+  "anchor_share": 0.1857
  },
  "records": [
   {
@@ -430,6 +430,7 @@
    "pretrial_detention_pct": 22.53,
    "incarceration_rate_per_100k": 565.0,
    "anchored": [
+    "constitutional_transfer_integrity",
     "gallagher_index",
     "gini_coefficient",
     "incarceration_rate_per_100k",
@@ -445,7 +446,7 @@
    "turnout_vap_pct": 62.97,
    "gallagher_index": 4.98,
    "effective_parties": 2.01,
-   "constitutional_transfer_integrity": 100.0,
+   "constitutional_transfer_integrity": 80.0,
    "legislative_hhi": 5008.0,
    "female_parliament_pct": 24.9,
    "gini_coefficient": 41.4,
@@ -454,7 +455,9 @@
    "journalists_detained_per_10m": 0.07,
    "pretrial_detention_pct": 23.05,
    "incarceration_rate_per_100k": 555.75,
-   "anchored": []
+   "anchored": [
+    "constitutional_transfer_integrity"
+   ]
   },
   {
    "country_code": "USA",
@@ -462,7 +465,7 @@
    "turnout_vap_pct": 63.15,
    "gallagher_index": 5.05,
    "effective_parties": 2.01,
-   "constitutional_transfer_integrity": 100.0,
+   "constitutional_transfer_integrity": 83.33,
    "legislative_hhi": 5006.0,
    "female_parliament_pct": 26.33,
    "gini_coefficient": 41.3,
@@ -479,7 +482,7 @@
    "turnout_vap_pct": 63.33,
    "gallagher_index": 5.12,
    "effective_parties": 2.01,
-   "constitutional_transfer_integrity": 100.0,
+   "constitutional_transfer_integrity": 86.67,
    "legislative_hhi": 5004.0,
    "female_parliament_pct": 27.77,
    "gini_coefficient": 41.2,
@@ -496,7 +499,7 @@
    "turnout_vap_pct": 63.5,
    "gallagher_index": 5.2,
    "effective_parties": 2.01,
-   "constitutional_transfer_integrity": 100.0,
+   "constitutional_transfer_integrity": 90.0,
    "legislative_hhi": 5002.0,
    "female_parliament_pct": 29.2,
    "gini_coefficient": 41.1,
@@ -506,6 +509,7 @@
    "pretrial_detention_pct": 24.6,
    "incarceration_rate_per_100k": 528.0,
    "anchored": [
+    "constitutional_transfer_integrity",
     "effective_parties",
     "female_parliament_pct",
     "gallagher_index",
@@ -4395,6 +4399,7 @@
    "pretrial_detention_pct": 31.97,
    "incarceration_rate_per_100k": 381.67,
    "anchored": [
+    "constitutional_transfer_integrity",
     "effective_parties",
     "female_parliament_pct",
     "gallagher_index",
@@ -4408,7 +4413,7 @@
    "turnout_vap_pct": 79.1,
    "gallagher_index": 3.8,
    "effective_parties": 9.4,
-   "constitutional_transfer_integrity": 100.0,
+   "constitutional_transfer_integrity": 85.0,
    "legislative_hhi": 1400.0,
    "female_parliament_pct": 17.5,
    "gini_coefficient": 51.9,
@@ -4417,7 +4422,9 @@
    "journalists_detained_per_10m": 0.0,
    "pretrial_detention_pct": 29.58,
    "incarceration_rate_per_100k": 388.33,
-   "anchored": []
+   "anchored": [
+    "constitutional_transfer_integrity"
+   ]
   },
   {
    "country_code": "BRA",
@@ -4425,7 +4432,7 @@
    "turnout_vap_pct": 79.1,
    "gallagher_index": 3.8,
    "effective_parties": 9.4,
-   "constitutional_transfer_integrity": 100.0,
+   "constitutional_transfer_integrity": 92.0,
    "legislative_hhi": 1400.0,
    "female_parliament_pct": 17.5,
    "gini_coefficient": 51.5,
@@ -4435,6 +4442,7 @@
    "pretrial_detention_pct": 27.2,
    "incarceration_rate_per_100k": 395.0,
    "anchored": [
+    "constitutional_transfer_integrity",
     "effective_parties",
     "female_parliament_pct",
     "gallagher_index",
@@ -6908,7 +6916,9 @@
    "journalists_detained_per_10m": 0.0,
    "pretrial_detention_pct": 36.03,
    "incarceration_rate_per_100k": 100.83,
-   "anchored": []
+   "anchored": [
+    "constitutional_transfer_integrity"
+   ]
   },
   {
    "country_code": "KOR",
@@ -6916,7 +6926,7 @@
    "turnout_vap_pct": 67.0,
    "gallagher_index": 7.1,
    "effective_parties": 2.4,
-   "constitutional_transfer_integrity": 100.0,
+   "constitutional_transfer_integrity": 75.0,
    "legislative_hhi": 4400.0,
    "female_parliament_pct": 20.0,
    "gini_coefficient": 32.2,
@@ -6926,6 +6936,7 @@
    "pretrial_detention_pct": 36.2,
    "incarceration_rate_per_100k": 100.0,
    "anchored": [
+    "constitutional_transfer_integrity",
     "effective_parties",
     "female_parliament_pct",
     "gallagher_index",

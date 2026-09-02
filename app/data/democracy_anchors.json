@@ -32,8 +32,13 @@
    }
   },
   "constitutional_transfer_integrity": {
-   "kind": "constant",
-   "value": 100.0
+   "kind": "anchors",
+   "points": {
+    "2000": 100.0,
+    "2020": 100.0,
+    "2021": 80.0,
+    "2024": 90.0
+   }
   },
   "legislative_hhi": {
    "kind": "anchors",
@@ -920,8 +925,13 @@
    }
   },
   "constitutional_transfer_integrity": {
-   "kind": "constant",
-   "value": 100.0
+   "kind": "anchors",
+   "points": {
+    "2000": 100.0,
+    "2022": 100.0,
+    "2023": 85.0,
+    "2024": 92.0
+   }
   },
   "legislative_hhi": {
    "kind": "anchors",
@@ -1511,8 +1521,12 @@
    }
   },
   "constitutional_transfer_integrity": {
-   "kind": "constant",
-   "value": 100.0
+   "kind": "anchors",
+   "points": {
+    "2000": 100.0,
+    "2023": 100.0,
+    "2024": 75.0
+   }
   },
   "legislative_hhi": {
    "kind": "anchors",
