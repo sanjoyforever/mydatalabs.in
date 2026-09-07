@@ -6,7 +6,7 @@
       "status": "warning"
     },
     "hormuz-index": {
-      "value": "170.1",
+      "value": "176.9",
       "unit": "score",
       "status": "serious"
     },
@@ -14,6 +14,11 @@
       "value": "128.1",
       "unit": "score",
       "status": "warning"
+    },
+    "democracy-index": {
+      "value": "72.4",
+      "unit": "panel mean",
+      "status": "good"
     },
     "lok-sabha-index": {
       "value": "274",

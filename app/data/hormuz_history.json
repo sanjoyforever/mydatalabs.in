@@ -509,15 +509,30 @@
         "vix": 15.260000228881836,
         "reroutes": 24.0
       }
+    },
+    {
+      "week_start": "2026-09-07",
+      "score": 176.9,
+      "level_label": "Severe",
+      "level_status": "serious",
+      "raw_values": {
+        "brent": 96.27999877929688,
+        "ship_traffic": 30.0,
+        "war_risk": 7.5,
+        "tanker_freight": 1360.0,
+        "ttf_gas": 71.9520034790039,
+        "vix": 14.529999732971191,
+        "reroutes": 24.0
+      }
     }
   ],
   "series_source_notes": {
-    "brent": "Baseline 64.77 $/bbl (Yahoo Finance / ICE (BZ=F), 2026-01-01/2026-01-31). Latest 88.17 $/bbl as of 2026-08-31, +36% vs baseline. Fetched automatically.",
-    "ship_traffic": "Baseline 616 transits/wk (IMF PortWatch, 2026-01-01/2026-01-31). Latest 35 transits/wk as of 2026-08-23, 6% of baseline. 15 vessels/day x 7, published 2026-07-19. Used only if the PortWatch feed is unreachable. Fetched automatically; the hand-entered figure is held only as a fallback for feed outages. Weekly values before the 2026-07-26 revision were re-anchored from a previously published series rather than measured.",
+    "brent": "Baseline 64.77 $/bbl (Yahoo Finance / ICE (BZ=F), 2026-01-01/2026-01-31). Latest 96.28 $/bbl as of 2026-09-07, +49% vs baseline. Fetched automatically.",
+    "ship_traffic": "Baseline 616 transits/wk (IMF PortWatch, 2026-01-01/2026-01-31). Latest 30 transits/wk as of 2026-08-30, 5% of baseline. 15 vessels/day x 7, published 2026-07-19. Used only if the PortWatch feed is unreachable. Fetched automatically; the hand-entered figure is held only as a fallback for feed outages. Weekly values before the 2026-07-26 revision were re-anchored from a previously published series rather than measured.",
     "war_risk": "Baseline 0.25 % hull value (Marsh / market brokers, 2026-01-01/2026-01-31). Latest 7.5 % hull value as of 2026-07-22 per Marsh (Marcus Baker, global head of marine), +2900% vs baseline. Low end of the 7.5-10% of hull range quoted for Hormuz transits. Weekly values before the 2026-07-26 revision were re-anchored from a previously published series rather than measured. Currently flagged stale.",
     "tanker_freight": "Baseline 900 index (Baltic Exchange, 2026-01-01/2026-01-31). Latest 1360 index as of 2026-07-20, +51% vs baseline. Currently flagged stale.",
-    "ttf_gas": "Baseline 34.11 EUR/MWh (Yahoo Finance / ICE (TTF=F), 2026-01-01/2026-01-31). Latest 70.27 EUR/MWh as of 2026-08-31, +106% vs baseline. Fetched automatically.",
-    "vix": "Baseline 16.05 (Yahoo Finance / CBOE (^VIX), 2026-01-01/2026-01-31). Latest 15.26 as of 2026-08-31, -5% vs baseline. Fetched automatically.",
+    "ttf_gas": "Baseline 34.11 EUR/MWh (Yahoo Finance / ICE (TTF=F), 2026-01-01/2026-01-31). Latest 71.95 EUR/MWh as of 2026-09-07, +111% vs baseline. Fetched automatically.",
+    "vix": "Baseline 16.05 (Yahoo Finance / CBOE (^VIX), 2026-01-01/2026-01-31). Latest 14.53 as of 2026-09-07, -9% vs baseline. Fetched automatically.",
     "reroutes": "Baseline 8 % of traffic (AIS / Vortexa, 2026-01-01/2026-01-31). Latest 24 % of traffic as of 2026-07-20, +200% vs baseline. Currently flagged stale."
   },
   "reconstructed_series": [

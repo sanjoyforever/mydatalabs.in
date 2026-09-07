@@ -812,7 +812,22 @@
         "fx_stress": 22.1,
         "cancellation_rate": 1.46
       }
+    },
+    {
+      "week_start": "2026-09-07",
+      "score": 127.9,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 94.41,
+        "fleet_grounding": 13.54,
+        "atfm_delay": 2.13,
+        "detour_pct": 4.81,
+        "equity_stress": 95.0,
+        "fx_stress": 22.3,
+        "cancellation_rate": 1.46
+      }
     }
   ],
-  "last_updated": "2026-08-31"
+  "last_updated": "2026-09-07"
 }
