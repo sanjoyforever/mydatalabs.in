@@ -1,19 +1,19 @@
 {
   "live_values": {
-    "crack_spread": 94.41,
+    "crack_spread": 102.58,
     "fleet_grounding": 13.54,
     "atfm_delay": 2.13,
     "detour_pct": 4.81,
     "equity_stress": 95.0,
-    "fx_stress": 22.3,
+    "fx_stress": 24.8,
     "cancellation_rate": 1.46
   },
-  "live_values_at": "2026-09-07",
+  "live_values_at": "2026-09-16",
   "snapshot": {
-    "score": 127.9,
+    "score": 128.3,
     "level_label": "Elevated Strain",
     "level_status": "warning",
-    "week_start": "2026-09-07"
+    "week_start": "2026-09-14"
   },
   "history": [
     {
@@ -838,6 +838,21 @@
         "detour_pct": 4.81,
         "equity_stress": 95.0,
         "fx_stress": 22.3,
+        "cancellation_rate": 1.46
+      }
+    },
+    {
+      "week_start": "2026-09-14",
+      "score": 128.3,
+      "level_label": "Elevated Strain",
+      "level_status": "warning",
+      "raw_values": {
+        "crack_spread": 102.43,
+        "fleet_grounding": 13.54,
+        "atfm_delay": 2.13,
+        "detour_pct": 4.81,
+        "equity_stress": 95.0,
+        "fx_stress": 25.0,
         "cancellation_rate": 1.46
       }
     }
