@@ -112,22 +112,22 @@ def _index_components(module_path: str) -> list[tuple[str, str]]:
 REPORTS: dict[str, dict] = {
     "hormuz": {
         "label": "Hormuz Crisis Index",
-        "url": "/hormuz-index",
+        "url": "/indices/hormuz-crisis",
         "module": "app.indices.hormuz",
     },
     "solvency": {
         "label": "US Solvency Index",
-        "url": "/solvency-index",
+        "url": "/indices/us-solvency",
         "module": "app.indices.solvency",
     },
     "aviation": {
         "label": "Airline Safety Index",
-        "url": "/airline-index",
+        "url": "/indices/airline-pressure",
         "module": "app.indices.aviation",
     },
     "elections": {
         "label": "Lok Sabha Index",
-        "url": "/lok-sabha-index",
+        "url": "/india-story/lok-sabha-projection",
         "module": None,  # no COMPONENTS list; generic targets only
     },
 }

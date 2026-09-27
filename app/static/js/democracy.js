@@ -132,6 +132,8 @@
         region: c.region,
         regime: c.regime_type,
         gdpRank: c.gdp_rank,
+        justiceEvidence: c.justice_evidence || "ok",
+        justiceNote: c.justice_note || "",
         pillars: pillars,
         metrics: raw[ROW.METRICS],
         context: raw[ROW.CONTEXT],
@@ -204,8 +206,15 @@
     tbody.innerHTML = shown.map(function (r) {
       var pills = r.pillars.map(function (score, i) {
         var p = PILLARS[i];
-        return '<span title="' + esc(p.label) + ": " + score.toFixed(1) + '" style="background:' +
-          p.color + "; opacity:" + (0.25 + 0.75 * (score / 100)).toFixed(2) + ';">' +
+        // Mirrors the server-rendered cell: a thinly-evidenced Due Process
+        // pillar is hatched, not rescored. See justice_evidence() in
+        // app/indices/democracy.py.
+        var flagged = p.key === "justice_rule_of_law" && r.justiceEvidence === "thin";
+        return '<span class="' + (flagged ? "is-unevidenced" : "") + '" title="' +
+          esc(p.label) + ": " + score.toFixed(1) +
+          (flagged ? " — thinly evidenced; this pillar is carried on almost no published years for this country" : "") +
+          '" style="background:' + p.color + "; opacity:" +
+          (0.25 + 0.75 * (score / 100)).toFixed(2) + ';">' +
           Math.round(score) + "</span>";
       }).join("");
 

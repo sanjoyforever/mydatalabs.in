@@ -24,6 +24,7 @@ import threading
 import time
 from datetime import date, datetime, timedelta, timezone
 
+from app import scoring
 from app.scoring import Component, CompositeResult, compute_composite
 from app import manual_data, storage
 
@@ -567,3 +568,205 @@ def top_driver(snapshot: CompositeResult):
 def component_result(snapshot: CompositeResult, key: str):
     """Look up one component's result by key, or None."""
     return next((c for c in snapshot.components if c.component.key == key), None)
+
+
+# --- Executive summary ------------------------------------------------------
+# How far back the closing summary reads. A quarter is long enough for a
+# component to have moved for a reason a reader can name, and short enough that
+# every week in it belongs to the same crisis.
+EXEC_WINDOW_WEEKS = 12
+
+# Column-width labels for the summary tables. The full component labels carry
+# their source and scope ("Hormuz Transits (all commercial vessels)"), which is
+# what the methodology needs and what a two-column list cannot fit.
+_SHORT_LABELS = {
+    "brent": "Brent crude",
+    "ship_traffic": "Hormuz transits",
+    "war_risk": "War-risk premium",
+    "tanker_freight": "Tanker freight",
+    "ttf_gas": "TTF gas",
+    "vix": "Equity volatility",
+    "reroutes": "Cape reroutes",
+}
+
+
+def _pct_from_baseline(cr) -> float | None:
+    """Signed % change of a component's raw value against its baseline."""
+    if cr.current_value is None or not cr.baseline_value:
+        return None
+    return (cr.current_value - cr.baseline_value) / cr.baseline_value * 100
+
+
+def _direction_word(comp: Component, pct_change: float | None) -> str:
+    """"above"/"below" for a rising-is-stress component, and the same words for
+    an inverted one — the word describes the value, never the stress."""
+    if pct_change is None:
+        return "at"
+    return "above" if pct_change >= 0 else "below"
+
+
+def _week_contributions(raw_values: dict) -> dict[str, float]:
+    """Points each component contributed in a stored week.
+
+    History persists raw values, not scores, so a past week's decomposition has
+    to be recomputed through the same scoring path the live snapshot uses. That
+    is deliberate: a cap or baseline revision restates this summary along with
+    the chart, instead of leaving it quoting arithmetic nothing performs.
+    """
+    out: dict[str, float] = {}
+    for comp in COMPONENTS:
+        value = raw_values.get(comp.key)
+        if value is None:
+            continue
+        stress = scoring.stress_score(
+            value, BASELINE_VALUES[comp.key], comp.cap_pct, comp.invert, comp.floor
+        )
+        out[comp.key] = comp.weight * stress
+    return out
+
+
+def executive_summary(snapshot: CompositeResult,
+                      history: list[dict] | None = None,
+                      sentiment: dict | None = None) -> dict:
+    """Every figure the closing summary quotes, computed from the live snapshot
+    and the stored series.
+
+    Nothing here is prose typed by hand, for the reason the press dispatch
+    gives: a summary whose numbers are literals contradicts the page around it
+    the first week the index moves.
+    """
+    history = history if history is not None else get_history()
+    weeks = [w for w in history if w.get("raw_values")]
+    window = weeks[-EXEC_WINDOW_WEEKS:] if weeks else []
+
+    above = round(snapshot.score - scoring.SCALE_MIN, 1)
+
+    # --- Trajectory ---------------------------------------------------------
+    first = window[0] if window else None
+    prev = weeks[-2] if len(weeks) >= 2 else None
+    start_score = first["score"] if first else snapshot.score
+    window_delta = round(snapshot.score - start_score, 1)
+    week_delta = round(snapshot.score - prev["score"], 1) if prev else 0.0
+
+    scored = [w for w in weeks if w.get("score") is not None]
+    peak = max(scored, key=lambda w: w["score"]) if scored else None
+    trough = min(scored, key=lambda w: w["score"]) if scored else None
+
+    # Consecutive weeks in the current band, counted back from the latest.
+    # "Four weeks in Severe" is a fact about persistence that a single week's
+    # label cannot carry, and persistence is what separates a spike from a
+    # state.
+    weeks_in_band = 0
+    for w in reversed(scored):
+        if scoring.default_level(w["score"])[0] != snapshot.level_label:
+            break
+        weeks_in_band += 1
+
+    # --- What owns the reading ---------------------------------------------
+    start_contribs = _week_contributions(first["raw_values"]) if first else {}
+    prev_contribs = _week_contributions(prev["raw_values"]) if prev else {}
+
+    drivers = []
+    for cr in snapshot.components:
+        comp = cr.component
+        pct_change = _pct_from_baseline(cr)
+        drivers.append({
+            "key": comp.key,
+            "label": comp.label,
+            "short": _SHORT_LABELS.get(comp.key, comp.label),
+            "unit": comp.unit,
+            "weight": comp.weight,
+            "contribution": round(cr.contribution, 2),
+            # Share of the points above baseline, not of the composite: the
+            # first 100 points are the baseline itself and belong to nobody.
+            "share": round(cr.contribution / above * 100, 1) if above > 0 else 0.0,
+            "stress": round(cr.stress, 1),
+            "current": cr.current_value,
+            "baseline": cr.baseline_value,
+            "pct_from_baseline": round(pct_change, 1) if pct_change is not None else None,
+            "direction": _direction_word(comp, pct_change),
+            # How much of the cap this component has spent. At 100 it is
+            # saturated and cannot register a further worsening — the single
+            # most important caveat on any capped composite.
+            "saturated": cr.stress >= 99.5,
+            "window_delta": round(cr.contribution - start_contribs[comp.key], 2)
+            if comp.key in start_contribs else None,
+            "week_delta": round(cr.contribution - prev_contribs[comp.key], 2)
+            if comp.key in prev_contribs else None,
+            "stale": cr.stale,
+            "manual": comp.manual,
+            "last_updated": cr.last_updated,
+        })
+    drivers.sort(key=lambda d: -d["contribution"])
+
+    movers = sorted(
+        (d for d in drivers if d["week_delta"] is not None and abs(d["week_delta"]) >= 0.05),
+        key=lambda d: -abs(d["week_delta"]),
+    )[:4]
+
+    # --- Model against readers ----------------------------------------------
+    sentiment = sentiment or {}
+    crowd = sentiment.get("index")
+    perception = {
+        "available": crowd is not None,
+        "index": crowd,
+        "votes": sentiment.get("votes") or 0,
+        "level_label": sentiment.get("level_label"),
+        "gap": round(crowd - snapshot.score, 1) if crowd is not None else None,
+        "reads": ("hotter" if crowd > snapshot.score else "cooler") if crowd is not None else None,
+        "min_votes": sentiment.get("min_votes"),
+    }
+
+    # --- Measured vs carried forward ---------------------------------------
+    stale = [d for d in drivers if d["stale"]]
+    carried = [
+        {"short": _SHORT_LABELS.get(cr.component.key, cr.component.label),
+         "last_updated": cr.last_updated,
+         "age_days": _days_old(cr.last_updated)}
+        for cr in snapshot.components if cr.carried_forward
+    ]
+    ages = [a for a in (_days_old(cr.last_updated) for cr in snapshot.components
+                        if cr.last_updated) if a is not None]
+
+    return {
+        "score": snapshot.score,
+        "level": snapshot.level_label,
+        "level_lower": snapshot.level_label.lower(),
+        "level_status": snapshot.level_status,
+        "points_above_baseline": above,
+        "scale_max": scoring.SCALE_MAX,
+        "week_start": snapshot.week_start,
+        "span_weeks": len(window),
+        "history_weeks": len(weeks),
+        "start_week": first["week_start"] if first else snapshot.week_start,
+        "start_score": start_score,
+        "window_delta": window_delta,
+        "window_direction": ("risen" if window_delta > 0
+                             else "fallen" if window_delta < 0 else "held"),
+        "week_delta": week_delta,
+        "peak": {"week": peak["week_start"], "score": peak["score"]} if peak else None,
+        "trough": {"week": trough["week_start"], "score": trough["score"]} if trough else None,
+        "off_peak": round(peak["score"] - snapshot.score, 1) if peak else None,
+        "weeks_in_band": weeks_in_band,
+        "drivers": drivers,
+        "top_driver": drivers[0] if drivers else None,
+        "movers": movers,
+        "saturated": [d for d in drivers if d["saturated"]],
+        # Two components out of seven carrying most of the move is a different
+        # index reading from seven carrying a seventh each, and the composite
+        # alone cannot tell the two apart.
+        "concentration": (round(sum(d["contribution"] for d in drivers[:2]) / above * 100)
+                          if above > 0 else 0),
+        "perception": perception,
+        "auto_weight": sum(c.weight for c in COMPONENTS if not c.manual),
+        "manual_weight": sum(c.weight for c in COMPONENTS if c.manual),
+        "auto_count": sum(1 for c in COMPONENTS if not c.manual),
+        "manual_count": sum(1 for c in COMPONENTS if c.manual),
+        "stale_weight": snapshot.stale_weight,
+        "stale": stale,
+        "carried_forward": carried,
+        "degraded": snapshot.degraded,
+        "degraded_threshold": scoring.DEGRADED_STALE_WEIGHT,
+        "oldest_days": max(ages) if ages else None,
+        "baseline_window": BASELINE_WINDOW,
+    }

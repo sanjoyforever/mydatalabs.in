@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+
+{% block title %}Lab Notes — One-off Findings from the Data | MyDataLabs{% endblock %}
+{% block meta_desc %}Lab Notes: one-off findings from MyDataLabs. Each note takes a single question, works through the numbers, and says plainly what they do and do not show.{% endblock %}
+
+{% block og_title %}Lab Notes — One-off Findings from the Data | MyDataLabs{% endblock %}
+{% block og_desc %}One-off findings: a single question, worked through the numbers, with the limits stated.{% endblock %}
+
+{% block twitter_title %}Lab Notes — One-off Findings from the Data | MyDataLabs{% endblock %}
+{% block twitter_desc %}One-off findings: a single question, worked through the numbers, with the limits stated.{% endblock %}
+
+{% block content %}
+<div class="report-dash-canvas">
+
+  <div class="elections-topbar">
+    <nav class="breadcrumb-v2" aria-label="Breadcrumb">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <span class="breadcrumb-current" aria-current="page">Lab Notes</span>
+    </nav>
+  </div>
+
+  <div class="lab-article">
+    <header class="lab-head">
+      <div class="lab-kicker">Lab Notes</div>
+      <h1>Findings from the data</h1>
+      <p class="lab-standfirst">
+        The indices measure the same thing every day, week or year. Lab Notes are different: each
+        takes a single question, works through the numbers once, and says plainly what they do and do
+        not show.
+      </p>
+    </header>
+
+    <div class="lab-body">
+      {% for n in notes %}
+      <a href="{{ n.url }}" class="lab-entry">
+        <div class="lab-kicker">{{ n.code }} &middot; {{ n.category }} &middot; {{ n.badge }}</div>
+        <h2 class="lab-entry-title">{{ n.title }}</h2>
+        <p class="lab-entry-dek">{{ n.subtitle }}</p>
+        <div class="lab-byline">
+          {% if n.author %}<span>By <strong>{{ n.author }}</strong></span>{% endif %}
+          <time datetime="{{ n.published }}">{{ n.published_label }}</time>
+          <span>{{ n.read_time }}</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

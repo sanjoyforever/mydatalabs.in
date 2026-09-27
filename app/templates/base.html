@@ -139,10 +139,25 @@
         </button>
         <div class="dropdown-menu" role="menu">
           {%- for entry in item['items'] %}
+          {%- if entry.disabled %}
+          <div class="dropdown-item is-disabled" role="menuitem" tabindex="-1">
+            <span class="dropdown-item-label">{{ entry.label }}</span>
+            {%- if entry.badge %}
+            <span class="nav-badge">{{ entry.badge }}</span>
+            {%- elif entry.ticker %}
+            <span class="dropdown-item-ticker">{{ entry.ticker }}</span>
+            {%- endif %}
+          </div>
+          {%- else %}
           <a role="menuitem" href="{{ entry.url }}"{% if entry.active %} aria-current="page" class="is-current"{% endif %}>
             <span class="dropdown-item-label">{{ entry.label }}</span>
+            {%- if entry.badge %}
+            <span class="nav-badge">{{ entry.badge }}</span>
+            {%- elif entry.ticker %}
             <span class="dropdown-item-ticker">{{ entry.ticker }}</span>
+            {%- endif %}
           </a>
+          {%- endif %}
           {%- endfor %}
         </div>
       </div>
@@ -174,10 +189,25 @@
     {%- if item.kind == 'menu' %}
     <p class="mobile-nav-group">{{ item.label }}</p>
     {%- for entry in item['items'] %}
+    {%- if entry.disabled %}
+    <div class="mobile-nav-link mobile-nav-sub is-disabled">
+      <span class="mobile-nav-label">{{ entry.label }}</span>
+      {%- if entry.badge %}
+      <span class="nav-badge">{{ entry.badge }}</span>
+      {%- elif entry.ticker %}
+      <span class="dropdown-item-ticker">{{ entry.ticker }}</span>
+      {%- endif %}
+    </div>
+    {%- else %}
     <a class="mobile-nav-link mobile-nav-sub {% if entry.active %}active{% endif %}" href="{{ entry.url }}"{% if entry.active %} aria-current="page"{% endif %}>
       <span class="mobile-nav-label">{{ entry.label }}</span>
+      {%- if entry.badge %}
+      <span class="nav-badge">{{ entry.badge }}</span>
+      {%- elif entry.ticker %}
       <span class="dropdown-item-ticker">{{ entry.ticker }}</span>
+      {%- endif %}
     </a>
+    {%- endif %}
     {%- endfor %}
     {%- else %}
     <a class="mobile-nav-link {% if item.active %}active{% endif %}" href="{{ item.url }}"{% if item.active %} aria-current="page"{% endif %}>
@@ -200,6 +230,7 @@
     </span>
     <div class="footer-right-links">
       <a href="{{ url_for('main.about') }}">About</a>
+      <a href="{{ url_for('main.lab_notes_archive') }}">Lab Notes</a>
       <a href="{{ url_for('main.terms_page') }}">Disclaimer</a>
       <a href="{{ url_for('main.hormuz_index') }}#methodology">Methodology</a>
       <a href="mailto:contact@mydatalabs.in">Contact</a>

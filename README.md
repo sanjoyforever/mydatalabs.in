@@ -265,19 +265,21 @@ python update.py --democracy         # or: python scripts/build_democracy_histor
 | Path | Purpose |
 | :--- | :--- |
 | `/` | Landing page, Featured Aviation Intelligence banner, live ticker |
-| `/airline-index` | Airline Pressure Index dashboard: trajectory, regional contribution breakdown, interactive simulator |
-| `/hormuz-index` | HMX-INDEX dashboard: gauge, trajectory, component matrix, press dispatch |
-| `/lok-sabha-index` | Lok Sabha Projection Engine: daily seat forecast + 2019/2024 backtest |
-| `/solvency-index` | USS-INDEX dashboard: 80-year trajectory, block decomposition, debt-dynamics scenario band, statutory turning points |
-| `/democracy-index` | HMDI dashboard: 30-economy rankings, live pillar reweighting, trajectories against anchor density, per-country indicator drawer, collinearity and saturation diagnostics |
+| `/indices/hormuz-crisis` | Hormuz Crisis Index (HMX) dashboard: gauge, trajectory, component matrix, press dispatch (legacy `/hormuz-index` supported) |
+| `/indices/airline-pressure` | Airline Pressure Index (API) dashboard: trajectory, regional breakdown, interactive simulator (legacy `/airline-index` supported) |
+| `/indices/us-solvency` | U.S. Sovereign Solvency Index (USS) dashboard: 80-year trajectory, block decomposition, debt-dynamics scenario band (legacy `/solvency-index` supported) |
+| `/indices/democracy-index` | Hard-Metric Democracy Index (HMDI) dashboard: 30-economy rankings, live pillar reweighting, per-country indicator drawer (legacy `/democracy-index` supported) |
+| `/india-story/lok-sabha-projection` | Lok Sabha Projection Engine (LS-PROJ): daily seat forecast + 2019/2024 backtest (legacy `/lok-sabha-index` supported) |
+| `/lab-notes` | Lab Notes research archive: data analysis, metric evaluations, and critical editorial feedback |
+| `/lab-notes/cross-cultural-metric-normalization` | Lab Note: IMDB Rating Deflation — Cross-Cultural Metric Normalization article |
 | `/about` | Why a topic is compressed into one number, the construction rules every index shares, and what a single number cannot express |
 | `/terms` | Legal disclaimers and use conditions |
-| `/methodology` | 301 to `/hormuz-index#methodology`. Kept as a redirect rather than deleted: the URL was indexed and is cited from the event log's source links |
+| `/methodology` | 301 to `/indices/hormuz-crisis#methodology` |
 | `/reports/<slug>` | "In development" placeholder for a nav category with no index yet. `noindex`, and deliberately absent from the sitemap |
 | `/admin`, `/admin/queue` | Critique moderation queue. Registered **only** when both `SECRET_KEY` and `ADMIN_PASSWORD_HASH` are set — a blueprint that cannot check a password must not be reachable |
-| `/sitemap.xml` | Eight indexable pages. `lastmod` per URL comes from the mtime of the file that backs the page (its precomputed artifact, or its template), not from today's date |
-| `/robots.txt` | Disallows `/reports/` and `/api/`. `/admin` is deliberately *not* disallowed: it answers `X-Robots-Tag: noindex`, and a path blocked in robots.txt is one a crawler may never fetch and may still list from an inbound link |
-| `/llms.txt` | Pointer file for AI answer surfaces: current HMX reading, page index, licence, and the manual-component caveat counted from the component list rather than hardcoded |
+| `/sitemap.xml` | Ten indexable pages. `lastmod` per URL comes from the mtime of the file that backs the page (its precomputed artifact, or its template), not from today's date |
+| `/robots.txt` | Disallows `/reports/` and `/api/`. `/admin` is deliberately *not* disallowed: it answers `X-Robots-Tag: noindex` |
+| `/llms.txt` | Pointer file for AI answer surfaces: current HMX reading, page index, licence, and the manual-component caveat |
 | `/favicon.ico` | Multi-resolution site favicon |
 
 There are **no public data endpoints.** The site used to serve

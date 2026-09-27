@@ -135,13 +135,60 @@ def test_absolute_monarchy_lands_in_a_bottom_tier():
     assert are["composite"] < usa["composite"] - 5
     assert are["composite"] < are["composite_arithmetic"]
     for code in ("CHN", "SAU"):
-        assert rows[code]["composite"] < 35.0, f"{code} should reach the closed-regime tier"
+        assert rows[code]["composite"] < 35.0, f"{code} should reach the lowest band"
 
 
 def test_bottom_tier_is_reachable():
-    """A tier no country can enter is a legend entry, not a classification."""
+    """A band no country can enter is a legend entry, not a classification."""
     rows = democracy.index_for_year(2024)
     assert any(r["tier"] == democracy.TIERS[-1]["label"] for r in rows)
+
+
+def test_band_labels_do_not_claim_a_regime_type():
+    """The bands describe the counted indicators. They are not a classification
+    of what kind of state a country is, and the labels must not imply one --
+    they used to borrow the EIU's vocabulary for a composite built on entirely
+    different inputs."""
+    banned = ("democracy", "democratic", "authoritarian", "regime", "flawed", "autocra")
+    for tier in democracy.TIERS:
+        low = tier["label"].lower()
+        for word in banned:
+            assert word not in low, f"band label {tier['label']!r} claims a regime type"
+
+
+# --- Due Process evidence ---------------------------------------------------
+
+
+def test_justice_evidence_flags_only_the_unreported():
+    """Derived from the panel, not keyed by hand: a country is flagged when its
+    two justice indicators rest on almost no source-backed years. The panel
+    divides sharply -- 28 countries carry 4+ anchors ending in 2024, two carry
+    one from 2000 -- so the flag must pick out exactly those two."""
+    evidence = democracy.justice_evidence()
+    thin = {code for code, v in evidence.items() if v["level"] == "thin"}
+    assert thin == {"ARE", "SAU"}, thin
+    assert all(evidence[c]["note"] for c in thin)
+    assert all(not evidence[c]["note"] for c in evidence if c not in thin)
+
+
+def test_justice_flag_does_not_move_any_score():
+    """The flag marks a pillar as unmeasured. It must not be an adjustment --
+    a country's composite is identical with and without it."""
+    rows = {r["country_code"]: r for r in democracy.index_for_year(2024)}
+    assert rows["ARE"]["justice_evidence"] == "thin"
+    assert rows["USA"]["justice_evidence"] == "ok"
+    pillars = rows["ARE"]["pillars"]
+    assert rows["ARE"]["composite"] == democracy.composite_from_pillars(pillars)
+
+
+def test_countries_annotated_carries_the_flag_to_the_page():
+    """The server-rendered table and the client re-render must read the flag
+    from one place, so it travels on the country payload."""
+    rows = {c["code"]: c for c in democracy.countries_annotated()}
+    assert len(rows) == len(democracy.COUNTRIES)
+    assert rows["SAU"]["justice_evidence"] == "thin"
+    assert rows["DEU"]["justice_evidence"] == "ok"
+    assert rows["DEU"]["justice_note"] == ""
 
 
 # --- Collinearity fix -------------------------------------------------------
@@ -371,3 +418,49 @@ def test_vdem_column_is_rendered(client):
     assert "hmdi-vdem-chip" in body
     assert "V-Dem" in body
     assert 'id="hmdi-vdem"' in body
+
+
+# --- Transfer integrity -----------------------------------------------------
+
+
+def _transfer(code, year):
+    rows = {r["country_code"]: r for r in democracy.index_for_year(year)}
+    return rows[code]["metrics"]["constitutional_transfer_integrity"]["raw"]
+
+
+def test_failed_attempts_are_scored_for_everyone():
+    """The column docked Turkey 30 points for a coup attempt that failed, then
+    recorded a flat 100 for the United States through 2021, Brazil through 2023
+    and South Korea through 2024. Whatever the rule is, it cannot be one rule
+    for Turkey and another for everyone else."""
+    assert _transfer("TUR", 2016) < _transfer("TUR", 2015)
+    assert _transfer("USA", 2021) < _transfer("USA", 2020)
+    assert _transfer("BRA", 2023) < _transfer("BRA", 2022)
+    assert _transfer("KOR", 2024) < _transfer("KOR", 2023)
+
+
+def test_unarmed_attempts_cost_less_than_armed_ones():
+    """Ordering is the whole content of the severity scale. An attempt without
+    organised armed force is a smaller deduction than one with it, which is in
+    turn smaller than a seizure that succeeded."""
+    succeeded = _transfer("THA", 2006)          # coup, -60
+    armed_failed = _transfer("TUR", 2016)       # coup attempt, -30
+    unarmed_failed = _transfer("USA", 2021)     # certification obstructed, -20
+    after_the_fact = _transfer("BRA", 2023)     # transfer already complete, -15
+    assert succeeded < armed_failed < unarmed_failed < after_the_fact < 100
+
+
+def test_recovery_is_partial_and_conditional():
+    """Points return as later transfers complete cleanly, and never all the way
+    back: a country that has had an attempt against a transfer is not a country
+    that never had one."""
+    assert _transfer("USA", 2021) < _transfer("USA", 2024) < 100
+    assert _transfer("BRA", 2023) < _transfer("BRA", 2024) < 100
+    # Turkey's conditions persisted, so it does not recover.
+    assert _transfer("TUR", 2024) <= _transfer("TUR", 2016)
+
+
+def test_severity_scale_is_ordered_and_documented():
+    deductions = [b["deduction"] for b in democracy.TRANSFER_SEVERITY]
+    assert deductions == sorted(deductions, reverse=True)
+    assert all(b["label"] for b in democracy.TRANSFER_SEVERITY)

@@ -11,6 +11,69 @@
 {% block extra_head %}
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
 
+<style>
+  /* --- Executive summary --------------------------------------------------
+     The page's one piece of long-form prose, so it follows the Democracy and
+     Solvency cards: a highlighted lede, then question blocks in two columns on
+     wide screens with the closing block spanning both. */
+  .hmx-exec { border-top: 3px solid var(--accent-blue); }
+  .hmx-exec-body { padding: var(--space-5) 0 var(--space-4); }
+  .hmx-exec-lede {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--text-main);
+    padding: var(--space-4);
+    background: var(--accent-blue-bg);
+    border-left: 4px solid var(--accent-blue);
+    border-radius: 0 var(--card-radius) var(--card-radius) 0;
+    margin: 0 0 var(--space-5);
+  }
+  .hmx-exec-lede strong { font-family: var(--font-mono); }
+  .hmx-exec-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6);
+  }
+  @media (min-width: 1024px) {
+    .hmx-exec-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6) var(--space-8);
+    }
+  }
+  .hmx-exec-q h3 {
+    font-size: 0.95rem; font-weight: 700; margin: 0 0 8px;
+    color: var(--accent-blue); line-height: 1.4;
+  }
+  .hmx-exec-q p {
+    font-size: 0.88rem; line-height: 1.7; color: var(--text-muted); margin: 0 0 10px;
+  }
+  .hmx-exec-q p strong { color: var(--text-main); }
+  .hmx-exec-bottom {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--space-4);
+  }
+  .hmx-exec-caveat {
+    font-size: 0.82rem !important; font-style: italic;
+    border-left: 3px solid var(--border-subtle); padding-left: var(--space-3);
+  }
+  .hmx-exec-list { list-style: none; margin: 0; padding: 0; }
+  .hmx-exec-list li { padding: 8px 0; border-top: 1px solid var(--border-subtle); }
+  .hmx-exec-list li:first-child { border-top: 0; }
+  .hmx-exec-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3);
+    font-size: 0.85rem; font-weight: 600;
+  }
+  .hmx-exec-delta { font-family: var(--font-mono); font-weight: 700; white-space: nowrap; }
+  .hmx-exec-delta.is-up { color: var(--accent-emerald); }
+  .hmx-exec-delta.is-down { color: var(--accent-rose); }
+  .hmx-exec-why { font-size: 0.76rem; color: var(--text-muted); line-height: 1.4; margin-top: 2px; }
+  .hmx-exec-endpoints { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 500; color: var(--text-muted); }
+  .hmx-exec-bar {
+    height: 4px; border-radius: 2px; background: var(--border-subtle);
+    margin-top: 6px; overflow: hidden; display: flex;
+  }
+  .hmx-exec-bar i { display: block; height: 100%; border-radius: 2px; }
+</style>
+
 <!-- Schema.org Dataset & Breadcrumb Structured Data -->
 <script type="application/ld+json">
 {
@@ -18,10 +81,10 @@
   "@graph": [
     {
       "@type": "Dataset",
-      "@id": "{{ origin }}/hormuz-index#dataset",
+      "@id": "{{ origin }}/indices/hormuz-crisis#dataset",
       "name": "Hormuz Crisis Index (HMX-INDEX)",
       "description": "Weekly quantitative composite index measuring geopolitical, maritime and energy-market stress in the Strait of Hormuz against a calm baseline of 100.0 (baseline window {{ baseline_window|default('2026-01-01/2026-01-31') }}). Seven weighted components covering Brent crude, ship transits, war-risk insurance, tanker freight, European gas, equity volatility and Cape of Good Hope reroutes.",
-      "url": "{{ origin }}/hormuz-index",
+      "url": "{{ origin }}/indices/hormuz-crisis",
       "keywords": ["Hormuz Crisis Index", "HMX-INDEX", "Strait of Hormuz", "war risk insurance", "tanker freight", "Brent crude", "maritime chokepoint"],
       "creator": { "@id": "{{ origin }}/#organization" },
       "publisher": { "@id": "{{ origin }}/#organization" },
@@ -52,7 +115,7 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ origin }}/" },
-        { "@type": "ListItem", "position": 2, "name": "Hormuz Crisis Index", "item": "{{ origin }}/hormuz-index" }
+        { "@type": "ListItem", "position": 2, "name": "Hormuz Crisis Index", "item": "{{ origin }}/indices/hormuz-crisis" }
       ]
     }
   ]
@@ -653,101 +716,229 @@
     and last-updated date above.
   </p>
 </section>
-  <!-- Executive Summary & Intelligence Dispatch -->
-  <section class="citation-card exec-summary-card-full" aria-labelledby="press-heading" style="margin: 20px 0 28px;">
-    <div class="citation-head">
-      <div>
-        <span class="badge-tag badge-tag-blue"><span aria-hidden="true">💡</span> EXECUTIVE SUMMARY</span>
-        <h2 id="press-heading" style="font-size: 1.25rem; font-weight: 700; margin: 4px 0;">Executive Summary &amp; Press Wire Dispatch</h2>
-        <p class="section-desc">
-          Every figure below is generated from the current index reading. News outlets and analysts may reproduce or
-          cite this summary under {{ license_name }} with attribution to MyDataLabs.
-        </p>
-      </div>
-      <button type="button" class="btn-primary" data-copy-target="press-story-container">
-        <span aria-hidden="true">📋</span> Copy full summary
-      </button>
+  <!-- Executive summary. Every figure comes from hormuz.executive_summary(),
+       which reads the live snapshot and the stored series at render time, so
+       this prose cannot drift away from the gauge above it. Same shape as the
+       Democracy and Solvency summaries: a lede, question blocks, bottom line. -->
+  <section class="components-card hmx-exec" id="hmx-exec" aria-labelledby="hmx-exec-heading" style="margin: 20px 0 28px;">
+    <div class="components-card-head">
+      <h2 id="hmx-exec-heading">
+        <span class="material-symbols-outlined" aria-hidden="true" style="vertical-align: -4px; margin-right: 6px;">summarize</span>
+        Executive Summary
+      </h2>
+      <span class="section-desc">
+        What seven components and {{ exec_summary.history_weeks }} weeks of readings add up to, in plain
+        language. Scored against the calm baseline week of
+        {{ exec_summary.baseline_window.replace('/', ' to ') }} = 100.0.
+      </span>
     </div>
 
-    <div id="press-story-container" class="press-story">
-      <div class="press-story-head">
-        <span>FOR IMMEDIATE RELEASE | EXECUTIVE SUMMARY</span>
-        <span>DATELINE: {{ press.week_start }}</span>
+    <div class="hmx-exec-body">
+
+      <div class="hmx-exec-lede">
+        The Strait scores <strong>{{ "%.1f"|format(exec_summary.score) }}</strong>
+        <span class="status-badge status-{{ exec_summary.level_status }}">{{ exec_summary.level|upper }}</span>
+        for the week of {{ exec_summary.week_start }} &mdash;
+        {{ "%.1f"|format(exec_summary.points_above_baseline) }} points above the calm baseline of 100.0, on a
+        scale whose maximum is {{ exec_summary.scale_max|int }}.
+        {% if exec_summary.span_weeks > 1 %}
+        The reading has {{ exec_summary.window_direction }}
+        <strong>{{ "%+.1f"|format(exec_summary.window_delta) }} points</strong> over
+        {{ exec_summary.span_weeks }} weeks, from {{ "%.1f"|format(exec_summary.start_score) }} in
+        {{ exec_summary.start_week }}{% if exec_summary.peak %}, and sits
+        {{ "%.1f"|format(exec_summary.off_peak) }} points off the series peak of
+        {{ "%.1f"|format(exec_summary.peak.score) }} set in {{ exec_summary.peak.week }}{% endif %}.
+        {% endif %}
+        {% if exec_summary.weeks_in_band > 1 %}
+        This is the {{ exec_summary.weeks_in_band }}th consecutive week in
+        &ldquo;{{ exec_summary.level }}&rdquo;: what the index is describing is a state, not a spike.
+        {% endif %}
+        {% if exec_summary.concentration %}
+        Two of seven components carry {{ exec_summary.concentration }}% of the stress.
+        {% endif %}
       </div>
 
-      <h3 class="press-headline">
-        Hormuz Crisis Index at {{ "%.1f"|format(press.score) }} ({{ press.level }})
-        {%- if press.driver_label %} as {{ press.driver_label }} leads weekly stress{% endif %}
-      </h3>
+      <div class="hmx-exec-grid">
 
-      <p>
-        <strong>{{ press.week_start }}</strong> — Geopolitical and maritime stress across
-        the Strait of Hormuz registered a <strong>{{ press.level_lower }} reading of
-        {{ "%.1f"|format(press.score) }}</strong> ({{ "%.1f"|format(press.points_above_baseline) }} points
-        above the 100.0 calm baseline) for the reporting week of {{ press.week_start }}, according to the
-        Hormuz Crisis Index (HMX-INDEX) published by MyDataLabs.
-      </p>
-
-      <p>
-        {% if press.driver_label %}
-        <strong>{{ press.driver_label }}</strong> was the largest contributor to the composite this week,
-        adding {{ "%.1f"|format(press.driver_points) }} points{% if press.driver_2_label %}, ahead of
-        {{ press.driver_2_label }} at {{ "%.1f"|format(press.driver_2_points) }} points{% endif %}.
-        {% endif %}
-        {% if press.traffic is not none and press.traffic_drop_pct %}
-        Commercial ship transits through the 21-nautical-mile chokepoint stand at
-        {{ "%.0f"|format(press.traffic) }} per week, {{ "%.1f"|format(press.traffic_drop_pct) }}%
-        {{ press.traffic_direction }} the baseline of {{ "%.0f"|format(press.traffic_baseline) }}.
-        {% endif %}
-        {% if press.ceasefire_months %}
-        Diplomatic truces in {{ press.ceasefire_months|join(', ') }} produced temporary operational lulls
-        without returning conditions to baseline.
-        {% endif %}
-      </p>
-
-      <p>
-        {% if press.brent is not none %}
-        Brent crude traded at <strong>${{ "%.2f"|format(press.brent) }} per barrel</strong>
-        ({{ "%.1f"|format(press.brent_change_pct|abs) }}% {{ press.brent_direction }} the
-        ${{ "%.2f"|format(press.brent_baseline) }} baseline).
-        {% endif %}
-        {% if press.war_risk is not none %}
-        Marine war-risk insurance surcharges stand at
-        <strong>{{ "%.2f"|format(press.war_risk) }}% of hull value</strong>{% if press.war_risk_multiple %},
-        {{ "%.1f"|format(press.war_risk_multiple) }} times the baseline rate{% endif %}.
-        {% endif %}
-        {% if press.reroutes %}
-        Reroutes via the Cape of Good Hope account for {{ "%.1f"|format(press.reroutes) }}% of regional traffic.
-        {% endif %}
-      </p>
-
-      <p>
-        The HMX-INDEX is a weekly composite of seven weighted market and shipping indicators scored
-        against a calm baseline week of {{ baseline_window.replace('/', ' to ') if baseline_window else 'January 2026' }}. Its full methodology, component weights and
-        cap thresholds are published on the <a href="{{ url_for('main.hormuz_index') }}#methodology" data-report-tab="methodology">Methodology tab</a>, and the underlying series is available
-        as open JSON and CSV.
-        {%- if press.degraded %}
-        MyDataLabs notes that part of the index weight is currently stale and this week's reading should
-        be treated as provisional.
-        {%- endif %}
-        <em>(Source: MyDataLabs Hormuz Crisis Index — mydatalabs.in)</em>
-      </p>
-    </div>
-
-    <div class="ticker-box">
-      <div class="ticker-body">
-        <span class="ticker-label">BROADCAST TICKER QUOTE:</span>
-        <div class="ticker-quote" id="ticker-quote-text">
-          "According to the MyDataLabs Hormuz Crisis Index (HMX-INDEX), geopolitical risk in the Strait of
-          Hormuz registered {{ snapshot.level_label }} {{ "%.1f"|format(snapshot.score) }} for the week of
-          {{ snapshot.week_start }} (baseline 100.0). Source: mydatalabs.in."
+        <!-- Q1 -->
+        <div class="hmx-exec-q">
+          <h3>What is actually driving the reading?</h3>
+          <p>
+            {% if exec_summary.top_driver %}
+            <strong>{{ exec_summary.top_driver.short }}</strong> contributes
+            {{ "%.1f"|format(exec_summary.top_driver.contribution) }} of the
+            {{ "%.1f"|format(exec_summary.points_above_baseline) }} points above baseline
+            ({{ "%.0f"|format(exec_summary.top_driver.share) }}%); the other six components account for the
+            rest. Each figure below is weight &times; stress score, so the column sums to the headline with
+            nothing left over.
+            {% endif %}
+          </p>
+          <ul class="hmx-exec-list">
+            {% for d in exec_summary.drivers %}
+            <li>
+              <div class="hmx-exec-row">
+                <span>{{ d.short }}
+                  <span class="hmx-exec-endpoints">{{ (d.weight * 100)|round|int }}% weight</span>
+                </span>
+                <span class="hmx-exec-delta is-down">{{ "%.2f"|format(d.contribution) }} pts</span>
+              </div>
+              <div class="hmx-exec-why">
+                {% if d.current is not none %}
+                {{ "%.2f"|format(d.current) }}{{ ' ' ~ d.unit if d.unit }} against a
+                {{ "%.2f"|format(d.baseline) }} baseline &mdash;
+                {{ "%.1f"|format(d.pct_from_baseline|abs) }}% {{ d.direction }} it,
+                {% endif %}
+                {{ "%.0f"|format(d.stress) }}% of its cap
+                {%- if d.saturated %} <strong>(capped &mdash; it cannot register a further worsening)</strong>{% endif %}.
+                {% if d.window_delta is not none and d.window_delta|abs >= 0.05 %}
+                {{ "%+.1f"|format(d.window_delta) }} pts over {{ exec_summary.span_weeks }} weeks.{% endif %}
+              </div>
+              <span class="hmx-exec-bar"><i style="width: {{ (d.contribution / (exec_summary.top_driver.contribution or 1) * 100)|round(1) }}%; background: {{ '#F87171' if d.stress >= 50 else '#FBBF24' }};"></i></span>
+            </li>
+            {% endfor %}
+          </ul>
+          {% if exec_summary.saturated %}
+          <p style="margin-top: 12px;">
+            Read the top of this column sceptically.
+            {% for d in exec_summary.saturated %}<strong>{{ d.short }}</strong>{% if not loop.last %} and {% endif %}{% endfor %}
+            {{ 'are' if exec_summary.saturated|length > 1 else 'is' }} at the cap, which means the composite is
+            now understating {{ 'them' if exec_summary.saturated|length > 1 else 'it' }}: a worse week in a
+            capped component moves the index not at all. The cap is what keeps one runaway series from owning
+            the whole score, and the price of it is exactly this blind spot at the top.
+          </p>
+          {% endif %}
         </div>
+
+        <!-- Q2 -->
+        <div class="hmx-exec-q">
+          <h3>What moved this week, and where is the trend?</h3>
+          <p>
+            The composite moved <strong>{{ "%+.1f"|format(exec_summary.week_delta) }} points</strong> against
+            last week.
+            {% if exec_summary.movers %}
+            {{ exec_summary.movers|length }} component{{ 's' if exec_summary.movers|length != 1 }} account for
+            it; components not listed did not move enough to matter, or were carried forward.
+            {% else %}
+            No component moved by as much as a tenth of a point &mdash; the week's values are the previous
+            week's, either because nothing changed or because nothing new was published.
+            {% endif %}
+          </p>
+          <ul class="hmx-exec-list">
+            {% for d in exec_summary.movers %}
+            <li>
+              <div class="hmx-exec-row">
+                <span>{{ d.short }}
+                  <span class="hmx-exec-endpoints">{{ "%.2f"|format(d.contribution - d.week_delta) }} &rarr; {{ "%.2f"|format(d.contribution) }} pts</span>
+                </span>
+                <span class="hmx-exec-delta {{ 'is-down' if d.week_delta > 0 else 'is-up' }}">{{ "%+.2f"|format(d.week_delta) }} pts</span>
+              </div>
+              <div class="hmx-exec-why">
+                {% if d.current is not none %}Now {{ "%.2f"|format(d.current) }}{{ ' ' ~ d.unit if d.unit }},
+                {{ "%.1f"|format(d.pct_from_baseline|abs) }}% {{ d.direction }} baseline.{% endif %}
+                {{ 'Hand-entered' if d.manual else 'Automatically fetched' }}, last refreshed
+                {{ d.last_updated or 'unknown' }}.
+              </div>
+              <span class="hmx-exec-bar"><i style="width: {{ (d.week_delta|abs / (exec_summary.movers|map(attribute='week_delta')|map('abs')|max or 1) * 100)|round(1) }}%; background: {{ '#F87171' if d.week_delta > 0 else '#34D399' }};"></i></span>
+            </li>
+            {% endfor %}
+          </ul>
+          <p style="margin-top: 12px;">
+            Over the whole series the index has run from {{ "%.1f"|format(exec_summary.trough.score) }}
+            ({{ exec_summary.trough.week }}) to {{ "%.1f"|format(exec_summary.peak.score) }}
+            ({{ exec_summary.peak.week }}). A single week's move is noise on a series this short; the band and
+            how long it has held are the readable signal.
+          </p>
+        </div>
+
+        <!-- Q3 -->
+        <div class="hmx-exec-q">
+          <h3>Does the index agree with its readers?</h3>
+          {% if exec_summary.perception.available %}
+          <p>
+            Not exactly, and the gap is the point. Readers place this week at
+            <strong>{{ "%.1f"|format(exec_summary.perception.index) }}</strong>
+            against the model's {{ "%.1f"|format(exec_summary.score) }} &mdash;
+            <strong>{{ "%+.1f"|format(exec_summary.perception.gap) }} points</strong>, so the crowd reads the
+            Strait {{ exec_summary.perception.reads }} than the components do, on
+            {{ exec_summary.perception.votes }} vote{{ 's' if exec_summary.perception.votes != 1 }}.
+          </p>
+          <p>
+            Neither number corrects the other. The composite prices seven series and knows nothing else; a
+            reader prices the headlines, the shipping notices and whatever they think happens next. When the
+            crowd runs hot against a falling composite, it is usually pricing risk the market has already
+            discounted &mdash; and occasionally it is early.
+          </p>
+          {% else %}
+          <p>
+            No published crowd reading this week: the Public Perception Index needs at least
+            {{ exec_summary.perception.min_votes or 'a handful of' }} votes before it prints, so that a
+            single ballot cannot be quoted as an opinion. The gauge above takes votes; the comparison appears
+            here once enough are in.
+          </p>
+          <p>
+            The comparison is worth having because the two numbers are built from different things. The
+            composite prices seven market and shipping series and knows nothing else; a reader prices the
+            headlines and whatever they think happens next.
+          </p>
+          {% endif %}
+        </div>
+
+        <!-- Q4 -->
+        <div class="hmx-exec-q">
+          <h3>How much of this is measured, and how much is carried forward?</h3>
+          <p>
+            <strong>{{ (exec_summary.auto_weight * 100)|round|int }}% of index weight</strong>
+            ({{ exec_summary.auto_count }} of seven components) refreshes automatically from Yahoo Finance and
+            IMF PortWatch. The remaining {{ (exec_summary.manual_weight * 100)|round|int }}% &mdash;
+            {{ exec_summary.manual_count }} components with no free API &mdash; is keyed by hand from
+            broker and exchange sources, each dated by when it was observed rather than when this page ran.
+          </p>
+          <p>
+            This week <strong>{{ (exec_summary.stale_weight * 100)|round|int }}% of weight is stale</strong>
+            against a {{ (exec_summary.degraded_threshold * 100)|round|int }}% threshold{% if exec_summary.degraded %},
+            so the composite is flagged degraded and this week's reading should be treated as provisional{% endif %}.
+            {% if exec_summary.stale %}
+            {% for d in exec_summary.stale %}<strong>{{ d.short }}</strong> (last {{ d.last_updated }}){% if not loop.last %}, {% endif %}{% endfor %}
+            {{ 'are' if exec_summary.stale|length > 1 else 'is' }} past
+            {{ 'their' if exec_summary.stale|length > 1 else 'its' }} refresh window.
+            {% endif %}
+            {% if exec_summary.carried_forward %}
+            {% for c in exec_summary.carried_forward %}<strong>{{ c.short }}</strong>{% if not loop.last %} and {% endif %}{% endfor %}
+            {{ 'were' if exec_summary.carried_forward|length > 1 else 'was' }} carried forward from the last
+            known reading rather than fetched &mdash; a value that could not be obtained is not a value that is
+            calm, so it is never reset to baseline.
+            {% endif %}
+            <a href="{{ url_for('main.hormuz_index') }}#methodology" data-report-tab="methodology">Per-component cadence and caps are in the methodology</a>.
+          </p>
+        </div>
+
+        <!-- Bottom line -->
+        <div class="hmx-exec-q hmx-exec-bottom">
+          <h3>Bottom line</h3>
+          <p>
+            The Strait is <strong>{{ exec_summary.level_lower }}</strong> and has been for
+            {{ exec_summary.weeks_in_band }} week{{ 's' if exec_summary.weeks_in_band != 1 }}, at
+            {{ "%.1f"|format(exec_summary.points_above_baseline) }} points above calm and
+            {{ "%.1f"|format(exec_summary.off_peak) }} off the peak. The stress is concentrated in
+            {% if exec_summary.top_driver %}{{ exec_summary.top_driver.short }}{% endif %}
+            {%- if exec_summary.drivers|length > 1 %} and {{ exec_summary.drivers[1].short|lower }}{% endif %},
+            and over the last {{ exec_summary.span_weeks }} weeks the reading has
+            {{ exec_summary.window_direction }} {{ "%+.1f"|format(exec_summary.window_delta) }} points.
+          </p>
+          <p class="hmx-exec-caveat">
+            None of this forecasts a closure. Five of the seven components are prices or rates, and a price is a market's
+            expectation, not an event: Brent and freight can fall while the shooting continues, and can rise on
+            a rumour that comes to nothing. The two components that count things rather than price them
+            &mdash; transits and reroutes &mdash; are the ones that say what is physically happening in the
+            Strait, and one of them is published a week in arrears. Read the composite as pressure, not as a
+            prediction.
+          </p>
+        </div>
+
       </div>
-      <button type="button" class="btn-secondary" data-copy-target="ticker-quote-text">
-        <span aria-hidden="true">📋</span> Copy ticker quote
-      </button>
     </div>
   </section>
+
 </div><!-- /#tab-dashboard -->
 
 <div id="tab-methodology" class="report-panel" role="tabpanel">

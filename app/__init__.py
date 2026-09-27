@@ -128,7 +128,7 @@ def create_app() -> Flask:
             "current_year": date.today().year,
             "ga_measurement_id": GA_MEASUREMENT_ID,
             "clarity_project_id": CLARITY_PROJECT_ID,
-            "nav_items": build_nav(request.endpoint),
+            "nav_items": build_nav(request.endpoint, request.view_args),
         }
 
     @app.after_request

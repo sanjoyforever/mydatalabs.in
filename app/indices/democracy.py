@@ -199,11 +199,13 @@ METRICS: list[dict[str, Any]] = [
         "lo": 0.0,
         "hi": 100.0,
         "source": "Comparative Constitutions Project; succession records",
-        "formula": "share of executive transfers made under constitutional rule",
+        "formula": "100 minus severity deductions for dated events; see TRANSFER_SEVERITY",
         "note": (
-            "Coups, annulled results and irregular successions pull this down; it is the one "
-            "indicator here that is a coded judgement about events rather than a published "
-            "count, and 24 of 30 countries sit at 100, so it discriminates only at the bottom."
+            "The one indicator here that is a coded judgement about events rather than a "
+            "published count. Every deduction is pinned to a dated event and graded on the "
+            "fixed severity scale in TRANSFER_SEVERITY, which includes failed attempts — "
+            "a rule the column previously applied to Turkey's 2016 coup attempt but not to "
+            "the United States, Brazil or South Korea."
         ),
     },
     {
@@ -345,19 +347,103 @@ CONTEXT_METRICS: list[dict[str, Any]] = [
 ]
 
 
+# --- Transfer integrity: the severity scale --------------------------------
+# `constitutional_transfer_integrity` is the only scored input that is not a
+# published count, so the rule behind it has to be written down or it is just a
+# set of numbers somebody liked.
+#
+# The rule: a country starts at 100 and loses points for dated events in which
+# a constitutional transfer of executive power was seized, prevented, reversed
+# or attempted against. Severity is graded on the scale below, which is not
+# invented here — it is read off the deductions the column already carried, so
+# the existing rows keep their values and the scale simply makes explicit what
+# was being done implicitly:
+#
+#   -60  Successful extra-constitutional seizure of power.
+#          Thailand 2006 (80 -> 20), Thailand 2014.
+#   -30  Failed seizure using organised armed force.
+#          Turkey 2016 (90 -> 60).
+#   -30  Constitutional self-entrenchment: removing the limit that forces a
+#        transfer at all. China 2018 (50 -> 20), Russia 2020 (50 -> 30, -20
+#        where the change was incremental rather than absolute).
+#   -20  Failed attempt to obstruct or reverse a transfer WITHOUT organised
+#        armed force. This band existed in the rule and had no entries.
+#   -15  Attack on the institutions of a transfer already completed.
+#
+# Recovery is conditional and partial, never automatic: points come back as
+# later transfers complete cleanly (Thailand 10 -> 50 after the 2019 election,
+# -> 65 by 2024) and do not come back where the conditions persist (Turkey
+# never recovers from 2016).
+#
+# THE BAND THAT WAS EMPTY
+# The -20 band is why this scale is being written down now. The column applied
+# the "failed attempts count" rule to Turkey and to nobody else, so three
+# events in the panel window were recorded as no event at all:
+#
+#   USA 2021 -> 80   6 January: organised attempt to stop the congressional
+#                    certification of a completed election. No organised armed
+#                    force, so -20 rather than Turkey's -30. Recovers to 90 by
+#                    2024 on a clean subsequent transfer, not to 100.
+#   BRA 2023 -> 85   8 January: storming of the Congress, Supreme Court and
+#                    presidential palace. -15 rather than -20 because the
+#                    transfer was already complete — Lula had been inaugurated
+#                    on 1 January — so no certification was obstructed.
+#   KOR 2024 -> 75   3 December: martial law declared by the executive and the
+#                    military deployed against the National Assembly. Worse
+#                    than the -20 band because the state's own armed forces
+#                    were used, better than Turkey's -30 because the Assembly
+#                    reversed it within hours by constitutional means and the
+#                    president was impeached eleven days later.
+#
+# Deliberately NOT scored: Bush v. Gore (2000). A transfer settled by a court
+# is a constitutional mechanism operating, not an attempt against one, and
+# scoring contested-but-lawful transfers would turn this column into a measure
+# of how bitter an election felt.
+#
+# This column remains the weakest thing in the index. It is a judgement, it is
+# keyed by hand, and 21 of 30 countries still sit at a flat 100 — which is
+# itself an assertion that nothing happened, not an observation that nothing
+# did. The scale does not fix that. It makes the assertion auditable.
+
+TRANSFER_SEVERITY: list[dict[str, Any]] = [
+    {"deduction": 60, "label": "Successful extra-constitutional seizure of power"},
+    {"deduction": 30, "label": "Failed seizure using organised armed force"},
+    {"deduction": 30, "label": "Constitutional self-entrenchment (transfer requirement removed)"},
+    {"deduction": 20, "label": "Failed attempt to obstruct or reverse a transfer, unarmed"},
+    {"deduction": 15, "label": "Attack on the institutions of a completed transfer"},
+]
+
+
 # --- Tiers -----------------------------------------------------------------
 # Cut at 80 / 65 / 50 / 35 on the composite. The bottom tier was unreachable
 # under the arithmetic mean — no country in the panel scored below 39 — which
 # is a tier that exists only in the legend. Under geometric aggregation China
 # (28.4) and Saudi Arabia (31.6) reach it, which is the calibration check that
 # the boundary is doing work.
+#
+# The bands say "countable health", not "regime type", and the labels were
+# changed to say so. They used to read "Established Democracy", "Moderate /
+# Flawed System", "Closed / Authoritarian Regime" — the Economist Intelligence
+# Unit's vocabulary, borrowed for a composite built on entirely different
+# inputs. That was a claim the arithmetic cannot support twice over: the labels
+# imported EIU's meaning without EIU's expert coding, and they described a
+# regime on the authority of ten published ratios. A country lands in the
+# bottom band because its counted indicators are poor, which is a weaker and
+# more defensible statement than calling it authoritarian.
+#
+# The cut points themselves stay where they were, and they are a choice rather
+# than a finding — round numbers, checked after the fact against where the
+# panel fell. Re-deriving them from the panel's own quintiles would swap one
+# arbitrary rule for one that silently relabels every country whenever a
+# thirty-first economy is added, so the arbitrary-but-fixed version wins. The
+# page states the cuts and lets the reader reweight underneath them.
 
 TIERS: list[dict[str, Any]] = [
-    {"lower": 80.0, "label": "Robust High-Parity Democracy", "status": "good"},
-    {"lower": 65.0, "label": "Established Democracy", "status": "good"},
-    {"lower": 50.0, "label": "Moderate / Flawed System", "status": "warning"},
-    {"lower": 35.0, "label": "Hybrid / Constrained Regime", "status": "serious"},
-    {"lower": 0.0, "label": "Closed / Authoritarian Regime", "status": "critical"},
+    {"lower": 80.0, "label": "Very high countable health", "status": "good"},
+    {"lower": 65.0, "label": "High countable health", "status": "good"},
+    {"lower": 50.0, "label": "Mixed countable health", "status": "warning"},
+    {"lower": 35.0, "label": "Low countable health", "status": "serious"},
+    {"lower": 0.0, "label": "Very low countable health", "status": "critical"},
 ]
 
 SCALE_MIN = 0.0
@@ -612,6 +698,10 @@ def score_record(record: dict, weights: Optional[dict[str, float]] = None) -> di
         "metrics": metrics,
         "context": context,
         "anchor_share": round(anchor_hits / scored_cells, 3) if scored_cells else 0.0,
+        # "thin" where the Due Process indicators are carried on almost no
+        # published years. See justice_evidence(): a low incarceration figure
+        # nobody has restated since 2000 is silence, not a finding.
+        "justice_evidence": justice_evidence().get(record["country_code"], {}).get("level", "ok"),
         # External comparator, never an input. See the V-Dem section below.
         "vdem_score": vdem_score(record["country_code"], record["year"]),
         "vdem_rank": vdem_rank(record["country_code"], record["year"]),
@@ -837,6 +927,134 @@ def anchor_coverage() -> list[dict]:
             "share": round(hits / total, 3) if total else 0.0,
         })
     out.sort(key=lambda r: r["share"])
+    return out
+
+
+# --- Justice-pillar evidence ------------------------------------------------
+# The Due Process pillar has a failure mode the other four do not. Both of its
+# indicators are `better: low`, and both can be low for two opposite reasons:
+# a state genuinely detains few people, or a state does not publish what it
+# does. A country that stopped reporting to the World Prison Brief in 2000 is
+# carried flat for twenty-four years and scores as though nothing happened.
+#
+# This is not corrected in the score, and deliberately so. Adjusting the
+# incarceration rate for national income was considered and rejected: the
+# failure here is unreliable reporting, not poverty, and the panel does not
+# support the premise anyway — the United States is the richest economy in the
+# sample and holds its worst incarceration rate. A GDP-normalised score would
+# mostly hand wealthy carceral states a discount, and it would abandon the
+# fixed absolute bounds the whole index rests on for a grade against a curve.
+#
+# What is corrected is the silence. The flag below is derived from the panel
+# itself — how many distinct years carry a source-backed value for each justice
+# indicator, and how recent the newest one is — so it introduces no new keyed
+# judgement about any country. The distribution is starkly bimodal: 28 of 30
+# countries carry 4-7 anchors per justice indicator with the newest in 2024,
+# while the United Arab Emirates and Saudi Arabia carry exactly one, in 2000.
+# Those two are precisely the rows where a low reported incarceration rate is
+# least likely to mean few people detained, and the data says so without anyone
+# having to assert it.
+#
+# The flag marks the pillar as thinly evidenced. It does not claim to know what
+# the unreported number is.
+
+JUSTICE_METRICS = [m["key"] for m in METRICS if m["pillar"] == "justice_rule_of_law"]
+
+# A metric carried on this many distinct anchor years or fewer is a flat line
+# with a value attached, not a series. Set at 2 because the panel divides at 1
+# vs 4 with nothing in between; it is a floor detector, not a fine gradation.
+JUSTICE_MIN_ANCHORS = 2
+
+# ...and one whose newest anchor is this many years behind the panel's end has
+# stopped being a current reading whatever its density.
+JUSTICE_STALE_YEARS = 10
+
+_justice_cache: Optional[dict] = None
+
+
+def justice_evidence() -> dict[str, dict]:
+    """Per-country evidence quality for the two Due Process indicators.
+
+    `level` is "thin" where at least one justice indicator is carried on
+    JUSTICE_MIN_ANCHORS anchors or fewer, or where its newest anchor is more
+    than JUSTICE_STALE_YEARS behind the panel end; "ok" otherwise.
+    """
+    global _justice_cache
+    with _history_lock:
+        if _justice_cache is not None:
+            return _justice_cache
+
+    years = available_years()
+    end = years[-1] if years else 0
+
+    seen: dict[tuple[str, str], list[int]] = {}
+    for record in _records():
+        anchored = set(record.get("anchored") or [])
+        for key in JUSTICE_METRICS:
+            if key in anchored:
+                seen.setdefault((record["country_code"], key), []).append(record["year"])
+
+    out: dict[str, dict] = {}
+    for country in COUNTRIES:
+        code = country["code"]
+        metrics: dict[str, dict] = {}
+        thin = False
+        for key in JUSTICE_METRICS:
+            anchor_years = sorted(seen.get((code, key), []))
+            last = anchor_years[-1] if anchor_years else None
+            sparse = len(anchor_years) <= JUSTICE_MIN_ANCHORS
+            stale = last is None or (end - last) > JUSTICE_STALE_YEARS
+            thin = thin or sparse or stale
+            metrics[key] = {
+                "anchors": len(anchor_years),
+                "last_year": last,
+                "sparse": sparse,
+                "stale": stale,
+            }
+
+        if thin:
+            worst = min(
+                (m for m in metrics.values()),
+                key=lambda m: (m["anchors"], m["last_year"] or 0),
+            )
+            note = (
+                "Due Process rests on {n} source-backed year{s} for this country"
+                "{last}. Both of its indicators score a low reported figure as good, so a "
+                "country that stopped publishing scores as though nothing changed. Read this "
+                "pillar as unmeasured rather than healthy."
+            ).format(
+                n=worst["anchors"],
+                s="" if worst["anchors"] == 1 else "s",
+                last=(", the most recent %d" % worst["last_year"]) if worst["last_year"] else "",
+            )
+        else:
+            note = ""
+
+        out[code] = {
+            "level": "thin" if thin else "ok",
+            "note": note,
+            "metrics": metrics,
+        }
+
+    with _history_lock:
+        _justice_cache = out
+    return out
+
+
+def countries_annotated() -> list[dict[str, Any]]:
+    """COUNTRIES with the justice-evidence flag merged in.
+
+    Served to the page in place of COUNTRIES so the server-rendered table and
+    the client re-render read the flag from one place.
+    """
+    evidence = justice_evidence()
+    out = []
+    for country in COUNTRIES:
+        row = dict(country)
+        flag = evidence.get(country["code"], {})
+        row["justice_evidence"] = flag.get("level", "ok")
+        row["justice_note"] = flag.get("note", "")
+        out.append(row)
     return out
 
 

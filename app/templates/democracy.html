@@ -20,10 +20,10 @@
   "@graph": [
     {
       "@type": "Dataset",
-      "@id": "{{ origin }}/democracy-index#dataset",
+      "@id": "{{ origin }}/indices/democracy-index#dataset",
       "name": "Hard-Metric Democracy Index (HMDI)",
       "description": "Annual composite democracy index for the 30 largest economies, 2000-{{ year }}, built exclusively from published counts, rates and electoral mathematics: voter turnout against voting-age population, Gallagher disproportionality, legislative Herfindahl-Hirschman concentration, women's legislative share, income Gini, internet shutdown person-hours per capita, journalists imprisoned per 10M, pre-trial detention share and incarceration rate. Five pillars aggregated by weighted geometric mean.",
-      "url": "{{ origin }}/democracy-index",
+      "url": "{{ origin }}/indices/democracy-index",
       "keywords": ["democracy index", "voter turnout", "Gallagher index", "electoral disproportionality", "legislative concentration", "income inequality", "internet shutdowns", "pre-trial detention", "comparative politics"],
       "creator": { "@id": "{{ origin }}/#organization" },
       "publisher": { "@id": "{{ origin }}/#organization" },
@@ -47,7 +47,7 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ origin }}/" },
-        { "@type": "ListItem", "position": 2, "name": "Hard-Metric Democracy Index", "item": "{{ origin }}/democracy-index" }
+        { "@type": "ListItem", "position": 2, "name": "Hard-Metric Democracy Index", "item": "{{ origin }}/indices/democracy-index" }
       ]
     }
   ]
@@ -170,6 +170,15 @@
     display: inline-block; width: 30px; height: 16px; border-radius: 3px;
     font-size: 0.6rem; line-height: 16px; text-align: center; font-family: var(--font-mono);
     color: #0B1220; font-weight: 700; margin-right: 2px;
+  }
+  /* A pillar carried on almost no published years. Hatched rather than
+     recoloured: the cell must still show its score and its pillar colour, and
+     the mark has to say "do not trust this number" without implying the score
+     itself was adjusted. */
+  .hmdi-pill-cells span.is-unevidenced {
+    background-image: repeating-linear-gradient(
+      135deg, rgba(11, 18, 32, 0.55) 0 2px, transparent 2px 5px);
+    outline: 1px dashed var(--accent-amber); outline-offset: 1px;
   }
 
   /* Column sizing. `table-layout: fixed` plus a colgroup is what stops a
@@ -601,7 +610,7 @@
               <th>Pillars</th>
               <th data-sort="vdem" class="hmdi-vdem-col" style="text-align:right;"
                   title="V-Dem Liberal Democracy Index rank within these thirty. Expert-coded, not an input to this index.">V-Dem&nbsp;#<span class="hmdi-sort-caret"> ▲</span></th>
-              <th data-sort="tier">Classification<span class="hmdi-sort-caret"> ▲</span></th>
+              <th data-sort="tier" title="Score band on the counted indicators. Not a regime classification.">Band<span class="hmdi-sort-caret"> ▲</span></th>
               <th data-sort="anchor" style="text-align:right;">On source<span class="hmdi-sort-caret"> ▲</span></th>
             </tr>
           </thead>
@@ -625,7 +634,9 @@
                 </div>
               </td>
               <td class="hmdi-pill-cells">
-                {% for p in pillars %}<span title="{{ p.label }}: {{ '%.1f'|format(row.pillars[p.key]) }}"
+                {% for p in pillars %}{% set flagged = p.key == 'justice_rule_of_law' and row.justice_evidence == 'thin' %}<span
+                  class="{{ 'is-unevidenced' if flagged }}"
+                  title="{{ p.label }}: {{ '%.1f'|format(row.pillars[p.key]) }}{% if flagged %} — thinly evidenced; this pillar is carried on almost no published years for this country{% endif %}"
                   style="background: {{ p.color }}; opacity: {{ 0.25 + 0.75 * (row.pillars[p.key] / 100) }};">{{ row.pillars[p.key]|round|int }}</span>{% endfor %}
               </td>
               <td class="hmdi-num hmdi-vdem-col">
@@ -641,9 +652,25 @@
         </table>
       </div>
       <p class="components-footnote">
+        The <em>Band</em> column is a band of the composite score &mdash; cut at
+        {{ "%.0f"|format(tiers[0].lower) }}, {{ "%.0f"|format(tiers[1].lower) }},
+        {{ "%.0f"|format(tiers[2].lower) }} and {{ "%.0f"|format(tiers[3].lower) }} &mdash; and
+        nothing more. It is <strong>not a regime classification</strong>: it says the counted
+        indicators in this index look healthy or poor, not that a country is or is not a
+        democracy. The cut points are a choice, not a finding, and a country a tenth of a point
+        either side of one is the same country.
+        <br>
         The <em>On source</em> column is the share of that row's ten indicators anchored to a
         published figure for that year rather than interpolated from neighbouring years. A row at
         20% is four-fifths inference; read its score accordingly.
+        <br>
+        A <strong>hatched pillar cell</strong> marks Due&nbsp;Process as thinly evidenced: both of
+        its indicators score a low reported figure as good, so a country that stopped publishing
+        prison statistics scores as though nothing changed. The mark is derived from how many
+        source-backed years that country has for those two indicators &mdash; 28 of 30 carry four
+        or more with the newest in {{ years[-1] }}; the hatched rows carry one, from {{ years[0] }}.
+        The score is not adjusted, because the fix for missing data is not a different number.
+        Read a hatched pillar as unmeasured rather than healthy.
         <br>
         The grey <em>V-Dem&nbsp;#</em> column is that country's rank on V-Dem's expert-coded
         Liberal Democracy Index <em>within these same thirty</em> (its 0&ndash;1 score beneath it),
@@ -803,8 +830,8 @@
               {% endfor %}
             </ul>
             <p style="margin-top: 12px;">
-              {{ exec_summary.tier_changes|length }} of {{ exec_summary.n }} economies changed tier over the
-              decade. A tier change is a threshold being crossed, not a transformation: a country a tenth of a
+              {{ exec_summary.tier_changes|length }} of {{ exec_summary.n }} economies changed band over the
+              decade. A band change is a threshold being crossed, not a transformation: a country a tenth of a
               point either side of {{ "%.0f"|format(tiers[1].lower) }} is the same country.
             </p>
           </div>
@@ -1356,6 +1383,12 @@
           A state that detains outside the prison system, or reports partially, scores as though it
           detains little. The pillar reads as carceral burden where statistics are credible and as
           an artefact where they are not — which is exactly backwards from where it is most needed.
+          The table now hatches the Due&nbsp;Process cell where a country's justice indicators rest
+          on almost no published years, so silence is visible instead of scoring as good. The score
+          is left alone: the flag says the number is unevidenced, not that it should be a different
+          number. Normalising incarceration by national income was considered and rejected &mdash;
+          the failure is unreliable reporting rather than poverty, and the panel refuses the premise
+          anyway, since the richest economy here holds the worst rate.
         </li>
         <li>
           <strong>More parties is treated as more plural.</strong> Legislative concentration scores
@@ -1365,8 +1398,16 @@
         </li>
         <li>
           <strong>Transfer integrity is the one coded judgement here.</strong> It is a scored
-          reading of historical events rather than a published count, and 24 of 30 countries sit at
-          100, so it discriminates only at the bottom of the panel.
+          reading of historical events rather than a published count. Deductions are pinned to
+          dated events and graded on a fixed severity scale &mdash; a successful seizure of power
+          costs 60 points, a failed one using organised armed force 30, a failed attempt without
+          it 20 &mdash; and the scale counts attempts that failed. It did not always: the column
+          docked Turkey 30 points for the failed coup of 2016 while recording a flat 100 for the
+          United States through 6&nbsp;January 2021, Brazil through 8&nbsp;January 2023 and South
+          Korea through the martial law declaration of 3&nbsp;December 2024. Those three are now
+          scored on the same rule as Turkey. 21 of 30 countries still sit at a flat 100, which is
+          an assertion that nothing happened rather than an observation that nothing did, and this
+          remains the weakest column in the index.
         </li>
         <li>
           <strong>Zero turnout is recorded as a zero, not as an absence.</strong> Years in which a

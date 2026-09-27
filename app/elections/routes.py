@@ -45,7 +45,8 @@ from app.elections.engine.paths import (
 
 bp = Blueprint("elections", __name__)
 
-PAGE_URL = "/lok-sabha-index"
+PAGE_URL = "/india-story/lok-sabha-projection"
+LEGACY_PAGE_URL = "/lok-sabha-index"
 API_PREFIX = "/api/lok-sabha-index"
 
 MAJORITY = 272
@@ -340,6 +341,7 @@ def _get_insights_data():
 
 
 @bp.route(PAGE_URL)
+@bp.route(LEGACY_PAGE_URL)
 def lok_sabha_index():
     from app.routes import _cached, _common
 
@@ -401,6 +403,12 @@ def lok_sabha_index():
         ),
     )
     return _cached(Response(html, mimetype="text/html"))
+
+
+@bp.route("/india-story")
+def india_story_overview():
+    from flask import redirect
+    return redirect(PAGE_URL, code=302)
 
 
 def _daily_forecast_rows():

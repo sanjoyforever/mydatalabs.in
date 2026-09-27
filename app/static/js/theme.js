@@ -2,6 +2,9 @@
   "use strict";
 
   var root = document.documentElement;
+  // Lets CSS tell the enhanced document from the no-JS one (see the
+  // dropdown fallback in style.css).
+  root.classList.add("js");
 
   // --- Analytics -------------------------------------------------------
   // Safe GA4 tracking wrapper — delegates to global window.trackEvent or gtag
@@ -148,9 +151,16 @@
   }
 
   // --- Indices dropdown -----------------------------------------------------
-  // Previously CSS :hover / :focus-within only, which left keyboard users
-  // unable to open it: the button had no handler, so Enter and Space did
-  // nothing and Escape could not close it.
+  // Pointer users expect the menu to open on hover and to survive the trip
+  // down to it; keyboard and touch users need a click/Enter toggle. Doing the
+  // hover half in CSS made those two fight each other, so both halves now set
+  // the same .is-open class from here.
+  var HOVER_CLOSE_DELAY = 200;   // forgives a pointer that clips a corner
+  var HOVER_OPEN_DELAY = 60;     // ignores a pointer merely passing through
+  var canHover = window.matchMedia
+    ? window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    : false;
+
   var dropdowns = Array.prototype.slice.call(document.querySelectorAll(".dropdown"));
 
   function closeDropdown(dd) {
@@ -159,30 +169,110 @@
     if (btn) btn.setAttribute("aria-expanded", "false");
   }
 
+  function openDropdown(dd) {
+    // Two menus open at once is never what was meant.
+    dropdowns.forEach(function (other) {
+      if (other !== dd) closeDropdown(other);
+    });
+    dd.classList.add("is-open");
+    var btn = dd.querySelector(".dropdown-toggle");
+    if (btn) btn.setAttribute("aria-expanded", "true");
+  }
+
   dropdowns.forEach(function (dd) {
     var btn = dd.querySelector(".dropdown-toggle");
     if (!btn) return;
 
+    var items = Array.prototype.slice.call(dd.querySelectorAll(".dropdown-menu a"));
+    var openTimer = null;
+    var closeTimer = null;
+
+    function cancelTimers() {
+      if (openTimer) { clearTimeout(openTimer); openTimer = null; }
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    }
+
+    function focusItem(i) {
+      if (!items.length) return;
+      var next = (i + items.length) % items.length;
+      items[next].focus();
+    }
+
+    if (canHover) {
+      dd.addEventListener("mouseenter", function () {
+        cancelTimers();
+        openTimer = setTimeout(function () { openDropdown(dd); }, HOVER_OPEN_DELAY);
+      });
+
+      dd.addEventListener("mouseleave", function () {
+        cancelTimers();
+        closeTimer = setTimeout(function () { closeDropdown(dd); }, HOVER_CLOSE_DELAY);
+      });
+    }
+
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
-      var isOpen = dd.classList.toggle("is-open");
-      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      cancelTimers();
+      var isOpen = dd.classList.contains("is-open");
       if (isOpen) {
-        var first = dd.querySelector(".dropdown-menu a");
-        if (first) first.focus();
+        closeDropdown(dd);
+      } else {
+        openDropdown(dd);
+        // Only pull focus into the menu when the click came from the keyboard
+        // (detail 0 means no pointer); yanking focus out from under a mouse
+        // user makes the next Tab start from the wrong place.
+        if (e.detail === 0) focusItem(0);
+      }
+    });
+
+    btn.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown" || e.key === "Down") {
+        e.preventDefault();
+        cancelTimers();
+        openDropdown(dd);
+        focusItem(0);
       }
     });
 
     dd.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" || e.key === "Esc") {
+        cancelTimers();
         closeDropdown(dd);
         btn.focus();
+        return;
+      }
+      var i = items.indexOf(document.activeElement);
+      if (i === -1) return;
+      if (e.key === "ArrowDown" || e.key === "Down") {
+        e.preventDefault();
+        focusItem(i + 1);
+      } else if (e.key === "ArrowUp" || e.key === "Up") {
+        e.preventDefault();
+        focusItem(i - 1);
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        focusItem(0);
+      } else if (e.key === "End") {
+        e.preventDefault();
+        focusItem(items.length - 1);
       }
     });
 
     // Tabbing out of the menu closes it.
     dd.addEventListener("focusout", function (e) {
-      if (!dd.contains(e.relatedTarget)) closeDropdown(dd);
+      if (!dd.contains(e.relatedTarget)) {
+        cancelTimers();
+        closeDropdown(dd);
+      }
+    });
+
+    // Following a link should not leave the menu hanging open behind the new
+    // page in browsers that restore the old DOM from bfcache.
+    items.forEach(function (a) {
+      a.addEventListener("click", function () {
+        cancelTimers();
+        closeDropdown(dd);
+      });
     });
   });
 

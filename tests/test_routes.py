@@ -27,9 +27,13 @@ def test_sitemap_contains_only_visible_pages(client):
 
     # Must contain visible pages
     assert "<loc>https://mydatalabs.in/</loc>" in xml_data
-    assert "<loc>https://mydatalabs.in/airline-index</loc>" in xml_data
-    assert "<loc>https://mydatalabs.in/hormuz-index</loc>" in xml_data
-    assert "<loc>https://mydatalabs.in/lok-sabha-index</loc>" in xml_data
+    assert "<loc>https://mydatalabs.in/indices/airline-pressure</loc>" in xml_data
+    assert "<loc>https://mydatalabs.in/indices/hormuz-crisis</loc>" in xml_data
+    assert "<loc>https://mydatalabs.in/indices/us-solvency</loc>" in xml_data
+    assert "<loc>https://mydatalabs.in/indices/democracy-index</loc>" in xml_data
+    assert "<loc>https://mydatalabs.in/india-story/lok-sabha-projection</loc>" in xml_data
+    assert "<loc>https://mydatalabs.in/lab-notes</loc>" in xml_data
+    assert "<loc>https://mydatalabs.in/lab-notes/cross-cultural-metric-normalization</loc>" in xml_data
     assert "<loc>https://mydatalabs.in/about</loc>" in xml_data
     assert "<loc>https://mydatalabs.in/terms</loc>" in xml_data
 
@@ -214,37 +218,57 @@ def test_nav_reaches_every_live_index_and_has_no_dead_links(client):
     assert 'href="#"' not in header
 
 
-def test_india_is_top_level_and_not_inside_the_indices_menu(client):
-    """India is its own section, not one more row in the Indices dropdown."""
+def test_india_story_and_indices_menu_structure(client):
+    """Indices, India Story and Lab Notes are distinct dropdown sections."""
     from app.routes import build_nav
 
     nav = {item["label"]: item for item in build_nav("main.home")}
     assert [item["label"] for item in build_nav("main.home")] == [
-        "Home", "Indices", "India", "About",
+        "Home", "Indices", "India Story", "Lab Notes", "About",
     ]
-    assert nav["India"]["kind"] == "link"
-    assert nav["India"]["url"] == "/lok-sabha-index"
     assert nav["Indices"]["kind"] == "menu"
-    assert "/lok-sabha-index" not in {i["url"] for i in nav["Indices"]["items"]}
+    assert nav["India Story"]["kind"] == "menu"
+    assert nav["Lab Notes"]["kind"] == "menu"
+    assert nav["Home"]["kind"] == "link"
+    assert nav["About"]["kind"] == "link"
 
+    # Lok Sabha is NOT in Indices dropdown
+    assert "/india-story/lok-sabha-projection" not in {i.get("url") for i in nav["Indices"]["items"]}
+    assert "/lok-sabha-index" not in {i.get("url") for i in nav["Indices"]["items"]}
 
-def test_a_group_collapses_to_a_link_and_disappears_when_empty(monkeypatch):
-    """A dropdown in front of one page is a click and a hover for nothing, and
-    a menu with nothing live behind it is how the dead "Global" link lasted."""
-    from app import routes
+    # Indices dropdown has exactly the 4 requested indices
+    assert len(nav["Indices"]["items"]) == 4
+    assert [i["label"] for i in nav["Indices"]["items"]] == [
+        "Hormuz Crisis Index",
+        "Airline Pressure Index",
+        "U.S. Sovereign Solvency Index",
+        "Hard-Metric Democracy Index",
+    ]
 
-    monkeypatch.setattr(
-        routes, "REPORTS",
-        [r for r in routes.REPORTS if r["nav_group"] == "indices"][:1],
-    )
-    labels = {item["label"]: item for item in routes.build_nav("main.home")}
-    assert "India" not in labels
-    assert labels["Indices"]["kind"] == "link"
+    # India Story dropdown has Lok Sabha + 2 upcoming items
+    assert [i["label"] for i in nav["India Story"]["items"]] == [
+        "Lok Sabha Projection Engine",
+        "State Assembly Swing Models",
+        "India Macro & Capex Tracker",
+    ]
+    assert nav["India Story"]["items"][0]["url"] == "/india-story/lok-sabha-projection"
+    assert nav["India Story"]["items"][1]["badge"] == "Upcoming"
+    assert nav["India Story"]["items"][1]["disabled"] is True
+    assert nav["India Story"]["items"][2]["badge"] == "Upcoming"
+    assert nav["India Story"]["items"][2]["disabled"] is True
+
+    # Lab Notes dropdown is built from LAB_NOTES: latest notes, then the archive
+    assert [i["label"] for i in nav["Lab Notes"]["items"]] == [
+        "IMDb Rating Deflation",
+        "All Lab Notes",
+    ]
+    assert nav["Lab Notes"]["items"][0]["url"] == "/lab-notes/cross-cultural-metric-normalization"
+    assert nav["Lab Notes"]["items"][1]["url"] == "/lab-notes"
 
 
 @pytest.mark.parametrize(
     "path,label",
-    [("/", "Home"), ("/lok-sabha-index", "India"), ("/about", "About")],
+    [("/", "Home"), ("/about", "About")],
 )
 def test_nav_marks_the_current_page(client, path, label):
     header = _header(client.get(path).get_data(as_text=True))
@@ -253,19 +277,78 @@ def test_nav_marks_the_current_page(client, path, label):
     assert header.count('aria-current="page"') >= 1
 
 
-def test_index_pages_mark_the_indices_menu_active(client):
-    """An index inside the dropdown still has to light its parent up."""
-    header = _header(client.get("/hormuz-index").get_data(as_text=True))
-    assert "dropdown-toggle active" in header
-    assert 'href="/hormuz-index" aria-current="page" class="is-current"' in header
+def test_dropdown_active_states(client):
+    """Dropdown menus light up when their child pages are active."""
+    # Indices dropdown active on Hormuz
+    header_indices = _header(client.get("/indices/hormuz-crisis").get_data(as_text=True))
+    assert "dropdown-toggle active" in header_indices
+    assert 'href="/indices/hormuz-crisis" aria-current="page" class="is-current"' in header_indices
+
+    # India Story dropdown active on Lok Sabha
+    header_india = _header(client.get("/india-story/lok-sabha-projection").get_data(as_text=True))
+    assert "dropdown-toggle active" in header_india
+    assert 'href="/india-story/lok-sabha-projection" aria-current="page" class="is-current"' in header_india
+
+    # Lab Notes dropdown active on IMDB note
+    header_lab = _header(client.get("/lab-notes/cross-cultural-metric-normalization").get_data(as_text=True))
+    assert "dropdown-toggle active" in header_lab
+    assert 'href="/lab-notes/cross-cultural-metric-normalization" aria-current="page" class="is-current"' in header_lab
+
+    # Lab Notes dropdown active on Archive
+    header_lab_arc = _header(client.get("/lab-notes").get_data(as_text=True))
+    assert "dropdown-toggle active" in header_lab_arc
+    assert 'href="/lab-notes" aria-current="page" class="is-current"' in header_lab_arc
 
 
 def test_every_page_including_errors_carries_the_nav(client):
     """404 and 500 render outside a route context, and are the pages a visitor
     most needs a way off — so the nav is injected app-wide, not per-route."""
-    for path in ("/", "/hormuz-index", "/lok-sabha-index", "/about", "/no-such-page"):
+    for path in ("/", "/indices/hormuz-crisis", "/india-story/lok-sabha-projection", "/lab-notes", "/about", "/no-such-page"):
         header = _header(client.get(path).get_data(as_text=True))
         assert 'aria-label="Primary"' in header
         # And the drawer, which is the only navigation below 900px.
         assert 'id="mobile-nav"' in header
-        assert "/lok-sabha-index" in header
+        assert "/india-story/lok-sabha-projection" in header
+
+
+def test_legacy_routes_resolve(client):
+    """Legacy routes continue to resolve so existing links and bookmarks work."""
+    for path in ("/hormuz-index", "/airline-index", "/solvency-index", "/democracy-index", "/lok-sabha-index"):
+        resp = client.get(path)
+        assert resp.status_code in (200, 301, 302)
+
+
+def test_lab_notes_article_and_archive(client):
+    """Lab Notes archive and article render from the LAB_NOTES registry."""
+    res_arc = client.get("/lab-notes")
+    assert res_arc.status_code == 200
+    arc_text = res_arc.get_data(as_text=True)
+    assert "Why Raw Scores Lie" in arc_text
+    assert "/lab-notes/cross-cultural-metric-normalization" in arc_text
+    assert "Sanjoy" not in arc_text
+
+    res_art = client.get("/lab-notes/cross-cultural-metric-normalization")
+    assert res_art.status_code == 200
+    art_text = res_art.get_data(as_text=True)
+    assert "Sanjoy" not in art_text
+    assert "Why Raw Scores Lie" in art_text
+    assert "Heart of the Beast" in art_text
+    # The example is illustrative, and the page has to say so up front.
+    assert "worked example, not a measured study" in art_text
+    assert '"datePublished": "2026-09-27"' in art_text
+    # No leftover LaTeX or markdown from the first draft.
+    for junk in ("\text{", "$N$", "*Hochdeutsch*"):
+        assert junk not in art_text
+
+
+def test_unknown_lab_note_is_404(client):
+    assert client.get("/lab-notes/no-such-note").status_code == 404
+
+
+def test_every_lab_note_is_in_sitemap_and_llms(client):
+    from app.routes import LAB_NOTES
+    xml = client.get("/sitemap.xml").get_data(as_text=True)
+    llms = client.get("/llms.txt").get_data(as_text=True)
+    for n in LAB_NOTES:
+        assert f"https://mydatalabs.in{n['url']}</loc>" in xml
+        assert n["url"] in llms

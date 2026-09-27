@@ -44,12 +44,23 @@ NAV_CATEGORIES = [
 
 REPORTS = [
     {
+        "slug": "hormuz-index",
+        "title": "Hormuz Crisis Index",
+        "ticker": "HMX",
+        "blurb": "Weekly composite index tracking geopolitical stress, vessel traffic disruption, and insurance risk in the Strait of Hormuz.",
+        "category": "Geo Politics",
+        "url": "/indices/hormuz-crisis",
+        "endpoint": "main.hormuz_index",
+        "nav_group": "indices",
+        "live": True,
+    },
+    {
         "slug": "airline-index",
         "title": "Airline Pressure Index",
-        "ticker": "API-INDEX",
+        "ticker": "API",
         "blurb": "Weekly composite index tracking jet fuel crack spreads, fleet grounding, ATC delays, and geopolitical detours across global aviation.",
         "category": "Maritime & Supply",
-        "url": "/airline-index",
+        "url": "/indices/airline-pressure",
         "endpoint": "main.airline_index",
         "nav_group": "indices",
         "live": True,
@@ -57,22 +68,11 @@ REPORTS = [
     {
         "slug": "solvency-index",
         "title": "U.S. Sovereign Solvency Index",
-        "ticker": "USS-INDEX",
+        "ticker": "USS",
         "blurb": "Eighty-year annual composite of U.S. federal debt, interest burden, primary deficit, productivity and r−g, with debt dynamics projected as a scenario band.",
         "category": "Financial Stress",
-        "url": "/solvency-index",
+        "url": "/indices/us-solvency",
         "endpoint": "main.solvency_index",
-        "nav_group": "indices",
-        "live": True,
-    },
-    {
-        "slug": "hormuz-index",
-        "title": "Hormuz Crisis Index",
-        "ticker": "HMX-INDEX",
-        "blurb": "Weekly composite index tracking geopolitical stress, vessel traffic disruption, and insurance risk in the Strait of Hormuz.",
-        "category": "Geo Politics",
-        "url": "/hormuz-index",
-        "endpoint": "main.hormuz_index",
         "nav_group": "indices",
         "live": True,
     },
@@ -82,7 +82,7 @@ REPORTS = [
         "ticker": "HMDI",
         "blurb": "Ten published counts and rates — turnout, seat proportionality, legislative concentration, inequality, shutdowns, detention — scored across the top 30 economies for every year since 2000, with no expert survey anywhere in it.",
         "category": "Geo Politics",
-        "url": "/democracy-index",
+        "url": "/indices/democracy-index",
         "endpoint": "main.democracy_index",
         "nav_group": "indices",
         "live": True,
@@ -93,7 +93,7 @@ REPORTS = [
         "ticker": "LS-PROJ",
         "blurb": "Daily 543-seat Lok Sabha projection from CVoter's option-level public opinion trackers, calibrated on the 2019 and 2024 general election results.",
         "category": "Geo Politics",
-        "url": "/lok-sabha-index",
+        "url": "/india-story/lok-sabha-projection",
         "endpoint": "elections.lok_sabha_index",
         "nav_group": "india",
         "live": True,
@@ -139,13 +139,95 @@ ABOUT_INDEX_NOTES = {
 # that read globally; India is its own top-level section rather than one more
 # row in that menu, because it is a separate audience arriving for a separate
 # reason, and burying it one hover deep would cost it the traffic.
+# second note needs one entry here and one template — nothing else.
+# Newest first.
+LAB_NOTES = [
+    {
+        "slug": "cross-cultural-metric-normalization",
+        "template": "lab_notes/imdb_deflation.html",
+        "number": 1,
+        "code": "LN-01",
+        "title": "Why Raw Scores Lie: The “Continental Discount” in Film Ratings",
+        "nav_label": "IMDb Rating Deflation",
+        "subtitle": (
+            "Hollywood films score lower in France and Germany than on IMDb. "
+            "How much of that gap is taste, and how much is just a different "
+            "rating scale?"
+        ),
+        "category": "Measurement",
+        "tags": ["Measurement", "Normalization", "Ratings"],
+        "published": "2026-09-27",
+        "updated": "2026-09-27",
+        "read_time": "8 min read",
+        "badge": "Worked example",
+    },
+]
+
+LAB_NOTES_NAV_LIMIT = 3
+
+for _note in LAB_NOTES:
+    _note["url"] = f"/lab-notes/{_note['slug']}"
+    _note["published_label"] = datetime.strptime(
+        _note["published"], "%Y-%m-%d").strftime("%d %b %Y").lstrip("0")
+
+
+def _lab_note_nav_items(endpoint, view_args):
+    """Latest notes plus the archive link, for the Lab Notes menu."""
+    current = (view_args or {}).get("slug") if endpoint == "main.lab_note" else None
+    items = [
+        {
+            "label": n["nav_label"],
+            "ticker": n["code"],
+            "url": n["url"],
+            "active": n["slug"] == current,
+        }
+        for n in LAB_NOTES[:LAB_NOTES_NAV_LIMIT]
+    ]
+    items.append({
+        "label": "All Lab Notes",
+        "ticker": "ARCHIVE",
+        "url": "/lab-notes",
+        "active": endpoint == "main.lab_notes_archive",
+    })
+    return items
+
+
 NAV_GROUPS = [
-    {"group": "indices", "label": "Indices", "icon": "monitoring"},
-    {"group": "india", "label": "India", "icon": "how_to_vote"},
+    {
+        "group": "indices",
+        "label": "Indices",
+        "icon": "monitoring",
+        "always_menu": True,
+    },
+    {
+        "group": "india",
+        "label": "India Story",
+        "icon": "analytics",
+        "always_menu": True,
+        "extra_items": [
+            {
+                "label": "State Assembly Swing Models",
+                "badge": "Upcoming",
+                "disabled": True,
+            },
+            {
+                "label": "India Macro & Capex Tracker",
+                "badge": "Upcoming",
+                "disabled": True,
+            },
+        ],
+    },
+    {
+        "group": "lab_notes",
+        "label": "Lab Notes",
+        "icon": "science",
+        "always_menu": True,
+        "builder": _lab_note_nav_items,
+    },
 ]
 
 
-def build_nav(endpoint):
+def build_nav(endpoint, view_args=None):
     """The primary nav for `endpoint`, with the active item already marked.
 
     Matches on endpoint rather than on request.path: the six hardcoded path
@@ -163,25 +245,45 @@ def build_nav(endpoint):
     }]
 
     for spec in NAV_GROUPS:
-        items = [
-            {
-                "label": r["title"],
-                "ticker": r["ticker"],
-                "url": r["url"],
-                "active": endpoint == r["endpoint"],
-            }
-            for r in REPORTS
-            if r.get("nav_group") == spec["group"] and r.get("live")
-        ]
+        if "builder" in spec:
+            items = spec["builder"](endpoint, view_args)
+        elif "items" in spec:
+            items = []
+            for it in spec["items"]:
+                is_active = (endpoint == it.get("endpoint"))
+                items.append({
+                    "label": it["label"],
+                    "ticker": it.get("ticker"),
+                    "badge": it.get("badge"),
+                    "url": it.get("url"),
+                    "disabled": it.get("disabled", False),
+                    "active": is_active,
+                })
+        else:
+            items = [
+                {
+                    "label": r["title"],
+                    "ticker": r["ticker"],
+                    "url": r["url"],
+                    "active": endpoint == r["endpoint"],
+                }
+                for r in REPORTS
+                if r.get("nav_group") == spec["group"] and r.get("live")
+            ]
+            for extra in spec.get("extra_items", []):
+                items.append({
+                    "label": extra["label"],
+                    "badge": extra.get("badge"),
+                    "ticker": extra.get("ticker"),
+                    "url": extra.get("url"),
+                    "disabled": extra.get("disabled", False),
+                    "active": False,
+                })
+
         if not items:
-            # A group with nothing live behind it is left out entirely. An
-            # empty menu is worse than no menu, and it is how the dead
-            # "Global" link survived as long as it did.
             continue
 
-        if len(items) == 1:
-            # One destination does not earn a dropdown — that is a click and a
-            # hover in front of the only thing behind it.
+        if len(items) == 1 and not spec.get("always_menu"):
             only = items[0]
             nav.append({
                 "kind": "link",
@@ -195,7 +297,7 @@ def build_nav(endpoint):
                 "kind": "menu",
                 "label": spec["label"],
                 "icon": spec["icon"],
-                "active": any(i["active"] for i in items),
+                "active": any(i.get("active") for i in items),
                 "items": items,
             })
 
@@ -650,6 +752,7 @@ def _build_aviation_press(snapshot):
     }
 
 
+@bp.route("/indices/airline-pressure")
 @bp.route("/airline-index")
 def airline_index():
     snapshot = get_aviation_snapshot()
@@ -688,6 +791,7 @@ def airline_index():
     return _cached(Response(html, mimetype="text/html"))
 
 
+@bp.route("/indices/us-solvency")
 @bp.route("/solvency-index")
 def solvency_index():
     snapshot = solvency.compute_snapshot()
@@ -766,6 +870,7 @@ def solvency_index():
     return _cached(Response(html, mimetype="text/html"))
 
 
+@bp.route("/indices/democracy-index")
 @bp.route("/democracy-index")
 def democracy_index():
     """The multi-country dashboard.
@@ -809,7 +914,7 @@ def democracy_index():
             metrics=democracy.METRICS,
             context_metrics=democracy.CONTEXT_METRICS,
             pillar_metrics=democracy.PILLAR_METRICS,
-            countries=democracy.COUNTRIES,
+            countries=democracy.countries_annotated(),
             regions=democracy.REGIONS,
             tiers=democracy.TIERS,
             default_weights=democracy.DEFAULT_WEIGHTS,
@@ -836,6 +941,7 @@ def democracy_index():
     return _cached(Response(html, mimetype="text/html"))
 
 
+@bp.route("/indices/hormuz-crisis")
 @bp.route("/hormuz-index")
 def hormuz_index():
     snapshot = get_snapshot()
@@ -906,6 +1012,7 @@ def hormuz_index():
             perception_series=perception_series,
             perception_by_week=perception_by_week,
             press=build_press_dispatch(snapshot, total_attacks),
+            exec_summary=hormuz.executive_summary(snapshot, history, sentiment),
             top_driver=hormuz.top_driver(snapshot),
             band_positions=scoring.band_positions(),
             scale_pct=scoring.scale_pct(snapshot.score),
@@ -920,6 +1027,12 @@ def hormuz_index():
     return _cached(Response(html, mimetype="text/html"))
 
 
+@bp.route("/indices")
+def indices_overview():
+    """Redirect to intelligence catalog on the homepage."""
+    return redirect("/#catalog-heading", code=302)
+
+
 @bp.route("/methodology")
 def methodology():
     """Permanent redirect to the methodology tab on the index it documents.
@@ -930,7 +1043,7 @@ def methodology():
     because it was indexed, is cited in the event log's source links, and may
     have been quoted externally — a 404 would break all three.
     """
-    return redirect("/hormuz-index#methodology", code=301)
+    return redirect("/indices/hormuz-crisis#methodology", code=301)
 
 
 def _methodology_context():
@@ -941,6 +1054,23 @@ def _methodology_context():
         degraded_threshold=scoring.DEGRADED_STALE_WEIGHT,
         durable_storage=storage.is_durable(),
     )
+
+
+@bp.route("/lab-notes")
+def lab_notes_archive():
+    """Lab Notes archive: every published note, newest first."""
+    html = render_template("lab_notes/archive.html", **_common(notes=LAB_NOTES))
+    return _cached(Response(html, mimetype="text/html"))
+
+
+@bp.route("/lab-notes/<slug>")
+def lab_note(slug):
+    """One Lab Note, looked up in LAB_NOTES."""
+    note = next((n for n in LAB_NOTES if n["slug"] == slug), None)
+    if note is None:
+        abort(404)
+    html = render_template(note["template"], **_common(note=note))
+    return _cached(Response(html, mimetype="text/html"))
 
 
 
@@ -1198,18 +1328,20 @@ def sitemap():
     pages = [
         {"loc": "/", "priority": "1.0", "changefreq": "daily",
          "src": precomputed.path_for("home")},
-        {"loc": "/airline-index", "priority": "1.0", "changefreq": "daily",
-         "src": precomputed.path_for("airline-index")},
-        {"loc": "/hormuz-index", "priority": "0.9", "changefreq": "daily",
+        {"loc": "/indices/hormuz-crisis", "priority": "1.0", "changefreq": "daily",
          "src": precomputed.path_for("hormuz-index")},
-        {"loc": "/lok-sabha-index", "priority": "0.9", "changefreq": "daily",
-         "src": precomputed.path_for("lok-sabha-index")},
-        # Annual series: the page only changes at fiscal-year close, so a daily
-        # changefreq here would be a claim the lastmod cannot support.
-        {"loc": "/solvency-index", "priority": "0.9", "changefreq": "monthly",
+        {"loc": "/indices/airline-pressure", "priority": "0.9", "changefreq": "daily",
+         "src": precomputed.path_for("airline-index")},
+        {"loc": "/indices/us-solvency", "priority": "0.9", "changefreq": "monthly",
          "src": precomputed.path_for("solvency-index")},
-        {"loc": "/democracy-index", "priority": "0.9", "changefreq": "monthly",
+        {"loc": "/indices/democracy-index", "priority": "0.9", "changefreq": "monthly",
          "src": precomputed.path_for("democracy-index")},
+        {"loc": "/india-story/lok-sabha-projection", "priority": "0.9", "changefreq": "daily",
+         "src": precomputed.path_for("lok-sabha-index")},
+        {"loc": "/lab-notes", "priority": "0.8", "changefreq": "weekly",
+         "src": os.path.join(current_app.root_path, "templates", "lab_notes", "archive.html")},
+        {"loc": "/lab-notes/cross-cultural-metric-normalization", "priority": "0.8", "changefreq": "monthly",
+         "src": os.path.join(current_app.root_path, "templates", "lab_notes", "imdb_deflation.html")},
         {"loc": "/about", "priority": "0.7", "changefreq": "monthly",
          "src": os.path.join(current_app.root_path, "templates", "about.html")},
         {"loc": "/terms", "priority": "0.5", "changefreq": "monthly",
@@ -1284,18 +1416,21 @@ def llms_txt():
 
 > Quantitative composite indices tracking geopolitical stress, maritime
 > chokepoint disruption, and energy dislocation. Flagship index: the Hormuz
-> Crisis Index (HMX-INDEX), a weekly composite scored against a calm baseline
+> Crisis Index (HMX), a weekly composite scored against a calm baseline
 > of 100.0 (baseline week {hormuz.BASELINE_WINDOW}).
 
-Current HMX-INDEX reading: {snapshot.score:.1f} ({snapshot.level_label}), week of {snapshot.week_start}.
+Current HMX reading: {snapshot.score:.1f} ({snapshot.level_label}), week of {snapshot.week_start}.
 
 ## Core pages
 
-- [Hormuz Crisis Index dashboard]({SITE_ORIGIN}/hormuz-index): live composite score, component breakdown, weekly trajectory since January 2026.
-- [Lok Sabha Projection Engine]({SITE_ORIGIN}/lok-sabha-index): daily 543-seat projection from CVoter's option-level opinion trackers, Monte Carlo intervals, event impact analysis, 2019/2024 backtest.
-- [Hard-Metric Democracy Index]({SITE_ORIGIN}/democracy-index): thirty largest economies, 2000-2024, scored only on published counts and ratios - turnout, Gallagher disproportionality, legislative concentration, incarceration, imprisoned journalists - never on expert judgement. V-Dem carried beside every row as a comparator, never as an input.
-- [Sovereign Solvency Index]({SITE_ORIGIN}/solvency-index): annual sovereign balance-sheet stress composite.
-- [Methodology]({SITE_ORIGIN}/hormuz-index#methodology): index formula, component weights, cap thresholds and their rationale, baseline selection, known limitations.
+- [Hormuz Crisis Index dashboard]({SITE_ORIGIN}/indices/hormuz-crisis): live composite score, component breakdown, weekly trajectory since January 2026.
+- [Airline Pressure Index]({SITE_ORIGIN}/indices/airline-pressure): weekly composite tracking jet fuel crack spreads, fleet grounding, ATC delays, and geopolitical detours.
+- [U.S. Sovereign Solvency Index]({SITE_ORIGIN}/indices/us-solvency): annual sovereign balance-sheet stress composite.
+- [Hard-Metric Democracy Index]({SITE_ORIGIN}/indices/democracy-index): thirty largest economies, 2000-2024, scored only on published counts and ratios.
+- [Lok Sabha Projection Engine]({SITE_ORIGIN}/india-story/lok-sabha-projection): daily 543-seat projection from CVoter's option-level opinion trackers, Monte Carlo intervals, event impact analysis.
+- [Lab Notes Archive]({SITE_ORIGIN}/lab-notes): quantitative research notes, metric evaluations, and critical analyses.
+- [Lab Note: IMDB Rating Deflation]({SITE_ORIGIN}/lab-notes/cross-cultural-metric-normalization): cross-cultural metric normalization and sentiment shift.
+- [Methodology]({SITE_ORIGIN}/indices/hormuz-crisis#methodology): index formula, component weights, cap thresholds and their rationale, baseline selection, known limitations.
 - [About the indices]({SITE_ORIGIN}/about): why each topic is compressed into one number, the construction rules shared by every index, and what a single number cannot express.
 
 ## Licence and attribution

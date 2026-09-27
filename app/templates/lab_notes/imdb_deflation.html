@@ -1,0 +1,526 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+
+{% block title %}{{ note.title }} — Lab Notes | MyDataLabs{% endblock %}
+{% block meta_desc %}{{ note.subtitle }}{% endblock %}
+
+{% block og_title %}{{ note.title }}{% endblock %}
+{% block og_desc %}{{ note.subtitle }}{% endblock %}
+
+{% block twitter_title %}{{ note.title }}{% endblock %}
+{% block twitter_desc %}{{ note.subtitle }}{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ note.title|tojson }},
+  "description": {{ note.subtitle|tojson }},
+  "url": "{{ origin }}{{ note.url }}",
+  "datePublished": "{{ note.published }}",
+  "dateModified": "{{ note.updated }}",
+  {% if note.author %}
+  "author": {"@type": "Person", "name": {{ note.author|tojson }}},
+  {% else %}
+  "author": {"@type": "Organization", "name": "MyDataLabs"},
+  {% endif %}
+  "publisher": {"@id": "{{ origin }}/#organization"},
+  "keywords": {{ note.tags|tojson }}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="report-dash-canvas">
+
+  <div class="elections-topbar">
+    <nav class="breadcrumb-v2" aria-label="Breadcrumb">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <a href="{{ url_for('main.lab_notes_archive') }}">Lab Notes</a>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <span class="breadcrumb-current" aria-current="page">{{ note.nav_label }}</span>
+    </nav>
+
+    <div class="tab-segmented" role="tablist" aria-label="Lab note sections">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true"
+              aria-controls="tab-analysis" data-report-tab="analysis">
+        <span class="material-symbols-outlined">article</span>
+        Analysis
+      </button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false"
+              aria-controls="tab-methodology" data-report-tab="methodology">
+        <span class="material-symbols-outlined">science</span>
+        Methodology
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= ANALYSIS ================= -->
+  <article id="tab-analysis" class="report-panel active lab-article" role="tabpanel">
+
+    <header class="lab-head">
+      <div class="lab-kicker">Lab Note {{ note.code }} &middot; {{ note.category }}</div>
+      <h1>{{ note.title }}</h1>
+      <p class="lab-standfirst">{{ note.subtitle }}</p>
+      <div class="lab-byline">
+        {% if note.author %}<span>By <strong>{{ note.author }}</strong></span>{% endif %}
+        <time datetime="{{ note.published }}">{{ note.published_label }}</time>
+        <span>{{ note.read_time }}</span>
+      </div>
+    </header>
+
+    <div class="lab-body">
+      <aside class="lab-editor-note" role="note">
+        <span class="lab-editor-note-label">Editor&rsquo;s note</span>
+        This is a worked example, not a measured study. The film scores and platform averages are
+        illustrative values chosen to show the method; they were not scraped from IMDb, SensCritique
+        or Moviepilot and should not be cited as those platforms&rsquo; ratings. <em>Heart of the
+        Beast</em> opened on 25&nbsp;September&nbsp;2026, so its real ratings are still moving daily.
+      </aside>
+
+      <p class="lab-inshort">
+        <span class="lab-inshort-label">In short</span>
+        In five Hollywood films, French and German users score <strong>0.72 points lower</strong> than
+        IMDb on average. Rescale each score against the platform it came from and the average gap falls
+        to <strong>about 0.05</strong>. What remains goes both ways: Europe comes out slightly warmer on
+        <em>Heart of the Beast</em>, slightly cooler on <em>Top Gun: Maverick</em>. The
+        &ldquo;continental discount&rdquo; is mostly a difference in scales, not in taste.
+      </p>
+
+      <h2 id="gap">The gap</h2>
+      <p>
+        When a mainstream Hollywood film reaches France and Germany, its user rating usually drops.
+        A film scoring 7.2 on IMDb might score 6.8 on Germany&rsquo;s <em>Moviepilot</em> and 6.7 on
+        France&rsquo;s <em>SensCritique</em>. The easy reading is that European audiences like these
+        films less.
+      </p>
+      <p>
+        That reading assumes a 7 means the same thing on every platform. It does not. Each platform
+        has its own average score and its own spread, so a raw comparison mixes two things together:
+        how much people liked the film, and how generously they use the scale.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">Raw scores by platform</span>
+          <span class="lab-figure-caption">Illustrative scores out of 10. Every film scores lower in Europe on the raw scale.</span>
+        </figcaption>
+        <div id="echart-benchmarks" class="lab-chart" role="img"
+             aria-label="Grouped bar chart of raw scores for five films on IMDb, Moviepilot and SensCritique. European scores are lower for every film.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <h2 id="scales">Why the scales differ</h2>
+      <p>
+        The likeliest cause is school. Nobody scoring a film out of ten starts from a neutral scale;
+        they bring the one they were graded on as children. That is a hypothesis rather than something
+        these numbers can prove, but it points the right way.
+      </p>
+
+      <div class="lab-trio">
+        <div class="lab-trio-item" style="--trio-accent: var(--accent-blue);">
+          <h3>US and UK</h3>
+          <p>Percentage grades. Below 70% is close to failing, so a 7 reads as merely acceptable and a 6 as poor.</p>
+        </div>
+        <div class="lab-trio-item" style="--trio-accent: var(--accent-rose);">
+          <h3>France</h3>
+          <p>Marks out of 20, where 10 is a pass and 16 is rare. A 6 out of 10 says the film works.</p>
+        </div>
+        <div class="lab-trio-item" style="--trio-accent: var(--accent-amber);">
+          <h3>Germany</h3>
+          <p>Grades 1 to 6, where 4 is a pass and top marks are uncommon. High scores are kept for the exceptional.</p>
+        </div>
+      </div>
+
+      <p>
+        Three other explanations come up often. French criticism has long prized a director&rsquo;s
+        personal style over studio polish, which is why some American directors dismissed at home,
+        Michael Mann with <em>Miami Vice</em> or Brian De Palma with <em>Femme Fatale</em>, found
+        champions in Paris. France and Germany also watch most Hollywood films dubbed, and a line
+        re-recorded in a studio months later can flatten a performance. And the audiences differ:
+        IMDb is vast and general and open to organised fan voting, while SensCritique and Moviepilot
+        are smaller communities of keener film fans. None of these is measured here.
+      </p>
+
+      <h2 id="rescale">Putting the scores on one scale</h2>
+      <p>
+        The fix is to ask a different question of each score: not &ldquo;how high is it?&rdquo; but
+        &ldquo;how far above this platform&rsquo;s usual score is it?&rdquo;. Measured that way, a 6.7
+        on SensCritique and a 7.2 on IMDb are close to the same judgement. Try any film or score below.
+      </p>
+
+      <div class="normalizer-widget" aria-labelledby="normalizer-h">
+        <h3 id="normalizer-h" class="normalizer-title">
+          <span class="material-symbols-outlined" aria-hidden="true">calculate</span>
+          Rating calculator
+        </h3>
+
+        <div class="normalizer-controls">
+          <div class="norm-field">
+            <label for="norm-preset-select" class="norm-label">Film</label>
+            <select id="norm-preset-select" class="norm-select">
+              <option value="heart" selected>Heart of the Beast</option>
+              <option value="topgun">Top Gun: Maverick</option>
+              <option value="togo">Togo</option>
+              <option value="call">The Call of the Wild</option>
+              <option value="alpha">Alpha</option>
+              <option value="custom">Custom score&hellip;</option>
+            </select>
+          </div>
+          <div class="norm-field">
+            <label for="norm-platform-select" class="norm-label">Platform</label>
+            <select id="norm-platform-select" class="norm-select">
+              <option value="imdb" selected>IMDb</option>
+              <option value="mp">Moviepilot (Germany)</option>
+              <option value="sc">SensCritique (France)</option>
+            </select>
+          </div>
+          <div class="norm-field">
+            <label for="norm-score-input" class="norm-label">Score (1&ndash;10)</label>
+            <input type="number" id="norm-score-input" class="norm-input font-mono" min="1" max="10" step="0.1" value="7.2">
+          </div>
+        </div>
+
+        <div class="norm-results-grid" aria-live="polite">
+          <div id="norm-card-imdb" class="norm-res-card is-active">
+            <div class="norm-res-platform"><span>IMDb</span><span id="imdb-z-badge" class="badge-tag">z +0.64</span></div>
+            <div id="imdb-percentile-val" class="norm-res-percentile">74th</div>
+            <div id="imdb-score-desc" class="norm-res-score">percentile &middot; score <strong>7.2</strong></div>
+          </div>
+          <div id="norm-card-mp" class="norm-res-card">
+            <div class="norm-res-platform"><span>Moviepilot</span><span id="mp-z-badge" class="badge-tag">z +0.82</span></div>
+            <div id="mp-percentile-val" class="norm-res-percentile">79th</div>
+            <div id="mp-score-desc" class="norm-res-score">percentile &middot; score <strong>6.8</strong></div>
+          </div>
+          <div id="norm-card-sc" class="norm-res-card">
+            <div class="norm-res-platform"><span>SensCritique</span><span id="sc-z-badge" class="badge-tag">z +0.86</span></div>
+            <div id="sc-percentile-val" class="norm-res-percentile">80th</div>
+            <div id="sc-score-desc" class="norm-res-score">percentile &middot; score <strong>6.7</strong></div>
+          </div>
+        </div>
+
+        <p id="norm-explainer-text" class="norm-explainer">
+          <em>Heart of the Beast</em> sits at the 74th percentile on IMDb, the 79th on Moviepilot and
+          the 80th on SensCritique.
+        </p>
+      </div>
+
+      <p>
+        Do the same for all five films and the picture changes. The raw gap was negative for every
+        film. After rescaling it is small, and it no longer points one way.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">The European gap, before and after rescaling</span>
+          <span class="lab-figure-caption">In IMDb points. Below zero means Europe rated the film lower.</span>
+        </figcaption>
+        <div id="echart-residual" class="lab-chart" role="img"
+             aria-label="Bar chart comparing the raw European gap with the gap after rescaling for five films. Raw gaps are all negative; after rescaling they are small and split both ways.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <div class="table-responsive lab-table-wrap">
+        <table class="components-table lab-table">
+          <thead>
+            <tr>
+              <th scope="col">Film</th>
+              <th scope="col" class="num">IMDb</th>
+              <th scope="col" class="num">Moviepilot</th>
+              <th scope="col" class="num">SensCritique</th>
+              <th scope="col" class="num">Raw gap</th>
+              <th scope="col" class="num">Rescaled</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Heart of the Beast</th><td class="num">7.2</td><td class="num">6.8</td><td class="num">6.7</td><td class="num">&minus;0.45</td><td class="num is-pos">+0.25</td></tr>
+            <tr><th scope="row">Top Gun: Maverick</th><td class="num">8.2</td><td class="num">7.3</td><td class="num">7.0</td><td class="num">&minus;1.05</td><td class="num is-neg">&minus;0.29</td></tr>
+            <tr><th scope="row">Togo</th><td class="num">7.9</td><td class="num">7.3</td><td class="num">7.1</td><td class="num">&minus;0.70</td><td class="num">+0.07</td></tr>
+            <tr><th scope="row">The Call of the Wild</th><td class="num">6.7</td><td class="num">6.1</td><td class="num">5.8</td><td class="num">&minus;0.75</td><td class="num is-neg">&minus;0.19</td></tr>
+            <tr><th scope="row">Alpha</th><td class="num">6.6</td><td class="num">6.0</td><td class="num">5.9</td><td class="num">&minus;0.65</td><td class="num">&minus;0.08</td></tr>
+            <tr class="lab-table-total"><th scope="row">Average</th><td></td><td></td><td></td><td class="num">&minus;0.72</td><td class="num">&minus;0.05</td></tr>
+          </tbody>
+        </table>
+        <p class="lab-table-note">Illustrative scores out of 10. Gaps are the European average minus IMDb, in IMDb points.</p>
+      </div>
+
+      <blockquote class="lab-pullquote">
+        About 93% of the raw gap is a difference in how the platforms use the scale. The part that
+        remains is small, changes from film to film, and is where any real difference in taste would
+        have to show up.
+      </blockquote>
+
+      <h2 id="lesson">Why this matters beyond film</h2>
+      <p>
+        The same trap opens whenever scores from different groups are averaged: satisfaction surveys
+        across countries, expert ratings from different institutions, sentiment scores in different
+        languages. If each group uses the scale differently, the average measures the scales as much
+        as the thing being scored.
+      </p>
+      <p>
+        It is why every index on this site rescales each input against its own baseline before
+        combining anything. The <a href="#methodology" data-report-tab="methodology">methodology</a>
+        sets out exactly how these numbers were made, and what a real study would need.
+      </p>
+
+      <footer class="lab-foot">
+        <a href="{{ url_for('main.lab_notes_archive') }}">&larr; All Lab Notes</a>
+        <a href="{{ url_for('main.home') }}">See the indices &rarr;</a>
+      </footer>
+    </div>
+  </article>
+
+  <!-- ================= METHODOLOGY ================= -->
+  <article id="tab-methodology" class="report-panel lab-article lab-method" role="tabpanel">
+    <header class="lab-head">
+      <div class="lab-kicker">Methodology &middot; {{ note.code }}</div>
+      <h2 class="lab-method-title">How the numbers in this note were made</h2>
+      <p class="lab-standfirst">
+        A two-step rescaling: place each score within its own platform, then translate that position
+        onto any other platform.
+      </p>
+    </header>
+
+    <div class="lab-body">
+      <h3>The problem</h3>
+      <p>
+        Treat each film as having an underlying quality, and each platform as a lens that maps that
+        quality onto a 1&ndash;10 score with its own centre and its own stretch. A raw score difference
+        between two platforms then reflects the lenses as well as the film. The goal is to remove the
+        lens.
+      </p>
+
+      <h3>Step one: position within the platform</h3>
+      <p>
+        Each score is converted to a z-score, the distance from the platform&rsquo;s average measured
+        in that platform&rsquo;s standard deviation:
+      </p>
+      <div class="math-formula-box" aria-label="z equals score minus platform mean, divided by platform standard deviation">
+        <div class="math-formula-line">
+          <span class="math-var">z</span>
+          <span>=</span>
+          <span class="math-fraction">
+            <span class="math-num">x &minus; &mu;<sub>P</sub></span>
+            <span class="math-denom">&sigma;<sub>P</sub></span>
+          </span>
+        </div>
+      </div>
+      <p>
+        The z-score is turned into a percentile with the standard normal distribution, which is what
+        the calculator shows.
+      </p>
+
+      <h3>Step two: translate to another platform</h3>
+      <p>
+        The score on platform B that holds the same position as score x on platform A is:
+      </p>
+      <div class="math-formula-box" aria-label="x on B equals mu B plus z times sigma B">
+        <div class="math-formula-line">
+          <span>x<sub>B</sub> = &mu;<sub>B</sub> + z<sub>A</sub> &times; &sigma;<sub>B</sub></span>
+        </div>
+      </div>
+      <p>
+        The &ldquo;rescaled gap&rdquo; in the analysis is the average of the German and French
+        z-scores minus the IMDb z-score, multiplied by IMDb&rsquo;s standard deviation so it can be
+        read in IMDb points next to the raw gap.
+      </p>
+
+      <h3>Parameters used</h3>
+      <p>
+        These averages and spreads are assumed for the example, not measured from the platforms&rsquo;
+        catalogues.
+      </p>
+      <div class="table-responsive lab-table-wrap">
+        <table class="components-table lab-table">
+          <thead>
+            <tr>
+              <th scope="col">Platform</th>
+              <th scope="col">Audience</th>
+              <th scope="col" class="num">Average (&mu;)</th>
+              <th scope="col" class="num">Spread (&sigma;)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">IMDb</th><td>US / UK and global English</td><td class="num">6.40</td><td class="num">1.25</td></tr>
+            <tr><th scope="row">Moviepilot</th><td>Germany</td><td class="num">5.90</td><td class="num">1.10</td></tr>
+            <tr><th scope="row">SensCritique</th><td>France</td><td class="num">5.80</td><td class="num">1.05</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Limits of this example</h3>
+      <p>
+        The bell curve is a simplification. IMDb ratings bunch towards the top of the scale, so a
+        normal distribution misplaces films at the extremes; ranking each film against its
+        platform&rsquo;s real catalogue would avoid that. Opening-week ratings are also unstable, and
+        <em>Heart of the Beast</em> is days old. Finally, rescaling says how much of a gap is scale. It
+        cannot say whether the remainder comes from taste, dubbing or who uses each site.
+      </p>
+
+      <h3>What a real study would need</h3>
+      <p>
+        Ratings for the same films on all three platforms, with vote counts and collection dates;
+        platform averages and spreads computed from each full catalogue; films old enough for their
+        ratings to have settled; and a separate test for each explanation of what remains after
+        rescaling. With that data, this note would move from a worked example to a finding.
+      </p>
+
+      <footer class="lab-foot">
+        <a href="#analysis" data-report-tab="analysis">&larr; Back to the analysis</a>
+      </footer>
+    </div>
+  </article>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const PLATFORMS = {
+    imdb: { mean: 6.40, sd: 1.25, name: 'IMDb' },
+    mp:   { mean: 5.90, sd: 1.10, name: 'Moviepilot' },
+    sc:   { mean: 5.80, sd: 1.05, name: 'SensCritique' }
+  };
+  const FILMS = {
+    heart:  { name: 'Heart of the Beast',   imdb: 7.2, mp: 6.8, sc: 6.7 },
+    topgun: { name: 'Top Gun: Maverick',    imdb: 8.2, mp: 7.3, sc: 7.0 },
+    togo:   { name: 'Togo',                 imdb: 7.9, mp: 7.3, sc: 7.1 },
+    call:   { name: 'The Call of the Wild', imdb: 6.7, mp: 6.1, sc: 5.8 },
+    alpha:  { name: 'Alpha',                imdb: 6.6, mp: 6.0, sc: 5.9 }
+  };
+  const KEYS = ['imdb', 'mp', 'sc'];
+
+  // Standard normal CDF (Abramowitz & Stegun 26.2.17).
+  function normalCDF(z) {
+    const t = 1 / (1 + 0.2316419 * Math.abs(z));
+    const d = 0.3989422804014327 * Math.exp(-z * z / 2);
+    const p = d * t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+    return z >= 0 ? 1 - p : p;
+  }
+  function ordinal(n) {
+    const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+  const zOf = (key, score) => (score - PLATFORMS[key].mean) / PLATFORMS[key].sd;
+  const pctOf = z => Math.min(99, Math.max(1, Math.round(normalCDF(z) * 100)));
+
+  const presetSelect = document.getElementById('norm-preset-select');
+  const platformSelect = document.getElementById('norm-platform-select');
+  const scoreInput = document.getElementById('norm-score-input');
+  const explainer = document.getElementById('norm-explainer-text');
+
+  function render() {
+    const film = FILMS[presetSelect.value];
+    const source = platformSelect.value;
+    let scores;
+    if (film) {
+      scores = { imdb: film.imdb, mp: film.mp, sc: film.sc };
+      scoreInput.value = film[source];
+    } else {
+      const raw = Math.min(10, Math.max(1, parseFloat(scoreInput.value) || 7));
+      const z = zOf(source, raw);
+      scores = {};
+      KEYS.forEach(k => { scores[k] = +(PLATFORMS[k].mean + z * PLATFORMS[k].sd).toFixed(1); });
+      scores[source] = raw;
+    }
+
+    const pct = {};
+    KEYS.forEach(k => {
+      const z = zOf(k, scores[k]);
+      pct[k] = pctOf(z);
+      document.getElementById(`${k}-z-badge`).textContent = `z ${z >= 0 ? '+' : '−'}${Math.abs(z).toFixed(2)}`;
+      document.getElementById(`${k}-percentile-val`).textContent = ordinal(pct[k]);
+      document.getElementById(`${k}-score-desc`).innerHTML = `percentile &middot; score <strong>${scores[k]}</strong>`;
+      document.getElementById(`norm-card-${k}`).classList.toggle('is-active', k === source);
+    });
+
+    if (film) {
+      explainer.innerHTML = `<em>${film.name}</em> sits at the ${ordinal(pct.imdb)} percentile on IMDb, ` +
+        `the ${ordinal(pct.mp)} on Moviepilot and the ${ordinal(pct.sc)} on SensCritique.`;
+    } else {
+      explainer.innerHTML = `A ${scores[source]} on ${PLATFORMS[source].name} is the ${ordinal(pct[source])} percentile. ` +
+        `The same position is ${scores.imdb} on IMDb, ${scores.mp} on Moviepilot and ${scores.sc} on SensCritique.`;
+    }
+  }
+
+  presetSelect.addEventListener('change', render);
+  platformSelect.addEventListener('change', render);
+  scoreInput.addEventListener('input', () => { presetSelect.value = 'custom'; render(); });
+  render();
+
+  // --- Charts ---------------------------------------------------------------
+  if (typeof echarts === 'undefined') return;
+
+  const names = Object.values(FILMS).map(f => f.name);
+  const charts = [];
+
+  function token(name, fallback) {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
+
+  function draw() {
+    charts.forEach(c => c.dispose());
+    charts.length = 0;
+
+    const text = token('--text-sub', '#64748B');
+    const split = token('--border-subtle', 'rgba(15,23,42,0.08)');
+    const blue = token('--accent-blue', '#0284C7');
+    const amber = token('--accent-amber', '#F59E0B');
+    const rose = token('--accent-rose', '#F43F5E');
+    const muted = token('--text-muted', '#94A3B8');
+    const axis = { axisLine: { lineStyle: { color: split } }, axisLabel: { color: text, fontSize: 11 } };
+    const base = {
+      backgroundColor: 'transparent',
+      textStyle: { fontFamily: 'inherit' },
+      legend: { top: 0, textStyle: { color: text, fontSize: 12 } },
+      grid: { left: 8, right: 8, bottom: 8, top: 40, containLabel: true },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } }
+    };
+
+    const bench = document.getElementById('echart-benchmarks');
+    if (bench) {
+      const c = echarts.init(bench);
+      c.setOption(Object.assign({}, base, {
+        xAxis: Object.assign({ type: 'category', data: names, axisLabel: { color: text, fontSize: 11, interval: 0, width: 80, overflow: 'break' } }, { axisLine: axis.axisLine }),
+        yAxis: { type: 'value', min: 4, max: 9, splitLine: { lineStyle: { color: split } }, axisLabel: axis.axisLabel },
+        series: [
+          { name: 'IMDb', type: 'bar', data: Object.values(FILMS).map(f => f.imdb), itemStyle: { color: blue, borderRadius: [3, 3, 0, 0] } },
+          { name: 'Moviepilot (DE)', type: 'bar', data: Object.values(FILMS).map(f => f.mp), itemStyle: { color: amber, borderRadius: [3, 3, 0, 0] } },
+          { name: 'SensCritique (FR)', type: 'bar', data: Object.values(FILMS).map(f => f.sc), itemStyle: { color: rose, borderRadius: [3, 3, 0, 0] } }
+        ]
+      }));
+      charts.push(c);
+    }
+
+    const resid = document.getElementById('echart-residual');
+    if (resid) {
+      const raw = [], adj = [];
+      Object.values(FILMS).forEach(f => {
+        raw.push(+((f.mp + f.sc) / 2 - f.imdb).toFixed(2));
+        const zEu = (zOf('mp', f.mp) + zOf('sc', f.sc)) / 2;
+        adj.push(+((zEu - zOf('imdb', f.imdb)) * PLATFORMS.imdb.sd).toFixed(2));
+      });
+      const c = echarts.init(resid);
+      c.setOption(Object.assign({}, base, {
+        xAxis: { type: 'category', data: names, axisLine: axis.axisLine, axisLabel: { color: text, fontSize: 11, interval: 0, width: 80, overflow: 'break' } },
+        yAxis: { type: 'value', min: -1.2, max: 0.4, splitLine: { lineStyle: { color: split } }, axisLabel: axis.axisLabel },
+        series: [
+          { name: 'Raw gap', type: 'bar', data: raw, itemStyle: { color: muted, borderRadius: 3 } },
+          { name: 'After rescaling', type: 'bar', data: adj, itemStyle: { color: blue, borderRadius: 3 } }
+        ]
+      }));
+      charts.push(c);
+    }
+  }
+
+  draw();
+  window.addEventListener('resize', () => charts.forEach(c => c.resize()));
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+});
+</script>
+{% endblock %}
