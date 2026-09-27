@@ -1,14 +1,14 @@
 {
   "cards": {
     "airline-index": {
-      "value": "128.3",
+      "value": "129.0",
       "unit": "score",
       "status": "warning"
     },
     "hormuz-index": {
-      "value": "180.7",
+      "value": "177.9",
       "unit": "score",
-      "status": "critical"
+      "status": "serious"
     },
     "solvency-index": {
       "value": "128.1",
@@ -21,7 +21,7 @@
       "status": "good"
     },
     "lok-sabha-index": {
-      "value": "274",
+      "value": "273",
       "unit": "NDA seats",
       "status": "good"
     }

@@ -1,13 +1,13 @@
 {
-  "started_at": "2026-09-15T11:09:07+00:00",
+  "started_at": "2026-09-27T07:55:06+00:00",
   "forced": false,
-  "local_latest_date": "2026-09-06",
-  "remote_latest_date": "2026-09-06",
+  "local_latest_date": "2026-09-20",
+  "remote_latest_date": "2026-09-20",
   "status": "updated",
   "reason": "new_data",
-  "rows_before": 2785,
-  "rows_after": 2806,
-  "new_rows": 21,
+  "rows_before": 2806,
+  "rows_after": 2820,
+  "new_rows": 14,
   "metrics": 41,
   "derived": {
     "calibration": {
@@ -15,9 +15,9 @@
       "slope": 0.036668,
       "intercept": 44.244889
     },
-    "projections_rows": 2806,
-    "latest_nda_seats": 274
+    "projections_rows": 2820,
+    "latest_nda_seats": 273
   },
-  "finished_at": "2026-09-15T11:09:40+00:00",
-  "duration_seconds": 33.25
+  "finished_at": "2026-09-27T07:55:42+00:00",
+  "duration_seconds": 36.36
 }

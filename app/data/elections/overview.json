@@ -1,6 +1,6 @@
 {
-  "as_of_date": "2026-09-06",
-  "total_days_analyzed": 2806,
+  "as_of_date": "2026-09-20",
+  "total_days_analyzed": 2820,
   "metrics_tracked": 41,
   "actual_2024_nda": 293,
   "actual_2024_india": 234,
@@ -8,35 +8,35 @@
   "majority_threshold": 272,
   "latest_forecast": {
     "point_estimate": {
-      "composite_sentiment": -28.293,
-      "governance_score": 35.85,
+      "composite_sentiment": -28.689,
+      "governance_score": 35.66,
       "projected_vote_share": {
-        "NDA": 43.21,
-        "INDIA": 41.99,
-        "OTHERS": 14.8
+        "NDA": 43.19,
+        "INDIA": 42.0,
+        "OTHERS": 14.81
       },
       "predicted_seats": {
-        "NDA": 274,
+        "NDA": 273,
         "INDIA": 254,
-        "OTHERS": 15
+        "OTHERS": 16
       }
     },
     "confidence_intervals": {
       "NDA": {
-        "p5": 247,
-        "p50": 274,
+        "p5": 246,
+        "p50": 273,
         "p95": 300
       },
       "INDIA": {
-        "p5": 228,
-        "p50": 253,
+        "p5": 229,
+        "p50": 254,
         "p95": 279
       }
     },
     "majority_probability": {
-      "NDA": 0.55295,
-      "INDIA": 0.12035,
-      "HUNG": 0.3267
+      "NDA": 0.54805,
+      "INDIA": 0.12275,
+      "HUNG": 0.3292
     },
     "n_simulations": 20000
   }
