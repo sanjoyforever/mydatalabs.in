@@ -9,6 +9,7 @@ import pytest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app import create_app  # noqa: E402
+from app.routes import LAB_NOTES  # noqa: E402
 
 
 @pytest.fixture
@@ -122,7 +123,18 @@ def test_favicon_is_served(client):
 
 @pytest.mark.parametrize(
     "path",
-    ["/", "/airline-index", "/hormuz-index", "/lok-sabha-index", "/about", "/terms"],
+    [
+        "/",
+        "/airline-index",
+        "/hormuz-index",
+        "/lok-sabha-index",
+        "/indices/democracy-index",
+        "/indices/us-solvency",
+        "/lab-notes",
+        *[note["url"] for note in LAB_NOTES],
+        "/about",
+        "/terms",
+    ],
 )
 def test_analytics_tags_render_on_every_page(client, path):
     """GA4 and Clarity are sitewide, so they belong on every rendered page."""
