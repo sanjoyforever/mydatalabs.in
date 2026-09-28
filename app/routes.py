@@ -158,8 +158,8 @@ LAB_NOTES = [
         "tags": ["Measurement", "Normalization", "Ratings"],
         "published": "2026-09-27",
         "updated": "2026-09-27",
-        "read_time": "8 min read",
-        "badge": "Worked example",
+        "read_time": "10 min read",
+        "badge": "100-Film Study",
     },
 ]
 
@@ -1063,13 +1063,31 @@ def lab_notes_archive():
     return _cached(Response(html, mimetype="text/html"))
 
 
+_FILM_NORMALIZATION_CACHE = None
+
+
+def _get_film_normalization_data():
+    global _FILM_NORMALIZATION_CACHE
+    if _FILM_NORMALIZATION_CACHE is None:
+        path = os.path.join(current_app.root_path, "data", "film_normalization_100.json")
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                _FILM_NORMALIZATION_CACHE = json.load(f)
+        else:
+            _FILM_NORMALIZATION_CACHE = {"films": [], "stats": {}, "platforms": {}}
+    return _FILM_NORMALIZATION_CACHE
+
+
 @bp.route("/lab-notes/<slug>")
 def lab_note(slug):
     """One Lab Note, looked up in LAB_NOTES."""
     note = next((n for n in LAB_NOTES if n["slug"] == slug), None)
     if note is None:
         abort(404)
-    html = render_template(note["template"], **_common(note=note))
+    extra = {}
+    if slug == "cross-cultural-metric-normalization":
+        extra["film_panel"] = _get_film_normalization_data()
+    html = render_template(note["template"], **_common(note=note, **extra))
     return _cached(Response(html, mimetype="text/html"))
 
 

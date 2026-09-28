@@ -335,6 +335,9 @@ def test_lab_notes_article_and_archive(client):
     assert "Heart of the Beast" in art_text
     # The example is illustrative, and the page has to say so up front.
     assert "worked example, not a measured study" in art_text
+    assert "100-film" in art_text
+    assert "Top Gun: Maverick" in art_text
+    assert "Oppenheimer" in art_text
     assert '"datePublished": "2026-09-27"' in art_text
     # No leftover LaTeX or markdown from the first draft.
     for junk in ("\text{", "$N$", "*Hochdeutsch*"):
