@@ -231,6 +231,9 @@ def test_published_comment_rendering_and_api(tmp_path, monkeypatch):
         assert "Jane Analyst" in html
         assert "empirically robust" in html
         assert "Thanks for the feedback!" in html
+        assert "comment_submitted" in html
+        assert "comment_submit" in html
+
 
 
 def test_admin_honeypot_and_lockout(tmp_path, monkeypatch):

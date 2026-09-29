@@ -379,6 +379,28 @@
       // Retain server-rendered comments if network request fails
     });
 
+  // Safe GA4 tracking wrapper — delegates to global window.trackEvent or gtag
+  function track_(name, params) {
+    if (typeof window.trackEvent === 'function') {
+      window.trackEvent(name, params);
+    } else if (typeof window.gtag === 'function') {
+      window.gtag('event', name, Object.assign({ page_path: location.pathname }, params || {}));
+    }
+  }
+
+  // Track initial user engagement with the observation form
+  let formEngaged = false;
+  if (bodyInput) {
+    bodyInput.addEventListener('focus', function() {
+      if (!formEngaged) {
+        formEngaged = true;
+        track_('comment_form_focus', {
+          article_slug: articleSlug
+        });
+      }
+    }, { once: true });
+  }
+
   // Character counter
   if (bodyInput && charCountEl) {
     bodyInput.addEventListener('input', function() {
@@ -438,12 +460,32 @@
           if (bodyInput) bodyInput.value = '';
           if (charCountEl) charCountEl.textContent = '0 / 1200';
           if (formEl) formEl.reset();
+
+          // GA4 event: comments submitted
+          track_('comment_submitted', {
+            article_slug: articleSlug,
+            article_title: document.title,
+            comment_length: body.length,
+            has_author: Boolean(name)
+          });
+          track_('comment_submit', {
+            article_slug: articleSlug,
+            article_title: document.title
+          });
         } else {
           setStatus(data.error || 'Submission could not be completed. Please try again.', 'error');
+          track_('comment_submit_error', {
+            article_slug: articleSlug,
+            error_message: data.error || 'submission_failed'
+          });
         }
       })
       .catch(() => {
         setStatus('Network error. Could not send comment. Please check your connection and retry.', 'error');
+        track_('comment_submit_error', {
+          article_slug: articleSlug,
+          error_message: 'network_error'
+        });
       })
       .finally(() => {
         if (submitBtn) {
