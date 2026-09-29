@@ -1,3 +1,4 @@
+import hashlib
 import os
 from datetime import date, timedelta
 
@@ -92,11 +93,17 @@ def create_app() -> Flask:
     )
     app.config["SEND_FILE_MAX_AGE_DEFAULT"] = STATIC_MAX_AGE
 
-    # Signs the admin session cookie. Falls back to VOTE_PEPPER if SECRET_KEY is omitted.
+    # Signs the admin session cookie. Falls back to VOTE_PEPPER or auto-derives from ADMIN_PASSWORD.
+    admin_auth_val = os.environ.get("ADMIN_PASSWORD") or os.environ.get("ADMIN_PASSWORD_HASH") or ""
+    derived_secret = (
+        hashlib.sha256(f"mydatalabs-session-{admin_auth_val}".encode()).hexdigest()
+        if admin_auth_val
+        else ""
+    )
     app.config["SECRET_KEY"] = (
         os.environ.get("SECRET_KEY")
         or os.environ.get("VOTE_PEPPER")
-        or ""
+        or derived_secret
     )
     app.config.update(
         SESSION_COOKIE_HTTPONLY=True,
