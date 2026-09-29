@@ -1,0 +1,458 @@
+{# Reusable Reader Comments & Methodology Discussion Component #}
+{% set slug = article_slug|default(note.slug if note and note.slug else (request.view_args.slug if request.view_args and 'slug' in request.view_args else (request.path.strip('/').split('/')[-1] if request.path else '')))|trim %}
+{% if slug %}
+<section id="discussion" class="lab-comments-section" data-article-slug="{{ slug }}">
+  <div class="lab-comments-wrap">
+    <header class="lab-comments-head">
+      <div class="lab-kicker">Discussion &amp; Methodology Notes</div>
+      <h3 class="lab-comments-title">Reader Observations</h3>
+      <p class="lab-comments-standfirst">
+        Methodological feedback, questions, and empirical observations on this study.
+        To maintain high-signal discourse and prevent promotional noise, all submissions are moderated before publication.
+      </p>
+    </header>
+
+    <!-- Comments List Container -->
+    <div id="comments-list" class="lab-comments-list" aria-live="polite">
+      {% if published_comments %}
+        {% for c in published_comments %}
+          <article class="lab-comment-card" id="comment-{{ c.id }}">
+            <div class="lab-comment-meta">
+              <span class="lab-comment-author">{{ c.author }}</span>
+              <span>&middot;</span>
+              <time>{{ c.created_at }}</time>
+            </div>
+            <p class="lab-comment-body">{{ c.body }}</p>
+            {% if c.response %}
+              <div class="lab-comment-response">
+                <div class="lab-response-kicker">Author / Editorial Desk Response</div>
+                <div>{{ c.response }}</div>
+              </div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      {% else %}
+        <div class="lab-comments-empty">No observations published yet. Be the first to share an observation.</div>
+      {% endif %}
+    </div>
+
+    <!-- Submission Form -->
+    <div class="lab-comment-form-card">
+      <h4 class="lab-form-title">Contribute an Observation</h4>
+      <p class="lab-form-subtitle">
+        Links, handles, and promotional copy are prohibited. Describe references in words.
+      </p>
+
+      <form id="comment-submission-form" class="lab-comment-form" novalidate>
+        <!-- Honeypot trap: hidden from human view, bots populate it -->
+        <div style="position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; overflow: hidden;" aria-hidden="true">
+          <label for="cmnt-website">Do not fill this if human</label>
+          <input type="text" id="cmnt-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="lab-form-row">
+          <label for="cmnt-author" class="lab-field-label">Name or Attribution <span class="muted">(Optional)</span></label>
+          <input type="text" id="cmnt-author" name="name" class="lab-input-text" maxlength="40" placeholder="e.g. Researcher, Data Analyst, or Anonymous">
+        </div>
+
+        <div class="lab-form-row">
+          <div class="lab-field-header">
+            <label for="cmnt-body" class="lab-field-label">Your Observation or Methodological Critique <span class="req">*</span></label>
+            <span id="cmnt-char-count" class="lab-char-count muted">0 / 1200</span>
+          </div>
+          <textarea id="cmnt-body" name="body" class="lab-textarea" rows="4" maxlength="1200" required
+            placeholder="Share what specifically is compelling, questionable, or worth exploring in this dataset..."></textarea>
+        </div>
+
+        <div id="cmnt-status-msg" class="lab-form-notice" style="display:none;" role="status"></div>
+
+        <div class="lab-form-actions">
+          <button type="submit" id="cmnt-submit-btn" class="lab-btn-submit">
+            <span class="btn-text">Submit Observation</span>
+          </button>
+          <span class="lab-note-rule muted">Minimum 15 characters &middot; Reviewed by the editorial desk</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+.lab-comments-section {
+  margin: 48px 0 32px;
+  padding: 32px 0 16px;
+  border-top: 1px solid var(--border-subtle);
+  width: 100%;
+  box-sizing: border-box;
+}
+.lab-comments-wrap {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+.lab-comments-head {
+  margin-bottom: 24px;
+}
+.lab-comments-title {
+  font-family: var(--font-heading, var(--font-sans, system-ui));
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 4px 0 8px;
+  color: var(--text-main);
+}
+.lab-comments-standfirst {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-sub);
+  margin: 0;
+}
+.lab-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+.lab-comment-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--canvas-radius, 8px);
+  padding: 20px 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  width: 100%;
+  box-sizing: border-box;
+}
+.lab-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.lab-comment-author {
+  font-weight: 700;
+  color: var(--text-main);
+}
+.lab-comment-body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-main);
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.lab-comment-response {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: var(--accent-blue-bg);
+  border-left: 3px solid var(--accent-blue);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.lab-response-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent-blue);
+  margin-bottom: 4px;
+}
+.lab-comments-empty {
+  padding: 28px 24px;
+  text-align: center;
+  background: var(--surface-card);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--canvas-radius, 8px);
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.lab-comment-form-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--canvas-radius, 8px);
+  padding: 24px 28px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.lab-form-title {
+  font-family: var(--font-heading, var(--font-sans, system-ui));
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: var(--text-main);
+}
+.lab-form-subtitle {
+  font-size: 0.86rem;
+  color: var(--text-sub);
+  margin: 0 0 18px;
+}
+.lab-form-row {
+  margin-bottom: 16px;
+}
+.lab-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.lab-field-label {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+}
+.lab-char-count {
+  font-size: 0.76rem;
+}
+.lab-input-text, .lab-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  font-family: inherit;
+  font-size: 0.94rem;
+  line-height: 1.5;
+  color: var(--text-main);
+  background: var(--surface-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.lab-input-text:focus, .lab-textarea:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px var(--accent-blue-bg);
+}
+.lab-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.lab-btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.05s ease;
+}
+.lab-btn-submit:hover:not(:disabled) {
+  opacity: 0.92;
+}
+.lab-btn-submit:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.lab-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.lab-note-rule {
+  font-size: 0.78rem;
+}
+.lab-form-notice {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.lab-form-notice.is-error {
+  background: var(--accent-rose-bg, rgba(225,29,72,0.08));
+  border: 1px solid var(--accent-rose, #E11D48);
+  color: var(--accent-rose, #E11D48);
+}
+.lab-form-notice.is-success {
+  background: var(--accent-emerald-bg, rgba(5,150,105,0.08));
+  border: 1px solid var(--accent-emerald, #059669);
+  color: var(--accent-emerald, #059669);
+}
+</style>
+
+<script>
+(function() {
+  const section = document.getElementById('discussion');
+  if (!section) return;
+
+  const articleSlug = section.dataset.articleSlug;
+  const listEl = document.getElementById('comments-list');
+  const formEl = document.getElementById('comment-submission-form');
+  const bodyInput = document.getElementById('cmnt-body');
+  const authorInput = document.getElementById('cmnt-author');
+  const websiteInput = document.getElementById('cmnt-website');
+  const charCountEl = document.getElementById('cmnt-char-count');
+  const statusEl = document.getElementById('cmnt-status-msg');
+  const submitBtn = document.getElementById('cmnt-submit-btn');
+
+  const renderTimestamp = Date.now();
+  const TOKEN_KEY = 'mydatalabs_voter_token';
+
+  function getVoterToken() {
+    let token = localStorage.getItem(TOKEN_KEY);
+    if (!token || !/^[A-Za-z0-9_-]{16,64}$/.test(token)) {
+      try {
+        token = (crypto.randomUUID ? crypto.randomUUID() : 't_' + Math.random().toString(36).slice(2) + Date.now().toString(36)).replace(/-/g, '');
+        localStorage.setItem(TOKEN_KEY, token);
+      } catch (e) {
+        token = 'anon_' + Math.random().toString(36).slice(2, 18);
+      }
+    }
+    return token;
+  }
+
+  function setStatus(msg, type) {
+    if (!statusEl) return;
+    if (!msg) {
+      statusEl.style.display = 'none';
+      statusEl.className = 'lab-form-notice';
+      statusEl.textContent = '';
+      return;
+    }
+    statusEl.textContent = msg;
+    statusEl.className = 'lab-form-notice ' + (type === 'error' ? 'is-error' : 'is-success');
+    statusEl.style.display = 'block';
+  }
+
+  function renderComments(comments) {
+    if (!listEl) return;
+    if (!comments || comments.length === 0) {
+      listEl.innerHTML = '<div class="lab-comments-empty">No observations published yet. Be the first to share an observation.</div>';
+      return;
+    }
+
+    listEl.innerHTML = comments.map(c => {
+      let respHtml = '';
+      if (c.response) {
+        respHtml = `
+          <div class="lab-comment-response">
+            <div class="lab-response-kicker">Author / Editorial Desk Response</div>
+            <div>${escapeHtml(c.response)}</div>
+          </div>
+        `;
+      }
+      return `
+        <article class="lab-comment-card" id="comment-${c.id}">
+          <div class="lab-comment-meta">
+            <span class="lab-comment-author">${escapeHtml(c.author)}</span>
+            <span>&middot;</span>
+            <time>${escapeHtml(c.created_at)}</time>
+          </div>
+          <p class="lab-comment-body">${escapeHtml(c.body)}</p>
+          ${respHtml}
+        </article>
+      `;
+    }).join('');
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Load existing published comments
+  fetch(`/api/comments/${encodeURIComponent(articleSlug)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.ok && Array.isArray(data.comments)) {
+        renderComments(data.comments);
+      }
+    })
+    .catch(() => {
+      // Retain server-rendered comments if network request fails
+    });
+
+  // Character counter
+  if (bodyInput && charCountEl) {
+    bodyInput.addEventListener('input', function() {
+      const len = this.value.length;
+      charCountEl.textContent = `${len} / 1200`;
+      if (len < 15) {
+        charCountEl.style.color = 'var(--text-muted)';
+      } else {
+        charCountEl.style.color = 'var(--text-sub)';
+      }
+    });
+  }
+
+  // Form submission
+  if (formEl) {
+    formEl.addEventListener('submit', function(e) {
+      e.preventDefault();
+      setStatus(null);
+
+      const body = (bodyInput ? bodyInput.value : '').trim();
+      const name = (authorInput ? authorInput.value : '').trim();
+      const website = (websiteInput ? websiteInput.value : '').trim();
+      const elapsed = (Date.now() - renderTimestamp) / 1000;
+
+      if (body.length < 15) {
+        setStatus('Please write at least 15 characters before submitting.', 'error');
+        if (bodyInput) bodyInput.focus();
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.querySelector('.btn-text').textContent = 'Submitting…';
+      }
+
+      const token = getVoterToken();
+      const payload = {
+        name: name,
+        body: body,
+        website: website,
+        elapsed: elapsed,
+        token: token
+      };
+
+      fetch(`/api/comments/${encodeURIComponent(articleSlug)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Voter-Token': token
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json().then(data => ({ status: res.status, data: data })))
+      .then(({ status, data }) => {
+        if (status === 200 && data.ok) {
+          setStatus(data.message || 'Thank you! Your observation has been submitted and will appear once reviewed.', 'success');
+          if (bodyInput) bodyInput.value = '';
+          if (charCountEl) charCountEl.textContent = '0 / 1200';
+          if (formEl) formEl.reset();
+        } else {
+          setStatus(data.error || 'Submission could not be completed. Please try again.', 'error');
+        }
+      })
+      .catch(() => {
+        setStatus('Network error. Could not send comment. Please check your connection and retry.', 'error');
+      })
+      .finally(() => {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.querySelector('.btn-text').textContent = 'Submit Observation';
+        }
+      });
+    });
+  }
+})();
+</script>
+{% endif %}

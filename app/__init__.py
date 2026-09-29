@@ -3,6 +3,13 @@ from datetime import date, timedelta
 
 from flask import Flask, render_template, request
 
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass
+
 # Static assets are versioned by the ?v= query string emitted in base.html, so
 # they can be cached hard. Without this Flask serves them with `no-cache` and
 # every navigation re-downloads the CSS, JS and images.
@@ -85,11 +92,12 @@ def create_app() -> Flask:
     )
     app.config["SEND_FILE_MAX_AGE_DEFAULT"] = STATIC_MAX_AGE
 
-    # Signs the admin session cookie. It must come from the environment and be
-    # stable across instances: generating one per boot would sign each cold
-    # start with a different key, and the moderator would be logged out by
-    # whichever serverless instance happened to answer their next request.
-    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "")
+    # Signs the admin session cookie. Falls back to VOTE_PEPPER if SECRET_KEY is omitted.
+    app.config["SECRET_KEY"] = (
+        os.environ.get("SECRET_KEY")
+        or os.environ.get("VOTE_PEPPER")
+        or ""
+    )
     app.config.update(
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
@@ -104,10 +112,11 @@ def create_app() -> Flask:
     app.register_blueprint(elections_bp)
 
     # The moderation queue. Registered only when it can actually be locked —
-    # without a signing key or a password hash there is no way to authenticate
-    # anyone, and an admin blueprint that cannot check a password must not be
-    # reachable at all.
-    if app.config["SECRET_KEY"] and os.environ.get("ADMIN_PASSWORD_HASH"):
+    # accepts either ADMIN_PASSWORD_HASH or plain ADMIN_PASSWORD in environment.
+    has_admin_auth = bool(
+        os.environ.get("ADMIN_PASSWORD_HASH") or os.environ.get("ADMIN_PASSWORD")
+    )
+    if app.config["SECRET_KEY"] and has_admin_auth:
         from app.admin import bp as admin_bp
 
         app.register_blueprint(admin_bp)

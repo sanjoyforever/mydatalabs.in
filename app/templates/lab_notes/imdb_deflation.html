@@ -748,6 +748,9 @@
         distribution before combining them into a composite metric.
       </p>
 
+      {% set article_slug = note.slug %}
+      {% include "_comments.html" %}
+
       <footer class="lab-foot">
         <a href="{{ url_for('main.lab_notes_archive') }}">&larr; All Lab Notes</a>
         <a href="{{ url_for('main.home') }}">See the indices &rarr;</a>

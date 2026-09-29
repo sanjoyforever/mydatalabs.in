@@ -1,0 +1,75 @@
+{% extends "admin/_base.html" %}
+{% block title %}Reader Comments{% endblock %}
+{% block body %}
+<header class="bar">
+  <h1>Reader Comments</h1>
+  <form method="post" action="{{ url_for('admin.logout') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf }}">
+    <button type="submit">Sign out</button>
+  </form>
+</header>
+
+<nav style="display:flex; gap:16px; margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+  <a href="{{ url_for('admin.queue') }}" style="color:var(--muted); text-decoration:none; font-weight:600;">Critiques Queue</a>
+  <span style="color:var(--border-strong)">&bull;</span>
+  <a href="{{ url_for('admin.comments_queue') }}" style="color:var(--text); text-decoration:none; font-weight:600; border-bottom:2px solid var(--blue); padding-bottom:2px;">Reader Comments</a>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="notice {{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+
+{% if db_error %}<div class="notice error">Database: {{ db_error }}</div>{% endif %}
+
+<div class="row" style="margin-bottom:18px">
+  {% for key in ['pending', 'published', 'rejected'] %}
+    <a href="{{ url_for('admin.comments_queue', status=key) }}"
+       style="text-decoration:none">
+      <button {% if status == key %}class="primary"{% endif %} type="button">
+        {{ key|capitalize }}{% if counts.get(key) %} ({{ counts[key] }}){% endif %}
+      </button>
+    </a>
+  {% endfor %}
+</div>
+
+{% if not rows %}
+  <div class="card muted">No comments {{ status }}.</div>
+{% endif %}
+
+{% for row in rows %}
+  <article class="card">
+    <div class="muted" style="margin-bottom:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+      <strong style="color:var(--text)">{{ row.author_name or 'Anonymous' }}</strong>
+      <span>&middot;</span>
+      <span style="background:var(--accent-blue-bg, rgba(2,132,199,0.1)); color:var(--accent-blue, #0284c7); padding:2px 8px; border-radius:4px; font-size:12px; font-weight:600;">
+        {{ row.article_slug }}
+      </span>
+      <span>&middot;</span>
+      <span>{{ row.created_at.strftime('%Y-%m-%d %H:%M') if (row.created_at and row.created_at.strftime is defined) else (row.created_at or '') }}</span>
+      <span>&middot;</span>
+      <span>#{{ row.id }}</span>
+    </div>
+
+    <p style="white-space:pre-wrap; margin:0 0 10px; font-size:15px; line-height:1.6;">{{ row.body }}</p>
+
+    <form method="post" action="{{ url_for('admin.moderate_comment', comment_id=row.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf }}">
+      <input type="hidden" name="from" value="{{ status }}">
+
+      <label for="response-{{ row.id }}">Author/Editor Response (shown publicly under the comment):</label>
+      <textarea id="response-{{ row.id }}" name="response"
+                placeholder="Add an editorial clarification, acknowledgment, or reply..."
+                >{{ row.response or '' }}</textarea>
+
+      <div class="row" style="margin-top:12px">
+        <button type="submit" name="action" value="publish" class="primary">Publish</button>
+        <button type="submit" name="action" value="reject">Reject</button>
+        <button type="submit" name="action" value="delete" class="warn"
+                onclick="return confirm('Delete comment #{{ row.id }} permanently?')">Delete</button>
+      </div>
+    </form>
+  </article>
+{% endfor %}
+{% endblock %}

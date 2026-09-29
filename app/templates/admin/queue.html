@@ -13,6 +13,12 @@
   </form>
 </header>
 
+<nav style="display:flex; gap:16px; margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+  <a href="{{ url_for('admin.queue') }}" style="color:var(--text); text-decoration:none; font-weight:600; border-bottom:2px solid var(--blue); padding-bottom:2px;">Critiques Queue</a>
+  <span style="color:var(--border-strong)">&bull;</span>
+  <a href="{{ url_for('admin.comments_queue') }}" style="color:var(--muted); text-decoration:none; font-weight:600;">Reader Comments</a>
+</nav>
+
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% for category, message in messages %}
     <div class="notice {{ category }}">{{ message }}</div>

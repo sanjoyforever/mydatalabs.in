@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import secrets
 import threading
 import time
 from datetime import date, datetime
@@ -10,6 +11,7 @@ from flask import (
     Response,
     abort,
     current_app,
+    has_request_context,
     jsonify,
     redirect,
     render_template,
@@ -17,7 +19,7 @@ from flask import (
     send_from_directory,
 )
 
-from app import critiques, db, precomputed, scoring, storage, votes
+from app import comments, critiques, db, precomputed, scoring, storage, votes
 from app.indices import aviation, democracy, hormuz, solvency
 
 bp = Blueprint("main", __name__)
@@ -589,6 +591,53 @@ def _about_indices():
     return rows
 
 
+REPORT_SLUGS_BY_PATH = {
+    "/indices/airline-pressure": "airline-pressure",
+    "/airline-index": "airline-pressure",
+    "/indices/us-solvency": "us-solvency",
+    "/solvency-index": "us-solvency",
+    "/indices/democracy-index": "democracy-index",
+    "/democracy-index": "democracy-index",
+    "/indices/hormuz-crisis": "hormuz-crisis",
+    "/hormuz-index": "hormuz-crisis",
+    "/india-story/lok-sabha-projection": "lok-sabha-projection",
+    "/lok-sabha-index": "lok-sabha-projection",
+}
+
+
+def _format_comment_date(val: object = None) -> str:
+    if not val:
+        return ""
+    if hasattr(val, "strftime"):
+        return val.strftime("%d %b %Y, %H:%M")
+    s = str(val).strip()
+    try:
+        from datetime import datetime
+        dt = datetime.fromisoformat(s.replace("Z", "+00:00"))
+        return dt.strftime("%d %b %Y, %H:%M")
+    except Exception:
+        return s[:16]
+
+
+def _get_comments_for(slug: str) -> list[dict]:
+    if not slug:
+        return []
+    try:
+        raw = comments.get_published(slug)
+        return [
+            {
+                "id": r["id"],
+                "author": r.get("author_name") or "Reader",
+                "body": r["body"],
+                "response": r.get("response"),
+                "created_at": _format_comment_date(r.get("created_at")),
+            }
+            for r in raw
+        ]
+    except Exception:
+        return []
+
+
 def _common(**extra):
     """Template context every page needs."""
     ctx = {
@@ -596,6 +645,19 @@ def _common(**extra):
         "license_name": DATA_LICENSE_NAME,
         "license_url": DATA_LICENSE_URL,
     }
+
+    slug = extra.get("article_slug")
+    if not slug and has_request_context():
+        if extra.get("note") and isinstance(extra["note"], dict):
+            slug = extra["note"].get("slug")
+        elif request.path in REPORT_SLUGS_BY_PATH:
+            slug = REPORT_SLUGS_BY_PATH[request.path]
+
+    if slug:
+        ctx["article_slug"] = slug
+        if "published_comments" not in extra:
+            ctx["published_comments"] = _get_comments_for(slug)
+
     ctx.update(extra)
     return ctx
 
@@ -686,49 +748,6 @@ def _build_hormuz_hero(snapshot):
     }
 
 
-@bp.route("/")
-def home():
-    av_snapshot = get_aviation_snapshot()
-    av_history = aviation.get_history()
-    av_prev_score = av_history[-2]["score"] if len(av_history) >= 2 else None
-    av_delta = (av_snapshot.score - av_prev_score) if av_prev_score is not None else 0.0
-
-    snapshot = get_snapshot()
-    history = hormuz.get_history()
-    prev_score = history[-2]["score"] if len(history) >= 2 else None
-    delta = (snapshot.score - prev_score) if prev_score is not None else 0.0
-
-    sv_snapshot = solvency.compute_snapshot()
-    sv_history = solvency.get_history()
-    sv_latest = solvency.latest_row()
-
-    html = render_template(
-        "home.html",
-        **_common(
-            reports=_report_cards(snapshot),
-            solvency_snapshot=sv_snapshot,
-            solvency_hero=_build_solvency_hero(sv_snapshot, sv_latest, sv_history),
-            hormuz_hero=_build_hormuz_hero(snapshot),
-            aviation_snapshot=av_snapshot,
-            aviation_score=av_snapshot.score,
-            aviation_level=av_snapshot.level_label,
-            aviation_status=av_snapshot.level_status,
-            aviation_delta=av_delta,
-            aviation_press=_build_aviation_press(av_snapshot),
-            aviation_scale_pct=scoring.scale_pct(av_snapshot.score),
-            snapshot=snapshot,
-            hormuz_score=snapshot.score,
-            hormuz_level=snapshot.level_label,
-            hormuz_status=snapshot.level_status,
-            delta=delta,
-            scale_pct=scoring.scale_pct(snapshot.score),
-            scale_min=scoring.SCALE_MIN,
-            scale_max=scoring.SCALE_MAX,
-        ),
-    )
-    return _cached(Response(html, mimetype="text/html"))
-
-
 def _build_aviation_press(snapshot):
     comp_map = {cr.component.key: cr for cr in snapshot.components}
     cs = comp_map.get("crack_spread")
@@ -750,6 +769,51 @@ def _build_aviation_press(snapshot):
         "fx_stress": fx.current_value if fx else None,
         "cancellation_rate": can.current_value if can else None,
     }
+
+
+def get_home_context() -> dict:
+    av_snapshot = get_aviation_snapshot()
+    av_history = aviation.get_history()
+    av_prev_score = av_history[-2]["score"] if len(av_history) >= 2 else None
+    av_delta = (av_snapshot.score - av_prev_score) if av_prev_score is not None else 0.0
+
+    snapshot = get_snapshot()
+    history = hormuz.get_history()
+    prev_score = history[-2]["score"] if len(history) >= 2 else None
+    delta = (snapshot.score - prev_score) if prev_score is not None else 0.0
+
+    sv_snapshot = solvency.compute_snapshot()
+    sv_history = solvency.get_history()
+    sv_latest = solvency.latest_row()
+
+    return {
+        "reports": _report_cards(snapshot),
+        "solvency_snapshot": sv_snapshot,
+        "solvency_hero": _build_solvency_hero(sv_snapshot, sv_latest, sv_history),
+        "hormuz_hero": _build_hormuz_hero(snapshot),
+        "aviation_snapshot": av_snapshot,
+        "aviation_score": av_snapshot.score,
+        "aviation_level": av_snapshot.level_label,
+        "aviation_status": av_snapshot.level_status,
+        "aviation_delta": av_delta,
+        "aviation_press": _build_aviation_press(av_snapshot),
+        "aviation_scale_pct": scoring.scale_pct(av_snapshot.score),
+        "snapshot": snapshot,
+        "hormuz_score": snapshot.score,
+        "hormuz_level": snapshot.level_label,
+        "hormuz_status": snapshot.level_status,
+        "delta": delta,
+        "scale_pct": scoring.scale_pct(snapshot.score),
+        "scale_min": scoring.SCALE_MIN,
+        "scale_max": scoring.SCALE_MAX,
+    }
+
+
+@bp.route("/")
+def home():
+    ctx = get_home_context()
+    html = render_template("home.html", **_common(**ctx))
+    return _cached(Response(html, mimetype="text/html"))
 
 
 @bp.route("/indices/airline-pressure")
@@ -1087,6 +1151,20 @@ def lab_note(slug):
     extra = {}
     if slug == "cross-cultural-metric-normalization":
         extra["film_panel"] = _get_film_normalization_data()
+    try:
+        raw_comments = comments.get_published(slug)
+        extra["published_comments"] = [
+            {
+                "id": r["id"],
+                "author": r.get("author_name") or "Reader",
+                "body": r["body"],
+                "response": r.get("response"),
+                "created_at": _format_comment_date(r.get("created_at")),
+            }
+            for r in raw_comments
+        ]
+    except Exception:
+        extra["published_comments"] = []
     html = render_template(note["template"], **_common(note=note, **extra))
     return _cached(Response(html, mimetype="text/html"))
 
@@ -1326,6 +1404,63 @@ def api_critique_submit(report_key):
         "message": "Thank you — this goes to the author for review before it "
                    "appears on the page.",
     }))
+
+
+# --- Reader comments -------------------------------------------------------
+# High-signal discussion for Lab Notes and research articles. See app/comments.py.
+
+
+
+@bp.route("/api/comments/<slug>", methods=["GET"])
+def api_comments_get(slug: str):
+    """Fetch published comments for an article."""
+    if not comments.is_configured():
+        return _no_store(jsonify({"ok": True, "comments": []}))
+    try:
+        rows = comments.get_published(slug)
+        items = []
+        for r in rows:
+            created = _format_comment_date(r.get("created_at"))
+            items.append({
+                "id": r["id"],
+                "author": r.get("author_name") or "Reader",
+                "body": r["body"],
+                "response": r.get("response"),
+                "created_at": created,
+            })
+        return _no_store(jsonify({"ok": True, "comments": items}))
+    except Exception:
+        return _no_store(jsonify({"ok": True, "comments": []}))
+
+
+@bp.route("/api/comments/<slug>", methods=["POST"])
+def api_comments_submit(slug: str):
+    """Submit a reader comment for moderation."""
+    token = _voter_token()
+    payload = request.get_json(silent=True) or {}
+    if not token:
+        body_token = str(payload.get("token", "")).strip()
+        if _VOTER_TOKEN_RE.match(body_token):
+            token = body_token
+        else:
+            token = secrets.token_urlsafe(24)
+
+    week_start = comments.current_week_start()
+    try:
+        result = comments.submit(
+            payload,
+            slug,
+            voter_hash=votes.hash_voter_token(token),
+            origin_hash=_origin_hash(week_start),
+        )
+    except comments.CommentRejected as exc:
+        return _no_store(jsonify({"error": str(exc)})), 422
+    except comments.DatabaseUnavailable:
+        return _no_store(jsonify({"error": "Comments are temporarily unavailable."})), 503
+    except Exception:
+        return _no_store(jsonify({"error": "Could not save your comment. Please try again."})), 503
+
+    return _no_store(jsonify(result))
 
 
 # --- Crawler-facing files --------------------------------------------------

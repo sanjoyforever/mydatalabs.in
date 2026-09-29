@@ -36,7 +36,7 @@ except ImportError:  # pragma: no cover
 
 import time
 
-CONNECT_TIMEOUT = int(os.environ.get("DB_CONNECT_TIMEOUT", "10"))
+CONNECT_TIMEOUT = int(os.environ.get("DB_CONNECT_TIMEOUT", "2"))
 
 _schema_lock = threading.Lock()
 _schema_ready = False

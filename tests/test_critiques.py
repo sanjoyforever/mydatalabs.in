@@ -196,9 +196,10 @@ def test_rejected_submission_answers_422_with_a_readable_reason(client):
 
 
 def test_admin_is_absent_without_credentials(monkeypatch):
-    """No signing key or password hash means no admin blueprint at all."""
     monkeypatch.delenv("ADMIN_PASSWORD_HASH", raising=False)
+    monkeypatch.delenv("ADMIN_PASSWORD", raising=False)
     monkeypatch.delenv("SECRET_KEY", raising=False)
+    monkeypatch.delenv("VOTE_PEPPER", raising=False)
     app = create_app()
     app.config["TESTING"] = True
     with app.test_client() as client:
