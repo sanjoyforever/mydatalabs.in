@@ -1,46 +1,46 @@
 {
   "summary": {
-    "as_of_date": "2026-09-20",
+    "as_of_date": "2026-10-05",
     "headlines": [
-      "NDA projects to 273 seats (\u00b127 at 90% confidence), 20 below its 2024 result of 293.",
-      "The most likely outcome is an NDA majority at 55%, with a hung parliament at 33%. The projection has sat above the 272 line for 1749 consecutive days.",
-      "The 30-day trend is flat: the -0.014 seats/day slope is not statistically distinguishable from zero (t=-1.8).",
-      "The composite sentiment index reads -29 on a \u00b1100 scale, against -27.4 on the 30-day average. Daily volatility is 0.41 seats, so moves under roughly 0.8 seats are inside the day-to-day noise.",
-      "The single heaviest drag is \"Current expenses have become difficult to manage\" at 69.8% of respondents, contributing -11.0 index points."
+      "NDA projects to 274 seats (\u00b126 at 90% confidence), 19 below its 2024 result of 293.",
+      "The most likely outcome is an NDA majority at 55%, with a hung parliament at 33%. The projection has sat above the 272 line for 1764 consecutive days.",
+      "The 30-day trend is flat: the -0.002 seats/day slope is not statistically distinguishable from zero (t=-0.3).",
+      "The composite sentiment index reads -28 on a \u00b1100 scale, against -27.7 on the 30-day average. Daily volatility is 0.37 seats, so moves under roughly 0.7 seats are inside the day-to-day noise.",
+      "The single heaviest drag is \"Current expenses have become difficult to manage\" at 68.2% of respondents, contributing -10.7 index points."
     ],
     "drivers": {
       "negative": [
         {
           "metric": "Current expenses have become difficult to manage",
-          "share": 69.8,
-          "contribution": -10.969
+          "share": 68.25,
+          "contribution": -10.725
         },
         {
           "metric": "My life & the country both are in a poor state",
-          "share": 32.4,
-          "contribution": -6.943
+          "share": 31.93,
+          "contribution": -6.842
         },
         {
           "metric": "Will Deteriorate",
-          "share": 33.48,
-          "contribution": -6.218
+          "share": 32.66,
+          "contribution": -6.065
         }
       ],
       "positive": [
         {
-          "metric": "Will Improve",
-          "share": 31.51,
-          "contribution": 5.852
+          "metric": "The country is moving forward and my life too",
+          "share": 37.02,
+          "contribution": 5.95
         },
         {
-          "metric": "The country is moving forward and my life too",
-          "share": 35.27,
-          "contribution": 5.668
+          "metric": "Will Improve",
+          "share": 31.77,
+          "contribution": 5.9
         },
         {
           "metric": "Improved",
-          "share": 27.15,
-          "contribution": 4.322
+          "share": 27.33,
+          "contribution": 4.35
         }
       ]
     },
@@ -51,22 +51,22 @@
       "The model is national uniform swing. It has no seat-level or state-level contest data, so it cannot see alliance arithmetic or candidate effects."
     ],
     "figures": {
-      "nda_seats": 273,
-      "india_seats": 254,
+      "nda_seats": 274,
+      "india_seats": 253,
       "others_seats": 16,
-      "nda_vs_last_election": -20,
+      "nda_vs_last_election": -19,
       "nda_ci": [
-        246,
+        247,
         300
       ],
-      "prob_nda_majority": 0.54805,
-      "prob_hung": 0.3292,
-      "prob_india_majority": 0.12275,
-      "trend_slope_per_day": -0.0138,
+      "prob_nda_majority": 0.55445,
+      "prob_hung": 0.3259,
+      "prob_india_majority": 0.11965,
+      "trend_slope_per_day": -0.0024,
       "trend_direction": "flat",
-      "volatility": 0.4138,
-      "momentum": -0.1429,
-      "composite": -29
+      "volatility": 0.3714,
+      "momentum": 0.1,
+      "composite": -28
     }
   },
   "impacts": {
@@ -138,7 +138,7 @@
         "post_seats": 268.6,
         "impact_seats": -4.5,
         "impact_composite": -8.32,
-        "z": -2.27,
+        "z": -2.28,
         "partial": false,
         "post_days_used": 30,
         "direction": "hurt NDA",
@@ -219,7 +219,7 @@
         "post_seats": 274.3,
         "impact_seats": -1.5,
         "impact_composite": -2.71,
-        "z": -0.76,
+        "z": -0.77,
         "partial": false,
         "post_days_used": 30,
         "direction": "hurt NDA",
@@ -245,7 +245,7 @@
         "post_seats": 278.2,
         "impact_seats": -1.2,
         "impact_composite": -1.99,
-        "z": -0.59,
+        "z": -0.6,
         "partial": false,
         "post_days_used": 30,
         "direction": "hurt NDA",

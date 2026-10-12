@@ -8,10 +8,10 @@
     "endpoint": "t160.json",
     "polarity": -1.0,
     "weight": 1.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 4.87
+    "last_date": "2026-10-05",
+    "latest_value": 4.53
   },
   {
     "tracker_id": 1,
@@ -22,10 +22,10 @@
     "endpoint": "t161.json",
     "polarity": -1.0,
     "weight": 1.5,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 22.29
+    "last_date": "2026-10-05",
+    "latest_value": 24.94
   },
   {
     "tracker_id": 1,
@@ -36,10 +36,10 @@
     "endpoint": "t162.json",
     "polarity": -1.0,
     "weight": 1.2,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 4.92
+    "last_date": "2026-10-05",
+    "latest_value": 4.19
   },
   {
     "tracker_id": 1,
@@ -50,10 +50,10 @@
     "endpoint": "t163.json",
     "polarity": -1.0,
     "weight": 1.5,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 24.92
+    "last_date": "2026-10-05",
+    "latest_value": 24.04
   },
   {
     "tracker_id": 1,
@@ -64,10 +64,10 @@
     "endpoint": "t164.json",
     "polarity": -1.0,
     "weight": 0.8,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 4.27
+    "last_date": "2026-10-05",
+    "latest_value": 4.07
   },
   {
     "tracker_id": 1,
@@ -78,10 +78,10 @@
     "endpoint": "t165.json",
     "polarity": 1.0,
     "weight": 0.9,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 0.5
+    "last_date": "2026-10-05",
+    "latest_value": 0.48
   },
   {
     "tracker_id": 1,
@@ -92,9 +92,9 @@
     "endpoint": "t166.json",
     "polarity": -0.5,
     "weight": 0.6,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
+    "last_date": "2026-10-05",
     "latest_value": 0.0
   },
   {
@@ -106,10 +106,10 @@
     "endpoint": "t167.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 29.76
+    "last_date": "2026-10-05",
+    "latest_value": 28.25
   },
   {
     "tracker_id": 1,
@@ -120,10 +120,10 @@
     "endpoint": "t168.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 8.47
+    "last_date": "2026-10-05",
+    "latest_value": 9.5
   },
   {
     "tracker_id": 2,
@@ -134,10 +134,10 @@
     "endpoint": "t120.json",
     "polarity": 1.0,
     "weight": 1.3,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 27.15
+    "last_date": "2026-10-05",
+    "latest_value": 27.33
   },
   {
     "tracker_id": 2,
@@ -148,10 +148,10 @@
     "endpoint": "t121.json",
     "polarity": 0.0,
     "weight": 0.2,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 40.0
+    "last_date": "2026-10-05",
+    "latest_value": 38.6
   },
   {
     "tracker_id": 2,
@@ -162,10 +162,10 @@
     "endpoint": "t122.json",
     "polarity": -1.0,
     "weight": 1.4,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 31.16
+    "last_date": "2026-10-05",
+    "latest_value": 32.51
   },
   {
     "tracker_id": 2,
@@ -176,10 +176,10 @@
     "endpoint": "t123.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 1.69
+    "last_date": "2026-10-05",
+    "latest_value": 1.56
   },
   {
     "tracker_id": 3,
@@ -190,10 +190,10 @@
     "endpoint": "t260.json",
     "polarity": 0.2,
     "weight": 0.6,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 11.13
+    "last_date": "2026-10-05",
+    "latest_value": 12.57
   },
   {
     "tracker_id": 3,
@@ -204,10 +204,10 @@
     "endpoint": "t261.json",
     "polarity": -0.7,
     "weight": 1.1,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 35.09
+    "last_date": "2026-10-05",
+    "latest_value": 33.0
   },
   {
     "tracker_id": 3,
@@ -218,10 +218,10 @@
     "endpoint": "t262.json",
     "polarity": -1.0,
     "weight": 1.5,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 40.94
+    "last_date": "2026-10-05",
+    "latest_value": 40.9
   },
   {
     "tracker_id": 3,
@@ -232,10 +232,10 @@
     "endpoint": "t263.json",
     "polarity": 1.0,
     "weight": 1.2,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 1.7
+    "last_date": "2026-10-05",
+    "latest_value": 1.56
   },
   {
     "tracker_id": 3,
@@ -246,10 +246,10 @@
     "endpoint": "t264.json",
     "polarity": -0.8,
     "weight": 1.1,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 3.05
+    "last_date": "2026-10-05",
+    "latest_value": 3.77
   },
   {
     "tracker_id": 3,
@@ -260,10 +260,10 @@
     "endpoint": "t265.json",
     "polarity": 0.0,
     "weight": 0.2,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 5.3
+    "last_date": "2026-10-05",
+    "latest_value": 5.2
   },
   {
     "tracker_id": 3,
@@ -274,10 +274,10 @@
     "endpoint": "t266.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 2.79
+    "last_date": "2026-10-05",
+    "latest_value": 3.0
   },
   {
     "tracker_id": 4,
@@ -288,10 +288,10 @@
     "endpoint": "t270.json",
     "polarity": -0.3,
     "weight": 0.8,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 22.05
+    "last_date": "2026-10-05",
+    "latest_value": 23.76
   },
   {
     "tracker_id": 4,
@@ -302,10 +302,10 @@
     "endpoint": "t271.json",
     "polarity": -1.0,
     "weight": 1.6,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 69.8
+    "last_date": "2026-10-05",
+    "latest_value": 68.25
   },
   {
     "tracker_id": 4,
@@ -316,10 +316,10 @@
     "endpoint": "t272.json",
     "polarity": 1.0,
     "weight": 1.0,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 6.0
+    "last_date": "2026-10-05",
+    "latest_value": 5.44
   },
   {
     "tracker_id": 4,
@@ -330,10 +330,10 @@
     "endpoint": "t273.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2536,
+    "points": 2551,
     "first_date": "2019-10-12",
-    "last_date": "2026-09-20",
-    "latest_value": 2.15
+    "last_date": "2026-10-05",
+    "latest_value": 2.55
   },
   {
     "tracker_id": 5,
@@ -344,10 +344,10 @@
     "endpoint": "t130.json",
     "polarity": 1.0,
     "weight": 1.5,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 31.51
+    "last_date": "2026-10-05",
+    "latest_value": 31.77
   },
   {
     "tracker_id": 5,
@@ -358,10 +358,10 @@
     "endpoint": "t131.json",
     "polarity": 0.0,
     "weight": 0.2,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 12.92
+    "last_date": "2026-10-05",
+    "latest_value": 13.64
   },
   {
     "tracker_id": 5,
@@ -372,10 +372,10 @@
     "endpoint": "t132.json",
     "polarity": -1.0,
     "weight": 1.5,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 33.48
+    "last_date": "2026-10-05",
+    "latest_value": 32.66
   },
   {
     "tracker_id": 5,
@@ -386,10 +386,10 @@
     "endpoint": "t133.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 22.09
+    "last_date": "2026-10-05",
+    "latest_value": 21.93
   },
   {
     "tracker_id": 6,
@@ -400,10 +400,10 @@
     "endpoint": "t140.json",
     "polarity": 0.25,
     "weight": 0.9,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 22.63
+    "last_date": "2026-10-05",
+    "latest_value": 21.89
   },
   {
     "tracker_id": 6,
@@ -414,10 +414,10 @@
     "endpoint": "t141.json",
     "polarity": 1.0,
     "weight": 1.35,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 35.27
+    "last_date": "2026-10-05",
+    "latest_value": 37.02
   },
   {
     "tracker_id": 6,
@@ -428,10 +428,10 @@
     "endpoint": "t142.json",
     "polarity": -0.25,
     "weight": 0.9,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 4.95
+    "last_date": "2026-10-05",
+    "latest_value": 4.88
   },
   {
     "tracker_id": 6,
@@ -442,10 +442,10 @@
     "endpoint": "t143.json",
     "polarity": -1.0,
     "weight": 1.8,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 32.4
+    "last_date": "2026-10-05",
+    "latest_value": 31.93
   },
   {
     "tracker_id": 6,
@@ -456,10 +456,10 @@
     "endpoint": "t144.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 4.75
+    "last_date": "2026-10-05",
+    "latest_value": 4.28
   },
   {
     "tracker_id": 7,
@@ -470,10 +470,10 @@
     "endpoint": "t220.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 23.99
+    "last_date": "2026-10-05",
+    "latest_value": 20.91
   },
   {
     "tracker_id": 7,
@@ -484,10 +484,10 @@
     "endpoint": "t221.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 1.55
+    "last_date": "2026-10-05",
+    "latest_value": 2.15
   },
   {
     "tracker_id": 7,
@@ -498,10 +498,10 @@
     "endpoint": "t222.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 7.69
+    "last_date": "2026-10-05",
+    "latest_value": 7.04
   },
   {
     "tracker_id": 7,
@@ -512,10 +512,10 @@
     "endpoint": "t223.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 0.39
+    "last_date": "2026-10-05",
+    "latest_value": 0.45
   },
   {
     "tracker_id": 7,
@@ -526,10 +526,10 @@
     "endpoint": "t224.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 56.5
+    "last_date": "2026-10-05",
+    "latest_value": 57.49
   },
   {
     "tracker_id": 7,
@@ -540,10 +540,10 @@
     "endpoint": "t225.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 0.25
+    "last_date": "2026-10-05",
+    "latest_value": 0.33
   },
   {
     "tracker_id": 7,
@@ -554,10 +554,10 @@
     "endpoint": "t226.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 3.82
+    "last_date": "2026-10-05",
+    "latest_value": 5.88
   },
   {
     "tracker_id": 7,
@@ -568,9 +568,9 @@
     "endpoint": "t227.json",
     "polarity": 0.0,
     "weight": 0.0,
-    "points": 2820,
+    "points": 2835,
     "first_date": "2019-01-01",
-    "last_date": "2026-09-20",
-    "latest_value": 1.8
+    "last_date": "2026-10-05",
+    "latest_value": 2.49
   }
 ]

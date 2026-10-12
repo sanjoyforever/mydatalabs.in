@@ -1428,7 +1428,9 @@ def api_comments_get(slug: str):
                 "response": r.get("response"),
                 "created_at": created,
             })
-        return _no_store(jsonify({"ok": True, "comments": items}))
+        resp = jsonify({"ok": True, "comments": items})
+        resp.headers["Cache-Control"] = "public, max-age=60, s-maxage=300, stale-while-revalidate=600"
+        return resp
     except Exception:
         return _no_store(jsonify({"ok": True, "comments": []}))
 

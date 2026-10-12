@@ -20,6 +20,7 @@ from __future__ import annotations
 import os
 import re
 import sqlite3
+import time
 import unicodedata
 from contextlib import contextmanager
 from datetime import date, datetime, timedelta
@@ -41,6 +42,7 @@ __all__ = [
     "submit",
     "validate",
     "get_published",
+    "clear_published_cache",
     "get_queue",
     "status_counts",
     "moderate",
@@ -410,8 +412,41 @@ def submit(
     }
 
 
-def get_published(article_slug: str) -> list[dict[str, Any]]:
-    """Return all published comments for an article, ordered chronologically."""
+# In-memory TTL cache for published comments to prevent repeated Firestore reads
+_published_cache: dict[str, tuple[float, list[dict[str, Any]]]] = {}
+PUBLISHED_CACHE_TTL = int(os.environ.get("COMMENTS_CACHE_TTL", "300"))  # 5 minutes default
+
+
+def clear_published_cache(article_slug: str | None = None) -> None:
+    """Invalidate in-memory cache of published comments."""
+    if article_slug:
+        _published_cache.pop(article_slug, None)
+    else:
+        _published_cache.clear()
+
+
+def get_published(article_slug: str, force: bool = False) -> list[dict[str, Any]]:
+    """Return all published comments for an article, ordered chronologically.
+
+    Results are cached in-memory with a 5-minute TTL to prevent draining
+    Firestore read quotas on repeated pageviews.
+    """
+    slug = (article_slug or "").strip().lower()
+    if not slug:
+        return []
+
+    now = time.time()
+    if not force and slug in _published_cache:
+        cached_time, cached_items = _published_cache[slug]
+        if (now - cached_time) < PUBLISHED_CACHE_TTL:
+            return cached_items
+
+    items = _fetch_published_from_storage(slug)
+    _published_cache[slug] = (now, items)
+    return items
+
+
+def _fetch_published_from_storage(article_slug: str) -> list[dict[str, Any]]:
     if _use_firestore():
         fs = _get_firestore_client()
         if fs is not None:
@@ -620,80 +655,86 @@ def moderate(
 
     clean_response = _clean(response, MAX_RESPONSE) or None
 
-    if _use_firestore():
-        fs = _get_firestore_client()
-        if fs is not None:
-            try:
-                fs.collection("comments").document(str(comment_id)).update({
-                    "status": status,
-                    "response": clean_response,
-                    "moderated_at": datetime.now(),
-                })
-                return
-            except Exception:
-                pass
-
-    if _use_sqlite():
-        _ensure_sqlite_schema()
-        with _sqlite_cursor() as cur:
-            cur.execute(
-                """
-                UPDATE article_comments
-                   SET status = ?, response = ?, moderated_at = CURRENT_TIMESTAMP
-                 WHERE id = ?
-                """,
-                (status, clean_response, comment_id),
-            )
-        return
-
     try:
-        db.ensure_schema(SCHEMA)
-        with db.cursor() as cur:
-            cur.execute(
-                """
-                UPDATE article_comments
-                   SET status = %s,
-                       response = %s,
-                       moderated_at = now()
-                 WHERE id = %s
-                """,
-                (status, clean_response, comment_id),
-            )
-    except Exception:
-        _ensure_sqlite_schema()
-        with _sqlite_cursor() as cur:
-            cur.execute(
-                """
-                UPDATE article_comments
-                   SET status = ?, response = ?, moderated_at = CURRENT_TIMESTAMP
-                 WHERE id = ?
-                """,
-                (status, clean_response, comment_id),
-            )
+        if _use_firestore():
+            fs = _get_firestore_client()
+            if fs is not None:
+                try:
+                    fs.collection("comments").document(str(comment_id)).update({
+                        "status": status,
+                        "response": clean_response,
+                        "moderated_at": datetime.now(),
+                    })
+                    return
+                except Exception:
+                    pass
+
+        if _use_sqlite():
+            _ensure_sqlite_schema()
+            with _sqlite_cursor() as cur:
+                cur.execute(
+                    """
+                    UPDATE article_comments
+                       SET status = ?, response = ?, moderated_at = CURRENT_TIMESTAMP
+                     WHERE id = ?
+                    """,
+                    (status, clean_response, comment_id),
+                )
+            return
+
+        try:
+            db.ensure_schema(SCHEMA)
+            with db.cursor() as cur:
+                cur.execute(
+                    """
+                    UPDATE article_comments
+                       SET status = %s,
+                           response = %s,
+                           moderated_at = now()
+                     WHERE id = %s
+                    """,
+                    (status, clean_response, comment_id),
+                )
+        except Exception:
+            _ensure_sqlite_schema()
+            with _sqlite_cursor() as cur:
+                cur.execute(
+                    """
+                    UPDATE article_comments
+                       SET status = ?, response = ?, moderated_at = CURRENT_TIMESTAMP
+                     WHERE id = ?
+                    """,
+                    (status, clean_response, comment_id),
+                )
+    finally:
+        clear_published_cache()
 
 
 def delete(comment_id: Any) -> None:
     """Permanently remove a comment."""
-    if _use_firestore():
-        fs = _get_firestore_client()
-        if fs is not None:
-            try:
-                fs.collection("comments").document(str(comment_id)).delete()
-                return
-            except Exception:
-                pass
-
-    if _use_sqlite():
-        _ensure_sqlite_schema()
-        with _sqlite_cursor() as cur:
-            cur.execute("DELETE FROM article_comments WHERE id = ?", (comment_id,))
-        return
-
     try:
-        db.ensure_schema(SCHEMA)
-        with db.cursor() as cur:
-            cur.execute("DELETE FROM article_comments WHERE id = %s", (comment_id,))
-    except Exception:
-        _ensure_sqlite_schema()
-        with _sqlite_cursor() as cur:
-            cur.execute("DELETE FROM article_comments WHERE id = ?", (comment_id,))
+        if _use_firestore():
+            fs = _get_firestore_client()
+            if fs is not None:
+                try:
+                    fs.collection("comments").document(str(comment_id)).delete()
+                    return
+                except Exception:
+                    pass
+
+        if _use_sqlite():
+            _ensure_sqlite_schema()
+            with _sqlite_cursor() as cur:
+                cur.execute("DELETE FROM article_comments WHERE id = ?", (comment_id,))
+            return
+
+        try:
+            db.ensure_schema(SCHEMA)
+            with db.cursor() as cur:
+                cur.execute("DELETE FROM article_comments WHERE id = %s", (comment_id,))
+        except Exception:
+            _ensure_sqlite_schema()
+            with _sqlite_cursor() as cur:
+                cur.execute("DELETE FROM article_comments WHERE id = ?", (comment_id,))
+    finally:
+        clear_published_cache()

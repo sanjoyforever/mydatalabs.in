@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /comments/{commentId} {
+      allow read: if resource.data.status == 'published';
+      allow write: if false;
+    }
+  }
+}

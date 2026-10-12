@@ -1,30 +1,30 @@
 {
   "live_values": {
-    "brent": 97.44000244140625,
-    "ttf_gas": 72.07099914550781,
-    "vix": 14.869999885559082,
-    "ship_traffic": 22.0
+    "brent": 107.12000274658203,
+    "ttf_gas": 83.11000061035156,
+    "vix": 15.319999694824219,
+    "ship_traffic": 19.0
   },
-  "live_values_at": "2026-09-27",
-  "portwatch_week_end": "2026-09-20",
+  "live_values_at": "2026-10-12",
+  "portwatch_week_end": "2026-10-04",
   "sentiment": {
     "available": true,
-    "week_start": "2026-08-31",
-    "votes": 14,
-    "index": 160.2,
+    "week_start": "2026-10-12",
+    "votes": 5,
+    "index": 175.2,
     "level_label": "Severe",
     "level_status": "serious",
-    "scale_pct": 60.2,
-    "mean_rating": 6.42,
+    "scale_pct": 75.2,
+    "mean_rating": 7.77,
     "distribution": [
       0,
       0,
       0,
       0,
       0,
-      9,
-      4,
-      1,
+      0,
+      0,
+      5,
       0,
       0
     ],
@@ -64,9 +64,45 @@
     },
     {
       "week_start": "2026-08-31",
-      "votes": 14,
-      "mean_rating": 6.42,
-      "index": 160.2
+      "votes": 83,
+      "mean_rating": 6.47,
+      "index": 160.8
+    },
+    {
+      "week_start": "2026-09-07",
+      "votes": 76,
+      "mean_rating": 6.46,
+      "index": 160.6
+    },
+    {
+      "week_start": "2026-09-14",
+      "votes": 46,
+      "mean_rating": 7.17,
+      "index": 168.6
+    },
+    {
+      "week_start": "2026-09-21",
+      "votes": 54,
+      "mean_rating": 8.31,
+      "index": 181.3
+    },
+    {
+      "week_start": "2026-09-28",
+      "votes": 45,
+      "mean_rating": 8.06,
+      "index": 178.5
+    },
+    {
+      "week_start": "2026-10-05",
+      "votes": 31,
+      "mean_rating": 8.03,
+      "index": 178.1
+    },
+    {
+      "week_start": "2026-10-12",
+      "votes": 5,
+      "mean_rating": 7.77,
+      "index": 175.2
     }
   ],
   "perception_by_week": {
@@ -75,7 +111,13 @@
     "2026-08-10": 159.1,
     "2026-08-17": 160.2,
     "2026-08-24": 159.7,
-    "2026-08-31": 160.2
+    "2026-08-31": 160.8,
+    "2026-09-07": 160.6,
+    "2026-09-14": 168.6,
+    "2026-09-21": 181.3,
+    "2026-09-28": 178.5,
+    "2026-10-05": 178.1,
+    "2026-10-12": 175.2
   },
   "perception_series": [
     null,
@@ -111,9 +153,10 @@
     158.3,
     159.1,
     160.2,
-    160.2,
-    null,
-    null,
-    null
+    160.8,
+    160.6,
+    168.6,
+    181.3,
+    175.2
   ]
 }

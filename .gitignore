@@ -51,3 +51,5 @@ insolvency.pdf
 
 # Generated backup of the CVoter master CSV (written by data_updater.py).
 *.csv.bak
+user_given_article.txt
+
