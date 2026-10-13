@@ -860,19 +860,19 @@
     },
     {
       "week_start": "2026-10-12",
-      "score": 130.0,
+      "score": 130.1,
       "level_label": "Elevated Strain",
       "level_status": "warning",
       "raw_values": {
-        "crack_spread": 92.26,
+        "crack_spread": 91.42,
         "fleet_grounding": 13.54,
         "atfm_delay": 2.13,
         "detour_pct": 4.81,
         "equity_stress": 95.0,
-        "fx_stress": 37.8,
+        "fx_stress": 37.9,
         "cancellation_rate": 1.46
       }
     }
   ],
-  "last_updated": "2026-10-12"
+  "last_updated": "2026-10-13"
 }
