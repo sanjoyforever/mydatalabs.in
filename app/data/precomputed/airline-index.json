@@ -1,19 +1,19 @@
 {
   "live_values": {
-    "crack_spread": 91.38,
+    "crack_spread": 82.97,
     "fleet_grounding": 13.54,
     "atfm_delay": 2.13,
     "detour_pct": 4.81,
     "equity_stress": 95.0,
-    "fx_stress": 37.9,
+    "fx_stress": 37.8,
     "cancellation_rate": 1.46
   },
-  "live_values_at": "2026-10-13",
+  "live_values_at": "2026-11-01",
   "snapshot": {
-    "score": 130.1,
+    "score": 130.0,
     "level_label": "Elevated Strain",
     "level_status": "warning",
-    "week_start": "2026-10-12"
+    "week_start": "2026-10-26"
   },
   "history": [
     {

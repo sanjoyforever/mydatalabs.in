@@ -1,12 +1,12 @@
 {
   "cards": {
     "airline-index": {
-      "value": "130.1",
+      "value": "130.0",
       "unit": "score",
       "status": "warning"
     },
     "hormuz-index": {
-      "value": "180.4",
+      "value": "181.4",
       "unit": "score",
       "status": "critical"
     },

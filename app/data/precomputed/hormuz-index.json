@@ -1,31 +1,31 @@
 {
   "live_values": {
-    "brent": 105.58999633789062,
-    "ttf_gas": 84.35099792480469,
-    "vix": 15.210000038146973,
-    "ship_traffic": 19.0
+    "brent": 113.43000030517578,
+    "ttf_gas": 103.94400024414062,
+    "vix": 19.420000076293945,
+    "ship_traffic": 23.0
   },
-  "live_values_at": "2026-10-13",
-  "portwatch_week_end": "2026-10-04",
+  "live_values_at": "2026-11-01",
+  "portwatch_week_end": "2026-10-25",
   "sentiment": {
     "available": true,
-    "week_start": "2026-08-31",
-    "votes": 14,
-    "index": 160.2,
-    "level_label": "Severe",
-    "level_status": "serious",
-    "scale_pct": 60.2,
-    "mean_rating": 6.42,
+    "week_start": "2026-10-26",
+    "votes": 43,
+    "index": 180.3,
+    "level_label": "Extreme",
+    "level_status": "critical",
+    "scale_pct": 80.3,
+    "mean_rating": 8.23,
     "distribution": [
       0,
       0,
       0,
       0,
       0,
-      9,
-      4,
-      1,
       0,
+      0,
+      36,
+      7,
       0
     ],
     "min_votes": 1,
@@ -64,9 +64,57 @@
     },
     {
       "week_start": "2026-08-31",
-      "votes": 14,
-      "mean_rating": 6.42,
-      "index": 160.2
+      "votes": 83,
+      "mean_rating": 6.47,
+      "index": 160.8
+    },
+    {
+      "week_start": "2026-09-07",
+      "votes": 76,
+      "mean_rating": 6.46,
+      "index": 160.6
+    },
+    {
+      "week_start": "2026-09-14",
+      "votes": 46,
+      "mean_rating": 7.17,
+      "index": 168.6
+    },
+    {
+      "week_start": "2026-09-21",
+      "votes": 54,
+      "mean_rating": 8.31,
+      "index": 181.3
+    },
+    {
+      "week_start": "2026-09-28",
+      "votes": 45,
+      "mean_rating": 8.06,
+      "index": 178.5
+    },
+    {
+      "week_start": "2026-10-05",
+      "votes": 31,
+      "mean_rating": 8.03,
+      "index": 178.1
+    },
+    {
+      "week_start": "2026-10-12",
+      "votes": 40,
+      "mean_rating": 8.25,
+      "index": 180.5
+    },
+    {
+      "week_start": "2026-10-19",
+      "votes": 52,
+      "mean_rating": 8.22,
+      "index": 180.2
+    },
+    {
+      "week_start": "2026-10-26",
+      "votes": 43,
+      "mean_rating": 8.23,
+      "index": 180.3
     }
   ],
   "perception_by_week": {
@@ -75,7 +123,15 @@
     "2026-08-10": 159.1,
     "2026-08-17": 160.2,
     "2026-08-24": 159.7,
-    "2026-08-31": 160.2
+    "2026-08-31": 160.8,
+    "2026-09-07": 160.6,
+    "2026-09-14": 168.6,
+    "2026-09-21": 181.3,
+    "2026-09-28": 178.5,
+    "2026-10-05": 178.1,
+    "2026-10-12": 180.5,
+    "2026-10-19": 180.2,
+    "2026-10-26": 180.3
   },
   "perception_series": [
     null,
@@ -111,10 +167,11 @@
     158.3,
     159.1,
     160.2,
-    160.2,
-    null,
-    null,
-    null,
-    null
+    160.8,
+    160.6,
+    168.6,
+    181.3,
+    180.5,
+    180.3
   ]
 }
