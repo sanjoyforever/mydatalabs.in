@@ -255,17 +255,20 @@
       <span class="breadcrumb-current" aria-current="page">{{ note.nav_label }}</span>
     </nav>
 
-    <div class="tab-segmented" role="tablist" aria-label="Lab note sections">
-      <button type="button" class="tab-btn active" role="tab" aria-selected="true"
-              aria-controls="tab-analysis" data-report-tab="analysis">
-        <span class="material-symbols-outlined">article</span>
-        Analysis
-      </button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false"
-              aria-controls="tab-methodology" data-report-tab="methodology">
-        <span class="material-symbols-outlined">science</span>
-        Methodology
-      </button>
+    <div class="lab-topbar-actions">
+      <div class="tab-segmented" role="tablist" aria-label="Lab note sections">
+        <button type="button" class="tab-btn active" role="tab" aria-selected="true"
+                aria-controls="tab-analysis" data-report-tab="analysis">
+          <span class="material-symbols-outlined">article</span>
+          Analysis
+        </button>
+        <button type="button" class="tab-btn" role="tab" aria-selected="false"
+                aria-controls="tab-methodology" data-report-tab="methodology">
+          <span class="material-symbols-outlined">science</span>
+          Methodology
+        </button>
+      </div>
+      {% include "_lab_pdf.html" %}
     </div>
   </div>
 

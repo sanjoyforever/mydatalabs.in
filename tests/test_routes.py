@@ -390,6 +390,18 @@ def test_polarisation_lab_note_renders_validated_figures(client):
     assert "/lab-notes/is-the-world-polarising" in arc
 
 
+def test_every_lab_note_has_the_same_pdf_export_button(client):
+    from app.routes import LAB_NOTES
+    for note in LAB_NOTES:
+        text = client.get(f"/lab-notes/{note['slug']}").get_data(as_text=True)
+        # One shared partial: same button, same print layout, on every note.
+        assert text.count('id="lab-pdf-btn"') == 1, note["slug"]
+        assert "html.lab-printing #tab-analysis" in text, note["slug"]
+        assert "html.lab-printing .lab-comments-section" in text, note["slug"]
+    # The archive is not a note and carries no export button.
+    assert 'id="lab-pdf-btn"' not in client.get("/lab-notes").get_data(as_text=True)
+
+
 def test_unknown_lab_note_is_404(client):
     assert client.get("/lab-notes/no-such-note").status_code == 404
 

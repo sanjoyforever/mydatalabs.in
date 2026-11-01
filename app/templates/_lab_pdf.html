@@ -1,0 +1,116 @@
+{# Export-as-PDF for every Lab Note. Include once, inside the topbar, next to the tab switcher.
+   Uses the browser's print engine ("Save as PDF"): the printed report runs from the headline
+   (the Analysis tab's <h1>) to the last line of the analysis. The site chrome, the tab bar,
+   the Methodology tab, the comments and the page footer are left out. #}
+<button type="button" class="lab-pdf-btn" id="lab-pdf-btn" aria-label="Export this Lab Note as a PDF"
+        title="Opens your browser's print dialog: choose &ldquo;Save as PDF&rdquo;">
+  <span class="material-symbols-outlined" aria-hidden="true">picture_as_pdf</span>
+  Export PDF
+</button>
+
+<style>
+.lab-topbar-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.lab-pdf-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--surface-card-hover); color: var(--text-main);
+  border: 1px solid var(--border-bright); border-radius: 8px;
+  font: inherit; font-size: 0.85rem; font-weight: 600;
+  padding: 8px 14px; cursor: pointer; transition: background .15s ease, border-color .15s ease;
+}
+.lab-pdf-btn:hover { background: var(--border-bright); }
+.lab-pdf-btn:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+.lab-pdf-btn .material-symbols-outlined { font-size: 18px; }
+
+/* Print layout. Everything is keyed on html.lab-printing, which the script below sets for
+   the moment of printing (so charts are measured at page width) and which also covers Ctrl+P. */
+@page { size: A4; margin: 14mm; }
+html.lab-printing, html.lab-printing body { background: #fff !important; color: #111 !important; }
+html.lab-printing * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+html.lab-printing .site-header,
+html.lab-printing .site-footer,
+html.lab-printing .mobile-nav,
+html.lab-printing .elections-topbar,
+html.lab-printing #tab-methodology,
+html.lab-printing .lab-comments-section,
+html.lab-printing .lab-foot,
+html.lab-printing .lab-pdf-btn,
+html.lab-printing .chart-fallback,
+html.lab-printing .lab-details { display: none !important; } /* appendix tables: on screen only */
+html.lab-printing .report-dash-canvas { background: #fff !important; border: 0 !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; }
+html.lab-printing #tab-analysis {
+  display: block !important; width: 640px; max-width: none; margin: 0 auto; padding: 0 !important;
+  background: #fff !important; border: 0 !important; box-shadow: none !important; border-radius: 0 !important;
+}
+html.lab-printing .lab-head, html.lab-printing .lab-body { max-width: none; }
+html.lab-printing figure, html.lab-printing table, html.lab-printing .lab-stat-box,
+html.lab-printing .lab-editor-note, html.lab-printing li { break-inside: avoid; }
+html.lab-printing h1, html.lab-printing h2, html.lab-printing h3, html.lab-printing figcaption { break-after: avoid; }
+html.lab-printing .lab-print-credit {
+  margin-top: 28px; padding-top: 10px; border-top: 1px solid #ccc;
+  font-size: 11px; color: #555;
+}
+.lab-print-credit { display: none; }
+html.lab-printing .lab-print-credit { display: block; }
+</style>
+
+<script>
+(function () {
+  const root = document.documentElement;
+  let saved = null;
+
+  function prepare() {
+    if (saved) return;
+    const panel = document.getElementById('tab-analysis');
+    if (!panel) return;
+    saved = {
+      theme: root.getAttribute('data-theme'),
+      active: panel.classList.contains('active'),
+      title: document.title,
+      opened: [...panel.querySelectorAll('details:not([open]):not(.lab-details)')],
+      credit: null
+    };
+    // Paper is white: print in the light theme whatever the reader is using.
+    root.setAttribute('data-theme', 'light');
+    panel.classList.add('active');
+    saved.opened.forEach(d => d.setAttribute('open', ''));
+    // Source line at the foot of the report.
+    const credit = document.createElement('p');
+    credit.className = 'lab-print-credit';
+    credit.textContent = 'Source: ' + location.origin + location.pathname + ' · MyDataLabs · printed ' +
+      new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    panel.appendChild(credit);
+    saved.credit = credit;
+    root.classList.add('lab-printing');
+    void panel.offsetWidth; // flush layout so charts are measured at page width
+    document.querySelectorAll('[_echarts_instance_]').forEach(el => {
+      const c = window.echarts && echarts.getInstanceByDom(el);
+      if (c) c.resize();
+    });
+  }
+
+  function restore() {
+    if (!saved) return;
+    const panel = document.getElementById('tab-analysis');
+    root.classList.remove('lab-printing');
+    if (saved.theme) root.setAttribute('data-theme', saved.theme);
+    if (panel && !saved.active) panel.classList.remove('active');
+    saved.opened.forEach(d => d.removeAttribute('open'));
+    if (saved.credit) saved.credit.remove();
+    document.title = saved.title;
+    saved = null;
+    // Back at screen width: charts need re-measuring (the Analysis tab may be hidden again).
+    setTimeout(() => document.querySelectorAll('[_echarts_instance_]').forEach(el => {
+      const c = window.echarts && echarts.getInstanceByDom(el);
+      if (c) c.resize();
+    }), 50);
+  }
+
+  window.addEventListener('beforeprint', prepare);
+  window.addEventListener('afterprint', restore);
+  document.getElementById('lab-pdf-btn').addEventListener('click', () => {
+    prepare();
+    // Give charts a frame to repaint at page width before the dialog opens.
+    requestAnimationFrame(() => setTimeout(() => window.print(), 120));
+  });
+})();
+</script>
