@@ -7,9 +7,129 @@
 <section class="hcar" aria-roledescription="carousel" aria-label="Featured indices" data-autoplay="7000">
   <div class="hcar-track" id="hcar-track">
 
-    <!-- Slide 1 — U.S. Sovereign Solvency Index -->
+    <!-- Slide 1 — Lab Note LN-02: Is the World Polarising? -->
+    {% set pol = polarisation.headline %}
+    {% set pol_india = polarisation.risers|selectattr("country", "equalto", "India")|first %}
+    <article class="hcar-slide hcar-polarisation" role="group" aria-roledescription="slide"
+             aria-label="1 of 4: Lab Note {{ polarisation_note.code }}, Is the World Polarising?" data-slide="lab-note-polarisation">
+      <div class="av-hero-card">
+        <div class="av-hero-overlay"></div>
+
+        <div class="av-hero-content">
+          <div class="av-badge-row">
+            <span class="av-badge-pill">
+              <span class="material-symbols-outlined av-pill-icon">science</span>
+              NEW LAB NOTE &middot; {{ polarisation_note.code }}
+            </span>
+            <span class="av-badge-meta">{{ pol.n_countries }} COUNTRIES &bull; 25 YEARS &bull; V-DEM v16</span>
+          </div>
+
+          <h1 class="av-headline">
+            Is the World<br>Polarising<span class="av-dot">?</span>
+          </h1>
+
+          <p class="hcar-score-line">
+            Yes:
+            <strong>{{ pol.n_rose }} of {{ pol.n_countries }}</strong>
+            countries more divided than in 2000, in all {{ pol.n_regions_rose }} regions.
+          </p>
+
+          <p class="av-desc">
+            Hostility between political camps has climbed since 2000, and {{ pol.post2010_share }}% of
+            the rise came after 2010. Of ten candidate explanations, parties' hate speech is the one
+            that holds up. People going online is not.
+          </p>
+
+          <div class="av-features-grid">
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">groups</span>
+              </div>
+              <span class="av-feat-label">Camp Hostility</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">record_voice_over</span>
+              </div>
+              <span class="av-feat-label">Party Hate Speech</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">campaign</span>
+              </div>
+              <span class="av-feat-label">Disinformation</span>
+            </div>
+
+            <div class="av-feat-item">
+              <div class="av-feat-icon-circle">
+                <span class="material-symbols-outlined">smartphone</span>
+              </div>
+              <span class="av-feat-label">Social Media</span>
+            </div>
+          </div>
+
+          <div class="hcar-actions">
+            <a href="{{ url_for('main.lab_note', slug=polarisation_note.slug) }}" class="btn-primary"
+               data-cta="/lab-notes/{{ polarisation_note.slug }}">
+              Read the Lab Note <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="{{ url_for('main.lab_note', slug=polarisation_note.slug) }}#methodology" class="btn-secondary"
+               data-cta="/lab-notes/{{ polarisation_note.slug }}#methodology">
+              Methodology
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: the global mean as a sparkline, plus three headline readings -->
+        {% set ys = polarisation.trend.mean %}
+        {% set y_lo = ys|min %}
+        {% set y_hi = ys|max %}
+        {% set pts = [] %}
+        {% for v in ys %}
+          {% set _ = pts.append("%.1f,%.1f"|format(4 + loop.index0 * 192 / (ys|length - 1), 6 + (y_hi - v) / (y_hi - y_lo) * 58)) %}
+        {% endfor %}
+        <div class="hcar-visual" aria-hidden="true">
+          <div class="hcar-window">
+            <div class="hcar-window-bar">
+              <span class="hcar-win-dot hcar-win-dot-r"></span>
+              <span class="hcar-win-dot hcar-win-dot-y"></span>
+              <span class="hcar-win-dot hcar-win-dot-g"></span>
+            </div>
+            <div class="hcar-window-body">
+              <span class="hcar-window-label">Global mean, {{ polarisation.trend.years|first }}&ndash;{{ polarisation.trend.years|last }}</span>
+              <svg class="hcar-spark" viewBox="0 0 200 70" preserveAspectRatio="none">
+                <polygon class="hcar-spark-area" points="4,70 {{ pts|join(' ') }} 196,70"></polygon>
+                <polyline class="hcar-spark-line" points="{{ pts|join(' ') }}"></polyline>
+              </svg>
+              <span class="hcar-window-score">{{ "%+.2f"|format(pol.mean_change) }}</span>
+              <span class="hcar-window-label">Change since {{ polarisation.trend.years|first }}</span>
+            </div>
+          </div>
+
+          <div class="hcar-bubble hcar-bubble-1">
+            <span class="hcar-bubble-label">Countries rising</span>
+            <span class="hcar-bubble-val">{{ pol.n_rose }}</span>
+          </div>
+          <div class="hcar-bubble hcar-bubble-2">
+            <span class="hcar-bubble-label">Deeply hostile</span>
+            <span class="hcar-bubble-val">{{ pol.share_deep_2025 }}%</span>
+            <span class="hcar-bubble-label">from {{ pol.share_deep_2000 }}%</span>
+          </div>
+          {% if pol_india %}
+          <div class="hcar-bubble hcar-bubble-3">
+            <span class="hcar-bubble-label">India</span>
+            <span class="hcar-bubble-val">{{ "%+.1f"|format(pol_india.change) }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+
+    <!-- Slide 2 — U.S. Sovereign Solvency Index -->
     <article class="hcar-slide hcar-solvency" role="group" aria-roledescription="slide"
-             aria-label="1 of 3: U.S. Sovereign Solvency Index" data-slide="solvency-index">
+             aria-label="2 of 4: U.S. Sovereign Solvency Index" data-slide="solvency-index">
       <div class="av-hero-card">
         <div class="av-hero-overlay"></div>
 
@@ -25,9 +145,9 @@
             FISCAL HEALTH &bull; DEBT SUSTAINABILITY &bull; ECONOMIC RESILIENCE
           </div>
 
-          <h1 class="av-headline">
+          <h2 class="av-headline">
             Track. Analyze.<br>Stay Ahead<span class="av-dot">.</span>
-          </h1>
+          </h2>
 
           <p class="av-desc">
             Quantitative intelligence on the financial solvency of the United States &mdash;
@@ -120,9 +240,9 @@
       </div>
     </article>
 
-    <!-- Slide 2 — Airline Pressure Index -->
+    <!-- Slide 3 — Airline Pressure Index -->
     <article class="hcar-slide hcar-aviation" role="group" aria-roledescription="slide"
-             aria-label="2 of 3: Airline Pressure Index" data-slide="airline-index">
+             aria-label="3 of 4: Airline Pressure Index" data-slide="airline-index">
       <div class="av-hero-card">
         <div class="av-hero-overlay"></div>
 
@@ -214,9 +334,9 @@
       </div>
     </article>
 
-    <!-- Slide 3 — Hormuz Crisis Index -->
+    <!-- Slide 4 — Hormuz Crisis Index -->
     <article class="hcar-slide hcar-hormuz" role="group" aria-roledescription="slide"
-             aria-label="3 of 3: Hormuz Crisis Index" data-slide="hormuz-index">
+             aria-label="4 of 4: Hormuz Crisis Index" data-slide="hormuz-index">
       <div class="av-hero-card">
         <div class="av-hero-overlay"></div>
 
@@ -301,9 +421,10 @@
     </button>
 
     <div class="hcar-dots" role="group" aria-label="Choose a featured index">
-      <button type="button" class="hcar-dot" data-hcar-dot="0" aria-label="U.S. Sovereign Solvency Index"></button>
-      <button type="button" class="hcar-dot" data-hcar-dot="1" aria-label="Airline Pressure Index"></button>
-      <button type="button" class="hcar-dot" data-hcar-dot="2" aria-label="Hormuz Crisis Index"></button>
+      <button type="button" class="hcar-dot" data-hcar-dot="0" aria-label="Lab Note: Is the World Polarising?"></button>
+      <button type="button" class="hcar-dot" data-hcar-dot="1" aria-label="U.S. Sovereign Solvency Index"></button>
+      <button type="button" class="hcar-dot" data-hcar-dot="2" aria-label="Airline Pressure Index"></button>
+      <button type="button" class="hcar-dot" data-hcar-dot="3" aria-label="Hormuz Crisis Index"></button>
     </div>
 
     <button type="button" class="hcar-arrow" data-hcar="next" aria-label="Next index">

@@ -2360,6 +2360,47 @@ main:focus { outline: none; }
 .hcar-hormuz .av-hero-card { --hero-accent: #C2410C; }
 [data-theme="dark"] .hcar-hormuz .av-hero-card { --hero-accent: #FB923C; }
 
+.hcar-polarisation .av-hero-card { --hero-accent: #BE123C; }
+[data-theme="dark"] .hcar-polarisation .av-hero-card { --hero-accent: #FB7185; }
+
+/* The Lab Note has no photograph: two accent washes pulling apart from either
+   side stand in for it, and the sparkline card carries the data. */
+.hcar-polarisation .av-hero-card {
+  background-image:
+    radial-gradient(circle at 72% 30%, color-mix(in srgb, var(--hero-accent) 22%, transparent) 0, transparent 42%),
+    radial-gradient(circle at 96% 85%, color-mix(in srgb, #4F46E5 20%, transparent) 0, transparent 40%),
+    radial-gradient(color-mix(in srgb, var(--hero-accent) 18%, transparent) 1px, transparent 1.5px);
+  background-size: auto, auto, 18px 18px;
+}
+
+.hcar-spark {
+  width: 100%;
+  height: 64px;
+  display: block;
+  overflow: visible;
+}
+
+.hcar-spark-line {
+  fill: none;
+  stroke: var(--hero-accent);
+  stroke-width: 2.25;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.hcar-spark-area {
+  fill: color-mix(in srgb, var(--hero-accent) 14%, transparent);
+  stroke: none;
+}
+
+/* A sentence rather than a score and badge, so it flows as text: flex would
+   break each run of words onto its own line. */
+.hcar-polarisation .hcar-score-line { display: block; }
+
+.hcar-polarisation .hcar-window-body { gap: 6px; padding: 16px 16px 18px; }
+.hcar-polarisation .hcar-window-score { color: var(--hero-accent); font-size: 2rem; }
+
 /* Aviation and Hormuz are photographic; solvency is drawn from its own history
    series, below. Hormuz reuses the original site hero photograph. */
 .hcar-aviation .av-hero-card {

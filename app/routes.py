@@ -835,6 +835,8 @@ def get_home_context() -> dict:
 @bp.route("/")
 def home():
     ctx = get_home_context()
+    ctx["polarisation_note"] = next(n for n in LAB_NOTES if n["slug"] == "is-the-world-polarising")
+    ctx["polarisation"] = _get_polarisation_story_data()
     html = render_template("home.html", **_common(**ctx))
     return _cached(Response(html, mimetype="text/html"))
 
