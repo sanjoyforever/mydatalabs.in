@@ -1,0 +1,901 @@
+{% extends "base.html" %}
+{% set origin = site_origin|default('https://mydatalabs.in') %}
+{% set h = story.headline %}
+{% set M = story.models %}
+{% set A = story.accounting %}
+{% set E = story.economy %}
+{% set C = story.cand %}
+{% macro pv(p) %}{% if p < 0.001 %}&lt;0.001{% else %}{{ "%.3f"|format(p) }}{% endif %}{% endmacro %}
+{% macro sg(v) %}{{ "%+0.2f"|format(v) }}{% endmacro %}
+
+{% block title %}{{ note.title }} — Lab Notes | MyDataLabs{% endblock %}
+{% block meta_desc %}{{ note.subtitle }}{% endblock %}
+
+{% block og_title %}{{ note.title }}{% endblock %}
+{% block og_desc %}{{ note.subtitle }}{% endblock %}
+
+{% block twitter_title %}{{ note.title }}{% endblock %}
+{% block twitter_desc %}{{ note.subtitle }}{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ note.title|tojson }},
+  "description": {{ note.subtitle|tojson }},
+  "url": "{{ origin }}{{ note.url }}",
+  "datePublished": "{{ note.published }}",
+  "dateModified": "{{ note.updated }}",
+  {% if note.author %}
+  "author": {"@type": "Person", "name": {{ note.author|tojson }}},
+  {% else %}
+  "author": {"@type": "Organization", "name": "MyDataLabs"},
+  {% endif %}
+  "publisher": {"@id": "{{ origin }}/#organization"},
+  "keywords": {{ note.tags|tojson }}
+}
+</script>
+<style>
+.lab-panel-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 20px 0 24px;
+}
+.lab-stat-box {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--canvas-radius);
+  padding: 14px 16px;
+}
+.lab-stat-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.lab-stat-val {
+  font-family: var(--font-mono);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+.lab-stat-sub {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  margin-top: 4px;
+}
+.lab-table .is-pos { color: var(--accent-rose); font-weight: 600; }
+.lab-table .is-neg { color: var(--accent-emerald); font-weight: 600; }
+.lab-details { margin: 1rem 0; }
+.lab-details > summary { cursor: pointer; font-weight: 600; color: var(--text-sub); padding: .4rem 0; }
+.lab-split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="report-dash-canvas">
+
+  <div class="elections-topbar">
+    <nav class="breadcrumb-v2" aria-label="Breadcrumb">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <a href="{{ url_for('main.lab_notes_archive') }}">Lab Notes</a>
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+      <span class="breadcrumb-current" aria-current="page">{{ note.nav_label }}</span>
+    </nav>
+
+    <div class="tab-segmented" role="tablist" aria-label="Lab note sections">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true"
+              aria-controls="tab-analysis" data-report-tab="analysis">
+        <span class="material-symbols-outlined">article</span>
+        Analysis
+      </button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false"
+              aria-controls="tab-methodology" data-report-tab="methodology">
+        <span class="material-symbols-outlined">science</span>
+        Methodology
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= ANALYSIS ================= -->
+  <article id="tab-analysis" class="report-panel active lab-article" role="tabpanel">
+
+    <header class="lab-head">
+      <div class="lab-kicker">Lab Note {{ note.code }} &middot; {{ note.category }}</div>
+      <h1>{{ note.title }}</h1>
+      <p class="lab-standfirst">{{ note.subtitle }}</p>
+      <div class="lab-byline">
+        {% if note.author %}<span>By <strong>{{ note.author }}</strong></span>{% endif %}
+        <time datetime="{{ note.published }}">{{ note.published_label }}</time>
+        <span>{{ note.read_time }}</span>
+      </div>
+    </header>
+
+    <div class="lab-body">
+      <div class="lab-panel-stats">
+        <div class="lab-stat-box">
+          <div class="lab-stat-kicker">World average, 2000 &rarr; 2025</div>
+          <div class="lab-stat-val">{{ sg(h.mean_change) }}</div>
+          <div class="lab-stat-sub">{{ sg(h.mean_2000) }} to {{ sg(h.mean_2025) }} on a &minus;4&hellip;+4 scale</div>
+        </div>
+        <div class="lab-stat-box">
+          <div class="lab-stat-kicker">Clearly rose / clearly fell</div>
+          <div class="lab-stat-val">{{ h.n_rose_beyond }} / {{ h.n_fell_beyond }}</div>
+          <div class="lab-stat-sub">of {{ h.n_countries }} countries, beyond measurement noise</div>
+        </div>
+        <div class="lab-stat-box">
+          <div class="lab-stat-kicker">Countries with hostile camps</div>
+          <div class="lab-stat-val">{{ h.share_hostile_2000 }}% &rarr; {{ h.share_hostile_2025 }}%</div>
+          <div class="lab-stat-sub">deeply hostile (&ge;&nbsp;+1): {{ h.share_deep_2000 }}% &rarr; {{ h.share_deep_2025 }}%</div>
+        </div>
+        <div class="lab-stat-box">
+          <div class="lab-stat-kicker">Of the rise after 2010</div>
+          <div class="lab-stat-val">{{ h.post2010_share }}%</div>
+          <div class="lab-stat-sub">all {{ h.n_regions_rose }} world regions rose</div>
+        </div>
+      </div>
+
+      <p class="lab-inshort">
+        <span class="lab-inshort-label">In short</span>
+        <strong>Yes, polarisation is rising across the world.</strong> In {{ h.n_countries }} countries
+        tracked by V-Dem since 2000, the average moved from {{ sg(h.mean_2000) }} to
+        {{ sg(h.mean_2025) }}, crossing from friendly to hostile territory. {{ h.n_rose_beyond }} countries
+        became clearly more polarised and {{ h.n_fell_beyond }} clearly less; every region rose, and
+        {{ h.post2010_share }}% of the rise came after 2010. <strong>As for why</strong>, of ten candidate
+        explanations one passes every test we ran: <strong>parties&rsquo; use of hate speech</strong>
+        against religious, ethnic and other groups. Its rise alone accounts for about a third of the global
+        increase. Disinformation and weakening democratic institutions move with polarisation but do not
+        hold up as independently. And the most popular explanation, people simply being online, shows
+        <strong>no link at all</strong>. Polarisation also feeds these factors back: it is a loop,
+        not a one-way chain.
+      </p>
+
+      <h2 id="rising">Part 1: Is polarisation rising?</h2>
+      <p>
+        V-Dem asks country experts every year whether society is &ldquo;polarized into antagonistic,
+        political camps&rdquo; &mdash; whether supporters of opposing sides avoid friendly contact at
+        family gatherings, at work and in their free time (<code>v2cacamps</code>). Roughly, below zero
+        people across the divide mostly get along; above zero they are more likely to be hostile than
+        friendly. We use every country V-Dem covers in all 26 years from 2000 to 2025:
+        {{ h.n_countries }} countries, democracies and autocracies alike.
+      </p>
+      <p>
+        The world average was flat until about 2005, edged up to {{ sg(h.mean_2010) }} by 2010, then
+        rose steadily to {{ sg(h.mean_2025) }}. The median country tells the same story
+        ({{ sg(h.median_2000) }} to {{ sg(h.median_2025) }}). Every country counts once: we do not weight
+        by population, which would let a handful of very large countries decide the answer for the world.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">World polarisation, 2000&ndash;2025</span>
+          <span class="lab-figure-caption">{{ h.n_countries }} countries. Shaded: the middle half of countries (25th to 75th percentile). Above zero, camps are more hostile than friendly.</span>
+        </figcaption>
+        <div id="echart-trend" class="lab-chart" style="height: 380px;" role="img"
+             aria-label="World average and median polarisation, 2000 to 2025, with the interquartile range shaded.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <p>
+        An average can rise because a few countries move a lot. That is not what happened. The whole
+        distribution shifted: the share of countries where camps are more hostile than friendly went from
+        {{ h.share_hostile_2000 }}% to {{ h.share_hostile_2025 }}%, and the share scoring +1 or higher,
+        where hostility is the norm, more than doubled, from
+        {{ h.share_deep_2000 }}% to {{ h.share_deep_2025 }}%.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">Share of countries at each level of polarisation</span>
+          <span class="lab-figure-caption">Percent of the {{ h.n_countries }} countries in each band, by year. Click a band in the legend to hide it; the axis rescales to the lines still showing.</span>
+        </figcaption>
+        <div id="echart-bands" class="lab-chart" style="height: 340px;" role="img"
+             aria-label="Stacked shares of countries in four polarisation bands, 2000 to 2025.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <h3>Everywhere, but not evenly</h3>
+      <p>
+        All six regions ended higher than they started. Latin America and Eastern Europe rose most;
+        Western Europe and North America rose almost a full point but remain the least polarised region;
+        Sub-Saharan Africa, which started highest, barely moved.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">Average polarisation by region</span>
+          <span class="lab-figure-caption">V-Dem&rsquo;s politico-geographic regions; number of countries in brackets. Click a region in the legend to hide it; the axis rescales to the regions still showing.</span>
+        </figcaption>
+        <div id="echart-regions" class="lab-chart" style="height: 360px;" role="img"
+             aria-label="Average polarisation in six world regions, 2000 to 2025.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <h3>How sure can we be about each country?</h3>
+      <p>
+        Each score is an estimate from a handful of experts ({{ h.coders_median_2025|int }} per country in
+        2025, typically), and V-Dem publishes an uncertainty range with every one. Counting only changes
+        where the 2025 range clears the 2000 range, {{ h.n_rose_beyond }} countries became more polarised and
+        {{ h.n_fell_beyond }} less. The other {{ h.n_countries - h.n_rose_beyond - h.n_fell_beyond }} moved
+        too little to tell. That still makes risers outnumber fallers by about seven to one.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">Change in polarisation per country, 2000&ndash;2025</span>
+          <span class="lab-figure-caption">Number of countries by size of change. Dark: change larger than V-Dem&rsquo;s measurement uncertainty. Light: within it.</span>
+        </figcaption>
+        <div id="echart-hist" class="lab-chart" style="height: 320px;" role="img"
+             aria-label="Histogram of country-level changes in polarisation, split by whether the change exceeds measurement uncertainty.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">Every country with a clear change, 2000 vs 2025</span>
+          <span class="lab-figure-caption">Each bubble is one country whose change exceeds V-Dem&rsquo;s measurement uncertainty ({{ story.risers|length }} rose, {{ story.fallers|length }} fell). Above the diagonal line, polarisation is higher in 2025 than in 2000; bubble size is the size of the change. Hover for details.</span>
+        </figcaption>
+        <div id="echart-movers" class="lab-chart" style="height: 460px;" role="img"
+             aria-label="Bubble chart of countries with clear changes in polarisation, 2000 score against 2025 score.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <details class="lab-details">
+        <summary>Show the full country tables</summary>
+      <div class="lab-split">
+        <div class="table-responsive lab-table-wrap">
+          <table class="components-table lab-table">
+            <caption class="lab-table-note" style="caption-side: top; text-align: left;">Every clear rise ({{ story.risers|length }})</caption>
+            <thead><tr><th scope="col">Country</th><th scope="col" class="num">2000</th><th scope="col" class="num">2025</th><th scope="col" class="num">Change</th></tr></thead>
+            <tbody>
+              {% for c in story.risers %}
+              <tr><th scope="row">{{ c.country }}</th><td class="num">{{ sg(c.p2000) }}</td><td class="num">{{ sg(c.p2025) }}</td><td class="num is-pos">{{ sg(c.change) }}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="table-responsive lab-table-wrap">
+          <table class="components-table lab-table">
+            <caption class="lab-table-note" style="caption-side: top; text-align: left;">Every clear fall ({{ story.fallers|length }})</caption>
+            <thead><tr><th scope="col">Country</th><th scope="col" class="num">2000</th><th scope="col" class="num">2025</th><th scope="col" class="num">Change</th></tr></thead>
+            <tbody>
+              {% for c in story.fallers %}
+              <tr><th scope="row">{{ c.country }}</th><td class="num">{{ sg(c.p2000) }}</td><td class="num">{{ sg(c.p2025) }}</td><td class="num is-neg">{{ sg(c.change) }}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </details>
+      <p class="lab-table-note">
+        The risers span every kind of country: established democracies (the United States, Germany),
+        new ones (Poland, Romania, Brazil) and countries that became less democratic along the way
+        (Nicaragua, Türkiye, Hungary). The fallers are mostly countries where hostility was extreme in
+        2000, several of them coming out of war (Iraq, Angola, the DR Congo, Nepal).
+      </p>
+
+      <h2 id="why">Part 2: What moves with it?</h2>
+      <p>
+        V-Dem rates many other things about each country every year. We picked ten that are commonly
+        offered as explanations for polarisation and that V-Dem measures from 2000 onward, in three
+        groups:
+      </p>
+      <ul>
+        <li><strong>Technology:</strong> how much citizens consume online media; how much parties campaign on social media; how differently online outlets report the same news.</li>
+        <li><strong>What political actors do:</strong> party disinformation online; government disinformation; foreign disinformation; parties&rsquo; hate speech against groups defined by race, religion, origin or similar.</li>
+        <li><strong>Media and institutions:</strong> media bias against the opposition; government censorship of the media; the liberal democracy index.</li>
+      </ul>
+      <p>
+        For each, we ask the same narrow question: <em>in the years when a country scores higher on this
+        than it usually does, is it also more polarised than usual?</em> Comparing a country with itself
+        removes everything stable about it &mdash; history, culture, electoral system &mdash; and
+        comparing within the same year removes shocks that hit everyone at once. The model covers
+        {{ "{:,}".format(M.n) }} country-years in {{ M.countries }} countries. Coefficients are
+        standardised so they can be compared: each is the change in polarisation, in standard
+        deviations, for a one-standard-deviation rise in the candidate.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">How strongly each candidate moves with polarisation</span>
+          <span class="lab-figure-caption">Standardised coefficients with 95% intervals, errors clustered by country. Grey: each candidate on its own. Blue: all ten together, so each is measured holding the others fixed.</span>
+        </figcaption>
+        <div id="echart-drivers" class="lab-chart" style="height: 460px;" role="img"
+             aria-label="Standardised coefficients for ten candidate explanations of polarisation, alone and together.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <p>
+        Taken one at a time, almost everything correlates with polarisation: disinformation, censorship,
+        media bias, hate speech and democratic decline all come with more hostile camps. That is not very
+        informative, because these things tend to happen together. Put all ten in at once and only one
+        stays clearly significant: <strong>party hate speech</strong>
+        ({{ "%+0.2f"|format(M.joint.v2smpolhate.b) }}, p&nbsp;{{ pv(M.joint.v2smpolhate.p) }}). Liberal
+        democracy is borderline ({{ "%+0.2f"|format(M.joint.v2x_libdem.b) }},
+        p&nbsp;=&nbsp;{{ pv(M.joint.v2x_libdem.p) }}). The disinformation measures shrink by three-quarters
+        or more.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">Share of the global rise accounted for, by candidate</span>
+          <span class="lab-figure-caption">Points of the {{ "%.2f"|format(A.total) }}-point rise in average polarisation, 2000&ndash;2025. Solid: significant in the joint model. Pale: not significant.</span>
+        </figcaption>
+        <div id="echart-accounting" class="lab-chart" style="height: 360px;" role="img"
+             aria-label="Bar chart of each candidate's contribution to the global rise in polarisation.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      {% set S = story.shapley %}
+      {% set G = S.groups['all'] %}
+      {% set G4 = S.groups.hate_and_disinfo %}
+      <h2 id="action">Part 3: What can be done?</h2>
+      <p>
+        Some of the ten candidates are conditions: how many people are online, how fragmented the news
+        is, how democratic a country is. Others are choices made by people who can be named. Party hate
+        speech, party disinformation, government disinformation, foreign disinformation and parties&rsquo;
+        social media campaigning are all things a party, a government or a foreign state decides to do,
+        and almost all of them reach voters through platforms that someone runs. These five can be
+        controlled.
+      </p>
+      <p>
+        Together they account for <strong>{{ ((G.shapley / S.total) * 100)|round|int }}%</strong> of the
+        {{ "%.2f"|format(S.total) }}-point rise in average polarisation by a Shapley split (95% interval
+        {{ G.share_ci[0] }}&ndash;{{ G.share_ci[1] }}%), and {{ ((G.bookkeeping / S.total) * 100)|round|int }}%
+        by the simpler bookkeeping. The two methods disagree on how to divide credit <em>among</em> these
+        five, because they rose together, but not on their total. They also account for
+        {{ "%.0f"|format(G.r2_share) }}% of the year-to-year variation the ten candidates explain. Leaving
+        out social media campaigning, which is only weakly linked to polarisation once the others are controlled for, hate speech and the three
+        disinformation measures alone account for {{ ((G4.shapley / S.total) * 100)|round|int }}% of the rise
+        (interval {{ G4.share_ci[0] }}&ndash;{{ G4.share_ci[1] }}%) and
+        {{ "%.0f"|format(G4.r2_share) }}% of the explained variation.
+      </p>
+
+      <figure class="lab-figure">
+        <figcaption>
+          <span class="lab-figure-title">How much of the rise is in actors&rsquo; hands</span>
+          <span class="lab-figure-caption">Share of the {{ "%.2f"|format(S.total) }}-point rise in average polarisation, 2000&ndash;2025, under each way of splitting it. Red and amber: controllable. Grey: the other five candidates and the part no candidate explains.</span>
+        </figcaption>
+        <div id="echart-controllable" class="lab-chart" style="height: 280px;" role="img"
+             aria-label="Stacked bars showing the share of the global rise accounted for by controllable candidates under bookkeeping and Shapley splits.">
+          <p class="chart-fallback">Loading chart&hellip;</p>
+        </div>
+      </figure>
+
+      <h3>Who holds the levers</h3>
+      <ul>
+        <li>
+          <strong>Parties and their leaders</strong> decide whether to use hate speech against groups and
+          whether to spread false claims. Electoral codes of conduct, enforced by election commissions,
+          and voters who punish such campaigns are the direct checks.
+        </li>
+        <li>
+          <strong>Governments</strong> decide whether to spread disinformation themselves, and set the
+          rules for parties, broadcasters and platforms.
+        </li>
+        <li>
+          <strong>Digital platform owners</strong> decide what their systems amplify. Their ranking
+          systems reward engagement, and content that attacks the other side engages most. Each word
+          about the political out-group raised the odds of a post being shared by 67% in a study of
+          2.7&nbsp;million Facebook and Twitter posts (Rathje, Van Bavel and van der Linden, 2021). Each
+          moral-emotional word raised a tweet&rsquo;s spread by about 20% (Brady and colleagues, 2017).
+          False news was 70% more likely to be retweeted than true news (Vosoughi, Roy and Aral, 2018).
+          When platforms amplify what spreads fastest, they amplify the hate and falsehood that this
+          panel links to polarisation, so they share responsibility for it.
+        </li>
+      </ul>
+      <p>
+        Two cautions. First, the arrow runs both ways: polarisation also produces more hate speech and
+        disinformation, so cutting them would not remove the full {{ ((G.shapley / S.total) * 100)|round|int }}%.
+        The figure is the share of the rise that travels with these choices, more likely a ceiling on
+        what changing them could achieve than a promise. Second, V-Dem does not measure platform algorithms;
+        the virality figures come from the studies cited, mostly of English-language posts in the United
+        States, not from this panel.
+      </p>
+
+      <h2 id="limits">What these numbers cannot show</h2>
+      <ul>
+        <li>
+          <strong>Experts rate both sides.</strong> Polarisation, hate speech and disinformation are all
+          judged by country experts, typically {{ h.coders_median_2025|int }} per country. An expert who sees
+          a country as bitterly divided may also rate its parties as more hateful. Some of the link may be
+          built into the measurement. Surveys of ordinary voters are the natural check.
+        </li>
+        <li>
+          <strong>The measures are coarse.</strong> About {{ (h.unchanged_share * 100)|round|int }}% of
+          year-to-year polarisation scores do not change at all, and the uncertainty ranges average
+          {{ "%.2f"|format(h.ci_width_2025) }} points wide. The analysis has less information than the
+          country-year count suggests.
+        </li>
+        <li>
+          <strong>Correlation, not cause.</strong> Comparing each country with itself removes a great deal,
+          but not events that push polarisation and its candidates up together, such as a bitter election.
+        </li>
+        <li>
+          <strong>Not every explanation is measurable here.</strong> Inequality, immigration, ageing and the
+          decline of traditional news are all plausible and are not in V-Dem&rsquo;s yearly data, so they
+          could not be tested.
+        </li>
+      </ul>
+
+      <h2 id="takeaway">What to take from this</h2>
+      <p>
+        Polarisation is rising across the world: in most countries, in every region, mostly since 2010,
+        and in democracies more than in autocracies (an average rise of {{ sg(h.change_dem2000) }} against
+        {{ sg(h.change_aut2000) }}). The factor that tracks it most consistently is not technology but
+        political choices &mdash; above all, parties using hate speech against groups &mdash; with economic
+        downturns adding to it and disinformation travelling alongside. People going online has, by this
+        measure, nothing to do with it. And polarisation feeds the very things that feed it. That is
+        also the hopeful part: about {{ ((G.shapley / S.total) * 100)|round|int }}% of the rise travels
+        with choices that parties, governments and platform owners make, and can make differently.
+      </p>
+
+      {% set article_slug = note.slug %}
+      {% include "_comments.html" %}
+
+      <footer class="lab-foot">
+        <a href="{{ url_for('main.lab_notes_archive') }}">&larr; All Lab Notes</a>
+        <a href="{{ url_for('main.home') }}">See the indices &rarr;</a>
+      </footer>
+    </div>
+  </article>
+
+  <!-- ================= METHODOLOGY ================= -->
+  <article id="tab-methodology" class="report-panel lab-article lab-method" role="tabpanel">
+    <header class="lab-head">
+      <div class="lab-kicker">Methodology &middot; {{ note.code }}</div>
+      <h2 class="lab-method-title">How the panel was built and tested</h2>
+      <p class="lab-standfirst">
+        V-Dem v16 country-year data, every country, 2000&ndash;2025.
+      </p>
+    </header>
+
+    <div class="lab-body">
+      <h3>Source and sample</h3>
+      <p>
+        Varieties of Democracy, dataset v16 (March 2026), country-year file. No country is filtered out by
+        regime type: the question is about the world, so autocracies count. The trend charts use the
+        {{ h.n_countries }} countries with a polarisation score in every year from 2000 to 2025, so that
+        countries entering or leaving the data cannot move the average. The regressions use every
+        country-year with all ten candidates observed ({{ "{:,}".format(M.n) }} country-years,
+        {{ M.countries }} countries). All averages are unweighted: each country counts once, whatever
+        its population. Regions are V-Dem&rsquo;s six politico-geographic regions
+        (<code>e_regionpol_6C</code>).
+      </p>
+
+      <h3>Variables</h3>
+      <div class="table-responsive lab-table-wrap">
+        <table class="components-table lab-table">
+          <thead><tr><th scope="col">Label</th><th scope="col">V-Dem variable</th><th scope="col">Question</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Polarisation</th><td><code>v2cacamps</code></td><td>Is society polarized into antagonistic, political camps?</td></tr>
+            {% for c in story.candidates %}
+            <tr><th scope="row">{{ c.label }}</th><td><code>{{ c.key }}</code></td><td>{{ c.question }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="lab-table-note">
+        V-Dem codes disinformation, hate speech, fragmentation, media bias and censorship so that high means
+        <em>less</em>; we multiply them by &minus;1 so that every candidate reads &ldquo;higher means
+        more&rdquo;. &ldquo;Beyond measurement noise&rdquo; means V-Dem&rsquo;s 68% intervals
+        (<code>v2cacamps_codelow</code>, <code>_codehigh</code>) for 2000 and 2025 do not overlap. Economic
+        growth is the change in log GDP per capita (<code>e_gdppc</code>), available to {{ E.last_year }}.
+      </p>
+
+      <h3>Models</h3>
+      <p>
+        All models are OLS with country and year fixed effects and standard errors clustered by country.
+        Coefficients on the Analysis tab are standardised (multiplied by the candidate&rsquo;s standard
+        deviation over that of polarisation, both pooled). The joint model explains R&sup2; =
+        {{ M.r2_joint }}, against {{ M.r2_fe_only }} for country and year effects alone. First differences
+        regress the yearly change in polarisation on the yearly changes in all ten candidates with year
+        effects. The lagged model regresses polarisation on its own lag and the lags of all ten; the reverse
+        model regresses each candidate on its own lag and lagged polarisation. Lagged-dependent-variable
+        models over a short panel carry a known bias (Nickell bias) and are offered as a check on timing,
+        not as effect sizes. The accounting multiplies each joint-model coefficient by the change in the
+        candidate&rsquo;s average across the regression sample from 2000 to 2025.
+      </p>
+
+      <h3>Full results</h3>
+      <div class="table-responsive lab-table-wrap">
+        <table class="components-table lab-table">
+          <thead>
+            <tr>
+              <th scope="col">Candidate</th>
+              <th scope="col" class="num">Alone (std)</th>
+              <th scope="col" class="num">Joint (std)</th>
+              <th scope="col" class="num">First diff.</th>
+              <th scope="col" class="num">Lagged</th>
+              <th scope="col" class="num">Reverse</th>
+              <th scope="col" class="num">2000&ndash;10</th>
+              <th scope="col" class="num">2011&ndash;25</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in story.candidates %}
+            {% set k = c.key %}
+            <tr>
+              <th scope="row">{{ c.label }}</th>
+              <td class="num">{{ sg(M.single[k].b) }} ({{ pv(M.single[k].p) }})</td>
+              <td class="num">{{ sg(M.joint[k].b) }} ({{ pv(M.joint[k].p) }})</td>
+              <td class="num">{{ sg(M.first_diff[k].b) }} ({{ pv(M.first_diff[k].p) }})</td>
+              <td class="num">{{ sg(M.lagged[k].b) }} ({{ pv(M.lagged[k].p) }})</td>
+              <td class="num">{{ "%+0.3f"|format(M.reverse[k].b) }} ({{ pv(M.reverse[k].p) }})</td>
+              <td class="num">{{ sg(M.split[k].pre.b) }} ({{ pv(M.split[k].pre.p) }})</td>
+              <td class="num">{{ sg(M.split[k].post.b) }} ({{ pv(M.split[k].post.p) }})</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="lab-table-note">
+        p-values in brackets. &ldquo;Alone&rdquo;, &ldquo;Joint&rdquo; and the two period columns are
+        standardised; first differences and lags are in raw units. &ldquo;Reverse&rdquo; is the effect of
+        last year&rsquo;s polarisation on the candidate this year (for liberal democracy, a negative value
+        means polarisation is followed by decline).
+      </p>
+
+      {% set S = story.shapley %}
+      <h3>Checking the accounting with a Shapley split</h3>
+      <p>
+        The bookkeeping on the Analysis tab gives each candidate whatever the joint model assigns it. When
+        candidates rise together, as hate speech, disinformation and social media campaigning did, that
+        split depends on which variable wins the shared trend in the regression. A Shapley decomposition
+        removes that dependence: the model is refitted on all {{ 2 ** story.candidates|length }} subsets
+        of the ten candidates (country and year effects kept), and each candidate is credited with its
+        average addition to the predicted rise across every order in which it could enter. Both methods
+        split the same total, {{ "%.2f"|format(S.explained) }} of the {{ "%.2f"|format(S.total) }}-point
+        rise, but they share it out differently.
+      </p>
+      <div class="table-responsive lab-table-wrap">
+        <table class="components-table lab-table">
+          <thead>
+            <tr>
+              <th scope="col">Candidate</th>
+              <th scope="col" class="num">Bookkeeping</th>
+              <th scope="col" class="num">Shapley</th>
+              <th scope="col" class="num">Gap</th>
+              <th scope="col" class="num">Shapley share of rise (95% interval)</th>
+              <th scope="col" class="num">Share of explained variation</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in story.candidates %}
+            {% set s = S['items'][c.key] %}
+            <tr>
+              <th scope="row">{{ c.label }}</th>
+              <td class="num">{{ "%+0.3f"|format(s.bookkeeping) }}</td>
+              <td class="num">{{ "%+0.3f"|format(s.shapley) }}</td>
+              <td class="num">{{ "%+0.3f"|format(s.shapley - s.bookkeeping) }}{% if s.gap_ci[0] > 0 or s.gap_ci[1] < 0 %}*{% endif %}</td>
+              <td class="num">{{ ((s.shapley / S.total) * 100)|round|int }}% ({{ s.share_ci[0] }} to {{ s.share_ci[1] }})</td>
+              <td class="num">{% if s.r2_share < 1 %}&lt;1%{% else %}{{ "%.0f"|format(s.r2_share) }}%{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="lab-table-note">
+        Points of the {{ "%.2f"|format(S.total) }}-point rise in the regression sample. Intervals from
+        {{ S.reps }} bootstrap resamples of whole countries. * The bootstrap interval for the gap excludes
+        zero. The last column splits the within-country R&sup2; of the joint model
+        ({{ "%.2f"|format(S.within_r2) }}) the same way.
+      </p>
+      {% set hs = S['items'].v2smpolhate %}
+      <p>
+        The two methods disagree on party hate speech, and only there is the gap clearly larger than noise.
+        Bookkeeping credits it with {{ "%.2f"|format(hs.bookkeeping) }} points
+        ({{ ((hs.bookkeeping / S.total) * 100)|round|int }}% of the rise); Shapley with
+        {{ "%.2f"|format(hs.shapley) }} ({{ ((hs.shapley / S.total) * 100)|round|int }}%, interval
+        {{ hs.share_ci[0] }}&ndash;{{ hs.share_ci[1] }}%). The credit it loses goes mostly to social media
+        campaigning and the three disinformation measures, which rose over the same years. So the share of
+        the global rise that can be put on hate speech lies somewhere between about
+        {{ ((hs.shapley / S.total) * 100)|round|int }}% and {{ ((hs.bookkeeping / S.total) * 100)|round|int }}%,
+        depending on how the shared trend is divided. Its lead is clearer in the year-to-year movement: it
+        accounts for {{ "%.0f"|format(hs.r2_share) }}% of the within-country variation the ten candidates
+        explain, more than twice any other. Social media campaigning gets a large share of the rise only
+        because it climbed so far; it explains {{ "%.0f"|format(S['items'].v2smcamp.r2_share) }}% of the
+        variation and is only weakly linked to polarisation once the others are controlled for.
+      </p>
+      <p>
+        Two samples are used on this page. The trend charts use the {{ h.n_countries }} countries observed
+        in every year from 2000 to 2025, where the world average rose by {{ "%.2f"|format(h.mean_change) }}.
+        The regressions, the bookkeeping and the Shapley split use every country-year with all ten
+        candidates ({{ M.countries }} countries), where the average rose by {{ "%.2f"|format(S.total) }}.
+        Run on the balanced countries only, the Shapley split gives the same picture.
+      </p>
+
+      <h3>What changed from the first draft</h3>
+      <p>
+        The first draft studied twenty large &ldquo;democracies&rdquo;. That sample turned out to include
+        three countries V-Dem now classes as electoral autocracies, and its results changed depending on
+        how democracy was used to pick countries. Since the question is whether the <em>world</em> is
+        polarising, this version uses every country instead. The draft also overstated several points,
+        corrected here: it used conventional rather than clustered standard errors; described hate speech as
+        attacks on political opponents, when V-Dem&rsquo;s item measures hate speech against social groups;
+        said no variable captured citizens&rsquo; internet use, when <code>v2smonex</code> does; and
+        attributed Australia&rsquo;s and Japan&rsquo;s stability to institutions that were never measured.
+        Unsourced figures (&ldquo;3&times; engagement&rdquo;, &ldquo;70%+ of partisans&rdquo;) were removed.
+      </p>
+
+      <h3>Reproduction</h3>
+      <p>
+        Every number on this page is written by <code>scripts/build_polarisation_story.py</code> from the
+        V-Dem file into a single data file the page reads, so no figure is typed by hand. Source: Coppedge
+        et al., <em>V-Dem Dataset v16</em>, Varieties of Democracy Project (V-Dem Institute, University of
+        Gothenburg); Digital Society Project indicators by Mechkova, Pemstein, Seim and Wilson.
+      </p>
+
+      <footer class="lab-foot">
+        <a href="{{ url_for('main.lab_notes_archive') }}">&larr; All Lab Notes</a>
+        <a href="{{ url_for('main.home') }}">See the indices &rarr;</a>
+      </footer>
+    </div>
+  </article>
+
+</div>
+
+<script>
+window.__POL__ = {{ story|tojson }};
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof echarts === 'undefined') return;
+  const S = window.__POL__;
+  const charts = [];
+
+  function token(name, fallback) {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
+  function chart(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    let c = echarts.getInstanceByDom(el);
+    if (!c) { c = echarts.init(el); charts.push(c); }
+    return c;
+  }
+  const sign = v => (v > 0 ? '+' : '') + v.toFixed(2);
+  // Axis title, centred under/beside the axis.
+  const ax = (name, gap, color) => ({ name, nameLocation: 'middle', nameGap: gap, nameTextStyle: { color, fontSize: 12 } });
+
+  function draw() {
+    const text = token('--text-sub', '#64748B');
+    const split = token('--border-subtle', 'rgba(15,23,42,0.08)');
+    const blue = token('--accent-blue', '#0284C7');
+    const rose = token('--accent-rose', '#E11D48');
+    const amber = token('--accent-amber', '#D97706');
+    const emerald = token('--accent-emerald', '#059669');
+    const purple = token('--accent-purple', '#7C3AED');
+    const muted = token('--text-muted', '#94A3B8');
+    const base = { backgroundColor: 'transparent', textStyle: { fontFamily: 'inherit' } };
+    const T = S.trend;
+    const yearAxis = { type: 'category', data: T.years, boundaryGap: false, axisLabel: { color: text }, axisLine: { lineStyle: { color: split } }, ...ax('Year', 28, text) };
+    const valAxis = extra => ({ type: 'value', axisLabel: { color: text }, splitLine: { lineStyle: { color: split } }, ...extra });
+    const zeroLine = { silent: true, symbol: 'none', lineStyle: { color: muted, type: 'dashed' }, label: { color: text, position: 'insideStartTop', formatter: 'hostile above this line' }, data: [{ yAxis: 0 }] };
+
+    // 1. World trend with interquartile band
+    const t = chart('echart-trend');
+    if (t) {
+      t.setOption({
+        ...base,
+        tooltip: { trigger: 'axis', formatter: ps => `<strong>${ps[0].name}</strong><br/>` +
+          ps.filter(p => !p.seriesName.startsWith('_')).map(p => `${p.marker} ${p.seriesName}: <strong>${sign(p.value)}</strong>`).join('<br/>') },
+        legend: { top: 0, data: ['World average', 'Median country'], textStyle: { color: text, fontSize: 12 } },
+        grid: { left: 24, right: 16, bottom: 28, top: 44, containLabel: true },
+        xAxis: yearAxis,
+        yAxis: valAxis({ min: -1.5, max: 1.5, ...ax('Polarisation score (higher = more hostile)', 40, text) }),
+        series: [
+          { name: '_p25', type: 'line', data: T.p25, stack: 'iqr', stackStrategy: 'all', symbol: 'none', lineStyle: { opacity: 0 }, silent: true },
+          { name: '_iqr', type: 'line', data: T.p75.map((v, i) => +(v - T.p25[i]).toFixed(2)), stack: 'iqr', stackStrategy: 'all', symbol: 'none',
+            lineStyle: { opacity: 0 }, areaStyle: { color: rose, opacity: 0.10 }, silent: true },
+          { name: 'World average', type: 'line', data: T.mean, smooth: true, showSymbol: false,
+            lineStyle: { width: 3.5, color: rose }, itemStyle: { color: rose }, markLine: zeroLine },
+          { name: 'Median country', type: 'line', data: T.median, smooth: true, showSymbol: false,
+            lineStyle: { width: 2, color: amber, type: 'dashed' }, itemStyle: { color: amber } }
+        ]
+      }, true);
+    }
+
+    // 2. Share of countries by band
+    const b = chart('echart-bands');
+    if (b) {
+      const bandColours = [emerald, blue, amber, rose];
+      // Fixed order: tojson sorts keys, which would scramble the bands.
+      const names = ['Below −1', '−1 to 0', '0 to +1', 'Above +1'];
+      b.setOption({
+        ...base,
+        tooltip: { trigger: 'axis', valueFormatter: v => v.toFixed(0) + '%' },
+        legend: { top: 0, textStyle: { color: text, fontSize: 12 } },
+        grid: { left: 24, right: 16, bottom: 28, top: 44, containLabel: true },
+        xAxis: yearAxis,
+        // No fixed min/max: the axis refits to whichever lines are switched on in the legend.
+        yAxis: valAxis({ scale: true, axisLabel: { color: text, formatter: '{value}%' }, ...ax('Share of countries', 44, text) }),
+        series: names.map((n, i) => ({ name: n, type: 'line', data: T.share_bands[n], smooth: true, showSymbol: false,
+          lineStyle: { width: 3, color: bandColours[i] }, itemStyle: { color: bandColours[i] } }))
+      }, true);
+    }
+
+    // 3. Regions
+    const r = chart('echart-regions');
+    if (r) {
+      const palette = [rose, blue, amber, emerald, purple, muted];
+      r.setOption({
+        ...base,
+        tooltip: { trigger: 'axis', valueFormatter: v => sign(v) },
+        legend: { top: 0, textStyle: { color: text, fontSize: 11 } },
+        grid: { left: 24, right: 16, bottom: 28, top: 118, containLabel: true },
+        xAxis: yearAxis,
+        // No fixed min/max: the axis refits to whichever regions are switched on in the legend.
+        yAxis: valAxis({ scale: true, ...ax('Average polarisation score', 40, text) }),
+        series: [
+          ...Object.keys(S.regions).map((n, i) => ({ name: `${n} (${S.region_n[n]})`, type: 'line', data: S.regions[n],
+            smooth: true, showSymbol: false, lineStyle: { width: 2.4, color: palette[i] }, itemStyle: { color: palette[i] } })),
+          // Unnamed helper so the zero line survives any region being hidden.
+          { type: 'line', silent: true, data: [], markLine: { ...zeroLine, label: { show: false } } }
+        ]
+      }, true);
+    }
+
+    // 4. Histogram of changes
+    const hC = chart('echart-hist');
+    if (hC) {
+      const H = S.histogram;
+      const labels = H.edges.slice(0, -1).map((e, i) => `${sign(e)} to ${sign(H.edges[i + 1])}`);
+      hC.setOption({
+        ...base,
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        legend: { top: 0, data: ['Beyond measurement noise', 'Within noise'], textStyle: { color: text, fontSize: 12 } },
+        grid: { left: 24, right: 16, bottom: 28, top: 44, containLabel: true },
+        xAxis: { type: 'category', data: labels, axisLabel: { color: text, fontSize: 10, rotate: 35 }, axisLine: { lineStyle: { color: split } }, ...ax('Change in polarisation score, 2000 to 2025', 62, text) },
+        yAxis: valAxis({ ...ax('Number of countries', 34, text) }),
+        series: [
+          { name: 'Beyond measurement noise', type: 'bar', stack: 'h', itemStyle: { color: rose }, data: H.beyond.map((v, i) => ({ value: v, itemStyle: { color: H.edges[i] < 0 ? emerald : rose } })) },
+          { name: 'Within noise', type: 'bar', stack: 'h', data: H.within, itemStyle: { color: muted, opacity: 0.45 } }
+        ]
+      }, true);
+    }
+
+    // 4b. Bubble chart of every clear mover: 2000 score vs 2025 score
+    const mC = chart('echart-movers');
+    if (mC) {
+      const point = (c, colour, labelled) => ({
+        name: c.country, value: [c.p2000, c.p2025, Math.abs(c.change)], region: c.region, change: c.change,
+        itemStyle: { color: colour, opacity: 0.55, borderColor: colour, borderWidth: 1 },
+        label: { show: labelled, formatter: c.country.replace('United States of America', 'USA').replace('Democratic Republic of the Congo', 'DR Congo'),
+                 position: 'right', color: text, fontSize: 10 }
+      });
+      const rank = (list, n) => new Set([...list].sort((a, b) => Math.abs(b.change) - Math.abs(a.change)).slice(0, n).map(c => c.country));
+      const topUp = rank(S.risers, 5), topDown = rank(S.fallers, 3);
+      mC.setOption({
+        ...base,
+        tooltip: { trigger: 'item', formatter: p => `<strong>${p.name}</strong><br/>${p.data.region}<br/>` +
+          `${sign(p.value[0])} in 2000 &rarr; ${sign(p.value[1])} in 2025 (<strong>${sign(p.data.change)}</strong>)` },
+        legend: { top: 0, data: ['Became more polarised', 'Became less polarised'], textStyle: { color: text, fontSize: 12 } },
+        grid: { left: 24, right: 24, bottom: 28, top: 56, containLabel: true },
+        xAxis: valAxis({ type: 'value', min: -3.5, max: 3.5, axisLine: { onZero: false }, ...ax('Polarisation score in 2000', 28, text) }),
+        yAxis: valAxis({ min: -3.5, max: 3.5, axisLine: { onZero: false }, ...ax('Polarisation score in 2025', 36, text) }),
+        series: [
+          { name: 'Became more polarised', type: 'scatter', labelLayout: { hideOverlap: true }, itemStyle: { color: rose }, symbolSize: d => 5 + d[2] * 3.5,
+            data: S.risers.map(c => point(c, rose, topUp.has(c.country))),
+            markLine: { silent: true, symbol: 'none', lineStyle: { color: muted, type: 'dashed' }, label: { show: false },
+                        data: [[{ coord: [-3.5, -3.5] }, { coord: [3.5, 3.5] }]] } },
+          { name: 'Became less polarised', type: 'scatter', labelLayout: { hideOverlap: true }, itemStyle: { color: emerald }, symbolSize: d => 5 + d[2] * 3.5,
+            data: S.fallers.map(c => point(c, emerald, topDown.has(c.country))) }
+        ]
+      }, true);
+    }
+
+    // 5. Drivers forest plot, alone vs joint
+    const dC = chart('echart-drivers');
+    if (dC) {
+      const order = [...S.candidates].reverse();
+      const names = order.map(c => c.label);
+      const ci = (key, colour, offset) => ({
+        name: key === 'single' ? 'On its own' : 'With the other nine', type: 'custom', z: key === 'joint' ? 3 : 2,
+        itemStyle: { color: colour },
+        renderItem: (params, api) => {
+          const e = S.models[key][order[params.dataIndex].key];
+          const y = api.coord([0, params.dataIndex])[1] + offset;
+          return { type: 'group', children: [
+            { type: 'line', shape: { x1: api.coord([e.lo, 0])[0], y1: y, x2: api.coord([e.hi, 0])[0], y2: y }, style: { stroke: colour, lineWidth: 3 } },
+            { type: 'circle', shape: { cx: api.coord([e.b, 0])[0], cy: y, r: 5 }, style: { fill: colour } }
+          ] };
+        },
+        data: order.map((c, i) => i)
+      });
+      dC.setOption({
+        ...base,
+        tooltip: { trigger: 'item', formatter: p => {
+          const c = order[p.dataIndex]; const key = p.seriesIndex === 0 ? 'single' : 'joint'; const e = S.models[key][c.key];
+          return `<strong>${c.label}</strong><br/>${p.seriesName}: ${sign(e.b)} (${sign(e.lo)} to ${sign(e.hi)})<br/>p = ${e.p < 0.001 ? '<0.001' : e.p.toFixed(3)}`;
+        } },
+        legend: { top: 0, data: ['On its own', 'With the other nine'], textStyle: { color: text, fontSize: 12 } },
+        grid: { left: 8, right: 24, bottom: 36, top: 64, containLabel: true },
+        xAxis: valAxis({ min: -0.8, max: 0.8, ...ax('Standardised effect (std. deviations)', 28, text), splitNumber: 4, axisLabel: { color: text, hideOverlap: true } }),
+        // y axis lists the ten candidates
+        yAxis: { type: 'category', data: names, name: 'Candidate', nameLocation: 'end', nameTextStyle: { color: text, fontSize: 12, align: 'left' }, axisLabel: { color: text, fontSize: 11 }, axisLine: { lineStyle: { color: split } } },
+        series: [
+          ci('single', muted, -7),
+          ci('joint', blue, 7),
+          { type: 'line', silent: true, data: [], markLine: { silent: true, symbol: 'none', lineStyle: { color: text, type: 'dashed' }, label: { show: false }, data: [{ xAxis: 0 }] } }
+        ]
+      }, true);
+    }
+
+    // 6. Accounting
+    const aC = chart('echart-accounting');
+    if (aC) {
+      const items = [...S.candidates].map(c => ({ ...c, ...S.accounting.items[c.key] }))
+        .sort((x, y) => x.contribution - y.contribution);
+      aC.setOption({
+        ...base,
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: ps => {
+          const it = items[ps[0].dataIndex];
+          return `<strong>${it.label}</strong><br/>${sign(it.contribution)} points` + (it.significant ? '' : '<br/><em>not significant</em>');
+        } },
+        grid: { left: 8, right: 32, bottom: 36, top: 30, containLabel: true },
+        xAxis: valAxis({ ...ax('Points of the global rise', 28, text), splitNumber: 3, axisLabel: { color: text, formatter: v => v.toFixed(1) } }),
+        yAxis: { type: 'category', data: items.map(i => i.label), name: 'Candidate', nameLocation: 'end', nameTextStyle: { color: text, fontSize: 12, align: 'left' }, axisLabel: { color: text, fontSize: 11 }, axisLine: { lineStyle: { color: split } } },
+        series: [{ type: 'bar', data: items.map(i => ({ value: i.contribution,
+          itemStyle: { color: i.significant ? rose : muted, opacity: i.significant ? 1 : 0.4, borderRadius: [0, 3, 3, 0] } })),
+          label: { show: true, position: 'right', color: text, fontSize: 11, formatter: p => sign(p.value) } }]
+      }, true);
+    }
+
+    // 7. Controllable share of the rise, bookkeeping vs Shapley
+    const cC = chart('echart-controllable');
+    if (cC) {
+      const Sh = S.shapley, I = Sh.items;
+      const disinfo = ['v2smpardom', 'v2smgovdom', 'v2smfordom'];
+      const ctrl = Sh.groups.all.keys;
+      const others = S.candidates.map(c => c.key).filter(k => !ctrl.includes(k));
+      const pc = v => +(v / Sh.total * 100).toFixed(1);
+      const seg = (m) => {
+        const sum = ks => ks.reduce((a, k) => a + I[k][m], 0);
+        return [pc(I.v2smpolhate[m]), pc(sum(disinfo)), pc(I.v2smcamp[m]), pc(sum(others)), pc(Sh.total - Sh.explained)];
+      };
+      const rows = { bookkeeping: seg('bookkeeping'), shapley: seg('shapley') };
+      const parts = [['Party hate speech', rose, 1], ['Disinformation (party, government, foreign)', rose, 0.6],
+                     ['Party social media campaigning', amber, 0.8], ['Other five candidates', muted, 0.6], ['Not explained', muted, 0.25]];
+      cC.setOption({
+        ...base,
+        tooltip: { trigger: 'item', formatter: p => `<strong>${p.name}</strong><br/>${p.marker} ${p.seriesName}: ${p.value}% of the rise` },
+        legend: { top: 0, textStyle: { color: text, fontSize: 11 } },
+        grid: { left: 24, right: 24, bottom: 36, top: 112, containLabel: true },
+        xAxis: valAxis({ max: 100, axisLabel: { color: text, formatter: '{value}%' }, ...ax('Share of the 2000–2025 rise', 28, text) }),
+        yAxis: { type: 'category', data: ['Shapley', 'Bookkeeping'], ...ax('Method', 78, text), axisLabel: { color: text }, axisLine: { lineStyle: { color: split } } },
+        series: parts.map(([name, colour, op], i) => ({ name, type: 'bar', stack: 'c', barWidth: 28,
+          itemStyle: { color: colour, opacity: op },
+          label: { show: i < 3, color: '#fff', fontSize: 11, formatter: p => p.value >= 8 ? Math.round(p.value) + '%' : '' },
+          data: [rows.shapley[i], rows.bookkeeping[i]] }))
+      }, true);
+    }
+  }
+
+  draw();
+  window.addEventListener('resize', () => charts.forEach(c => c.resize()));
+  document.querySelectorAll('[data-report-tab]').forEach(b =>
+    b.addEventListener('click', () => setTimeout(() => charts.forEach(c => c.resize()), 120)));
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+});
+</script>
+{% endblock %}

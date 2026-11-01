@@ -271,11 +271,13 @@ def test_india_story_and_indices_menu_structure(client):
 
     # Lab Notes dropdown is built from LAB_NOTES: latest notes, then the archive
     assert [i["label"] for i in nav["Lab Notes"]["items"]] == [
+        "Global Polarisation",
         "IMDb Rating Deflation",
         "All Lab Notes",
     ]
-    assert nav["Lab Notes"]["items"][0]["url"] == "/lab-notes/cross-cultural-metric-normalization"
-    assert nav["Lab Notes"]["items"][1]["url"] == "/lab-notes"
+    assert nav["Lab Notes"]["items"][0]["url"] == "/lab-notes/is-the-world-polarising"
+    assert nav["Lab Notes"]["items"][1]["url"] == "/lab-notes/cross-cultural-metric-normalization"
+    assert nav["Lab Notes"]["items"][2]["url"] == "/lab-notes"
 
 
 @pytest.mark.parametrize(
@@ -354,6 +356,38 @@ def test_lab_notes_article_and_archive(client):
     # No leftover LaTeX or markdown from the first draft.
     for junk in ("\text{", "$N$", "*Hochdeutsch*"):
         assert junk not in art_text
+
+
+def test_polarisation_lab_note_renders_validated_figures(client):
+    res = client.get("/lab-notes/is-the-world-polarising")
+    assert res.status_code == 200
+    text = res.get_data(as_text=True)
+    assert "Sanjoy" not in text
+    assert '"datePublished": "2026-11-01"' in text
+    # Global panel, every regime type: the headline is about the world.
+    assert "173 countries" in text
+    assert "-0.41" in text and "+0.28" in text and "85%" in text
+    # Country changes only count when they clear V-Dem's own intervals.
+    assert "62 / 9" in text
+    # All ten candidates appear (Methodology table), including citizens' online use.
+    assert "Citizens&#39; online media use" in text or "Citizens' online media use" in text
+    assert "Party hate speech" in text and "Liberal democracy" in text
+    # The draft's twenty-country framing and its per-country sections are gone.
+    for gone in ("India: the largest case", "Outside the twenty", "proves", "robust standard errors"):
+        assert gone not in text
+    # Methodology checks the bookkeeping against a Shapley split over all 1024 subsets.
+    assert "Checking the accounting with a Shapley split" in text
+    assert "all 1024 subsets" in text and "+0.111" in text and "+0.238" in text
+    # Every clear riser is listed, not just the largest ten.
+    assert "Every clear rise (62)" in text and "Every clear fall (9)" in text
+    # Part 3 puts a number on the controllable share and cites the virality studies.
+    assert "Part 3: What can be done?" in text and "<strong>69%</strong>" in text
+    assert "Rathje, Van Bavel and van der Linden, 2021" in text
+    for chart_id in ("echart-trend", "echart-bands", "echart-regions", "echart-hist",
+                     "echart-movers", "echart-drivers", "echart-accounting", "echart-controllable"):
+        assert chart_id in text
+    arc = client.get("/lab-notes").get_data(as_text=True)
+    assert "/lab-notes/is-the-world-polarising" in arc
 
 
 def test_unknown_lab_note_is_404(client):

@@ -271,6 +271,7 @@ python update.py --democracy         # or: python scripts/build_democracy_histor
 | `/indices/democracy-index` | Hard-Metric Democracy Index (HMDI) dashboard: 30-economy rankings, live pillar reweighting, per-country indicator drawer (legacy `/democracy-index` supported) |
 | `/india-story/lok-sabha-projection` | Lok Sabha Projection Engine (LS-PROJ): daily seat forecast + 2019/2024 backtest (legacy `/lok-sabha-index` supported) |
 | `/lab-notes` | Lab Notes research archive: data analysis, metric evaluations, and critical editorial feedback |
+| `/lab-notes/is-the-world-polarising` | Lab Note LN-02: Is the World Polarising? — V-Dem v16, 173 countries (data built by `scripts/build_polarisation_story.py`) |
 | `/lab-notes/cross-cultural-metric-normalization` | Lab Note: IMDB Rating Deflation — Cross-Cultural Metric Normalization article |
 | `/about` | Why a topic is compressed into one number, the construction rules every index shares, and what a single number cannot express |
 | `/terms` | Legal disclaimers and use conditions |

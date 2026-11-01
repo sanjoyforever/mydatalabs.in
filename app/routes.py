@@ -145,6 +145,26 @@ ABOUT_INDEX_NOTES = {
 # Newest first.
 LAB_NOTES = [
     {
+        "slug": "is-the-world-polarising",
+        "template": "lab_notes/global_polarisation.html",
+        "number": 2,
+        "code": "LN-02",
+        "title": "Is the World Polarising? 25 Years, 173 Countries",
+        "nav_label": "Global Polarisation",
+        "subtitle": (
+            "Yes: hostility between political camps has risen in every region "
+            "since 2000, mostly after 2010. Of ten candidate explanations, "
+            "parties' hate speech is the one that holds up; people going "
+            "online is not."
+        ),
+        "category": "Politics",
+        "tags": ["Polarisation", "Hate speech", "Disinformation", "V-Dem", "Social media"],
+        "published": "2026-11-01",
+        "updated": "2026-11-01",
+        "read_time": "12 min read",
+        "badge": "173-Country Panel",
+    },
+    {
         "slug": "cross-cultural-metric-normalization",
         "template": "lab_notes/imdb_deflation.html",
         "number": 1,
@@ -1142,6 +1162,20 @@ def _get_film_normalization_data():
     return _FILM_NORMALIZATION_CACHE
 
 
+_POLARISATION_CACHE = None
+
+def _get_polarisation_story_data():
+    """Numbers for LN-02, written by scripts/build_polarisation_story.py."""
+    global _POLARISATION_CACHE
+    if _POLARISATION_CACHE is None:
+        path = os.path.join(current_app.root_path, "data", "polarisation_story.json")
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        data["cand"] = {c["key"]: c for c in data["candidates"]}
+        _POLARISATION_CACHE = data
+    return _POLARISATION_CACHE
+
+
 @bp.route("/lab-notes/<slug>")
 def lab_note(slug):
     """One Lab Note, looked up in LAB_NOTES."""
@@ -1151,6 +1185,8 @@ def lab_note(slug):
     extra = {}
     if slug == "cross-cultural-metric-normalization":
         extra["film_panel"] = _get_film_normalization_data()
+    elif slug == "is-the-world-polarising":
+        extra["story"] = _get_polarisation_story_data()
     try:
         raw_comments = comments.get_published(slug)
         extra["published_comments"] = [
@@ -1495,6 +1531,8 @@ def sitemap():
          "src": precomputed.path_for("lok-sabha-index")},
         {"loc": "/lab-notes", "priority": "0.8", "changefreq": "weekly",
          "src": os.path.join(current_app.root_path, "templates", "lab_notes", "archive.html")},
+        {"loc": "/lab-notes/is-the-world-polarising", "priority": "0.8", "changefreq": "monthly",
+         "src": os.path.join(current_app.root_path, "templates", "lab_notes", "global_polarisation.html")},
         {"loc": "/lab-notes/cross-cultural-metric-normalization", "priority": "0.8", "changefreq": "monthly",
          "src": os.path.join(current_app.root_path, "templates", "lab_notes", "imdb_deflation.html")},
         {"loc": "/about", "priority": "0.7", "changefreq": "monthly",
@@ -1584,6 +1622,7 @@ Current HMX reading: {snapshot.score:.1f} ({snapshot.level_label}), week of {sna
 - [Hard-Metric Democracy Index]({SITE_ORIGIN}/indices/democracy-index): thirty largest economies, 2000-2024, scored only on published counts and ratios.
 - [Lok Sabha Projection Engine]({SITE_ORIGIN}/india-story/lok-sabha-projection): daily 543-seat projection from CVoter's option-level opinion trackers, Monte Carlo intervals, event impact analysis.
 - [Lab Notes Archive]({SITE_ORIGIN}/lab-notes): quantitative research notes, metric evaluations, and critical analyses.
+- [Lab Note: Global Polarisation]({SITE_ORIGIN}/lab-notes/is-the-world-polarising): V-Dem v16, 173 countries, 2000-2025: is polarisation rising worldwide, and which of ten candidate explanations hold up.
 - [Lab Note: IMDB Rating Deflation]({SITE_ORIGIN}/lab-notes/cross-cultural-metric-normalization): cross-cultural metric normalization and sentiment shift.
 - [Methodology]({SITE_ORIGIN}/indices/hormuz-crisis#methodology): index formula, component weights, cap thresholds and their rationale, baseline selection, known limitations.
 - [About the indices]({SITE_ORIGIN}/about): why each topic is compressed into one number, the construction rules shared by every index, and what a single number cannot express.

@@ -1,0 +1,1927 @@
+{
+ "source": "V-Dem v16 (March 2026)",
+ "headline": {
+  "n_countries": 173,
+  "mean_2000": -0.41,
+  "mean_2010": -0.3,
+  "mean_2025": 0.28,
+  "mean_change": 0.69,
+  "post2010_share": 85,
+  "median_2000": -0.37,
+  "median_2025": 0.33,
+  "n_rose": 126,
+  "n_fell": 46,
+  "n_rose_beyond": 62,
+  "n_fell_beyond": 9,
+  "share_hostile_2000": 40,
+  "share_hostile_2025": 54,
+  "share_deep_2000": 13,
+  "share_deep_2025": 32,
+  "n_regions_rose": 6,
+  "change_dem2000": 1.08,
+  "change_aut2000": 0.34,
+  "n_dem2000": 82,
+  "n_aut2000": 91,
+  "coders_median_2025": 5.0,
+  "ci_width_2025": 1.12,
+  "unchanged_share": 0.61
+ },
+ "trend": {
+  "years": [
+   2000,
+   2001,
+   2002,
+   2003,
+   2004,
+   2005,
+   2006,
+   2007,
+   2008,
+   2009,
+   2010,
+   2011,
+   2012,
+   2013,
+   2014,
+   2015,
+   2016,
+   2017,
+   2018,
+   2019,
+   2020,
+   2021,
+   2022,
+   2023,
+   2024,
+   2025
+  ],
+  "mean": [
+   -0.41,
+   -0.42,
+   -0.42,
+   -0.43,
+   -0.41,
+   -0.41,
+   -0.4,
+   -0.37,
+   -0.36,
+   -0.35,
+   -0.3,
+   -0.26,
+   -0.24,
+   -0.2,
+   -0.15,
+   -0.13,
+   -0.06,
+   -0.02,
+   0.01,
+   0.06,
+   0.13,
+   0.24,
+   0.22,
+   0.25,
+   0.3,
+   0.28
+  ],
+  "median": [
+   -0.37,
+   -0.47,
+   -0.46,
+   -0.48,
+   -0.34,
+   -0.39,
+   -0.42,
+   -0.39,
+   -0.35,
+   -0.35,
+   -0.34,
+   -0.35,
+   -0.35,
+   -0.29,
+   -0.19,
+   -0.21,
+   -0.05,
+   0.0,
+   -0.0,
+   0.06,
+   0.1,
+   0.29,
+   0.17,
+   0.18,
+   0.36,
+   0.33
+  ],
+  "p25": [
+   -1.31,
+   -1.32,
+   -1.32,
+   -1.29,
+   -1.29,
+   -1.29,
+   -1.28,
+   -1.28,
+   -1.29,
+   -1.24,
+   -1.18,
+   -1.18,
+   -1.17,
+   -1.13,
+   -1.12,
+   -1.13,
+   -1.13,
+   -1.12,
+   -1.03,
+   -1.07,
+   -0.92,
+   -0.78,
+   -0.85,
+   -0.8,
+   -0.8,
+   -0.89
+  ],
+  "p75": [
+   0.57,
+   0.55,
+   0.62,
+   0.57,
+   0.62,
+   0.56,
+   0.56,
+   0.57,
+   0.64,
+   0.67,
+   0.79,
+   0.78,
+   0.78,
+   0.79,
+   0.86,
+   0.85,
+   1.0,
+   1.02,
+   1.02,
+   1.06,
+   1.18,
+   1.25,
+   1.13,
+   1.22,
+   1.24,
+   1.29
+  ],
+  "share_bands": {
+   "Below −1": [
+    34.1,
+    34.1,
+    34.1,
+    33.5,
+    31.2,
+    32.4,
+    32.4,
+    30.6,
+    30.6,
+    30.1,
+    30.1,
+    30.1,
+    30.1,
+    30.1,
+    29.5,
+    30.6,
+    27.7,
+    27.7,
+    26.6,
+    26.6,
+    23.1,
+    20.2,
+    21.4,
+    20.8,
+    19.1,
+    22.5
+   ],
+   "−1 to 0": [
+    25.4,
+    25.4,
+    24.9,
+    24.9,
+    26.0,
+    24.9,
+    23.1,
+    26.6,
+    26.0,
+    24.9,
+    26.6,
+    26.0,
+    26.0,
+    23.1,
+    23.7,
+    23.7,
+    24.3,
+    22.0,
+    23.7,
+    22.5,
+    25.4,
+    26.0,
+    27.2,
+    26.0,
+    26.6,
+    23.7
+   ],
+   "0 to +1": [
+    27.2,
+    28.9,
+    29.5,
+    31.2,
+    32.9,
+    31.8,
+    33.5,
+    31.2,
+    30.6,
+    32.4,
+    26.0,
+    25.4,
+    23.7,
+    27.2,
+    26.6,
+    23.1,
+    22.5,
+    24.3,
+    22.5,
+    23.1,
+    20.8,
+    22.5,
+    23.7,
+    23.1,
+    23.7,
+    21.4
+   ],
+   "Above +1": [
+    13.3,
+    11.6,
+    11.6,
+    10.4,
+    9.8,
+    11.0,
+    11.0,
+    11.6,
+    12.7,
+    12.7,
+    17.3,
+    18.5,
+    20.2,
+    19.7,
+    20.2,
+    22.5,
+    25.4,
+    26.0,
+    27.2,
+    27.7,
+    30.6,
+    31.2,
+    27.7,
+    30.1,
+    30.6,
+    32.4
+   ]
+  }
+ },
+ "regions": {
+  "Asia & Pacific": [
+   -0.47,
+   -0.55,
+   -0.56,
+   -0.51,
+   -0.43,
+   -0.38,
+   -0.27,
+   -0.3,
+   -0.29,
+   -0.3,
+   -0.27,
+   -0.27,
+   -0.22,
+   -0.25,
+   -0.12,
+   -0.16,
+   -0.09,
+   -0.02,
+   0.01,
+   0.08,
+   0.11,
+   0.29,
+   0.29,
+   0.4,
+   0.4,
+   0.28
+  ],
+  "Eastern Europe & Central Asia": [
+   -0.35,
+   -0.39,
+   -0.44,
+   -0.44,
+   -0.38,
+   -0.41,
+   -0.43,
+   -0.37,
+   -0.32,
+   -0.38,
+   -0.35,
+   -0.35,
+   -0.29,
+   -0.23,
+   -0.09,
+   -0.12,
+   -0.03,
+   0.02,
+   0.07,
+   0.14,
+   0.38,
+   0.59,
+   0.61,
+   0.58,
+   0.71,
+   0.68
+  ],
+  "Latin America & Caribbean": [
+   -0.62,
+   -0.67,
+   -0.6,
+   -0.55,
+   -0.53,
+   -0.53,
+   -0.48,
+   -0.43,
+   -0.43,
+   -0.37,
+   -0.26,
+   -0.26,
+   -0.27,
+   -0.19,
+   -0.19,
+   -0.16,
+   -0.02,
+   0.01,
+   0.21,
+   0.33,
+   0.42,
+   0.49,
+   0.47,
+   0.49,
+   0.57,
+   0.55
+  ],
+  "Middle East & North Africa": [
+   -0.35,
+   -0.32,
+   -0.3,
+   -0.33,
+   -0.31,
+   -0.27,
+   -0.2,
+   -0.19,
+   -0.2,
+   -0.22,
+   -0.06,
+   0.26,
+   0.38,
+   0.48,
+   0.46,
+   0.52,
+   0.55,
+   0.55,
+   0.51,
+   0.54,
+   0.42,
+   0.58,
+   0.46,
+   0.43,
+   0.22,
+   0.25
+  ],
+  "Sub-Saharan Africa": [
+   0.2,
+   0.23,
+   0.21,
+   0.14,
+   0.12,
+   0.09,
+   0.04,
+   0.06,
+   0.06,
+   0.09,
+   0.09,
+   0.1,
+   0.08,
+   0.09,
+   0.07,
+   0.14,
+   0.2,
+   0.21,
+   0.2,
+   0.24,
+   0.28,
+   0.23,
+   0.19,
+   0.2,
+   0.27,
+   0.33
+  ],
+  "Western Europe & North America": [
+   -1.5,
+   -1.48,
+   -1.42,
+   -1.44,
+   -1.48,
+   -1.47,
+   -1.47,
+   -1.44,
+   -1.41,
+   -1.37,
+   -1.31,
+   -1.31,
+   -1.29,
+   -1.26,
+   -1.2,
+   -1.16,
+   -1.11,
+   -1.02,
+   -1.05,
+   -1.06,
+   -0.99,
+   -0.76,
+   -0.74,
+   -0.64,
+   -0.49,
+   -0.55
+  ]
+ },
+ "region_n": {
+  "Asia & Pacific": 27,
+  "Eastern Europe & Central Asia": 30,
+  "Latin America & Caribbean": 24,
+  "Middle East & North Africa": 19,
+  "Sub-Saharan Africa": 49,
+  "Western Europe & North America": 24
+ },
+ "histogram": {
+  "edges": [
+   -3.0,
+   -2.5,
+   -2.0,
+   -1.5,
+   -1.0,
+   -0.5,
+   0.0,
+   0.5,
+   1.0,
+   1.5,
+   2.0,
+   2.5,
+   3.0,
+   3.5,
+   4.0
+  ],
+  "beyond": [
+   0,
+   2,
+   3,
+   3,
+   1,
+   0,
+   0,
+   1,
+   18,
+   20,
+   12,
+   6,
+   4,
+   1
+  ],
+  "within": [
+   0,
+   0,
+   0,
+   2,
+   12,
+   23,
+   36,
+   23,
+   5,
+   1,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "risers": [
+  {
+   "country": "Nicaragua",
+   "region": "Latin America & Caribbean",
+   "p2000": -0.47,
+   "p2025": 3.14,
+   "change": 3.62
+  },
+  {
+   "country": "Honduras",
+   "region": "Latin America & Caribbean",
+   "p2000": -2.58,
+   "p2025": 0.84,
+   "change": 3.42
+  },
+  {
+   "country": "Brazil",
+   "region": "Latin America & Caribbean",
+   "p2000": -0.17,
+   "p2025": 3.22,
+   "change": 3.4
+  },
+  {
+   "country": "Türkiye",
+   "region": "Middle East & North Africa",
+   "p2000": 0.04,
+   "p2025": 3.36,
+   "change": 3.32
+  },
+  {
+   "country": "Poland",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": 0.33,
+   "p2025": 3.35,
+   "change": 3.02
+  },
+  {
+   "country": "Ukraine",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -1.04,
+   "p2025": 1.8,
+   "change": 2.83
+  },
+  {
+   "country": "Hungary",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -0.29,
+   "p2025": 2.47,
+   "change": 2.76
+  },
+  {
+   "country": "United States of America",
+   "region": "Western Europe & North America",
+   "p2000": -0.46,
+   "p2025": 2.3,
+   "change": 2.76
+  },
+  {
+   "country": "Germany",
+   "region": "Western Europe & North America",
+   "p2000": -2.44,
+   "p2025": 0.19,
+   "change": 2.63
+  },
+  {
+   "country": "Romania",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -0.05,
+   "p2025": 2.55,
+   "change": 2.61
+  },
+  {
+   "country": "Bulgaria",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -1.24,
+   "p2025": 1.29,
+   "change": 2.53
+  },
+  {
+   "country": "Yemen",
+   "region": "Middle East & North Africa",
+   "p2000": 0.35,
+   "p2025": 2.81,
+   "change": 2.46
+  },
+  {
+   "country": "Mexico",
+   "region": "Latin America & Caribbean",
+   "p2000": -0.29,
+   "p2025": 2.13,
+   "change": 2.42
+  },
+  {
+   "country": "Slovakia",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -0.95,
+   "p2025": 1.42,
+   "change": 2.36
+  },
+  {
+   "country": "Maldives",
+   "region": "Asia & Pacific",
+   "p2000": -1.7,
+   "p2025": 0.66,
+   "change": 2.36
+  },
+  {
+   "country": "Mozambique",
+   "region": "Sub-Saharan Africa",
+   "p2000": -1.06,
+   "p2025": 1.26,
+   "change": 2.32
+  },
+  {
+   "country": "India",
+   "region": "Asia & Pacific",
+   "p2000": -0.22,
+   "p2025": 2.08,
+   "change": 2.3
+  },
+  {
+   "country": "Hong Kong",
+   "region": "Asia & Pacific",
+   "p2000": -1.23,
+   "p2025": 1.0,
+   "change": 2.23
+  },
+  {
+   "country": "Netherlands",
+   "region": "Western Europe & North America",
+   "p2000": -2.31,
+   "p2025": -0.09,
+   "change": 2.21
+  },
+  {
+   "country": "Burkina Faso",
+   "region": "Sub-Saharan Africa",
+   "p2000": -0.67,
+   "p2025": 1.53,
+   "change": 2.2
+  },
+  {
+   "country": "Colombia",
+   "region": "Latin America & Caribbean",
+   "p2000": -0.25,
+   "p2025": 1.89,
+   "change": 2.14
+  },
+  {
+   "country": "Pakistan",
+   "region": "Asia & Pacific",
+   "p2000": -1.11,
+   "p2025": 0.99,
+   "change": 2.1
+  },
+  {
+   "country": "Libya",
+   "region": "Middle East & North Africa",
+   "p2000": 0.47,
+   "p2025": 2.48,
+   "change": 2.01
+  },
+  {
+   "country": "Czechia",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -2.12,
+   "p2025": -0.13,
+   "change": 1.99
+  },
+  {
+   "country": "Belarus",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": 1.19,
+   "p2025": 3.18,
+   "change": 1.99
+  },
+  {
+   "country": "Argentina",
+   "region": "Latin America & Caribbean",
+   "p2000": -0.03,
+   "p2025": 1.9,
+   "change": 1.93
+  },
+  {
+   "country": "Azerbaijan",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": 0.26,
+   "p2025": 2.18,
+   "change": 1.92
+  },
+  {
+   "country": "Bolivia",
+   "region": "Latin America & Caribbean",
+   "p2000": -0.28,
+   "p2025": 1.62,
+   "change": 1.9
+  },
+  {
+   "country": "Venezuela",
+   "region": "Latin America & Caribbean",
+   "p2000": 0.38,
+   "p2025": 2.23,
+   "change": 1.85
+  },
+  {
+   "country": "Lithuania",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -2.67,
+   "p2025": -0.87,
+   "change": 1.8
+  },
+  {
+   "country": "Thailand",
+   "region": "Asia & Pacific",
+   "p2000": -0.2,
+   "p2025": 1.56,
+   "change": 1.76
+  },
+  {
+   "country": "Slovenia",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": 0.28,
+   "p2025": 2.04,
+   "change": 1.76
+  },
+  {
+   "country": "Costa Rica",
+   "region": "Latin America & Caribbean",
+   "p2000": -2.02,
+   "p2025": -0.27,
+   "change": 1.75
+  },
+  {
+   "country": "Moldova",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -0.15,
+   "p2025": 1.6,
+   "change": 1.74
+  },
+  {
+   "country": "Portugal",
+   "region": "Western Europe & North America",
+   "p2000": -2.37,
+   "p2025": -0.64,
+   "change": 1.73
+  },
+  {
+   "country": "Guatemala",
+   "region": "Latin America & Caribbean",
+   "p2000": -1.0,
+   "p2025": 0.68,
+   "change": 1.68
+  },
+  {
+   "country": "Spain",
+   "region": "Western Europe & North America",
+   "p2000": -1.75,
+   "p2025": -0.09,
+   "change": 1.66
+  },
+  {
+   "country": "Philippines",
+   "region": "Asia & Pacific",
+   "p2000": -1.14,
+   "p2025": 0.51,
+   "change": 1.65
+  },
+  {
+   "country": "Guinea-Bissau",
+   "region": "Sub-Saharan Africa",
+   "p2000": -0.76,
+   "p2025": 0.86,
+   "change": 1.62
+  },
+  {
+   "country": "France",
+   "region": "Western Europe & North America",
+   "p2000": -0.18,
+   "p2025": 1.43,
+   "change": 1.61
+  },
+  {
+   "country": "Sweden",
+   "region": "Western Europe & North America",
+   "p2000": -2.28,
+   "p2025": -0.67,
+   "change": 1.61
+  },
+  {
+   "country": "Morocco",
+   "region": "Middle East & North Africa",
+   "p2000": -0.67,
+   "p2025": 0.88,
+   "change": 1.56
+  },
+  {
+   "country": "Bangladesh",
+   "region": "Asia & Pacific",
+   "p2000": 0.86,
+   "p2025": 2.37,
+   "change": 1.5
+  },
+  {
+   "country": "Egypt",
+   "region": "Middle East & North Africa",
+   "p2000": -1.7,
+   "p2025": -0.22,
+   "change": 1.48
+  },
+  {
+   "country": "Bhutan",
+   "region": "Asia & Pacific",
+   "p2000": -2.38,
+   "p2025": -0.89,
+   "change": 1.48
+  },
+  {
+   "country": "South Korea",
+   "region": "Asia & Pacific",
+   "p2000": -0.04,
+   "p2025": 1.44,
+   "change": 1.48
+  },
+  {
+   "country": "Tanzania",
+   "region": "Sub-Saharan Africa",
+   "p2000": -1.54,
+   "p2025": -0.1,
+   "change": 1.44
+  },
+  {
+   "country": "Cameroon",
+   "region": "Sub-Saharan Africa",
+   "p2000": 0.67,
+   "p2025": 2.08,
+   "change": 1.42
+  },
+  {
+   "country": "Madagascar",
+   "region": "Sub-Saharan Africa",
+   "p2000": 1.08,
+   "p2025": 2.38,
+   "change": 1.29
+  },
+  {
+   "country": "Palestine/West Bank",
+   "region": "Middle East & North Africa",
+   "p2000": -1.23,
+   "p2025": 0.04,
+   "change": 1.27
+  },
+  {
+   "country": "Uruguay",
+   "region": "Latin America & Caribbean",
+   "p2000": -3.06,
+   "p2025": -1.81,
+   "change": 1.25
+  },
+  {
+   "country": "Canada",
+   "region": "Western Europe & North America",
+   "p2000": -1.62,
+   "p2025": -0.4,
+   "change": 1.22
+  },
+  {
+   "country": "Malawi",
+   "region": "Sub-Saharan Africa",
+   "p2000": -0.88,
+   "p2025": 0.33,
+   "change": 1.21
+  },
+  {
+   "country": "Papua New Guinea",
+   "region": "Asia & Pacific",
+   "p2000": -2.08,
+   "p2025": -0.88,
+   "change": 1.2
+  },
+  {
+   "country": "New Zealand",
+   "region": "Western Europe & North America",
+   "p2000": -2.61,
+   "p2025": -1.42,
+   "change": 1.19
+  },
+  {
+   "country": "Cambodia",
+   "region": "Asia & Pacific",
+   "p2000": -0.17,
+   "p2025": 0.99,
+   "change": 1.16
+  },
+  {
+   "country": "Russia",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": 0.13,
+   "p2025": 1.24,
+   "change": 1.11
+  },
+  {
+   "country": "Uzbekistan",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": -2.53,
+   "p2025": -1.43,
+   "change": 1.1
+  },
+  {
+   "country": "Suriname",
+   "region": "Latin America & Caribbean",
+   "p2000": -1.81,
+   "p2025": -0.73,
+   "change": 1.08
+  },
+  {
+   "country": "Senegal",
+   "region": "Sub-Saharan Africa",
+   "p2000": -1.23,
+   "p2025": -0.14,
+   "change": 1.08
+  },
+  {
+   "country": "Benin",
+   "region": "Sub-Saharan Africa",
+   "p2000": -1.31,
+   "p2025": -0.27,
+   "change": 1.04
+  },
+  {
+   "country": "Georgia",
+   "region": "Eastern Europe & Central Asia",
+   "p2000": 0.83,
+   "p2025": 1.75,
+   "change": 0.93
+  }
+ ],
+ "fallers": [
+  {
+   "country": "Iraq",
+   "region": "Middle East & North Africa",
+   "p2000": 2.66,
+   "p2025": 0.2,
+   "change": -2.46
+  },
+  {
+   "country": "Democratic Republic of the Congo",
+   "region": "Sub-Saharan Africa",
+   "p2000": 1.27,
+   "p2025": -0.76,
+   "change": -2.02
+  },
+  {
+   "country": "Togo",
+   "region": "Sub-Saharan Africa",
+   "p2000": 2.43,
+   "p2025": 0.53,
+   "change": -1.9
+  },
+  {
+   "country": "Angola",
+   "region": "Sub-Saharan Africa",
+   "p2000": 1.58,
+   "p2025": -0.3,
+   "change": -1.89
+  },
+  {
+   "country": "Zanzibar",
+   "region": "Sub-Saharan Africa",
+   "p2000": 0.22,
+   "p2025": -1.35,
+   "change": -1.56
+  },
+  {
+   "country": "Nepal",
+   "region": "Asia & Pacific",
+   "p2000": 0.99,
+   "p2025": -0.45,
+   "change": -1.44
+  },
+  {
+   "country": "Somalia",
+   "region": "Sub-Saharan Africa",
+   "p2000": 2.83,
+   "p2025": 1.45,
+   "change": -1.39
+  },
+  {
+   "country": "Zimbabwe",
+   "region": "Sub-Saharan Africa",
+   "p2000": 2.43,
+   "p2025": 1.24,
+   "change": -1.19
+  },
+  {
+   "country": "Dominican Republic",
+   "region": "Latin America & Caribbean",
+   "p2000": 0.02,
+   "p2025": -0.9,
+   "change": -0.92
+  }
+ ],
+ "candidates": [
+  {
+   "key": "v2smonex",
+   "label": "Citizens' online media use",
+   "group": "Technology",
+   "question": "Do people consume domestic online media?"
+  },
+  {
+   "key": "v2smcamp",
+   "label": "Parties' social media campaigning",
+   "group": "Technology",
+   "question": "Do parties and candidates use social media to campaign?"
+  },
+  {
+   "key": "v2smmefra",
+   "label": "Online media fragmentation",
+   "group": "Technology",
+   "question": "Do the major online outlets give different presentations of the news?"
+  },
+  {
+   "key": "v2smpardom",
+   "label": "Party disinformation online",
+   "group": "Political actors",
+   "question": "How often do parties use social media to spread false information domestically?"
+  },
+  {
+   "key": "v2smgovdom",
+   "label": "Government disinformation",
+   "group": "Political actors",
+   "question": "How often does the government spread false information domestically?"
+  },
+  {
+   "key": "v2smfordom",
+   "label": "Foreign disinformation",
+   "group": "Political actors",
+   "question": "How often do foreign governments spread false information in the country?"
+  },
+  {
+   "key": "v2smpolhate",
+   "label": "Party hate speech",
+   "group": "Political actors",
+   "question": "How often do major parties use hate speech against groups defined by race, religion, origin or similar?"
+  },
+  {
+   "key": "v2mebias",
+   "label": "Media bias",
+   "group": "Media and institutions",
+   "question": "Is coverage of the opposition biased?"
+  },
+  {
+   "key": "v2mecenefm",
+   "label": "Government media censorship",
+   "group": "Media and institutions",
+   "question": "Does the government attempt to censor the print and broadcast media?"
+  },
+  {
+   "key": "v2x_libdem",
+   "label": "Liberal democracy",
+   "group": "Media and institutions",
+   "question": "V-Dem's liberal democracy index (0 to 1)."
+  }
+ ],
+ "models": {
+  "n": 4629,
+  "countries": 179,
+  "r2_joint": 0.894,
+  "r2_fe_only": 0.855,
+  "single": {
+   "v2smonex": {
+    "b": 0.08,
+    "lo": -0.039,
+    "hi": 0.199,
+    "p": 0.1863006459829014
+   },
+   "v2smcamp": {
+    "b": 0.132,
+    "lo": 0.038,
+    "hi": 0.227,
+    "p": 0.006006263538023639
+   },
+   "v2smmefra": {
+    "b": 0.136,
+    "lo": -0.03,
+    "hi": 0.301,
+    "p": 0.10750460494604741
+   },
+   "v2smpardom": {
+    "b": 0.38,
+    "lo": 0.273,
+    "hi": 0.487,
+    "p": 3.1342774457686577e-12
+   },
+   "v2smgovdom": {
+    "b": 0.402,
+    "lo": 0.304,
+    "hi": 0.5,
+    "p": 8.960216877531597e-16
+   },
+   "v2smfordom": {
+    "b": 0.286,
+    "lo": 0.182,
+    "hi": 0.389,
+    "p": 6.163342845422385e-08
+   },
+   "v2smpolhate": {
+    "b": 0.578,
+    "lo": 0.456,
+    "hi": 0.699,
+    "p": 1.156655765176545e-20
+   },
+   "v2mebias": {
+    "b": 0.257,
+    "lo": 0.094,
+    "hi": 0.419,
+    "p": 0.0020029659739652893
+   },
+   "v2mecenefm": {
+    "b": 0.298,
+    "lo": 0.164,
+    "hi": 0.432,
+    "p": 1.2532442957009822e-05
+   },
+   "v2x_libdem": {
+    "b": -0.535,
+    "lo": -0.706,
+    "hi": -0.365,
+    "p": 7.718090864862262e-10
+   }
+  },
+  "joint": {
+   "v2smonex": {
+    "b": 0.017,
+    "lo": -0.071,
+    "hi": 0.105,
+    "p": 0.7004990113053469
+   },
+   "v2smcamp": {
+    "b": 0.05,
+    "lo": -0.02,
+    "hi": 0.119,
+    "p": 0.16338835268367602
+   },
+   "v2smmefra": {
+    "b": 0.045,
+    "lo": -0.083,
+    "hi": 0.172,
+    "p": 0.4920623292396935
+   },
+   "v2smpardom": {
+    "b": 0.092,
+    "lo": -0.035,
+    "hi": 0.22,
+    "p": 0.154080380524886
+   },
+   "v2smgovdom": {
+    "b": 0.067,
+    "lo": -0.031,
+    "hi": 0.165,
+    "p": 0.18100352041239887
+   },
+   "v2smfordom": {
+    "b": 0.051,
+    "lo": -0.044,
+    "hi": 0.146,
+    "p": 0.2945615001556896
+   },
+   "v2smpolhate": {
+    "b": 0.371,
+    "lo": 0.235,
+    "hi": 0.506,
+    "p": 7.843017990145957e-08
+   },
+   "v2mebias": {
+    "b": 0.017,
+    "lo": -0.114,
+    "hi": 0.147,
+    "p": 0.8033040225536257
+   },
+   "v2mecenefm": {
+    "b": 0.064,
+    "lo": -0.044,
+    "hi": 0.172,
+    "p": 0.2472861111861876
+   },
+   "v2x_libdem": {
+    "b": -0.193,
+    "lo": -0.39,
+    "hi": 0.004,
+    "p": 0.054978146672108145
+   }
+  },
+  "first_diff": {
+   "v2smonex": {
+    "b": -0.004,
+    "lo": -0.071,
+    "hi": 0.063,
+    "p": 0.9106083566421169
+   },
+   "v2smcamp": {
+    "b": 0.05,
+    "lo": 0.006,
+    "hi": 0.095,
+    "p": 0.027160047561032005
+   },
+   "v2smmefra": {
+    "b": 0.05,
+    "lo": -0.023,
+    "hi": 0.122,
+    "p": 0.17934843401781508
+   },
+   "v2smpardom": {
+    "b": 0.026,
+    "lo": -0.028,
+    "hi": 0.08,
+    "p": 0.3410407567002207
+   },
+   "v2smgovdom": {
+    "b": 0.084,
+    "lo": 0.022,
+    "hi": 0.145,
+    "p": 0.007779169076816382
+   },
+   "v2smfordom": {
+    "b": 0.054,
+    "lo": -0.016,
+    "hi": 0.123,
+    "p": 0.12931462251015705
+   },
+   "v2smpolhate": {
+    "b": 0.192,
+    "lo": 0.121,
+    "hi": 0.263,
+    "p": 1.3481044557935937e-07
+   },
+   "v2mebias": {
+    "b": 0.047,
+    "lo": -0.003,
+    "hi": 0.096,
+    "p": 0.06364871053106474
+   },
+   "v2mecenefm": {
+    "b": 0.043,
+    "lo": -0.005,
+    "hi": 0.09,
+    "p": 0.07744402804933259
+   },
+   "v2x_libdem": {
+    "b": -0.949,
+    "lo": -1.554,
+    "hi": -0.343,
+    "p": 0.002129443915759418
+   }
+  },
+  "lagged": {
+   "v2smonex": {
+    "b": 0.034,
+    "lo": -0.002,
+    "hi": 0.069,
+    "p": 0.06264942823855564
+   },
+   "v2smcamp": {
+    "b": -0.003,
+    "lo": -0.025,
+    "hi": 0.02,
+    "p": 0.8059100939695529
+   },
+   "v2smmefra": {
+    "b": 0.013,
+    "lo": -0.022,
+    "hi": 0.048,
+    "p": 0.4600307809593528
+   },
+   "v2smpardom": {
+    "b": 0.045,
+    "lo": 0.002,
+    "hi": 0.088,
+    "p": 0.040289915124450425
+   },
+   "v2smgovdom": {
+    "b": 0.002,
+    "lo": -0.039,
+    "hi": 0.043,
+    "p": 0.9193051691029211
+   },
+   "v2smfordom": {
+    "b": 0.007,
+    "lo": -0.027,
+    "hi": 0.041,
+    "p": 0.6923931356394206
+   },
+   "v2smpolhate": {
+    "b": 0.05,
+    "lo": 0.0,
+    "hi": 0.1,
+    "p": 0.04931461483541982
+   },
+   "v2mebias": {
+    "b": 0.001,
+    "lo": -0.037,
+    "hi": 0.039,
+    "p": 0.9505619334911307
+   },
+   "v2mecenefm": {
+    "b": -0.004,
+    "lo": -0.039,
+    "hi": 0.031,
+    "p": 0.8115338839431763
+   },
+   "v2x_libdem": {
+    "b": 0.062,
+    "lo": -0.244,
+    "hi": 0.369,
+    "p": 0.6906349286842941
+   }
+  },
+  "lag_persistence": {
+   "b": 0.818,
+   "lo": 0.784,
+   "hi": 0.853,
+   "p": 0.0
+  },
+  "reverse": {
+   "v2smonex": {
+    "b": -0.003,
+    "lo": -0.019,
+    "hi": 0.014,
+    "p": 0.7428290607509844
+   },
+   "v2smcamp": {
+    "b": 0.004,
+    "lo": -0.023,
+    "hi": 0.031,
+    "p": 0.7959437447769193
+   },
+   "v2smmefra": {
+    "b": -0.007,
+    "lo": -0.029,
+    "hi": 0.014,
+    "p": 0.4867808192231853
+   },
+   "v2smpardom": {
+    "b": 0.035,
+    "lo": 0.009,
+    "hi": 0.062,
+    "p": 0.008826851543713486
+   },
+   "v2smgovdom": {
+    "b": 0.037,
+    "lo": 0.014,
+    "hi": 0.06,
+    "p": 0.0013883386487920347
+   },
+   "v2smfordom": {
+    "b": 0.021,
+    "lo": 0.002,
+    "hi": 0.04,
+    "p": 0.029039379998031606
+   },
+   "v2smpolhate": {
+    "b": 0.028,
+    "lo": 0.005,
+    "hi": 0.051,
+    "p": 0.01825898820332972
+   },
+   "v2mebias": {
+    "b": 0.042,
+    "lo": 0.012,
+    "hi": 0.071,
+    "p": 0.005483473171555341
+   },
+   "v2mecenefm": {
+    "b": 0.054,
+    "lo": 0.026,
+    "hi": 0.081,
+    "p": 0.00012274488602828984
+   },
+   "v2x_libdem": {
+    "b": -0.004,
+    "lo": -0.007,
+    "hi": -0.002,
+    "p": 0.0009391311240560645
+   }
+  },
+  "split": {
+   "v2smonex": {
+    "pre": {
+     "b": 0.029,
+     "lo": -0.107,
+     "hi": 0.165,
+     "p": 0.6802103997191002
+    },
+    "post": {
+     "b": 0.104,
+     "lo": -0.058,
+     "hi": 0.267,
+     "p": 0.20810744313956675
+    }
+   },
+   "v2smcamp": {
+    "pre": {
+     "b": 0.161,
+     "lo": 0.034,
+     "hi": 0.287,
+     "p": 0.012847200634360354
+    },
+    "post": {
+     "b": 0.09,
+     "lo": -0.021,
+     "hi": 0.201,
+     "p": 0.11151869487084518
+    }
+   },
+   "v2smmefra": {
+    "pre": {
+     "b": 0.3,
+     "lo": 0.136,
+     "hi": 0.464,
+     "p": 0.0003312952517139568
+    },
+    "post": {
+     "b": 0.087,
+     "lo": -0.09,
+     "hi": 0.264,
+     "p": 0.33523722514494125
+    }
+   },
+   "v2smpardom": {
+    "pre": {
+     "b": 0.235,
+     "lo": -0.037,
+     "hi": 0.507,
+     "p": 0.09044657330935363
+    },
+    "post": {
+     "b": 0.431,
+     "lo": 0.331,
+     "hi": 0.531,
+     "p": 2.8251060434138823e-17
+    }
+   },
+   "v2smgovdom": {
+    "pre": {
+     "b": 0.202,
+     "lo": -0.037,
+     "hi": 0.441,
+     "p": 0.09819151378781568
+    },
+    "post": {
+     "b": 0.395,
+     "lo": 0.295,
+     "hi": 0.494,
+     "p": 5.881138769801914e-15
+    }
+   },
+   "v2smfordom": {
+    "pre": {
+     "b": 0.314,
+     "lo": 0.032,
+     "hi": 0.596,
+     "p": 0.028971449851334673
+    },
+    "post": {
+     "b": 0.236,
+     "lo": 0.127,
+     "hi": 0.344,
+     "p": 1.971856829791263e-05
+    }
+   },
+   "v2smpolhate": {
+    "pre": {
+     "b": 0.559,
+     "lo": 0.311,
+     "hi": 0.807,
+     "p": 1.0163417866003698e-05
+    },
+    "post": {
+     "b": 0.458,
+     "lo": 0.312,
+     "hi": 0.603,
+     "p": 7.259624234883266e-10
+    }
+   },
+   "v2mebias": {
+    "pre": {
+     "b": 0.079,
+     "lo": -0.08,
+     "hi": 0.237,
+     "p": 0.33075983299147893
+    },
+    "post": {
+     "b": 0.343,
+     "lo": 0.223,
+     "hi": 0.463,
+     "p": 1.9991174379073587e-08
+    }
+   },
+   "v2mecenefm": {
+    "pre": {
+     "b": 0.116,
+     "lo": -0.067,
+     "hi": 0.299,
+     "p": 0.21224193406837688
+    },
+    "post": {
+     "b": 0.348,
+     "lo": 0.239,
+     "hi": 0.456,
+     "p": 3.1933939544081106e-10
+    }
+   },
+   "v2x_libdem": {
+    "pre": {
+     "b": -0.314,
+     "lo": -0.583,
+     "hi": -0.044,
+     "p": 0.022682948642224428
+    },
+    "post": {
+     "b": -0.501,
+     "lo": -0.692,
+     "hi": -0.31,
+     "p": 2.8021070503536305e-07
+    }
+   }
+  },
+  "by_regime": {
+   "dem2000": {
+    "v2smonex": {
+     "b": -0.069,
+     "lo": -0.19,
+     "hi": 0.052,
+     "p": 0.26341755719165727
+    },
+    "v2smcamp": {
+     "b": 0.052,
+     "lo": -0.031,
+     "hi": 0.135,
+     "p": 0.22157642665907296
+    },
+    "v2smmefra": {
+     "b": 0.027,
+     "lo": -0.171,
+     "hi": 0.226,
+     "p": 0.7877903524863623
+    },
+    "v2smpardom": {
+     "b": 0.188,
+     "lo": 0.042,
+     "hi": 0.334,
+     "p": 0.011665553858718132
+    },
+    "v2smgovdom": {
+     "b": 0.047,
+     "lo": -0.082,
+     "hi": 0.175,
+     "p": 0.4768731075794317
+    },
+    "v2smfordom": {
+     "b": 0.015,
+     "lo": -0.108,
+     "hi": 0.139,
+     "p": 0.8062013875692989
+    },
+    "v2smpolhate": {
+     "b": 0.331,
+     "lo": 0.148,
+     "hi": 0.513,
+     "p": 0.00038527780830297436
+    },
+    "v2mebias": {
+     "b": 0.1,
+     "lo": -0.01,
+     "hi": 0.21,
+     "p": 0.07583659581119168
+    },
+    "v2mecenefm": {
+     "b": 0.038,
+     "lo": -0.098,
+     "hi": 0.174,
+     "p": 0.5814349682383884
+    },
+    "v2x_libdem": {
+     "b": -0.236,
+     "lo": -0.479,
+     "hi": 0.007,
+     "p": 0.05736374687535275
+    }
+   },
+   "aut2000": {
+    "v2smonex": {
+     "b": 0.098,
+     "lo": -0.025,
+     "hi": 0.221,
+     "p": 0.11931089985362762
+    },
+    "v2smcamp": {
+     "b": -0.004,
+     "lo": -0.104,
+     "hi": 0.095,
+     "p": 0.9296157957544174
+    },
+    "v2smmefra": {
+     "b": 0.043,
+     "lo": -0.105,
+     "hi": 0.192,
+     "p": 0.5648409025044079
+    },
+    "v2smpardom": {
+     "b": 0.006,
+     "lo": -0.169,
+     "hi": 0.181,
+     "p": 0.9478776979643244
+    },
+    "v2smgovdom": {
+     "b": 0.124,
+     "lo": -0.025,
+     "hi": 0.274,
+     "p": 0.10207951557265307
+    },
+    "v2smfordom": {
+     "b": 0.085,
+     "lo": -0.049,
+     "hi": 0.218,
+     "p": 0.21248261913888666
+    },
+    "v2smpolhate": {
+     "b": 0.391,
+     "lo": 0.205,
+     "hi": 0.576,
+     "p": 3.70041059728928e-05
+    },
+    "v2mebias": {
+     "b": -0.045,
+     "lo": -0.22,
+     "hi": 0.131,
+     "p": 0.618596743199087
+    },
+    "v2mecenefm": {
+     "b": 0.11,
+     "lo": -0.033,
+     "hi": 0.253,
+     "p": 0.13264148638552
+    },
+    "v2x_libdem": {
+     "b": -0.061,
+     "lo": -0.32,
+     "hi": 0.197,
+     "p": 0.6406289467327875
+    }
+   }
+  }
+ },
+ "accounting": {
+  "total": 0.732,
+  "items": {
+   "v2smonex": {
+    "contribution": 0.022,
+    "mean_2000": -0.69,
+    "mean_2025": 0.52,
+    "significant": false
+   },
+   "v2smcamp": {
+    "contribution": 0.106,
+    "mean_2000": -1.56,
+    "mean_2025": 0.6,
+    "significant": false
+   },
+   "v2smmefra": {
+    "contribution": 0.001,
+    "mean_2000": -0.19,
+    "mean_2025": -0.18,
+    "significant": false
+   },
+   "v2smpardom": {
+    "contribution": 0.09,
+    "mean_2000": -0.79,
+    "mean_2025": 0.1,
+    "significant": false
+   },
+   "v2smgovdom": {
+    "contribution": 0.043,
+    "mean_2000": -0.51,
+    "mean_2025": 0.14,
+    "significant": false
+   },
+   "v2smfordom": {
+    "contribution": 0.043,
+    "mean_2000": -0.67,
+    "mean_2025": 0.09,
+    "significant": false
+   },
+   "v2smpolhate": {
+    "contribution": 0.238,
+    "mean_2000": -0.4,
+    "mean_2025": 0.23,
+    "significant": true
+   },
+   "v2mebias": {
+    "contribution": 0.003,
+    "mean_2000": -0.78,
+    "mean_2025": -0.59,
+    "significant": false
+   },
+   "v2mecenefm": {
+    "contribution": 0.018,
+    "mean_2000": -0.66,
+    "mean_2025": -0.33,
+    "significant": false
+   },
+   "v2x_libdem": {
+    "contribution": 0.014,
+    "mean_2000": 0.38,
+    "mean_2025": 0.37,
+    "significant": false
+   }
+  },
+  "explained": 0.578
+ },
+ "shapley": {
+  "total": 0.732,
+  "explained": 0.577,
+  "within_r2": 0.27,
+  "reps": 200,
+  "items": {
+   "v2smonex": {
+    "bookkeeping": 0.022,
+    "shapley": 0.045,
+    "share_ci": [
+     -8,
+     18
+    ],
+    "gap_ci": [
+     -0.019,
+     0.067
+    ],
+    "r2_share": 0.5
+   },
+   "v2smcamp": {
+    "bookkeeping": 0.106,
+    "shapley": 0.141,
+    "share_ci": [
+     6,
+     39
+    ],
+    "gap_ci": [
+     -0.007,
+     0.089
+    ],
+    "r2_share": 3.1
+   },
+   "v2smmefra": {
+    "bookkeeping": 0.001,
+    "shapley": -0.005,
+    "share_ci": [
+     -4,
+     2
+    ],
+    "gap_ci": [
+     -0.027,
+     0.006
+    ],
+    "r2_share": 1.9
+   },
+   "v2smpardom": {
+    "bookkeeping": 0.09,
+    "shapley": 0.105,
+    "share_ci": [
+     10,
+     23
+    ],
+    "gap_ci": [
+     -0.067,
+     0.09
+    ],
+    "r2_share": 14.4
+   },
+   "v2smgovdom": {
+    "bookkeeping": 0.043,
+    "shapley": 0.072,
+    "share_ci": [
+     5,
+     16
+    ],
+    "gap_ci": [
+     -0.017,
+     0.077
+    ],
+    "r2_share": 13.7
+   },
+   "v2smfordom": {
+    "bookkeeping": 0.043,
+    "shapley": 0.075,
+    "share_ci": [
+     4,
+     17
+    ],
+    "gap_ci": [
+     -0.008,
+     0.074
+    ],
+    "r2_share": 5.8
+   },
+   "v2smpolhate": {
+    "bookkeeping": 0.238,
+    "shapley": 0.111,
+    "share_ci": [
+     8,
+     23
+    ],
+    "gap_ci": [
+     -0.199,
+     -0.056
+    ],
+    "r2_share": 36.9
+   },
+   "v2mebias": {
+    "bookkeeping": 0.003,
+    "shapley": 0.015,
+    "share_ci": [
+     0,
+     7
+    ],
+    "gap_ci": [
+     -0.009,
+     0.028
+    ],
+    "r2_share": 4.6
+   },
+   "v2mecenefm": {
+    "bookkeeping": 0.018,
+    "shapley": 0.027,
+    "share_ci": [
+     1,
+     10
+    ],
+    "gap_ci": [
+     -0.012,
+     0.03
+    ],
+    "r2_share": 7.3
+   },
+   "v2x_libdem": {
+    "bookkeeping": 0.014,
+    "shapley": -0.009,
+    "share_ci": [
+     -6,
+     3
+    ],
+    "gap_ci": [
+     -0.055,
+     0.003
+    ],
+    "r2_share": 11.7
+   }
+  },
+  "groups": {
+   "all": {
+    "keys": [
+     "v2smcamp",
+     "v2smpardom",
+     "v2smgovdom",
+     "v2smfordom",
+     "v2smpolhate"
+    ],
+    "bookkeeping": 0.52,
+    "shapley": 0.504,
+    "share_ci": [
+     52,
+     91
+    ],
+    "r2_share": 73.9
+   },
+   "hate_and_disinfo": {
+    "keys": [
+     "v2smpardom",
+     "v2smgovdom",
+     "v2smfordom",
+     "v2smpolhate"
+    ],
+    "bookkeeping": 0.414,
+    "shapley": 0.363,
+    "share_ci": [
+     35,
+     65
+    ],
+    "r2_share": 70.8
+   }
+  }
+ },
+ "economy": {
+  "n": 3464,
+  "countries": 174,
+  "growth3": {
+   "b": -0.015,
+   "lo": -0.028,
+   "hi": -0.002,
+   "p": 0.019445468907998444
+  },
+  "recession": {
+   "b": 0.246,
+   "lo": 0.074,
+   "hi": 0.419,
+   "p": 0.005107802515715233
+  },
+  "recession_with_hate": {
+   "b": 0.193,
+   "lo": 0.069,
+   "hi": 0.316,
+   "p": 0.002170005096973946
+  },
+  "last_year": 2019
+ }
+}
