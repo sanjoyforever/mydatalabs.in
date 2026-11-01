@@ -375,6 +375,12 @@ def test_polarisation_lab_note_renders_validated_figures(client):
     # The draft's twenty-country framing and its per-country sections are gone.
     for gone in ("India: the largest case", "Outside the twenty", "proves", "robust standard errors"):
         assert gone not in text
+    # V-Dem's requested citations and its CC BY-SA 4.0 licence (the site default is CC BY 4.0).
+    assert "10.23696/vdemds26" in text and "V-Dem Codebook v16" in text
+    assert "The V-Dem Measurement Model" in text and "Measuring Internet Politics" in text
+    assert "licenses/by-sa/4.0" in text and "CC BY-SA 4.0" in text
+    assert "licenses/by/4.0" not in text
+    assert "three or fewer expert coders" in text
     # Methodology checks the bookkeeping against a Shapley split over all 1024 subsets.
     assert "Checking the accounting with a Shapley split" in text
     assert "all 1024 subsets" in text and "+0.111" in text and "+0.238" in text

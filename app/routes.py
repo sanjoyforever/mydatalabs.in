@@ -163,6 +163,9 @@ LAB_NOTES = [
         "updated": "2026-11-01",
         "read_time": "12 min read",
         "badge": "173-Country Panel",
+        # V-Dem publishes under CC BY-SA 4.0; derived data carries the same terms.
+        "license_name": "CC BY-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
     },
     {
         "slug": "cross-cultural-metric-normalization",
@@ -1187,6 +1190,9 @@ def lab_note(slug):
         extra["film_panel"] = _get_film_normalization_data()
     elif slug == "is-the-world-polarising":
         extra["story"] = _get_polarisation_story_data()
+    if note.get("license_name"):
+        extra["license_name"] = note["license_name"]
+        extra["license_url"] = note["license_url"]
     try:
         raw_comments = comments.get_published(slug)
         extra["published_comments"] = [

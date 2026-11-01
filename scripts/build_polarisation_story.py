@@ -163,7 +163,8 @@ def shapley_check(d, reps=200, seed=42):
 def main(path):
     cols = ["country_name", "country_text_id", "year", "v2cacamps", "v2cacamps_codelow",
             "v2cacamps_codehigh", "v2cacamps_nr", "v2x_regime", "e_gdppc",
-            "e_regionpol_6C", *[c for c in X if c != "v2x_libdem"], "v2x_libdem"]
+            "e_regionpol_6C", *[c for c in X if c != "v2x_libdem"], "v2x_libdem",
+            *[c + "_nr" for c in X if c != "v2x_libdem"]]
     df = pd.read_csv(path, usecols=cols)
     df = df.sort_values(["country_text_id", "year"])
     df["growth"] = df.groupby("country_text_id").e_gdppc.transform(lambda s: np.log(s).diff() * 100)
@@ -272,6 +273,23 @@ def main(path):
                       "mean_2000": r2(mu.loc[2000, x]), "mean_2025": r2(mu.loc[2025, x]),
                       "significant": bool(joint_m.pvalues[x] < 0.05)} for x in X}
 
+    # V-Dem advises against point estimates built on three or fewer coders. Refit
+    # the joint model and the trend without those country-years.
+    nr_cols = ["v2cacamps_nr", *[c + "_nr" for c in X if c != "v2x_libdem"]]
+    low = (d[nr_cols] <= 3).any(axis=1)
+    kept = d[~low]
+    sdk = kept[["polar", *X]].std()
+    kept_m = fit(kept, "polar ~ " + " + ".join(X) + fe)
+    bal_ok = bal[bal.v2cacamps_nr > 3].groupby("year").polar.mean()
+    coders = {
+        "threshold": 3,
+        "share_polar": round(float((d.v2cacamps_nr <= 3).mean()) * 100, 1),
+        "share_rows": round(float(low.mean()) * 100, 1),
+        "n_kept": int(len(kept)),
+        "joint": {x: row(kept_m, x, float(sdk[x] / sdk["polar"])) for x in X},
+        "mean_2000": r2(bal_ok[2000]), "mean_2025": r2(bal_ok[2025]),
+    }
+
     econ = df[(df.year >= 2000) & (df.year <= 2019)].copy()
     econ["polar"] = econ.v2cacamps
     econ["recession"] = (econ.growth < -3).astype(int)
@@ -308,6 +326,7 @@ def main(path):
         "accounting": {"total": round(float(delta["polar"]), 3), "items": accounting,
                        "explained": round(sum(v["contribution"] for v in accounting.values()), 3)},
         "shapley": shapley_check(d),
+        "coders": coders,
         "economy": economy,
     }
     OUT.write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")

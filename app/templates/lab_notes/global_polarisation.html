@@ -35,6 +35,7 @@
   "author": {"@type": "Organization", "name": "MyDataLabs"},
   {% endif %}
   "publisher": {"@id": "{{ origin }}/#organization"},
+  {% if note.license_url %}"license": {{ note.license_url|tojson }},{% endif %}
   "keywords": {{ note.tags|tojson }}
 }
 </script>
@@ -484,6 +485,18 @@
         its population. Regions are V-Dem&rsquo;s six politico-geographic regions
         (<code>e_regionpol_6C</code>).
       </p>
+      {% set CO = story.coders %}
+      <p>
+        V-Dem advises against relying on scores built from three or fewer expert coders. In the regression
+        sample, {{ CO.share_rows }}% of country-years have at least one of the ten scores with coder counts used here in
+        that position. They are kept in the main results for coverage. Without them
+        ({{ "{:,}".format(CO.n_kept) }} country-years left), the world average on the balanced panel moves from
+        {{ sg(CO.mean_2000) }} to {{ sg(CO.mean_2025) }}, and party hate speech keeps its joint coefficient
+        ({{ sg(CO.joint.v2smpolhate.b) }}, p&nbsp;{{ pv(CO.joint.v2smpolhate.p) }}). The one change is liberal
+        democracy, borderline in the main model (p&nbsp;=&nbsp;{{ pv(M.joint.v2x_libdem.p) }}), which becomes
+        significant ({{ sg(CO.joint.v2x_libdem.b) }}, p&nbsp;=&nbsp;{{ pv(CO.joint.v2x_libdem.p) }}). No other
+        candidate changes its verdict.
+      </p>
 
       <h3>Variables</h3>
       <div class="table-responsive lab-table-wrap">
@@ -643,9 +656,43 @@
       <h3>Reproduction</h3>
       <p>
         Every number on this page is written by <code>scripts/build_polarisation_story.py</code> from the
-        V-Dem file into a single data file the page reads, so no figure is typed by hand. Source: Coppedge
-        et al., <em>V-Dem Dataset v16</em>, Varieties of Democracy Project (V-Dem Institute, University of
-        Gothenburg); Digital Society Project indicators by Mechkova, Pemstein, Seim and Wilson.
+        V-Dem file into a single data file the page reads, so no figure is typed by hand.
+      </p>
+
+      <h3>Sources and licence</h3>
+      <ul class="lab-sources">
+        <li>
+          Coppedge, Michael, John Gerring, Carl Henrik Knutsen, Staffan I. Lindberg, Jan Teorell, David
+          Altman, Fabio Angiolillo, Michael Bernhard, Agnes Cornell, M. Steven Fish, Linnea Fox, Lisa
+          Gastaldi, Haakon Gjerl&oslash;w, Adam Glynn, Ana Good God, Allen Hicken, Katrin Kinzelbach, Joshua
+          Krusell, Kyle L. Marquardt, Kelly McMann, Valeriya Mechkova, Juraj Medzihorsky, Anja Neundorf,
+          Pamela Paxton, Daniel Pemstein, Josefine Pernes, Johannes von R&ouml;mer, Brigitte Seim, Rachel
+          Sigman, Svend-Erik Skaaning, Jeffrey Staton, Aksel Sundstr&ouml;m, Marcus Tannenberg, Eitan Tzelgov,
+          Yi-ting Wang, Tore Wig, Steven Wilson and Daniel Ziblatt. 2026. &ldquo;V-Dem [Country-Year/Country-Date]
+          Dataset v16&rdquo;. Varieties of Democracy (V-Dem) Project.
+          <a href="https://doi.org/10.23696/vdemds26" rel="noopener" target="_blank">https://doi.org/10.23696/vdemds26</a>.
+        </li>
+        <li>
+          Pemstein, Daniel, Kyle L. Marquardt, Eitan Tzelgov, Yi-ting Wang, Juraj Medzihorsky, Joshua Krusell,
+          Farhad Miri and Johannes von R&ouml;mer. 2026. &ldquo;The V-Dem Measurement Model: Latent Variable
+          Analysis for Cross-National and Cross-Temporal Expert-Coded Data&rdquo;. V-Dem Working Paper No. 21,
+          11th edition. University of Gothenburg: Varieties of Democracy Institute.
+        </li>
+        <li>
+          Coppedge, Michael, et al. 2026. &ldquo;V-Dem Codebook v16&rdquo;. Varieties of Democracy (V-Dem) Project.
+        </li>
+        <li>
+          For the social media and disinformation items (<code>v2sm*</code>): Mechkova, Valeriya, Daniel
+          Pemstein, Brigitte Seim and Steven Wilson. 2019. &ldquo;Measuring Internet Politics: Introducing the
+          Digital Society Project&rdquo;. Digital Society Project Working Paper 2019(1).
+        </li>
+      </ul>
+      <p>
+        V-Dem publishes its dataset under
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license noopener" target="_blank">CC BY-SA 4.0</a>,
+        which requires attribution and that derivative products carry the same terms. The figures and the data
+        file behind this note are derived from it and are shared on those terms. V-Dem and its institutions
+        are not responsible for this analysis or its conclusions.
       </p>
 
       <footer class="lab-foot">
